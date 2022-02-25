@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{42963b44-b84a-4625-b192-43dcff5e35e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\light">
+      <UniqueIdentifier>{fc532b25-ec91-48e9-8247-ea313e9b9e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\gamescene">
+      <UniqueIdentifier>{a109593a-8e95-4f3d-8308-6941d8a05385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Framework">
+      <UniqueIdentifier>{ba2c7a50-3d5e-4220-a51c-c600249596cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\gamescene\タイトルやプレイ中のシーン">
+      <UniqueIdentifier>{39bc05de-d731-4ea1-9a6a-a36908f63a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\gamescene\ベースのシーン">
+      <UniqueIdentifier>{632b285f-2b51-4a02-9294-481b8804ac0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\3d %28Model  Obj  Fbx%29">
+      <UniqueIdentifier>{eb9fcd18-808e-4b86-9248-ed57ad20b114}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base %28Dxcmn  Winapp  Input%29">
+      <UniqueIdentifier>{439ff388-c689-43e9-84f9-d08497261198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collision%28追加おねしゃす%29">
+      <UniqueIdentifier>{518bc2c8-df9d-4048-bfd8-50cf167e9495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\gamescene\SceneManager">
+      <UniqueIdentifier>{2e27c173-1215-4383-a2a1-8c877fad90f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29">
+      <UniqueIdentifier>{4e9074a4-90c2-483a-a4be-84f383169ae8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\3d %28Model  Obj  Fbx%29\fbx用">
+      <UniqueIdentifier>{e967cf92-71e9-4d12-91fe-b743e7098fa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\自前effekseerクラス">
+      <UniqueIdentifier>{f9675d61-6fc9-4f07-8648-6392641b8acb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\自前effekseerクラス\元のやつはエクスプローラーから">
+      <UniqueIdentifier>{0e50cd4f-cbe9-4a22-89a5-8a36ecda0ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\camera">
+      <UniqueIdentifier>{7eb0ae62-67de-4ad5-b1a0-92338b41a16b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\audio">
+      <UniqueIdentifier>{ed5d2f49-00ca-46bc-b02c-631302e06fbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\2d %28DebugTxt  Sprite Texture%29">
+      <UniqueIdentifier>{573ebaa2-d591-4a84-8383-047d49c29c01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\2d %28DebugTxt  Sprite Texture%29\スプライト関係">
+      <UniqueIdentifier>{2a2ebbbf-cdb4-47df-946d-9120578ec5d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\2d %28DebugTxt  Sprite Texture%29\普通のテクスチャ">
+      <UniqueIdentifier>{f08a4507-f760-48ea-8e19-b7f649ac293b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\2d %28DebugTxt  Sprite Texture%29\ポストエフェクト">
+      <UniqueIdentifier>{bb2e2d1d-1c8d-4903-b347-7c737e073396}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29">
+      <UniqueIdentifier>{e9f5456a-d30b-40bb-b9d6-9bfe71fdba70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\プレイヤー">
+      <UniqueIdentifier>{e5a842c1-21a8-44cc-8805-58d7d6e172ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ">
+      <UniqueIdentifier>{293f4dae-14e3-4c0a-a4fc-b135ecd80da3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\基底クラス">
+      <UniqueIdentifier>{3e85c2a7-c6dc-4b80-a64a-0dc725560740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス">
+      <UniqueIdentifier>{7684abeb-c596-4091-af95-0f6a157dffb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\エフェクト">
+      <UniqueIdentifier>{c918944e-2360-46e1-941b-593efd2a13b0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCamera.cpp">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="LightGroup.cpp">
+      <Filter>ソース ファイル\light</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>ソース ファイル\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Cllision.cpp">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXCommon.cpp">
+      <Filter>ソース ファイル\base %28Dxcmn  Winapp  Input%29</Filter>
+    </ClCompile>
+    <ClCompile Include="WinApp.cpp">
+      <Filter>ソース ファイル\base %28Dxcmn  Winapp  Input%29</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>ソース ファイル\base %28Dxcmn  Winapp  Input%29</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework.cpp">
+      <Filter>ソース ファイル\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>ソース ファイル\gamescene\タイトルやプレイ中のシーン</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>ソース ファイル\gamescene\タイトルやプレイ中のシーン</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseScene.cpp">
+      <Filter>ソース ファイル\gamescene\ベースのシーン</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>ソース ファイル\gamescene\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="mEffekseer.cpp">
+      <Filter>ソース ファイル\自前effekseerクラス</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29</Filter>
+    </ClCompile>
+    <ClCompile Include="Object3d.cpp">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxLoader.cpp">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\fbx用</Filter>
+    </ClCompile>
+    <ClCompile Include="f_Model.cpp">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\fbx用</Filter>
+    </ClCompile>
+    <ClCompile Include="f_Object3d.cpp">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\fbx用</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugTxt.cpp">
+      <Filter>ソース ファイル\2d %28DebugTxt  Sprite Texture%29\スプライト関係</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>ソース ファイル\2d %28DebugTxt  Sprite Texture%29\スプライト関係</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>ソース ファイル\2d %28DebugTxt  Sprite Texture%29\普通のテクスチャ</Filter>
+    </ClCompile>
+    <ClCompile Include="PostEffect.cpp">
+      <Filter>ソース ファイル\2d %28DebugTxt  Sprite Texture%29\ポストエフェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\プレイヤー</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\基底クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="BossEnemy.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="MobEnemy.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\エフェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGame.cpp">
+      <Filter>ソース ファイル\gamescene</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseCollider.cpp">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollider.cpp">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DebugCamera.h">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="LightGroup.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>ソース ファイル\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Cllision.h">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClInclude>
+    <ClInclude Include="WinApp.h">
+      <Filter>ソース ファイル\base %28Dxcmn  Winapp  Input%29</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXCommon.h">
+      <Filter>ソース ファイル\base %28Dxcmn  Winapp  Input%29</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGame.h">
+      <Filter>ソース ファイル\gamescene</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>ソース ファイル\base %28Dxcmn  Winapp  Input%29</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework.h">
+      <Filter>ソース ファイル\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>ソース ファイル\gamescene\タイトルやプレイ中のシーン</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>ソース ファイル\gamescene\タイトルやプレイ中のシーン</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseScene.h">
+      <Filter>ソース ファイル\gamescene\ベースのシーン</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>ソース ファイル\gamescene\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="mEffekseer.h">
+      <Filter>ソース ファイル\自前effekseerクラス</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3d.h">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29</Filter>
+    </ClInclude>
+    <ClInclude Include="FbxLoader.h">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\fbx用</Filter>
+    </ClInclude>
+    <ClInclude Include="f_Model.h">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\fbx用</Filter>
+    </ClInclude>
+    <ClInclude Include="f_Object3d.h">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\fbx用</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugTxt.h">
+      <Filter>ソース ファイル\2d %28DebugTxt  Sprite Texture%29\スプライト関係</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>ソース ファイル\2d %28DebugTxt  Sprite Texture%29\スプライト関係</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>ソース ファイル\2d %28DebugTxt  Sprite Texture%29\普通のテクスチャ</Filter>
+    </ClInclude>
+    <ClInclude Include="PostEffect.h">
+      <Filter>ソース ファイル\2d %28DebugTxt  Sprite Texture%29\ポストエフェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\プレイヤー</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\基底クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="BossEnemy.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="MobEnemy.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="Effects.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\エフェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>ソース ファイル\3d %28Model  Obj  Fbx%29\obj用%28後で消すかも%29</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionInfo.h">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionTypes.h">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCollider.h">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereCollider.h">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionPrimitive.h">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FBX.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Blur.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="PostEffectTest.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="FBXPS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="FBXVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="BlurVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="BlurPS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="PostEffectTestPS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="PostEffectTestVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
