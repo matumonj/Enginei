@@ -237,8 +237,8 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->PostDraw();
 
 
-	//enemys[0]->Draw();
-	//enemys[1]->Draw();
+	enemys[0]->Draw();
+	enemys[1]->Draw();
 
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画
