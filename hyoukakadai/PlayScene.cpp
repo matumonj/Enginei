@@ -41,11 +41,15 @@ void PlayScene::SpriteCreate()
 void PlayScene::ModelCreate()
 {
 	model2 = Model::CreateFromOBJ("newfield");
+	yugudo = Model::CreateFromOBJ("skydome");
 
 	//フィールドにモデル割り当て
 	//Field = new Object3d();
 	Field = Object3d::Create();
 	Field->SetModel(model2);
+
+	yugudo3d = Object3d::Create();
+	yugudo3d->SetModel(yugudo);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -76,6 +80,10 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
+	yugudo3d->SetPosition({ 0,30,0 });
+	yugudo3d->SetScale({ 10,10,10 });
+
+
 	//フィールド
 	Field->SetPosition({ 0,-20,0 });
 	Field->SetScale({ 10,5,5 });
@@ -95,6 +103,7 @@ void PlayScene::objUpdate()
 	}
 	lightGroup->Update();
 	Field->Update({ 1,1,1,1 });
+	yugudo3d->Update({ 1,1,1,1 });
 	enemys[0]->Update();
 	enemys[1]->Update();
 	}
@@ -195,6 +204,10 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	Field->PreDraw();
 	Field->Draw();
 	Field->PostDraw();
+
+	yugudo3d->PreDraw();
+	yugudo3d->Draw();
+	yugudo3d->PostDraw();
 
 	enemys[0]->Draw();
 	enemys[1]->Draw();
@@ -318,5 +331,6 @@ void PlayScene::Finalize()
 	delete camera;
 	delete background;
 	delete enemys[0], enemys[1];
+	delete yugudo3d;
 }
 #pragma endregion

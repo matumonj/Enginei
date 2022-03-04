@@ -51,10 +51,12 @@ private:
 	Object3d* player = nullptr;
 	Object3d* Boss = nullptr;
 	Object3d* Field = nullptr;
+	Object3d* yugudo3d = nullptr;
 
 	Model* model=nullptr;
 	Model* model2=nullptr;
 	Model* model5;
+	Model* yugudo = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
