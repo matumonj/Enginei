@@ -104,7 +104,7 @@
     <ClCompile Include="Audio.cpp">
       <Filter>ソース ファイル\audio</Filter>
     </ClCompile>
-    <ClCompile Include="Cllision.cpp">
+    <ClCompile Include="Collision.cpp">
       <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
     </ClCompile>
     <ClCompile Include="DirectXCommon.cpp">
@@ -194,6 +194,15 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="MeshCollider.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="TouchableObject.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionPrimitive.cpp">
+      <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugCamera.h">
@@ -214,7 +223,7 @@
     <ClInclude Include="Audio.h">
       <Filter>ソース ファイル\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Cllision.h">
+    <ClInclude Include="Collision.h">
       <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
     </ClInclude>
     <ClInclude Include="WinApp.h">
@@ -314,6 +323,15 @@
       <Filter>ソース ファイル\collision%28追加おねしゃす%29</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshCollider.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TouchableObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="RaycastHit.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

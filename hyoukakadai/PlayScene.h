@@ -7,7 +7,7 @@
 
 #include"Object3d.h"
 #include"Model.h"
-#include"Cllision.h"
+#include"Collision.h"
 #include"DebugTxt.h"
 #include"LightGroup.h"
 #include"DebugCamera.h"
@@ -46,7 +46,7 @@ private:
 	Texture* zukki = nullptr;
 	DebugTxt* debugText;
 
-	Cllision* collision = nullptr;
+	Collision* collision = nullptr;
 
 	Object3d* player = nullptr;
 	Object3d* Boss = nullptr;

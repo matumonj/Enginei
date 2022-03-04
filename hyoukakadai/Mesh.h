@@ -142,6 +142,19 @@ private: // メンバ変数
 	std::unordered_map<unsigned short, std::vector<unsigned short>> smoothData;
 	// マテリアル
 	Material* material = nullptr;
+
+public:
+	/// <summary>
+	/// 頂点配列を取得
+	/// </summary>
+	/// <param name="material">マテリアル</param>
+	inline const std::vector<VertexPosNormalUv>& GetVertices() { return vertices; }
+
+	/// <summary>
+	/// インデックス配列を取得
+	/// </summary>
+	/// <param name="material">マテリアル</param>
+	inline const std::vector<unsigned short>& GetIndices() { return indices; }
 };
 
 

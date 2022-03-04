@@ -7,7 +7,7 @@
 
 #include"Object3d.h"
 #include"Model.h"
-#include"Cllision.h"
+#include"Collision.h"
 #include"DebugTxt.h"
 #include"LightGroup.h"
 #include"DebugCamera.h"

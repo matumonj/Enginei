@@ -86,7 +86,7 @@ private: // メンバ関数
 	/// <summary>
 	/// マテリアル読み込み
 	/// </summary>
-	void LoadMaterial(const std::string& directoryPath, const std::string & filename);
+	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
 
 	/// <summary>
 	/// マテリアル登録
@@ -104,6 +104,11 @@ private: // メンバ関数
 	void LoadTextures();
 
 public:
+	/// <summary>
+	/// メッシュコンテナを取得
+	/// </summary>
+	/// <param name="material">マテリアル</param>
+	inline const std::vector<Mesh*>& GetMeshes() { return meshes; }
 	//static void SetDevice(ID3D12Device* dev) { device = dev; }
 };
 

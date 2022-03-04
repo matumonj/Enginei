@@ -123,7 +123,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	//
 	c_postEffect = Default;
 
-	collision = new Cllision();
+	collision = new Collision();
 	SpriteCreate();//
 	ModelCreate();//
 
@@ -173,9 +173,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	effects->Update(dxCommon, camera);
 	//“–‚½‚è”»’è
-	if (collision->ChenkSphere2Sphere(Player_Pos, Boss_Pos, 4) == TRUE) {
-		debugText->Print("Hit", 950, 20, 3.0f);
-	}
+//	if (collision->CheckSphere2Sphere() == TRUE) {
+		//debugText->Print("Hit", 950, 20, 3.0f);
+	//}
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += 1;

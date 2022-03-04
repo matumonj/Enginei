@@ -10,6 +10,7 @@
 #include"LightGroup.h"
 #include"Camera.h"
 #include"CollisionInfo.h"
+//#include"CollisionManager.h"
 class BaseCollider;
 
 class Object3d
@@ -22,9 +23,9 @@ private: // エイリアス
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
-	
+
 	Model* model = nullptr;
-	
+
 	static Camera* camera;
 public: // サブクラス
 	void SetModel(Model* model) { this->model = model; }
@@ -35,9 +36,9 @@ public: // サブクラス
 		//XMFLOAT4 color;
 		//XMMATRIX mat;
 		// 定数バッファ用データ構造体B0
-			XMMATRIX viewproj;    // ビュープロジェクション行列
-			XMMATRIX world; // ワールド行列
-			XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
+		XMMATRIX viewproj;    // ビュープロジェクション行列
+		XMMATRIX world; // ワールド行列
+		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
 	};
 
 private: // 定数
@@ -56,7 +57,7 @@ public: // 静的メンバ関数
 	/// <param name="window_width">画面幅</param>
 	/// <param name="window_height">画面高さ</param>
 	/// <returns>成否</returns>
-	static bool StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,int window_width, int window_height, Camera* camera=nullptr);
+	static bool StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, int window_width, int window_height, Camera* camera = nullptr);
 
 	/// <summary>
 	/// 描画前処理
@@ -108,14 +109,14 @@ public: // 静的メンバ関数
 private: // 静的メンバ変数
 	// デバイス
 	static ID3D12Device* device;
-	
+
 	// コマンドリスト
 	static ID3D12GraphicsCommandList* cmdList;
 	// ルートシグネチャ
 	static ComPtr<ID3D12RootSignature> rootsignature;
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate;
-	
+
 
 
 	// ビュー行列
@@ -132,7 +133,7 @@ private: // 静的メンバ変数
 	// 頂点データ配列
 
 	//static unsigned short indices[planeCount * 3];
-	
+
 private:// 静的メンバ関数
 
 	/// <summary>
@@ -163,7 +164,7 @@ private:// 静的メンバ関数
 	/// </summary>
 	static void UpdateViewMatrix();
 
-	
+
 public: // メンバ関数
 	Object3d() = default;
 
@@ -174,7 +175,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	virtual void Update( XMFLOAT4 color);
+	virtual void Update(XMFLOAT4 color);
 
 	/// <summary>
 	/// 描画
@@ -201,7 +202,7 @@ public: // メンバ関数
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
-	
+
 	static void SetCamera(Camera* camera) {
 		Object3d::camera = camera;
 	}
@@ -210,9 +211,9 @@ public: // メンバ関数
 		Object3d::lightGroup = lightGroup;
 	}
 	static LightGroup* lightGroup;
-private: // メンバ変数
+protected: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
-	
+
 	// 色
 	//XMFLOAT4 color = { 1,1,1,1 };
 	// ローカルスケール
@@ -221,7 +222,7 @@ private: // メンバ変数
 	XMFLOAT3 rotation = { 0,0,0 };
 	// ローカル座標
 	XMFLOAT3 position = { 0,0,0 };
-	
+
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
 	// 親オブジェクト
@@ -229,13 +230,18 @@ private: // メンバ変数
 
 public:
 	void SetCollider(BaseCollider* collider);
+	virtual void OnCollision(const CollisionInfo& info) {}
+protected:
+	const char* name = nullptr;
 
-	virtual void OnCollision(const CollisionInfo&info){}
+	BaseCollider* collider = nullptr;
 
-	protected:
-		const char* name = nullptr;
-
-		BaseCollider* collider = nullptr;
+public:
+	/// <summary>
+	/// モデルを取得
+	/// </summary>
+	/// <param name="material">マテリアル</param>
+	inline Model* GetModel() { return model; }
 };
 
 

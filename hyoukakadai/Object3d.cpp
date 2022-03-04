@@ -7,6 +7,7 @@
 #include<string>
 #include<vector>
 #include"BaseCollider.h"
+#include"CollisionManager.h"
 #pragma comment(lib, "d3dcompiler.lib")
 using namespace std;
 using namespace DirectX;
@@ -35,10 +36,12 @@ Camera* Object3d::camera = nullptr;
 Object3d::~Object3d()
 {
 	if (collider) {
+		//当たり判定マネージャの登録解除
+		CollisionManager::GetInstance()->RemoveCollider(collider);
 		delete collider;
 	}
 }
-bool Object3d::StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,int window_width, int window_height, Camera* camera)
+bool Object3d::StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, int window_width, int window_height, Camera* camera)
 {
 	// nullptrチェック
 	assert(device);
@@ -101,7 +104,7 @@ Object3d* Object3d::Create()
 		assert(0);
 		return nullptr;
 	}
-	float scale_val = 5;
+	float scale_val = 1;
 	object3d->scale = { scale_val , scale_val , scale_val };
 
 	return object3d;
@@ -335,7 +338,7 @@ bool Object3d::Initialize()
 	assert(device);
 
 	HRESULT result;
-	
+
 	name = typeid(*this).name();
 
 	//// 定数バッファの生成
@@ -355,11 +358,11 @@ bool Object3d::Initialize()
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuffB0));
-	
+
 	return true;
 }
 
-void Object3d::Update( XMFLOAT4 color)
+void Object3d::Update(XMFLOAT4 color)
 {
 	HRESULT result;
 	XMMATRIX matScale, matRot, matTrans;
@@ -419,7 +422,7 @@ void Object3d::Draw()
 	// ライトの描画
 	lightGroup->Draw(cmdList, 3);
 	model->Draw(cmdList);
-	
+
 }
 
 
@@ -427,4 +430,8 @@ void Object3d::SetCollider(BaseCollider* collider)
 {
 	collider->SetObject(this);
 	this->collider = collider;
+	//当たり判定マネージャに登録
+	CollisionManager::GetInstance()->AddCollider(collider);
+	//コライダーの更新
+	collider->Update();
 }
