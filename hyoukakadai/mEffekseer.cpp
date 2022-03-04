@@ -87,7 +87,7 @@ void mEffekseer::EffekseerUpdate(DirectXCommon* dxCommon, DebugCamera* camera)
 	//_efkHandle = _efkManager->Play(_effect, positionx, positiony, positionz);
 	_efkManager->SetScale(_efkHandle, scalex, scaley, scalez);
 	_efkManager->SetRotation(_efkHandle, rotationx, rotationy, rotationz);
-	//SyncronizeEffekseerCamera(dxCommon,camera);
+	SyncronizeEffekseerCamera(dxCommon,camera);
 	auto efkpos = _efkManager->GetLocation(_efkHandle);
 	efkpos.X += 0.1f;
 	_efkManager->SetLocation(_efkHandle, efkpos);

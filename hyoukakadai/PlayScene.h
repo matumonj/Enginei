@@ -53,6 +53,8 @@ private:
 	Object3d* Field = nullptr;
 	Object3d* yugudo3d = nullptr;
 
+
+	Model* playermodel = nullptr;
 	Model* model=nullptr;
 	Model* model2=nullptr;
 	Model* model5;

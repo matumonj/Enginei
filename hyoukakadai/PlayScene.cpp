@@ -42,6 +42,8 @@ void PlayScene::ModelCreate()
 {
 	model2 = Model::CreateFromOBJ("newfield");
 	yugudo = Model::CreateFromOBJ("skydome");
+	playermodel = Model::CreateFromOBJ("chr_sword");
+
 
 	//フィールドにモデル割り当て
 	//Field = new Object3d();
@@ -50,6 +52,10 @@ void PlayScene::ModelCreate()
 
 	yugudo3d = Object3d::Create();
 	yugudo3d->SetModel(yugudo);
+
+	player = Object3d::Create();
+	player->SetModel(playermodel);
+
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -83,10 +89,11 @@ void PlayScene::SetPrm()
 	yugudo3d->SetPosition({ 0,30,0 });
 	yugudo3d->SetScale({ 10,10,10 });
 
+	player->SetPosition({ Player_Pos });
 
 	//フィールド
 	Field->SetPosition({ 0,-20,0 });
-	Field->SetScale({ 10,5,5 });
+	Field->SetScale({ 150,5,150 });
 	background->SetSize({ 1900, 1020 });
 }
 #pragma endregion
@@ -104,6 +111,7 @@ void PlayScene::objUpdate()
 	lightGroup->Update();
 	Field->Update({ 1,1,1,1 });
 	yugudo3d->Update({ 1,1,1,1 });
+	player->Update({ 1,1,1,1 });
 	enemys[0]->Update();
 	enemys[1]->Update();
 	}
@@ -123,7 +131,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
-	camera->SetEye({ 0,10,-20 });
+	camera->SetEye({ Player_Pos.x,Player_Pos.y+5,Player_Pos.z-15 });
 
 	effects->Initialize(dxCommon, camera);
 	spotLightpos[0] = 10;
@@ -169,6 +177,19 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		debugText->Print("Hit", 950, 20, 3.0f);
 	}
 
+	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+		Player_Pos.x += 1;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
+		Player_Pos.x -= 1;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+		Player_Pos.z += 1;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
+		Player_Pos.z -= 1;
+	}
+
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -183,6 +204,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
+	camera->SetEye({ Player_Pos.x,Player_Pos.y + 5,Player_Pos.z - 15 });
+	camera->SetTarget({ Player_Pos.x,Player_Pos.y + 5,Player_Pos.z });
 	camera->Update();
 
 	SetPrm();//パラメータのセット
@@ -209,8 +232,13 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	yugudo3d->Draw();
 	yugudo3d->PostDraw();
 
-	enemys[0]->Draw();
-	enemys[1]->Draw();
+	player->PreDraw();
+	player->Draw();
+	player->PostDraw();
+
+
+	//enemys[0]->Draw();
+	//enemys[1]->Draw();
 
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画
@@ -226,8 +254,8 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 	
 	//普通のテクスチャの描画
 	Texture::PreDraw(dxcomn->GetCmdList());
-	zukki->Draw();//ズッキーニャの画像
-	mech->Draw();//メカバーンの画像
+	//zukki->Draw();//ズッキーニャの画像
+	//mech->Draw();//メカバーンの画像
 	Texture::PostDraw();
 	
 	effects->Draw(dxcomn);
