@@ -48,19 +48,25 @@ private:
 
 	Collision* collision = nullptr;
 	Object3d* player = nullptr;
+	Object3d* ito = nullptr;
 
 
 	Model* playermodel = nullptr;
-	
+	Model* itomodel = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
 
 	Effects* effects;
 private:
+	//Plyer
 	XMFLOAT3 Player_Pos;// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
-
+	XMFLOAT3 Player_Scl;
+	//ito
+	XMFLOAT3 ito_Pos;
+	XMFLOAT3 ito_Scl;
+	XMFLOAT3 ito_Rot;
 
 	float distance = 30;
 

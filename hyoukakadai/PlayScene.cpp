@@ -42,12 +42,15 @@ void PlayScene::ModelCreate()
 {
 	
 	playermodel = Model::CreateFromOBJ("chr_sword");
-
+	itomodel = Model::CreateFromOBJ("ito");
 
 	
 
 	player = Object3d::Create();
 	player->SetModel(playermodel);
+
+	ito = Object3d::Create();
+	ito->SetModel(itomodel);
 
 
 	// ライト生成
@@ -77,7 +80,13 @@ void PlayScene::ModelCreate()
 void PlayScene::SetPrm()
 {
 	//Scale,Position,Size
+	//ito_Pos = Player_Pos;
+	Player_Scl = { 1,1,1 };
+	ito_Scl = { 1,1,1 };
 	player->SetPosition({ Player_Pos });
+	player->SetScale({ Player_Scl });
+	ito->SetPosition({ ito_Pos });
+	ito->SetScale({ ito_Scl });
 }
 #pragma endregion
 
@@ -93,7 +102,7 @@ void PlayScene::objUpdate()
 	}
 	lightGroup->Update();
 	player->Update({ 1,1,1,1 });
-	
+	ito->Update({ 1,1,1,1 });
 	}
 #pragma endregion
 
@@ -158,16 +167,25 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//}
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += 1;
+		Player_Pos.x += 1; 
+		ito_Scl.x += 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos.x -= 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_UP)) {
 		Player_Pos.z += 1;
+		ito_Scl.z += 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
 		Player_Pos.z -= 1;
+	}
+
+	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
+		ito_Scl.x+=1;
+		ito_Scl.y+=1;
+		ito_Scl.z+=1;
+		//ito_Pos.x++;
 	}
 
 	//FBXのアニメーション再生
@@ -209,6 +227,9 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->Draw();
 	player->PostDraw();
 
+	ito->PreDraw();
+	ito->Draw();
+	ito->PostDraw();
 
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画
