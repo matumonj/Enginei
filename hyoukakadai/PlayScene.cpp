@@ -5,6 +5,8 @@
 #include"SceneManager.h"
 #include"MobEnemy.h"
 #include"BossEnemy.h"
+
+
 //シーンのコンストラクタ
 PlayScene::PlayScene(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
@@ -81,12 +83,12 @@ void PlayScene::SetPrm()
 {
 	//Scale,Position,Size
 	//ito_Pos = Player_Pos;
-	Player_Scl = { 1,1,1 };
+	/*Player_Scl = { 1,1,1 };
 	ito_Scl = { 1,1,1 };
 	player->SetPosition({ Player_Pos });
 	player->SetScale({ Player_Scl });
 	ito->SetPosition({ ito_Pos });
-	ito->SetScale({ ito_Scl });
+	ito->SetScale({ ito_Scl });*/
 }
 #pragma endregion
 
