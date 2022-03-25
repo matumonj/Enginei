@@ -191,7 +191,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Input::GetInstance()->Pushkey(DIK_1)) {
-		ito_Rot.y++;
+		ito_Rot.z++;
 	}
 
 
@@ -203,7 +203,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	
 	if (Line == 1) {
 		ito_Scl.x += ito_speed.x;
-		ito_Pos.x += ito_speed.x;
+		//ito_Pos.x += ito_speed.x;
 		Limit -= 0.1f;
 	}
 	if (Limit <= 0) {
