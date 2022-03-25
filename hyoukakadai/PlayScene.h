@@ -47,31 +47,26 @@ private:
 	DebugTxt* debugText;
 
 	Collision* collision = nullptr;
-
 	Object3d* player = nullptr;
-	Object3d* Boss = nullptr;
-	Object3d* Field = nullptr;
-	Object3d* yugudo3d = nullptr;
+	Object3d* ito = nullptr;
 
 
 	Model* playermodel = nullptr;
-	Model* model=nullptr;
-	Model* model2=nullptr;
-	Model* model5;
-	Model* yugudo = nullptr;
+	Model* itomodel = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
 
-	Enemy* enemys[2];
 	Effects* effects;
 private:
+	//Plyer
 	XMFLOAT3 Player_Pos;// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
-
-	XMFLOAT3 Boss_Pos;// = Boss->GetPosition();
-	XMFLOAT3 Boss_Scl;// = Boss->GetScale();
-	XMFLOAT3 Boss_Rot;// = { 0,180,0 };
+	XMFLOAT3 Player_Scl;
+	//ito
+	XMFLOAT3 ito_Pos;
+	XMFLOAT3 ito_Scl;
+	XMFLOAT3 ito_Rot;
 
 	float distance = 30;
 

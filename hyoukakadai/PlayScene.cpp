@@ -40,21 +40,17 @@ void PlayScene::SpriteCreate()
 #pragma region モデルとエフェクトとライトのインスタンス生成
 void PlayScene::ModelCreate()
 {
-	model2 = Model::CreateFromOBJ("newfield");
-	yugudo = Model::CreateFromOBJ("skydome");
+	
 	playermodel = Model::CreateFromOBJ("chr_sword");
+	itomodel = Model::CreateFromOBJ("ito");
 
-
-	//フィールドにモデル割り当て
-	//Field = new Object3d();
-	Field = Object3d::Create();
-	Field->SetModel(model2);
-
-	yugudo3d = Object3d::Create();
-	yugudo3d->SetModel(yugudo);
+	
 
 	player = Object3d::Create();
 	player->SetModel(playermodel);
+
+	ito = Object3d::Create();
+	ito->SetModel(itomodel);
 
 
 	// ライト生成
@@ -74,10 +70,7 @@ void PlayScene::ModelCreate()
 	lightGroup->SetPointLightActive(2, false);
 	lightGroup->SetSpotLightActive(0, true);
 
-	enemys[0] = new MobEnemy();
-	enemys[1] = new BossEnemy();
-	enemys[0]->Initialize();
-	enemys[1]->Initialize();
+
 	effects = new Effects();
 
 }
@@ -86,15 +79,14 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
-	yugudo3d->SetPosition({ 0,30,0 });
-	yugudo3d->SetScale({ 10,10,10 });
-
+	//Scale,Position,Size
+	//ito_Pos = Player_Pos;
+	Player_Scl = { 1,1,1 };
+	ito_Scl = { 1,1,1 };
 	player->SetPosition({ Player_Pos });
-
-	//フィールド
-	Field->SetPosition({ 0,-20,0 });
-	Field->SetScale({ 150,5,150 });
-	background->SetSize({ 1900, 1020 });
+	player->SetScale({ Player_Scl });
+	ito->SetPosition({ ito_Pos });
+	ito->SetScale({ ito_Scl });
 }
 #pragma endregion
 
@@ -109,11 +101,8 @@ void PlayScene::objUpdate()
 		lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));
 	}
 	lightGroup->Update();
-	Field->Update({ 1,1,1,1 });
-	yugudo3d->Update({ 1,1,1,1 });
 	player->Update({ 1,1,1,1 });
-	enemys[0]->Update();
-	enemys[1]->Update();
+	ito->Update({ 1,1,1,1 });
 	}
 #pragma endregion
 
@@ -178,16 +167,25 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//}
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += 1;
+		Player_Pos.x += 1; 
+		ito_Scl.x += 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos.x -= 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_UP)) {
 		Player_Pos.z += 1;
+		ito_Scl.z += 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
 		Player_Pos.z -= 1;
+	}
+
+	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
+		ito_Scl.x+=1;
+		ito_Scl.y+=1;
+		ito_Scl.z+=1;
+		//ito_Pos.x++;
 	}
 
 	//FBXのアニメーション再生
@@ -224,21 +222,14 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	Field->PreDraw();
-	Field->Draw();
-	Field->PostDraw();
-
-	yugudo3d->PreDraw();
-	yugudo3d->Draw();
-	yugudo3d->PostDraw();
 
 	player->PreDraw();
 	player->Draw();
 	player->PostDraw();
 
-
-	enemys[0]->Draw();
-	enemys[1]->Draw();
+	ito->PreDraw();
+	ito->Draw();
+	ito->PostDraw();
 
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画
@@ -313,12 +304,7 @@ void PlayScene::ImGuiDraw()
 		ImGui::ColorPicker3("light_color", spotLightColor);
 		ImGui::TreePop();
 	}
-	if (ImGui::TreeNode("Boss_position")) {
-		ImGui::SliderFloat("positionX", &Boss_Pos.x, -100, 100);
-		ImGui::SliderFloat("positionY", &Boss_Pos.y, -100, 100);
-		ImGui::SliderFloat("positionZ", &Boss_Pos.z, -100, 100);
-		ImGui::TreePop();
-	}
+	
 	if (ImGui::TreeNode("Effect_position")) {
 		ImGui::SliderFloat("positionX", &efkposition.x, -100, 100);
 		ImGui::SliderFloat("positionY", &efkposition.y, -100, 100);
@@ -349,16 +335,11 @@ void PlayScene::Finalize()
 {	
 	//delete efk,efk1;
 	delete mech, zukki;
-	delete model,model5,model2;
 	delete player;
-	delete Boss;
-	delete Field;
 	delete debugText;
 	delete collision;
 	delete lightGroup;
 	delete camera;
 	delete background;
-	delete enemys[0], enemys[1];
-	delete yugudo3d;
 }
 #pragma endregion
