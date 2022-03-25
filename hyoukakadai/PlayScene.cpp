@@ -6,6 +6,7 @@
 #include"MobEnemy.h"
 #include"BossEnemy.h"
 
+//コメントアウト
 
 //シーンのコンストラクタ
 PlayScene::PlayScene(SceneManager* sceneManager)
@@ -83,12 +84,13 @@ void PlayScene::SetPrm()
 {
 	//Scale,Position,Size
 	//ito_Pos = Player_Pos;
-	/*Player_Scl = { 1,1,1 };
-	ito_Scl = { 1,1,1 };
+	Player_Scl = { 1,1,1 };
+	//ito_Scl = { 1,1,1 };
 	player->SetPosition({ Player_Pos });
 	player->SetScale({ Player_Scl });
 	ito->SetPosition({ ito_Pos });
-	ito->SetScale({ ito_Scl });*/
+	ito->SetScale({ ito_Scl });
+	ito->SetRotation({ ito_Rot });
 }
 #pragma endregion
 
@@ -167,13 +169,17 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 //	if (collision->CheckSphere2Sphere() == TRUE) {
 		//debugText->Print("Hit", 950, 20, 3.0f);
 	//}
+	//if (Line == 0) {
+		
+	//}
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += 1; 
-		ito_Scl.x += 1;
+		ito_Pos.x += 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos.x -= 1;
+		ito_Pos.x -= 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_UP)) {
 		Player_Pos.z += 1;
@@ -181,14 +187,40 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
 		Player_Pos.z -= 1;
+		ito_Pos.z -= 1;
 	}
 
-	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
-		ito_Scl.x+=1;
-		ito_Scl.y+=1;
-		ito_Scl.z+=1;
-		//ito_Pos.x++;
+	if (Input::GetInstance()->Pushkey(DIK_1)) {
+		ito_Rot.y++;
 	}
+
+
+	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
+		Line = 1;
+		//ito_Scl.y+=1;
+	}
+
+	
+	if (Line == 1) {
+		ito_Scl.x += ito_speed.x;
+		ito_Pos.x += ito_speed.x;
+		Limit -= 0.1f;
+	}
+	if (Limit <= 0) {
+		//ito_Scl.x--;
+		ito_speed.x = -1;
+		if (ito_Scl.x == old_Scl.x) {
+			Line = 0;
+			Limit = 4;
+		}
+	}
+
+	if (Line == 0) {
+		ito_speed.x = +1;
+		ito_Scl = old_Scl;
+		ito_Pos = Player_Pos;
+	}
+
 
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
