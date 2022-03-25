@@ -49,10 +49,11 @@ private:
 	Collision* collision = nullptr;
 	Object3d* player = nullptr;
 	Object3d* ito = nullptr;
-
+	Object3d* tst = nullptr;
 
 	Model* playermodel = nullptr;
 	Model* itomodel = nullptr;
+	Model* tstmodel = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
@@ -60,13 +61,20 @@ private:
 	Effects* effects;
 private:
 	//Plyer
-	XMFLOAT3 Player_Pos;// = player->GetPosition();
+	XMFLOAT3 Player_Pos={1,1,0};// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
-	XMFLOAT3 Player_Scl;
+	XMFLOAT3 Player_Scl = { 1,1,1 };
 	//ito
 	XMFLOAT3 ito_Pos = {0,0,0};
 	XMFLOAT3 ito_Scl = {1,1,1};
 	XMFLOAT3 ito_Rot;
+	XMFLOAT3 ito_PS = { 0,0,0 };
+	
+	//tst
+	XMFLOAT3 tst_Pos = { 15,1,0 };
+	XMFLOAT3 tst_Scl = {1,1,1};
+	XMFLOAT3 tst_Rot;
+
 
 	XMFLOAT3 old_Scl = { 1,1,1 };
 
