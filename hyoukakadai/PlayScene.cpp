@@ -176,7 +176,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		//debugText->Print("Hit", 950, 20, 3.0f);
 	//}
 
-	ito_PS.x = ito_Pos.x + ito_Scl.x;
+	ito_PS.x = ito_Pos.x + (ito_Scl.x/4);
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += 1; 
@@ -231,14 +231,16 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Line == 0) {
-		ito_speed.x = 0.5;
+		ito_speed.x = 1;
 		ito_Scl = old_Scl;
 		ito_Pos = Player_Pos;
+		Limitsave = Limit;
 	}
 
 	if (Line == 1 && Limit > 0) {
 		if ( ito_PS.x > tst_Pos.x+(tst_Scl.x/2) ) {
 			ito_speed.x = 0;
+			Limit = Limitsave;
 		}
 	}
 
