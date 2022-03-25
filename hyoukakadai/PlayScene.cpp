@@ -46,8 +46,8 @@ void PlayScene::ModelCreate()
 	
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
+	tstmodel = Model::CreateFromOBJ("tst");
 
-	
 
 	player = Object3d::Create();
 	player->SetModel(playermodel);
@@ -55,6 +55,8 @@ void PlayScene::ModelCreate()
 	ito = Object3d::Create();
 	ito->SetModel(itomodel);
 
+	tst = Object3d::Create();
+	tst->SetModel(tstmodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -91,6 +93,9 @@ void PlayScene::SetPrm()
 	ito->SetPosition({ ito_Pos });
 	ito->SetScale({ ito_Scl });
 	ito->SetRotation({ ito_Rot });
+	tst->SetPosition({ tst_Pos });
+	tst->SetRotation({ tst_Rot });
+	tst->SetScale({ tst_Scl });
 }
 #pragma endregion
 
@@ -107,6 +112,7 @@ void PlayScene::objUpdate()
 	lightGroup->Update();
 	player->Update({ 1,1,1,1 });
 	ito->Update({ 1,1,1,1 });
+	tst->Update({ 1,1,1,1 });
 	}
 #pragma endregion
 
@@ -169,9 +175,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 //	if (collision->CheckSphere2Sphere() == TRUE) {
 		//debugText->Print("Hit", 950, 20, 3.0f);
 	//}
-	//if (Line == 0) {
-		
-	//}
+
+	ito_PS.x = ito_Pos.x + ito_Scl.x;
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += 1; 
@@ -194,6 +199,16 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		ito_Rot.z++;
 	}
 
+	if (Input::GetInstance()->Pushkey(DIK_2)) {
+		tst_Rot.x++;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_3)) {
+		tst_Rot.y++;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_4)) {
+		tst_Rot.z++;
+	}
+
 
 	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
 		Line = 1;
@@ -208,7 +223,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	if (Limit <= 0) {
 		//ito_Scl.x--;
-		ito_speed.x = -1;
+		ito_speed.x = -0.5;
 		if (ito_Scl.x == old_Scl.x) {
 			Line = 0;
 			Limit = 4;
@@ -216,9 +231,15 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Line == 0) {
-		ito_speed.x = +1;
+		ito_speed.x = 0.5;
 		ito_Scl = old_Scl;
 		ito_Pos = Player_Pos;
+	}
+
+	if (Line == 1 && Limit > 0) {
+		if ( ito_PS.x > tst_Pos.x+(tst_Scl.x/2) ) {
+			ito_speed.x = 0;
+		}
 	}
 
 
@@ -264,6 +285,10 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	ito->PreDraw();
 	ito->Draw();
 	ito->PostDraw();
+
+	tst->PreDraw();
+	tst->Draw();
+	tst->PostDraw();
 
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画
