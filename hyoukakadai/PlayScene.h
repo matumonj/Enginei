@@ -64,15 +64,21 @@ private:
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl;
 	//ito
-	XMFLOAT3 ito_Pos;
-	XMFLOAT3 ito_Scl;
+	XMFLOAT3 ito_Pos = {0,0,0};
+	XMFLOAT3 ito_Scl = {1,1,1};
 	XMFLOAT3 ito_Rot;
+
+	XMFLOAT3 old_Scl = { 1,1,1 };
 
 	float distance = 30;
 
 	float dy;
 	float dx;
 	float dz;
+
+	int Line = 0;
+	float Limit = 4;
+	XMFLOAT3 ito_speed = { 1,1,1 };
 
 private://“_ŒõŒ¹
 	LightGroup* lightGroup = nullptr;
