@@ -50,10 +50,12 @@ private:
 	Object3d* player = nullptr;
 	Object3d* ito = nullptr;
 	Object3d* tst = nullptr;
+	Object3d* sentan = nullptr;
 
 	Model* playermodel = nullptr;
 	Model* itomodel = nullptr;
 	Model* tstmodel = nullptr;
+	Model* sentanmodel = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
@@ -74,6 +76,11 @@ private:
 	XMFLOAT3 tst_Pos = { 15,1,0 };
 	XMFLOAT3 tst_Scl = {1,1,1};
 	XMFLOAT3 tst_Rot;
+	//sentan
+	XMFLOAT3 sentan_Pos;
+	XMFLOAT3 sentan_Scl = {1,1,0};
+	XMFLOAT3 sentan_Rot;
+
 
 
 	XMFLOAT3 old_Scl = { 1,1,1 };
@@ -86,6 +93,7 @@ private:
 
 	int Line = 0;
 	float Limit = 4;
+	float Limitsave = 0;
 	XMFLOAT3 ito_speed = { 1,1,1 };
 
 private://“_ŒõŒ¹
