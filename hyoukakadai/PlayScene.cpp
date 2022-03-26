@@ -46,7 +46,7 @@ void PlayScene::ModelCreate()
 	
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
-	tstmodel = Model::CreateFromOBJ("tst");
+	tstmodel = Model::CreateFromOBJ("block");
 
 
 	player = Object3d::Create();
@@ -186,17 +186,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= 1;
 		ito_Pos.x -= 1;
 	}
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		Player_Pos.z += 1;
-		ito_Scl.z += 1;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-		Player_Pos.z -= 1;
-		ito_Pos.z -= 1;
-	}
+	
 
 	if (Input::GetInstance()->Pushkey(DIK_1)) {
-		ito_Rot.z++;
+		ito_Rot.y++;
 	}
 
 	if (Input::GetInstance()->Pushkey(DIK_2)) {
