@@ -47,10 +47,11 @@ private:
 	DebugTxt* debugText;
 
 	Collision* collision = nullptr;
-	Object3d* player = nullptr;
+	Object3d* player[10];
 	Object3d* ito = nullptr;
 	Object3d* tst = nullptr;
 	Object3d* sentan = nullptr;
+	
 
 	Model* playermodel = nullptr;
 	Model* itomodel = nullptr;
@@ -63,7 +64,7 @@ private:
 	Effects* effects;
 private:
 	//Plyer
-	XMFLOAT3 Player_Pos={1,1,0};// = player->GetPosition();
+	XMFLOAT3 Player_Pos[10];// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	//ito
@@ -90,6 +91,8 @@ private:
 	float dy;
 	float dx;
 	float dz;
+
+	float zanzouSpeed = 0;
 
 	int Line = 0;
 	float Limit = 4;
