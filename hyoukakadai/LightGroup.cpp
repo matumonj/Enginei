@@ -286,4 +286,3 @@ void LightGroup::SetSpotLightFactorAngle(int index, const XMFLOAT2& lightFactorA
 	spotLights[index].SetLightFactorAngle(lightFactorAngle);
 	dirty = true;
 }
-////////////////////////////////////
