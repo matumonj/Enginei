@@ -43,11 +43,9 @@ void PlayScene::SpriteCreate()
 #pragma region モデルとエフェクトとライトのインスタンス生成
 void PlayScene::ModelCreate()
 {
-	
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
 	tstmodel = Model::CreateFromOBJ("block");
-
 
 	player = Object3d::Create();
 	player->SetModel(playermodel);
@@ -119,9 +117,8 @@ void PlayScene::objUpdate()
 #pragma region 初期化
 void PlayScene::Initialize(DirectXCommon* dxCommon)
 {
-	//
+	
 	c_postEffect = Default;
-
 	collision = new Collision();
 	SpriteCreate();//
 	ModelCreate();//
@@ -186,7 +183,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= 1;
 		ito_Pos.x -= 1;
 	}
-	
 
 	if (Input::GetInstance()->Pushkey(DIK_1)) {
 		ito_Rot.y++;
@@ -202,18 +198,17 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		tst_Rot.z++;
 	}
 
-
 	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
 		Line = 1;
 		//ito_Scl.y+=1;
 	}
 
-	
 	if (Line == 1) {
 		ito_Scl.x += ito_speed.x;
 		//ito_Pos.x += ito_speed.x;
 		Limit -= 0.1f;
 	}
+
 	if (Limit <= 0) {
 		//ito_Scl.x--;
 		ito_speed.x = -0.5;
