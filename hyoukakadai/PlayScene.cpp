@@ -49,8 +49,7 @@ void PlayScene::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("block");
 
 
-	player = Object3d::Create();
-	player->SetModel(playermodel);
+	
 
 	ito = Object3d::Create();
 	ito->SetModel(itomodel);
@@ -58,6 +57,10 @@ void PlayScene::ModelCreate()
 	tst = Object3d::Create();
 	tst->SetModel(tstmodel);
 
+	for (int i = 0; i < 10; i++) {
+		player[i] = Object3d::Create();
+		player[i]->SetModel(playermodel);
+	}
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -88,14 +91,17 @@ void PlayScene::SetPrm()
 	//ito_Pos = Player_Pos;
 	Player_Scl = { 1,1,1 };
 	//ito_Scl = { 1,1,1 };
-	player->SetPosition({ Player_Pos });
-	player->SetScale({ Player_Scl });
+	for (int i = 0; i < 10; i++) {
+		player[i]->SetPosition({ Player_Pos[i] });
+		player[i]->SetScale({ Player_Scl });
+	}
 	ito->SetPosition({ ito_Pos });
 	ito->SetScale({ ito_Scl });
 	ito->SetRotation({ ito_Rot });
 	tst->SetPosition({ tst_Pos });
 	tst->SetRotation({ tst_Rot });
 	tst->SetScale({ tst_Scl });
+	
 }
 #pragma endregion
 
@@ -110,10 +116,13 @@ void PlayScene::objUpdate()
 		lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));
 	}
 	lightGroup->Update();
-	player->Update({ 1,1,1,1 });
+	for (int i = 0; i < 10; i++) {
+		player[i]->Update({ 1,1,1,1 });
+	}
 	ito->Update({ 1,1,1,1 });
 	tst->Update({ 1,1,1,1 });
-	}
+
+}
 #pragma endregion
 
 #pragma region 初期化
@@ -130,7 +139,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
-	camera->SetEye({ Player_Pos.x,Player_Pos.y+5,Player_Pos.z-15 });
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y+5,Player_Pos[0].z-15 });
 
 	effects->Initialize(dxCommon, camera);
 	spotLightpos[0] = 10;
@@ -179,11 +188,11 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	ito_PS.x = ito_Pos.x + (ito_Scl.x/4);
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += 1; 
+		Player_Pos[0].x += 0.5f; 
 		ito_Pos.x += 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= 1;
+		Player_Pos[0].x -= 0.5f;
 		ito_Pos.x -= 1;
 	}
 	
@@ -226,18 +235,24 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Line == 0) {
 		ito_speed.x = 1;
 		ito_Scl = old_Scl;
-		ito_Pos = Player_Pos;
+		ito_Pos = Player_Pos[0];
 		Limitsave = Limit;
+		zanzouSpeed = 0;
+
 	}
 
 	if (Line == 1 && Limit > 0) {
 		if ( ito_PS.x > tst_Pos.x+(tst_Scl.x/2) ) {
 			ito_speed.x = 0;
 			Limit = Limitsave;
+			Player_Pos[0].x++;
+			zanzouSpeed = 0.5f;
 		}
 	}
 
-
+	for (int i = 9; i > 0; i--) {
+		Player_Pos[i].x = Player_Pos[i - 1].x+zanzouSpeed;
+	}
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -252,8 +267,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y + 5,Player_Pos.z - 15 });
-	camera->SetTarget({ Player_Pos.x,Player_Pos.y + 5,Player_Pos.z });
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 15 });
+	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
 	camera->Update();
 
 	SetPrm();//パラメータのセット
@@ -272,10 +287,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
-
-	player->PreDraw();
-	player->Draw();
-	player->PostDraw();
+	for (int i = 0; i < 10; i++) {
+		player[i]->PreDraw();
+		player[i]->Draw();
+		player[i]->PostDraw();
+	}
+	
 
 	ito->PreDraw();
 	ito->Draw();
@@ -285,6 +302,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	tst->Draw();
 	tst->PostDraw();
 
+	
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画
 	debugText->DrawAll(DirectXCommon::GetInstance()->GetCmdList());
