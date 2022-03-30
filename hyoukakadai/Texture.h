@@ -156,7 +156,7 @@ private:// 静的メンバ関数
 	static bool InitializeGraphicsPipeline();
 
 public: // メンバ関数
-	void CreateTexture();
+	void CreateTexture(float px,float px2);
 
 	bool Initialize();
 	/// <summary>
@@ -196,6 +196,7 @@ private: // メンバ変数
 	XMFLOAT3 position = { 0,0,0 };
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
+	float px, px2;
 	// 親オブジェクト
 	//SoulpEffect* parent = nullptr;
 private:

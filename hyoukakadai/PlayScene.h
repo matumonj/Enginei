@@ -22,12 +22,12 @@
 class PlayScene :public BaseScene
 {
 public:
-	//ƒV[ƒ“‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//ã‚·ãƒ¼ãƒ³ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	PlayScene(SceneManager* sceneManager);
-private: // ƒGƒCƒŠƒAƒX
-// Microsoft::WRL::‚ğÈ—ª
+private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -52,14 +52,11 @@ private:
 	Object3d* ito = nullptr;
 	Object3d* tst[5][5];
 	Object3d* sentan = nullptr;
-	Object3d* test = nullptr;
 
-	
 
 	Model* playermodel = nullptr;
 	Model* itomodel = nullptr;
 	Model* tstmodel = nullptr;
-
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
@@ -67,6 +64,7 @@ private:
 	Effects* effects;
 private:
 	//Plyer
+
 	XMFLOAT3 Player_Pos[10];// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
@@ -96,7 +94,7 @@ private:
 	float dz;
 
 	float zanzouSpeed = 0;
-	//…—p•Ï”
+
 	int Line = 0;
 	float Limit = 4;
 	float Limitsave = 0;
@@ -117,7 +115,7 @@ private:
 
 
 
-private://“_ŒõŒ¹
+private://ç‚¹å…‰æº
 	LightGroup* lightGroup = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
 
@@ -135,7 +133,7 @@ private://“_ŒõŒ¹
 	float pointLightAtten[3] = { 0.05f,0.05f,0.05f };
 
 	int SpotLightflag = false;
-private://ƒXƒ|ƒbƒgƒ‰ƒCƒg
+private://ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
 	float spotLightDir[3] = { 0,-1,0 };
 	float spotLightpos[3] = { 0,5,0 };
 	float spotLightColor[3] = { 1,1,1 };
@@ -164,7 +162,7 @@ public:
 
 public:
 	XMFLOAT3 efkposition = {-50,-10,90};
-	//ƒGƒtƒFƒNƒg—p(‚½‚¾ƒvƒƒOƒ‰ƒ€‚Å‚Â‚­‚ê‚é‚à‚Ì‚ÍƒvƒƒOƒ‰ƒ€‚Åì‚é•û‚ª‚¢‚¢@‘½—p‚Í‚¢‚­‚È‚¢)
+	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”¨(ãŸã ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã§ã¤ãã‚Œã‚‹ã‚‚ã®ã¯ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã§ä½œã‚‹æ–¹ãŒã„ã„ã€€å¤šç”¨ã¯ã„ããªã„)
 	
 	f_Model* fbxmodel = nullptr;
 	f_Object3d* object1 = nullptr;
