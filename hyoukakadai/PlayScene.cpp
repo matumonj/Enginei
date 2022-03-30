@@ -6,25 +6,25 @@
 #include"MobEnemy.h"
 #include"BossEnemy.h"
 
-//ƒRƒƒ“ƒgƒAƒEƒg
+//ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ
 
-//ƒV[ƒ“‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//ã‚·ãƒ¼ãƒ³ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 PlayScene::PlayScene(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
 
 }
 
-#pragma region ƒXƒvƒ‰ƒCƒg‚Ì¶¬
-//ƒXƒvƒ‰ƒCƒg¶¬
+#pragma region ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
+//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”Ÿæˆ
 void PlayScene::SpriteCreate()
 {
-	// ƒfƒoƒbƒOƒeƒLƒXƒg—pƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆç”¨ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont2.png");
 	Sprite::LoadTexture(1, L"Resources/0057b6fa9ec85ae.jpg");
 	Sprite::LoadTexture(2, L"Resources/tyuta_C.png");
 
-	//•’Ê‚ÌƒeƒNƒXƒ`ƒƒ(ƒXƒvƒ‰ƒCƒg‚¶‚á‚È‚¢‚æ)
+	//æ™®é€šã®ãƒ†ã‚¯ã‚¹ãƒãƒ£(ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã˜ã‚ƒãªã„ã‚ˆ)
 	Texture::LoadTexture(6, L"Resources/bosshp.png");
 	Texture::LoadTexture(1, L"Resources/ball.png");
 	mech = Texture::Create(6, { 0,-50,50 }, { 2,2,2 }, {1,1,1,1});
@@ -33,14 +33,14 @@ void PlayScene::SpriteCreate()
 	zukki->CreateTexture(5,5);
 
 	background = Sprite::Create(1, { 0.0f,-200.0f });
-	// ƒfƒoƒbƒOƒeƒLƒXƒg‰Šú‰»
+	// ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆåˆæœŸåŒ–
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
 	debugText->Initialize(debugTextTexNumber);
 }
 #pragma endregion
 
-#pragma region ƒ‚ƒfƒ‹‚ÆƒGƒtƒFƒNƒg‚Æƒ‰ƒCƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+#pragma region ãƒ¢ãƒ‡ãƒ«ã¨ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã¨ãƒ©ã‚¤ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
 void PlayScene::ModelCreate()
 {
 	fieldmodel = Model::CreateFromOBJ("block");
@@ -54,22 +54,30 @@ void PlayScene::ModelCreate()
 	ito = Object3d::Create();
 	ito->SetModel(itomodel);
 
-	tst = Object3d::Create();
-	tst->SetModel(tstmodel);
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			tst[i][j] = Object3d::Create();
+			tst[i][j]->SetModel(tstmodel);
+		}
+	}
+	test = Object3d::Create();
+	test->SetModel(tstmodel);
+
+	sentan = Object3d::Create();
+	sentan->SetModel(tstmodel);
 
 	for (int i = 0; i < 10; i++) {
 		player[i] = Object3d::Create();
 		player[i]->SetModel(playermodel);
 	}
-	for (int i = 0; i < 10; i++) {
-		fieldmap[i] = Object3d::Create();
 		fieldmap[i]->SetModel(fieldmodel);
 	}
-	// ƒ‰ƒCƒg¶¬
+
+	// ãƒ©ã‚¤ãƒˆç”Ÿæˆ
 	lightGroup = LightGroup::Create();
-	// 3DƒIƒuƒGƒNƒg‚Éƒ‰ƒCƒg‚ğƒZƒbƒg
+	// 3Dã‚ªãƒ–ã‚¨ã‚¯ãƒˆã«ãƒ©ã‚¤ãƒˆã‚’ã‚»ãƒƒãƒˆ
 	Object3d::SetLightGroup(lightGroup);
-	//ƒpƒ‰ƒ[ƒ^‚Ìİ’è
+	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®è¨­å®š
 	lightGroup->SetDirLightActive(0, false);
 	lightGroup->SetDirLightActive(1, false);
 	lightGroup->SetDirLightActive(2, false);
@@ -88,7 +96,7 @@ void PlayScene::ModelCreate()
 }
 #pragma endregion
 
-#pragma region Šeƒpƒ‰ƒ[ƒ^‚ÌƒZƒbƒg
+#pragma region å„ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
 void PlayScene::SetPrm()
 {
 	//Scale,Position,Size
@@ -106,17 +114,15 @@ void PlayScene::SetPrm()
 	ito->SetPosition({ ito_Pos });
 	ito->SetScale({ ito_Scl });
 	ito->SetRotation({ ito_Rot });
-	tst->SetPosition({ tst_Pos });
-	tst->SetRotation({ tst_Rot });
-	tst->SetScale({ tst_Scl });
+
 	
 }
 #pragma endregion
 
-#pragma region ƒIƒuƒWƒFƒNƒg+ƒ‰ƒCƒg‚ÌXVˆ—
+#pragma region ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ+ãƒ©ã‚¤ãƒˆã®æ›´æ–°å‡¦ç†
 void PlayScene::objUpdate()
 {
-	{//ƒ‰ƒCƒg‚Ìƒpƒ‰ƒ[ƒ^‚ğ”½‰f 	
+	{//ãƒ©ã‚¤ãƒˆã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’åæ˜  	
 		lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
 		lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightpos));
 		lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
@@ -127,14 +133,12 @@ void PlayScene::objUpdate()
 	for (int i = 0; i < 10; i++) {
 		player[i]->Update({ 1,1,1,1 });
 	}
-	
-	ito->Update({ 1,1,1,1 });
-	tst->Update({ 1,1,1,1 });
+
 
 }
 #pragma endregion
 
-#pragma region ‰Šú‰»
+#pragma region åˆæœŸåŒ–
 void PlayScene::Initialize(DirectXCommon* dxCommon)
 {
 	//
@@ -144,27 +148,28 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	SpriteCreate();//
 	ModelCreate();//
 
-	// ƒJƒƒ‰¶¬
+	// ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
-	// 3DƒIƒuƒWƒFƒNƒg‚ÉƒJƒƒ‰‚ğƒZƒbƒg
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
 	Object3d::SetCamera(camera);
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y+5,Player_Pos[0].z-15 });
+
+
 
 	effects->Initialize(dxCommon, camera);
 	spotLightpos[0] = 10;
 	spotLightpos[2] = 0;
 
-	//ƒ‚ƒfƒ‹–¼‚ğw’è‚µ‚Äƒtƒ@ƒCƒ‹“Ç‚İ‚İ
+	//ãƒ¢ãƒ‡ãƒ«åã‚’æŒ‡å®šã—ã¦ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
-	//ƒfƒoƒCƒX‚ğƒZƒbƒg
+	//ãƒ‡ãƒã‚¤ã‚¹ã‚’ã‚»ãƒƒãƒˆ
 	f_Object3d::SetDevice(dxCommon->GetDev());
-	//ƒJƒƒ‰‚ğƒZƒbƒg
+	//ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
 	f_Object3d::SetCamera(camera);
-	//ƒOƒ‰ƒtƒBƒbƒNƒpƒCƒvƒ‰ƒCƒ“¶¬
+	//ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ç”Ÿæˆ
 	f_Object3d::CreateGraphicsPipeline();
 
-	//FBXƒ‚ƒfƒ‹‚Ì¶¬
+	//FBXãƒ¢ãƒ‡ãƒ«ã®ç”Ÿæˆ
 	object1 = new f_Object3d();
 	object1->Initialize();
 	object1->SetModel(fbxmodel);
@@ -173,17 +178,20 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	postEffect = new PostEffect();
 	postEffect->Initialize();
+
+	
+	
 }
 #pragma endregion
 
-#pragma region XVˆ—
+#pragma region æ›´æ–°å‡¦ç†
 void PlayScene::Update(DirectXCommon* dxCommon)
 {
 	px -= 0.01f;
 	px2 -= 0.01f;
 	mech->CreateTexture(px,px2);
 	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
-	//ƒ}ƒEƒX‚Ì“ü—Íó‘Ôæ“¾
+	//ãƒã‚¦ã‚¹ã®å…¥åŠ›çŠ¶æ…‹å–å¾—
 	if (Input::GetInstance()->PushMouseLeft()) {
 		dy = (float)mouseMove.lX;
 		dx = (float)mouseMove.lY;
@@ -192,29 +200,33 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		//Player_Rot.z -= dx * 0.2;
 	}
 	effects->Update(dxCommon, camera);
-	//“–‚½‚è”»’è
+	//å½“ãŸã‚Šåˆ¤å®š
 //	if (collision->CheckSphere2Sphere() == TRUE) {
 		//debugText->Print("Hit", 950, 20, 3.0f);
 	//}
 
 	ito_PS.x = ito_Pos.x + (ito_Scl.x/4);
+	sentan_Pos = ito_PS;
+	sentan_Rot = ito_Rot;
+
+	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos[0].x += 0.5f; 
-		ito_Pos.x += 1;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos[0].x -= 0.5f;
-		ito_Pos.x -= 1;
+
+
 	}
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_1)) {
-		ito_Rot.y++;
+		ito_Rot.z++;
+		ito_Scl.x = 4;
+		//ito_rad = ito_Rot.y * 3.14 / 180;
 	}
+	
 
 	if (Input::GetInstance()->Pushkey(DIK_2)) {
-		tst_Rot.x++;
+		tst_Pos.x++;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_3)) {
 		tst_Rot.y++;
@@ -229,47 +241,38 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		//ito_Scl.y+=1;
 	}
 
-	
 	if (Line == 1) {
-		ito_Scl.x += ito_speed.x;
-		//ito_Pos.x += ito_speed.x;
-		Limit -= 0.1f;
-	}
-	if (Limit <= 0) {
-		//ito_Scl.x--;
-		ito_speed.x = -0.5;
-		if (ito_Scl.x == old_Scl.x) {
-			Line = 0;
-			Limit = 4;
+		Limit-=0.1f;
+		vec_x = speed;
+		if (vec_x != 0.0f ) {
+			length = sqrtf(vec_x * vec_x );
+			normal_x = vec_x / length;
+			normal_x *= speed;
+			if (Limit <= 0) {
+				normal_x = -normal_x;
+				speed = -1;
+				if (ito_Scl.x == old_Scl.x) {
+					Line = 0;
+					Limit = 4;
+				}
+			}
+			ito_Scl.x += normal_x;
 		}
 	}
+	
 
 	if (Line == 0) {
-		ito_speed.x = 1;
 		ito_Scl = old_Scl;
 		ito_Pos = Player_Pos[0];
 		Limitsave = Limit;
 		zanzouSpeed = 0;
 
-	}
 
-	if (Line == 1 && Limit > 0) {
-		if ( ito_PS.x > tst_Pos.x+(tst_Scl.x/2) ) {
-			ito_speed.x = 0;
-			Limit = Limitsave;
-			Player_Pos[0].x++;
-			zanzouSpeed = 0.5f;
-		}
-	}
-
-	for (int i = 9; i > 0; i--) {
-		Player_Pos[i].x = Player_Pos[i - 1].x+zanzouSpeed;
-	}
-	//FBX‚ÌƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+	//FBXã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
 	}
-	//FBXƒ‚ƒfƒ‹‚ÌXV
+	//FBXãƒ¢ãƒ‡ãƒ«ã®æ›´æ–°
 	object1->Updata(TRUE);
 	for (int i = 0; i < 10; i++) {
 		fieldmap[i]->Update({ 1,1,1,1 });
@@ -278,27 +281,28 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	mech->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
 	zukki->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
 
-	//ƒJƒƒ‰ŠÖŒW‚Ìˆ—
-	camera->SetTarget({ 0,1,0 });//’‹“_
+	//ã‚«ãƒ¡ãƒ©é–¢ä¿‚ã®å‡¦ç†
+	camera->SetTarget({ 0,1,0 });//æ³¨è¦–ç‚¹
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 15 });
+
+
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
 	camera->Update();
 
-	SetPrm();//ƒpƒ‰ƒ[ƒ^‚ÌƒZƒbƒg
+	SetPrm();//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
 	
-	objUpdate();//ƒIƒuƒWƒFƒNƒg‚ÌXVˆ—
+	objUpdate();//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°å‡¦ç†
 
-	//ƒV[ƒ“ƒ`ƒFƒ“ƒW
-	if (Input::GetInstance()->TriggerKey(DIK_R)) {//‰Ÿ‚³‚ê‚½‚ç
-	BaseScene* scene = new TitleScene(sceneManager_);//Ÿ‚ÌƒV[ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX¶¬
-	sceneManager_->SetnextScene(scene);//ƒV[ƒ“‚ÌƒZƒbƒg
+	//ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸
+	if (Input::GetInstance()->TriggerKey(DIK_R)) {//æŠ¼ã•ã‚ŒãŸã‚‰
+	BaseScene* scene = new TitleScene(sceneManager_);//æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
+	sceneManager_->SetnextScene(scene);//ã‚·ãƒ¼ãƒ³ã®ã‚»ãƒƒãƒˆ
 	}
 }
 #pragma endregion 
 
-//ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ
-#pragma region ƒ‚ƒfƒ‹‚Ì•`‰æ
+//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»
+#pragma region ãƒ¢ãƒ‡ãƒ«ã®æç”»
 void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	for (int i = 0; i < 10; i++) {
@@ -306,63 +310,71 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		player[i]->Draw();
 		player[i]->PostDraw();
 	}
-	for (int i = 0; i < 10; i++) {
-		fieldmap[i]->PreDraw();
-		fieldmap[i]->Draw();
-		fieldmap[i]->PostDraw();
+
 	}
 
 	ito->PreDraw();
 	ito->Draw();
 	ito->PostDraw();
 
-	tst->PreDraw();
-	tst->Draw();
-	tst->PostDraw();
+	
+
+	//test->PreDraw();
+	//test->Draw();
+	//test->PostDraw();
+
+	/*sentan->PreDraw();
+	sentan->Draw();
+	sentan->PostDraw();*/
+	
+	/*if (radY <= tst_Pos.y ) {
+		debugText->Print("Hit", 0, 0, 10);
+	}*/
+
 
 	
 	Sprite::PreDraw(cmdList);
-	//// ”wŒiƒXƒvƒ‰ƒCƒg•`‰æ
+	//// èƒŒæ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 	debugText->DrawAll(DirectXCommon::GetInstance()->GetCmdList());
-	//// ƒXƒvƒ‰ƒCƒg•`‰æŒãˆ—
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å¾Œå‡¦ç†
 	Sprite::PostDraw(cmdList);
 }
-//sƒvƒ‰ƒC‚ÆˆÈŠO‚Ì•`‰æ
+//sãƒ—ãƒ©ã‚¤ã¨ä»¥å¤–ã®æç”»
 void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 {
-	//ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»
 	SpriteDraw(dxcomn->GetCmdList());
 	
-	//•’Ê‚ÌƒeƒNƒXƒ`ƒƒ‚Ì•`‰æ
+	//æ™®é€šã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»
 	Texture::PreDraw(dxcomn->GetCmdList());
-	//zukki->Draw();//ƒYƒbƒL[ƒjƒƒ‚Ì‰æ‘œ
-	mech->Draw();//ƒƒJƒo[ƒ“‚Ì‰æ‘œ
+	//zukki->Draw();//ã‚ºãƒƒã‚­ãƒ¼ãƒ‹ãƒ£ã®ç”»åƒ
+	mech->Draw();//ãƒ¡ã‚«ãƒãƒ¼ãƒ³ã®ç”»åƒ
 	Texture::PostDraw();
 	
 	effects->Draw(dxcomn);
-	//FBX‚Ì•`‰æ
+	//FBXã®æç”»
 	object1->Draw(dxcomn->GetCmdList());
 }
 #pragma endregion
-//«‚É“ü‚é
-#pragma region •`‰æ(imgui‚ÆƒXƒvƒ‰ƒCƒg‚Æƒ‚ƒfƒ‹‚Ü‚Æ‚ß‚½‚à‚Ì)
+//â†“ã«å…¥ã‚‹
+#pragma region æç”»(imguiã¨ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã¨ãƒ¢ãƒ‡ãƒ«ã¾ã¨ã‚ãŸã‚‚ã®)
 void PlayScene::Draw(DirectXCommon* dxcomn)
 {	
-	//ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ìê‡‚í‚¯(B‚Å‚Ú‚©‚µ D‚ªƒfƒtƒHƒ‹ƒg)
+	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å ´åˆã‚ã‘(Bã§ã¼ã‹ã— DãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)
 	switch (c_postEffect)
 	{
-	case Blur://‚Ú‚©‚µ@•`‰æ€ˆá‚¤‚¾‚¯
+	case Blur://ã¼ã‹ã—ã€€æç”»æº–é•ã†ã ã‘
 		postEffect->PreDrawScene(dxcomn->GetCmdList());
 		MyGameDraw(dxcomn);
 		postEffect->PostDrawScene(dxcomn->GetCmdList());
 
 		dxcomn->BeginDraw();
 		postEffect->Draw(dxcomn->GetCmdList());
-		ImGuiDraw();//imgui‚ÍÅŒã‚Ì•û“ü‚ê‚Æ‚­
+		ImGuiDraw();//imguiã¯æœ€å¾Œã®æ–¹å…¥ã‚Œã¨ã
 		dxcomn->EndDraw();
 		break;
 
-	case Default://•’Ê‚Ì‚â‚Â“Á‚É‰½‚à‚©‚©‚Á‚Ä‚¢‚È‚¢
+	case Default://æ™®é€šã®ã‚„ã¤ç‰¹ã«ä½•ã‚‚ã‹ã‹ã£ã¦ã„ãªã„
 		postEffect->PreDrawScene(dxcomn->GetCmdList());
 		postEffect->Draw(dxcomn->GetCmdList());
 		postEffect->PostDrawScene(dxcomn->GetCmdList());
@@ -407,6 +419,8 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderFloat("positionZ", &texpo.z, -100, 100);
 		ImGui::TreePop();
 	}
+
+
 	ImGui::End();
 
 	ImGui::Begin("postEffect");
@@ -420,7 +434,7 @@ void PlayScene::ImGuiDraw()
 	ImGui::End();
 
 }
-#pragma region ‰ğ•ú•”•ª
+#pragma region è§£æ”¾éƒ¨åˆ†
 void PlayScene::Finalize()
 {	
 	//delete efk,efk1;
