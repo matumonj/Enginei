@@ -51,19 +51,21 @@ private:
 	Object3d* ito = nullptr;
 	Object3d* tst = nullptr;
 	Object3d* sentan = nullptr;
-	
+	Object3d* fieldmap[10];
 
 	Model* playermodel = nullptr;
 	Model* itomodel = nullptr;
 	Model* tstmodel = nullptr;
 	Model* sentanmodel = nullptr;
-
+	Model* fieldmodel = nullptr;
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
 
 	Effects* effects;
 private:
 	//Plyer
+	float px = 0;
+	float px2 = 0;
 	XMFLOAT3 Player_Pos[10];// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };

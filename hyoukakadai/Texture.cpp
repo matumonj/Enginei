@@ -341,7 +341,7 @@ bool Texture::LoadTexture(UINT texnumber, const wchar_t* filename)
 	return true;
 }
 
-void Texture::CreateTexture()
+void Texture::CreateTexture(float px,float px2)
 {
 	HRESULT result = S_FALSE;
 
@@ -355,8 +355,8 @@ void Texture::CreateTexture()
 		VertexPosNormalUv verticesSquare[] = {
 			{{-5.0f,-5.0f,0.0f}, { 0,0,1}, {0,1}},
 			{{-5.0f,+5.0f,0.0f}, { 0,0,1}, {0,0}},
-			{{+5.0f,-5.0f,0.0f}, { 0,0,1}, {1,1}},
-			{{+5.0f,+5.0f,0.0f}, { 0,0,1}, {1,0}},
+			{{px,-5.0f,0.0f}, { 0,0,1}, {1,1}},
+			{{px2,+5.0f,0.0f}, { 0,0,1}, {1,0}},
 		};
 		std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
 

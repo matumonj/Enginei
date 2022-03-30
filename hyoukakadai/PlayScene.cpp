@@ -25,12 +25,12 @@ void PlayScene::SpriteCreate()
 	Sprite::LoadTexture(2, L"Resources/tyuta_C.png");
 
 	//普通のテクスチャ(スプライトじゃないよ)
-	Texture::LoadTexture(6, L"Resources/DQVDS_-_Mechanowyrm.png");
+	Texture::LoadTexture(6, L"Resources/bosshp.png");
 	Texture::LoadTexture(1, L"Resources/ball.png");
 	mech = Texture::Create(6, { 0,-50,50 }, { 2,2,2 }, {1,1,1,1});
 	zukki = Texture::Create(1, { 0,-20,50 }, { 2,2,2 }, { 1,1,1,1 });
-	mech->CreateTexture();
-	zukki->CreateTexture();
+	
+	zukki->CreateTexture(5,5);
 
 	background = Sprite::Create(1, { 0.0f,-200.0f });
 	// デバッグテキスト初期化
@@ -43,7 +43,7 @@ void PlayScene::SpriteCreate()
 #pragma region モデルとエフェクトとライトのインスタンス生成
 void PlayScene::ModelCreate()
 {
-	
+	fieldmodel = Model::CreateFromOBJ("block");
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
 	tstmodel = Model::CreateFromOBJ("block");
@@ -60,6 +60,10 @@ void PlayScene::ModelCreate()
 	for (int i = 0; i < 10; i++) {
 		player[i] = Object3d::Create();
 		player[i]->SetModel(playermodel);
+	}
+	for (int i = 0; i < 10; i++) {
+		fieldmap[i] = Object3d::Create();
+		fieldmap[i]->SetModel(fieldmodel);
 	}
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -90,6 +94,10 @@ void PlayScene::SetPrm()
 	//Scale,Position,Size
 	//ito_Pos = Player_Pos;
 	Player_Scl = { 1,1,1 };
+	for (int i = 0; i < 10; i++) {
+		fieldmap[i]->SetScale({ 5,5,5 });
+		fieldmap[i]->SetPosition({ (float)i * 6,0,0 });
+	}
 	//ito_Scl = { 1,1,1 };
 	for (int i = 0; i < 10; i++) {
 		player[i]->SetPosition({ Player_Pos[i] });
@@ -119,6 +127,7 @@ void PlayScene::objUpdate()
 	for (int i = 0; i < 10; i++) {
 		player[i]->Update({ 1,1,1,1 });
 	}
+	
 	ito->Update({ 1,1,1,1 });
 	tst->Update({ 1,1,1,1 });
 
@@ -170,6 +179,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void PlayScene::Update(DirectXCommon* dxCommon)
 {
+	px -= 0.01f;
+	px2 -= 0.01f;
+	mech->CreateTexture(px,px2);
 	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
 	//マウスの入力状態取得
 	if (Input::GetInstance()->PushMouseLeft()) {
@@ -259,7 +271,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	//FBXモデルの更新
 	object1->Updata(TRUE);
-	
+	for (int i = 0; i < 10; i++) {
+		fieldmap[i]->Update({ 1,1,1,1 });
+	}
 	mech->SetPosition(texpo);
 	mech->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
 	zukki->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
@@ -292,7 +306,11 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		player[i]->Draw();
 		player[i]->PostDraw();
 	}
-	
+	for (int i = 0; i < 10; i++) {
+		fieldmap[i]->PreDraw();
+		fieldmap[i]->Draw();
+		fieldmap[i]->PostDraw();
+	}
 
 	ito->PreDraw();
 	ito->Draw();
@@ -318,7 +336,7 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 	//普通のテクスチャの描画
 	Texture::PreDraw(dxcomn->GetCmdList());
 	//zukki->Draw();//ズッキーニャの画像
-	//mech->Draw();//メカバーンの画像
+	mech->Draw();//メカバーンの画像
 	Texture::PostDraw();
 	
 	effects->Draw(dxcomn);
