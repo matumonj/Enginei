@@ -57,6 +57,12 @@ void PlayScene::ModelCreate()
 	tst = Object3d::Create();
 	tst->SetModel(tstmodel);
 
+	test = Object3d::Create();
+	test->SetModel(tstmodel);
+
+	sentan = Object3d::Create();
+	sentan->SetModel(tstmodel);
+
 	for (int i = 0; i < 10; i++) {
 		player[i] = Object3d::Create();
 		player[i]->SetModel(playermodel);
@@ -101,6 +107,8 @@ void PlayScene::SetPrm()
 	tst->SetPosition({ tst_Pos });
 	tst->SetRotation({ tst_Rot });
 	tst->SetScale({ tst_Scl });
+	test->SetPosition({ tst_Pos.x - 2,tst_Pos.y,tst_Pos.z });
+	sentan->SetPosition({ sentan_Pos });
 	
 }
 #pragma endregion
@@ -121,7 +129,8 @@ void PlayScene::objUpdate()
 	}
 	ito->Update({ 1,1,1,1 });
 	tst->Update({ 1,1,1,1 });
-
+	sentan->Update({ 1,1,1,1 });
+	test->Update({ 1,1,1,1 });
 }
 #pragma endregion
 
@@ -186,20 +195,27 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//}
 
 	ito_PS.x = ito_Pos.x + (ito_Scl.x/4);
+	sentan_Pos = ito_PS;
+	sentan_Rot = ito_Rot;
+
+	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos[0].x += 0.5f; 
-		ito_Pos.x += 1;
+		//ito_Pos.x += 1;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos[0].x -= 0.5f;
-		ito_Pos.x -= 1;
+		//ito_Pos.x -= 1;
 	}
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_1)) {
-		ito_Rot.y++;
+		ito_Rot.z++;
+		ito_Scl.x = 4;
+		//ito_rad = ito_Rot.y * 3.14 / 180;
 	}
+	
 
 	if (Input::GetInstance()->Pushkey(DIK_2)) {
 		tst_Rot.x++;
@@ -217,42 +233,49 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		//ito_Scl.y+=1;
 	}
 
-	
 	if (Line == 1) {
-		ito_Scl.x += ito_speed.x;
-		//ito_Pos.x += ito_speed.x;
-		Limit -= 0.1f;
-	}
-	if (Limit <= 0) {
-		//ito_Scl.x--;
-		ito_speed.x = -0.5;
-		if (ito_Scl.x == old_Scl.x) {
-			Line = 0;
-			Limit = 4;
+		Limit-=0.1f;
+		vec_x = speed;
+		if (vec_x != 0.0f ) {
+			length = sqrtf(vec_x * vec_x );
+			normal_x = vec_x / length;
+			normal_x *= speed;
+			if (Limit <= 0) {
+				normal_x = -normal_x;
+				speed = -1;
+				if (ito_Scl.x == old_Scl.x) {
+					Line = 0;
+					Limit = 4;
+				}
+			}
+			ito_Scl.x += normal_x;
 		}
 	}
+	
 
 	if (Line == 0) {
-		ito_speed.x = 1;
 		ito_Scl = old_Scl;
 		ito_Pos = Player_Pos[0];
 		Limitsave = Limit;
 		zanzouSpeed = 0;
-
 	}
 
-	if (Line == 1 && Limit > 0) {
-		if ( ito_PS.x > tst_Pos.x+(tst_Scl.x/2) ) {
-			ito_speed.x = 0;
-			Limit = Limitsave;
-			Player_Pos[0].x++;
-			zanzouSpeed = 0.5f;
-		}
-	}
+	
+
+	//if (Line == 1 && Limit > 0) {
+	//	ito_rad = ito_PS.x / cosf(ito_Rot.z);
+	//	if ( ito_PS.x > tst_Pos.x + (tst_Scl.x / 2)   /*ito_rad >= tst_Pos.x + (tst_Scl.x / 2)*/) {
+	//		ito_speed.x = 0;
+	//		Limit = Limitsave;
+	//		Player_Pos[0].x++;
+	//		zanzouSpeed = 0.5f;
+	//	}
+	//}
 
 	for (int i = 9; i > 0; i--) {
-		Player_Pos[i].x = Player_Pos[i - 1].x+zanzouSpeed;
+		Player_Pos[i].x = Player_Pos[i - 1].x + zanzouSpeed;
 	}
+	
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -302,7 +325,19 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	tst->Draw();
 	tst->PostDraw();
 
+	test->PreDraw();
+	test->Draw();
+	test->PostDraw();
+
+	/*sentan->PreDraw();
+	sentan->Draw();
+	sentan->PostDraw();*/
 	
+	/*if (radY <= tst_Pos.y ) {
+		debugText->Print("Hit", 0, 0, 10);
+	}*/
+
+
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画
 	debugText->DrawAll(DirectXCommon::GetInstance()->GetCmdList());

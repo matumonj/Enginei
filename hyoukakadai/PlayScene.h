@@ -51,12 +51,14 @@ private:
 	Object3d* ito = nullptr;
 	Object3d* tst = nullptr;
 	Object3d* sentan = nullptr;
+	Object3d* test = nullptr;
+
 	
 
 	Model* playermodel = nullptr;
 	Model* itomodel = nullptr;
 	Model* tstmodel = nullptr;
-	Model* sentanmodel = nullptr;
+
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
@@ -93,11 +95,16 @@ private:
 	float dz;
 
 	float zanzouSpeed = 0;
-
+	//éÖópïœêî
 	int Line = 0;
 	float Limit = 4;
 	float Limitsave = 0;
-	XMFLOAT3 ito_speed = { 1,1,1 };
+	float speed = 1.0f;
+	float vec_x = 0.0f;
+	float vec_y = 0.0f;
+	float length = 0.0f;
+	float normal_x;
+	float rot = 0;
 
 private://ì_åıåπ
 	LightGroup* lightGroup = nullptr;
