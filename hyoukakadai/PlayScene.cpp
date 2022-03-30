@@ -43,7 +43,7 @@ void PlayScene::SpriteCreate()
 #pragma region モデルとエフェクトとライトのインスタンス生成
 void PlayScene::ModelCreate()
 {
-	
+	//a
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
 	tstmodel = Model::CreateFromOBJ("block");
