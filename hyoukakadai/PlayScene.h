@@ -106,14 +106,15 @@ private:
 	float rot = 0;
 	//map
 	int map[5][5] ={ 
-	{1,1,1,1,1},
+	{1,1,1,0,1},
 	{1,1,1,1,1},
 	{1,1,1,1,1},
 	{1,1,1,1,1},
 	{1,1,1,1,1},
 	};
 
-
+	float px = 0;
+	float px2 = 0;
 
 private://点光源
 	LightGroup* lightGroup = nullptr;

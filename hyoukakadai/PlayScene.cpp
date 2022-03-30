@@ -30,7 +30,7 @@ void PlayScene::SpriteCreate()
 	mech = Texture::Create(6, { 0,-50,50 }, { 2,2,2 }, {1,1,1,1});
 	zukki = Texture::Create(1, { 0,-20,50 }, { 2,2,2 }, { 1,1,1,1 });
 	
-	zukki->CreateTexture(5,5);
+
 
 	background = Sprite::Create(1, { 0.0f,-200.0f });
 	// デバッグテキスト初期化
@@ -40,14 +40,12 @@ void PlayScene::SpriteCreate()
 }
 #pragma endregion
 
-#pragma region モデルとエフェクトとライトのインスタンス生成
+#pragma region 
 void PlayScene::ModelCreate()
 {
-<<<<<<< HEAD
-	fieldmodel = Model::CreateFromOBJ("block");
-=======
-	//a
->>>>>>> a
+
+
+
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
 	tstmodel = Model::CreateFromOBJ("block");
@@ -64,8 +62,8 @@ void PlayScene::ModelCreate()
 			tst[i][j]->SetModel(tstmodel);
 		}
 	}
-	test = Object3d::Create();
-	test->SetModel(tstmodel);
+	
+
 
 	sentan = Object3d::Create();
 	sentan->SetModel(tstmodel);
@@ -74,8 +72,7 @@ void PlayScene::ModelCreate()
 		player[i] = Object3d::Create();
 		player[i]->SetModel(playermodel);
 	}
-		fieldmap[i]->SetModel(fieldmodel);
-	}
+
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -105,19 +102,24 @@ void PlayScene::SetPrm()
 {
 	//Scale,Position,Size
 	//ito_Pos = Player_Pos;
-	Player_Scl = { 1,1,1 };
-	for (int i = 0; i < 10; i++) {
-		fieldmap[i]->SetScale({ 5,5,5 });
-		fieldmap[i]->SetPosition({ (float)i * 6,0,0 });
-	}
-	//ito_Scl = { 1,1,1 };
-	for (int i = 0; i < 10; i++) {
-		player[i]->SetPosition({ Player_Pos[i] });
-		player[i]->SetScale({ Player_Scl });
-	}
 	ito->SetPosition({ ito_Pos });
 	ito->SetScale({ ito_Scl });
 	ito->SetRotation({ ito_Rot });
+	for (int i = 0; i < 10; i++) {
+		player[i]->SetPosition({ Player_Pos[i] });
+		player[i]->SetScale({ Player_Scl });
+		player[i]->SetRotation({ Player_Rot });
+	}
+
+	for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < 5; i++) {
+			tst[j][i]->SetPosition({ tst_Pos.x + 2 * j,tst_Pos.y - 2 - 2 * i ,tst_Pos.z });
+			tst[j][i]->SetRotation({ tst_Rot });
+			tst[j][i]->SetScale({ tst_Scl });
+		}
+	}
+
+	sentan->SetPosition({ sentan_Pos });
 
 	
 }
@@ -137,6 +139,13 @@ void PlayScene::objUpdate()
 	for (int i = 0; i < 10; i++) {
 		player[i]->Update({ 1,1,1,1 });
 	}
+	ito->Update({ 1,1,1,1 });
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			tst[j][i]->Update({ 1,1,1,1 });
+		}
+	}
+
 
 
 }
@@ -216,11 +225,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos[0].x += 0.5f; 
-
-
+		Player_Pos[0].x += 0.5f;
+		Player_Rot.x += 1;
 	}
-	
+	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+		Player_Pos[0].x -= 0.5f;
+	}
 
 	if (Input::GetInstance()->Pushkey(DIK_1)) {
 		ito_Rot.z++;
@@ -270,7 +280,13 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		ito_Pos = Player_Pos[0];
 		Limitsave = Limit;
 		zanzouSpeed = 0;
+	}
 
+	for (int i = 9; i > 0; i--) {
+		Player_Pos[i].x = Player_Pos[i - 1].x + zanzouSpeed;
+	}
+
+	
 
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
@@ -278,9 +294,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	//FBXモデルの更新
 	object1->Updata(TRUE);
-	for (int i = 0; i < 10; i++) {
-		fieldmap[i]->Update({ 1,1,1,1 });
-	}
+
 	mech->SetPosition(texpo);
 	mech->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
 	zukki->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
@@ -288,8 +302,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-
-
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 25 });
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
 	camera->Update();
 
@@ -315,13 +328,21 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		player[i]->PostDraw();
 	}
 
-	}
 
 	ito->PreDraw();
 	ito->Draw();
 	ito->PostDraw();
 
-	
+	for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < 5; i++) {
+			if (map[j][i] == 1) {
+				tst[i][j]->PreDraw();
+				tst[i][j]->Draw();
+				tst[i][j]->PostDraw();
+			}
+		}
+	}
+
 
 	//test->PreDraw();
 	//test->Draw();
@@ -361,7 +382,7 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 }
 #pragma endregion
 //↓に入る
-#pragma region 描画(imguiとスプライトとモデルまとめたもの)
+#pragma region
 void PlayScene::Draw(DirectXCommon* dxcomn)
 {	
 	//ポストエフェクトの場合わけ(Bでぼかし Dがデフォルト)
