@@ -46,10 +46,11 @@ private:
 	Texture* zukki = nullptr;
 	DebugTxt* debugText;
 
+
 	Collision* collision = nullptr;
 	Object3d* player[10];
 	Object3d* ito = nullptr;
-	Object3d* tst = nullptr;
+	Object3d* tst[5][5];
 	Object3d* sentan = nullptr;
 	Object3d* test = nullptr;
 
@@ -76,7 +77,7 @@ private:
 	XMFLOAT3 ito_PS = { 0,0,0 };
 	
 	//tst
-	XMFLOAT3 tst_Pos = { 15,1,0 };
+	XMFLOAT3 tst_Pos = { 0,1,0 };
 	XMFLOAT3 tst_Scl = {1,1,1};
 	XMFLOAT3 tst_Rot;
 	//sentan
@@ -105,6 +106,16 @@ private:
 	float length = 0.0f;
 	float normal_x;
 	float rot = 0;
+	//map
+	int map[5][5] ={ 
+	{1,1,1,1,1},
+	{1,1,1,1,1},
+	{1,1,1,1,1},
+	{1,1,1,1,1},
+	{1,1,1,1,1},
+	};
+
+
 
 private://“_ŒõŒ¹
 	LightGroup* lightGroup = nullptr;
@@ -159,6 +170,8 @@ public:
 	f_Object3d* object1 = nullptr;
 	
 	int c_postEffect;
+
+	
 private:
 	enum{
 		Blur,
