@@ -43,15 +43,14 @@ void PlayScene::SpriteCreate()
 #pragma region 
 void PlayScene::ModelCreate()
 {
-
-
-
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
 	tstmodel = Model::CreateFromOBJ("block");
 
-
-	
+	for (int i = 0; i < 10; i++) {
+		player[i] = Object3d::Create();
+		player[i]->SetModel(playermodel);
+	}
 
 	ito = Object3d::Create();
 	ito->SetModel(itomodel);
@@ -63,16 +62,8 @@ void PlayScene::ModelCreate()
 		}
 	}
 	
-
-
 	sentan = Object3d::Create();
 	sentan->SetModel(tstmodel);
-
-	for (int i = 0; i < 10; i++) {
-		player[i] = Object3d::Create();
-		player[i]->SetModel(playermodel);
-	}
-
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -100,16 +91,17 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
-	//Scale,Position,Size
-	//ito_Pos = Player_Pos;
+	
 	ito->SetPosition({ ito_Pos });
 	ito->SetScale({ ito_Scl });
 	ito->SetRotation({ ito_Rot });
+	
 	for (int i = 0; i < 10; i++) {
 		player[i]->SetPosition({ Player_Pos[i] });
 		player[i]->SetScale({ Player_Scl });
-		player[i]->SetRotation({ Player_Rot });
+		player[i]->SetRotation({Player_Rot});
 	}
+
 
 	for (int j = 0; j < 5; j++) {
 		for (int i = 0; i < 5; i++) {
@@ -225,12 +217,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos[0].x += 0.5f;
-		Player_Rot.x += 1;
+		Player_Pos[0].x += 1.0f;
 	}
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos[0].x -= 0.5f;
+	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
+		Player_Pos[0].x -= 1.0f;
 	}
+
 
 	if (Input::GetInstance()->Pushkey(DIK_1)) {
 		ito_Rot.z++;
@@ -322,12 +314,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
+	
 	for (int i = 0; i < 10; i++) {
 		player[i]->PreDraw();
 		player[i]->Draw();
 		player[i]->PostDraw();
 	}
-
 
 	ito->PreDraw();
 	ito->Draw();
@@ -464,7 +456,7 @@ void PlayScene::Finalize()
 {	
 	//delete efk,efk1;
 	delete mech, zukki;
-	delete player;
+	
 	delete debugText;
 	delete collision;
 	delete lightGroup;
