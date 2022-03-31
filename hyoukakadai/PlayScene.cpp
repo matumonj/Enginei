@@ -213,7 +213,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	ito_PS.x = ito_Pos.x + (ito_Scl.x/4);
 	sentan_Pos = ito_PS;
 	sentan_Rot = ito_Rot;
-
+	//a
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
