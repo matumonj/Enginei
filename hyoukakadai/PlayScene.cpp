@@ -55,10 +55,10 @@ void PlayScene::ModelCreate()
 	ito = Object3d::Create();
 	ito->SetModel(itomodel);
 
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			tst[i][j] = Object3d::Create();
-			tst[i][j]->SetModel(tstmodel);
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i] = Object3d::Create();
+			tst[j][i]->SetModel(tstmodel);
 		}
 	}
 	
@@ -103,9 +103,9 @@ void PlayScene::SetPrm()
 	}
 
 
-	for (int j = 0; j < 5; j++) {
-		for (int i = 0; i < 5; i++) {
-			tst[j][i]->SetPosition({ tst_Pos.x + 2 * j,tst_Pos.y - 2 - 2 * i ,tst_Pos.z });
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i]->SetPosition({ tst_Pos.x + 2 * i,tst_Pos.y-3 - 2 * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
 		}
@@ -132,8 +132,8 @@ void PlayScene::objUpdate()
 		player[i]->Update({ 1,1,1,1 });
 	}
 	ito->Update({ 1,1,1,1 });
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->Update({ 1,1,1,1 });
 		}
 	}
@@ -217,10 +217,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos[0].x += 1.0f;
+		Player_Pos[0].x += 0.2f;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos[0].x -= 1.0f;
+		Player_Pos[0].x -= 0.2f;
 	}
 
 
@@ -294,7 +294,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 25 });
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 20 });
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
 	camera->Update();
 
@@ -325,12 +325,12 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	ito->Draw();
 	ito->PostDraw();
 
-	for (int j = 0; j < 5; j++) {
-		for (int i = 0; i < 5; i++) {
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1) {
-				tst[i][j]->PreDraw();
-				tst[i][j]->Draw();
-				tst[i][j]->PostDraw();
+				tst[j][i]->PreDraw();
+				tst[j][i]->Draw();
+				tst[j][i]->PostDraw();
 			}
 		}
 	}
