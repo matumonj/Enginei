@@ -52,7 +52,7 @@ private:
 	Object3d* ito = nullptr;
 	Object3d* tst[5][5];
 	Object3d* sentan = nullptr;
-
+	Collision* mapcol;
 
 	Model* playermodel = nullptr;
 	Model* itomodel = nullptr;
@@ -106,16 +106,27 @@ private:
 	float rot = 0;
 	//map
 	int map[5][5] ={ 
-	{1,1,1,0,1},
-	{1,1,1,1,1},
+	{0,0,0,0,0},
+	{0,0,0,1,1},
 	{1,1,1,1,1},
 	{1,1,1,1,1},
 	{1,1,1,1,1},
 	};
-
-	float px = 0;
-	float px2 = 0;
-
+	float FollowangleX, FollowangleZ, FollowangleR;
+	float FollowSpeed = 1.0f;
+	bool trigger = false;
+	bool boundflag = false;
+	float debuga;
+	float tempx, tempy;
+	float linex, linex2, liney, liney2;
+	float lineangle = 0;
+	float subradius = 0;
+	float Startsubradius = 2.0f;
+	const float LengThenSpeed = 5.0f;
+	const float MaxLen = 30.0f;
+	const float MinLen = 0.0f;
+	int L_Cflag = 0;
+	//float botttomy = 0;
 private://点光源
 	LightGroup* lightGroup = nullptr;
 	float ambientColor0[3] = { 1,1,1 };

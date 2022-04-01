@@ -5,7 +5,7 @@
 #include"SceneManager.h"
 #include"MobEnemy.h"
 #include"BossEnemy.h"
-
+#define PI 3.14
 //コメントアウト
 
 //シーンのコンストラクタ
@@ -27,8 +27,8 @@ void PlayScene::SpriteCreate()
 	//普通のテクスチャ(スプライトじゃないよ)
 	Texture::LoadTexture(6, L"Resources/bosshp.png");
 	Texture::LoadTexture(1, L"Resources/ball.png");
-	mech = Texture::Create(6, { 0,-50,50 }, { 2,2,2 }, {1,1,1,1});
-	zukki = Texture::Create(1, { 0,-20,50 }, { 2,2,2 }, { 1,1,1,1 });
+	mech = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, {1,1,1,1});
+	zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 	
 
 
@@ -155,6 +155,12 @@ void PlayScene::objUpdate()
 void PlayScene::Initialize(DirectXCommon* dxCommon)
 {
 	//
+
+	linex = Player_Pos[0].x;
+	liney = Player_Pos[0].y;
+	liney2 = liney;
+	linex2 = linex;
+	mapcol = new Collision();
 	c_postEffect = Default;
 
 	collision = new Collision();
@@ -200,9 +206,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void PlayScene::Update(DirectXCommon* dxCommon)
 {
-	px -= 0.01f;
-	px2 -= 0.01f;
-	mech->CreateTexture(px,px2);
+	
+	//liney += 0.01f;
+	//liney2 -= 0.01f;
 	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
 	//マウスの入力状態取得
 	if (Input::GetInstance()->PushMouseLeft()) {
@@ -228,7 +234,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos[0].x += 0.5f;
 		Player_Rot.x += 1;
 	}
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos[0].x -= 0.5f;
 	}
 
@@ -286,8 +292,88 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos[i].x = Player_Pos[i - 1].x + zanzouSpeed;
 	}
 
+	//やけくそコード,汚いよ
+	linex = player[0]->GetPosition().x;//線の始点をプレイヤー位置に
+	liney = player[0]->GetPosition().y;
+	if (Input::GetInstance()->Pushkey(DIK_1)) {
+		lineangle += 13.0f;//移動方向の指定
+		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
+	}
 	
+	linex2 = tempx + cosf((lineangle) * PI/ 180) * subradius;
+	liney2 = tempy + sinf((lineangle) *	PI / 180) * subradius;
+	//////////中心点//////飛ばす角度///////////////////半径(距離)
+	
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		trigger = true;//線を伸ばすフラグね
+	}
+	if (trigger) {//trigger:線伸ばすフラグ
+		subradius += LengThenSpeed;//線を伸ばす
+		if (subradius >MaxLen) {//一定以上行ったら
+			trigger = false;//フラグ切る
+		}
+	}
+	else if(!trigger&&subradius>0){//フラグ切られて線の長さがまだある時
+		if (Input::GetInstance()->TriggerKey(DIK_F)) {
+			boundflag = true;//線の終点へ吸い付くフラグ
+		}
+		//線の終点とプレイヤーとの距離求める
+		float distance;
+		distance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
+			((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
+		);
+		//距離が一定以内いったら
+		if (distance <= 0.01f) {
+			subradius = 0;//長さやフラグリセット	
+			boundflag = false;
+		}
+	}
+	//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
+	/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
+　　　　　　線の終点も動いてしまうから(subradiusの部分が中心点依存)*/
+	if (!boundflag) {
+		tempx = Player_Pos[0].x;
+		tempy = Player_Pos[0].y;
+	}
+	
+	//吸い付く処理
+	FollowangleX = (linex2-player[0]->GetPosition().x);
+	FollowangleZ = (liney2-player[0]->GetPosition().y);//これZじゃなくてYです
+	FollowangleR = sqrtf((player[0]->GetPosition().x-linex2) * (player[0]->GetPosition().x - linex2)
+		+ (player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2));
+	if (boundflag) {
+		Player_Pos[0].x += (FollowangleX / FollowangleR) * FollowSpeed;
+		Player_Pos[0].y += (FollowangleZ / FollowangleR) * FollowSpeed;
+	}
 
+	debuga=tst[0][4]->GetPosition().y;
+	//頂点座標の更新
+	mech->CreateTexture(linex, linex2, liney, liney2);
+	
+	//線の長さの最大値と最小値
+	max(subradius, MinLen);
+	min(subradius, MaxLen);
+	float len[5][5];
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			if (map[i][j] == 1) {
+				len[i][j] = sqrtf((tst[j][i]->GetPosition().x - player[0]->GetPosition().x) * (tst[j][i]->GetPosition().x - player[0]->GetPosition().x) +
+					((tst[j][i]->GetPosition().y - player[0]->GetPosition().y) * (tst[j][i]->GetPosition().y - player[0]->GetPosition().y)));
+
+			}
+		
+		}
+	}
+
+	if (len[0][4] < 2) {
+		L_Cflag = 1;
+	} else {
+		L_Cflag = 0;
+
+	}
+	//マップとの当たり判定処理
+	//右の壁にあたったとき
+	
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -296,14 +382,14 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	object1->Updata(TRUE);
 
 	mech->SetPosition(texpo);
-	mech->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
-	zukki->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+	mech->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
+	zukki->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
 
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 25 });
-	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 25 });
+	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
 	camera->Update();
 
 	SetPrm();//パラメータのセット
@@ -343,21 +429,6 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 
-
-	//test->PreDraw();
-	//test->Draw();
-	//test->PostDraw();
-
-	/*sentan->PreDraw();
-	sentan->Draw();
-	sentan->PostDraw();*/
-	
-	/*if (radY <= tst_Pos.y ) {
-		debugText->Print("Hit", 0, 0, 10);
-	}*/
-
-
-	
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画
 	debugText->DrawAll(DirectXCommon::GetInstance()->GetCmdList());
@@ -419,7 +490,7 @@ void PlayScene::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("light_position")) {
-		ImGui::SliderFloat("positionX", &spotLightpos[0], -100, 100);
+		ImGui::SliderFloat("positionX", &Player_Pos[0].x, -100, 100);
 		ImGui::SliderFloat("positionY", &spotLightpos[1], -100, 100);
 		ImGui::SliderFloat("positionZ", &spotLightpos[2], -100, 100);
 		if (ImGui::Button("spotlight ON")) {
@@ -433,8 +504,8 @@ void PlayScene::ImGuiDraw()
 	}
 	
 	if (ImGui::TreeNode("Effect_position")) {
-		ImGui::SliderFloat("positionX", &efkposition.x, -100, 100);
-		ImGui::SliderFloat("positionY", &efkposition.y, -100, 100);
+		ImGui::SliderInt("positionX", &L_Cflag, -100, 100);
+		ImGui::SliderFloat("positionY", &debuga, -100, 100);
 		ImGui::SliderFloat("positionZ", &efkposition.z, -100, 100);
 		ImGui::TreePop();
 	}

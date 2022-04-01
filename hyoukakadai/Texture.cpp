@@ -341,7 +341,7 @@ bool Texture::LoadTexture(UINT texnumber, const wchar_t* filename)
 	return true;
 }
 
-void Texture::CreateTexture(float px,float px2)
+void Texture::CreateTexture(float px,float px2,float py,float py2)
 {
 	HRESULT result = S_FALSE;
 
@@ -353,10 +353,10 @@ void Texture::CreateTexture(float px,float px2)
 		D3D12_RESOURCE_DESC resDesc = texbuff[texNumber]->GetDesc();
 
 		VertexPosNormalUv verticesSquare[] = {
-			{{-5.0f,-5.0f,0.0f}, { 0,0,1}, {0,1}},
-			{{-5.0f,+5.0f,0.0f}, { 0,0,1}, {0,0}},
-			{{px,-5.0f,0.0f}, { 0,0,1}, {1,1}},
-			{{px2,+5.0f,0.0f}, { 0,0,1}, {1,0}},
+			{{px,py,0.0f}, { 0,0,1}, {0,1}},
+			{{px,py+0.2f,0.0f}, { 0,0,1}, {0,0}},
+			{{px2,py2,0.0f}, { 0,0,1}, {1,1}},
+			{{px2+0.05f,py2+0.2f,0.0f}, { 0,0,1}, {1,0}},
 		};
 		std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
 
@@ -506,7 +506,7 @@ Texture* Texture::Create(UINT texNumber, XMFLOAT3 position,XMFLOAT3 size, XMFLOA
 		// テクスチャ情報取得
 		D3D12_RESOURCE_DESC resDesc = texbuff[texNumber]->GetDesc();
 		// スプライトのサイズをテクスチャのサイズに設定
-		size ={ 10,10, 10 };
+		size ={ 1,1,1 };
 	}
 
 	// Spriteのインスタンスを生成

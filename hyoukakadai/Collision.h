@@ -1,6 +1,8 @@
 #pragma once
 #include"CollisionPrimitive.h"
 #include<DirectXMath.h>
+#include"Object3d.h"
+#include"Player.h"
 using namespace DirectX;
 class Collision
 {
@@ -13,6 +15,7 @@ public:
 		float Right;
 	};
 public:
+	 float LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d** map[],Player*player, float radius);
 	/// <summary>
 	/// 点と三角形の最近接点を求める
 	/// </summary>

@@ -156,7 +156,7 @@ private:// Ã“Iƒƒ“ƒoŠÖ”
 	static bool InitializeGraphicsPipeline();
 
 public: // ƒƒ“ƒoŠÖ”
-	void CreateTexture(float px,float px2);
+	void CreateTexture(float px, float px2,float py,float py2);
 
 	bool Initialize();
 	/// <summary>

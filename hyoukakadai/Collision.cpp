@@ -266,3 +266,30 @@ bool Collision::CheckRay2Sphere(const Ray& lay, const Sphere& sphere, float* dis
 
 	return true;
 }
+
+float Collision::LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d** map[], Player*player,float radius)
+{
+	BoxVertex** MapObject;
+	BoxVertex PlayerObject;
+
+	PlayerObject.Left = player->GetPosition().x - 1;
+	PlayerObject.Right = player->GetPosition().x + 1;
+	PlayerObject.Up = player->GetPosition().y+ 1;
+	PlayerObject.Down= player->GetPosition().y - 1;
+	
+	for (int i = 0; i < Map_Y; i++) {
+		for (int j = 0; j < Map_X; j++) {
+			MapObject[i][j].Right = map[i][j]->GetPosition().x + 1;
+			MapObject[i][j].Left = map[i][j]->GetPosition().x - 1;
+			MapObject[i][j].Up = map[i][j]->GetPosition().y + 1;
+			MapObject[i][j].Down = map[i][j]->GetPosition().y - 1;
+
+		}
+	}
+	for (int i = 0; i < Map_Y; i++) {
+		for (int j = 0; j < Map_X; j++) {
+			return MapObject[i][j].Right >= PlayerObject.Left && PlayerObject.Right >= MapObject[i][j].Left && MapObject[i][j].Up >= PlayerObject.Down && PlayerObject.Up >= MapObject[i][j].Down;
+		}
+	}
+	
+}
