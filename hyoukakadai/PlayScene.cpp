@@ -43,36 +43,27 @@ void PlayScene::SpriteCreate()
 #pragma region 
 void PlayScene::ModelCreate()
 {
-
-
-
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
 	tstmodel = Model::CreateFromOBJ("block");
-
-
-	
-
-	ito = Object3d::Create();
-	ito->SetModel(itomodel);
-
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			tst[i][j] = Object3d::Create();
-			tst[i][j]->SetModel(tstmodel);
-		}
-	}
-	
-
-
-	sentan = Object3d::Create();
-	sentan->SetModel(tstmodel);
 
 	for (int i = 0; i < 10; i++) {
 		player[i] = Object3d::Create();
 		player[i]->SetModel(playermodel);
 	}
 
+	ito = Object3d::Create();
+	ito->SetModel(itomodel);
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i] = Object3d::Create();
+			tst[j][i]->SetModel(tstmodel);
+		}
+	}
+	
+	sentan = Object3d::Create();
+	sentan->SetModel(tstmodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -100,20 +91,21 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
-	//Scale,Position,Size
-	//ito_Pos = Player_Pos;
+	
 	ito->SetPosition({ ito_Pos });
 	ito->SetScale({ ito_Scl });
 	ito->SetRotation({ ito_Rot });
+	
 	for (int i = 0; i < 10; i++) {
 		player[i]->SetPosition({ Player_Pos[i] });
 		player[i]->SetScale({ Player_Scl });
-		player[i]->SetRotation({ Player_Rot });
+		player[i]->SetRotation({Player_Rot});
 	}
 
-	for (int j = 0; j < 5; j++) {
-		for (int i = 0; i < 5; i++) {
-			tst[j][i]->SetPosition({ tst_Pos.x + 2 * j,tst_Pos.y - 2 - 2 * i ,tst_Pos.z });
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i]->SetPosition({ tst_Pos.x + 2 * i,tst_Pos.y-3 - 2 * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
 		}
@@ -140,8 +132,8 @@ void PlayScene::objUpdate()
 		player[i]->Update({ 1,1,1,1 });
 	}
 	ito->Update({ 1,1,1,1 });
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->Update({ 1,1,1,1 });
 		}
 	}
@@ -227,16 +219,20 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	ito_PS.x = ito_Pos.x + (ito_Scl.x/4);
 	sentan_Pos = ito_PS;
 	sentan_Rot = ito_Rot;
-
+	//a
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos[0].x += 0.5f;
-		Player_Rot.x += 1;
+		Player_Pos[0].x += 0.2f;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
+<<<<<<< HEAD
 		Player_Pos[0].x -= 0.5f;
+=======
+		Player_Pos[0].x -= 0.2f;
+>>>>>>> 80dab14cbc10297d56f5e213aecb463f71d61454
 	}
+
 
 	if (Input::GetInstance()->Pushkey(DIK_1)) {
 		ito_Rot.z++;
@@ -388,8 +384,13 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
+<<<<<<< HEAD
 	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 25 });
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
+=======
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 20 });
+	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
+>>>>>>> 80dab14cbc10297d56f5e213aecb463f71d61454
 	camera->Update();
 
 	SetPrm();//パラメータのセット
@@ -408,23 +409,23 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
+	
 	for (int i = 0; i < 10; i++) {
 		player[i]->PreDraw();
 		player[i]->Draw();
 		player[i]->PostDraw();
 	}
 
-
 	ito->PreDraw();
 	ito->Draw();
 	ito->PostDraw();
 
-	for (int j = 0; j < 5; j++) {
-		for (int i = 0; i < 5; i++) {
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1) {
-				tst[i][j]->PreDraw();
-				tst[i][j]->Draw();
-				tst[i][j]->PostDraw();
+				tst[j][i]->PreDraw();
+				tst[j][i]->Draw();
+				tst[j][i]->PostDraw();
 			}
 		}
 	}
@@ -535,7 +536,7 @@ void PlayScene::Finalize()
 {	
 	//delete efk,efk1;
 	delete mech, zukki;
-	delete player;
+	
 	delete debugText;
 	delete collision;
 	delete lightGroup;
