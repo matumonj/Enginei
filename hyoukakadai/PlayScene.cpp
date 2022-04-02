@@ -227,21 +227,11 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos[0].x += 0.2f;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-<<<<<<< HEAD
-		Player_Pos[0].x -= 0.2f;
-	}
-
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		Player_Pos[0].y -= 0.2f;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-		Player_Pos[0].y += 0.2f;
-	}
-=======
 
 		Player_Pos[0].x -= 0.2f;
-
 	}
+
+
 
 
 	if (Input::GetInstance()->Pushkey(DIK_UP)) {
@@ -250,7 +240,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
 		Player_Pos[0].y += 0.2f;
 	}
->>>>>>> cbdecffafc968278b70ae44eb718e595ae4fa405
+
 
 	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
 		Line = 1;
@@ -371,21 +361,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-
-<<<<<<< HEAD
 	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 18 });
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
-
-=======
-
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 18 });
-	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
-
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 20 });
-	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
-
-
->>>>>>> cbdecffafc968278b70ae44eb718e595ae4fa405
 	camera->Update();
 
 	SetPrm();//パラメータのセット
