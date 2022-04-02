@@ -49,8 +49,7 @@ void PlayScene::SpriteCreate()
 #pragma region 
 void PlayScene::ModelCreate()
 {
-	playermodel = Model::CreateFromOBJ("chr_sword");
-	itomodel = Model::CreateFromOBJ("ito");
+	playermodel = Model::CreateFromOBJ("player");
 	tstmodel = Model::CreateFromOBJ("block");
 
 	for (int i = 0; i < 10; i++) {
@@ -58,8 +57,6 @@ void PlayScene::ModelCreate()
 		player[i]->SetModel(playermodel);
 	}
 
-	ito = Object3d::Create();
-	ito->SetModel(itomodel);
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -98,22 +95,27 @@ void PlayScene::ModelCreate()
 void PlayScene::SetPrm()
 {
 	
-	ito->SetPosition({ ito_Pos });
-	ito->SetScale({ ito_Scl });
-	ito->SetRotation({ ito_Rot });
 	
 	for (int i = 0; i < 10; i++) {
 			player[i]->SetPosition({ Player_Pos[i] });
 		player[i]->SetScale({ Player_Scl });
 		player[i]->SetRotation({Player_Rot});
+		posX = player[i]->GetPosition().x;
+		posY = player[i]->GetPosition().y;
+		half_height = player[i]->GetScale().y / 2;
+		half_Width = player[i]->GetScale().x / 2;
 	}
 
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i]->SetPosition({ tst_Pos.x + 2 * i,tst_Pos.y-3 - 2 * j ,tst_Pos.z });
+			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
+			mapx = tst[j][i]->GetPosition().x;
+			mapy = tst[j][i]->GetPosition().y;
+			map_half_heigh = tst[j][i]->GetScale().y / 2;
+			map_half_width = tst[j][i]->GetScale().x / 2;
 		}
 	}
 
@@ -137,14 +139,12 @@ void PlayScene::objUpdate()
 	for (int i = 0; i < 10; i++) {
 		player[i]->Update({ 1,1,1,1 });
 	}
-	ito->Update({ 1,1,1,1 });
+
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->Update({ 1,1,1,1 });
 		}
 	}
-
-
 
 }
 #pragma endregion
@@ -219,15 +219,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		//Player_Rot.z -= dx * 0.2;
 	}
 	effects->Update(dxCommon, camera);
-	//当たり判定
-//	if (collision->CheckSphere2Sphere() == TRUE) {
-		//debugText->Print("Hit", 950, 20, 3.0f);
-	//}
-
-	ito_PS.x = ito_Pos.x + (ito_Scl.x/4);
-	sentan_Pos = ito_PS;
-	sentan_Rot = ito_Rot;
-	//a
+	Old_Pos = Player_Pos[0];
+	Player_Pos[0].y -= gravity;
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
@@ -235,65 +228,35 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 
-		Player_Pos[0].x -= 0.5f;
-
 		Player_Pos[0].x -= 0.2f;
 
 	}
 
 
-	if (Input::GetInstance()->Pushkey(DIK_1)) {
-		ito_Rot.z++;
-		ito_Scl.x = 4;
-		//ito_rad = ito_Rot.y * 3.14 / 180;
+	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+		Player_Pos[0].y -= 0.2f;
 	}
-	
-
-	if (Input::GetInstance()->Pushkey(DIK_2)) {
-		tst_Pos.x++;
+	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
+		Player_Pos[0].y += 0.2f;
 	}
-	if (Input::GetInstance()->Pushkey(DIK_3)) {
-		tst_Rot.y++;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_4)) {
-		tst_Rot.z++;
-	}
-
 
 	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
 		Line = 1;
 		//ito_Scl.y+=1;
 	}
 
-	if (Line == 1) {
-		Limit-=0.1f;
-		vec_x = speed;
-		if (vec_x != 0.0f ) {
-			length = sqrtf(vec_x * vec_x );
-			normal_x = vec_x / length;
-			normal_x *= speed;
-			if (Limit <= 0) {
-				normal_x = -normal_x;
-				speed = -1;
-				if (ito_Scl.x == old_Scl.x) {
-					Line = 0;
-					Limit = 4;
-				}
-			}
-			ito_Scl.x += normal_x;
-		}
-	}
-	
-
-	if (Line == 0) {
-		ito_Scl = old_Scl;
-		ito_Pos = Player_Pos[0];
-		Limitsave = Limit;
-		zanzouSpeed = 0;
-	}
-
+	//残像
 	for (int i = 9; i > 0; i--) {
 		Player_Pos[i].x = Player_Pos[i - 1].x + zanzouSpeed;
+	}
+	//当たり判定
+	if (map[(int)(Player_Pos[0].y - (Player_Scl.y/2)) / blockSize][(int)(Player_Pos[0].x - (Player_Scl.x/2)) / blockSize] == 1 &&
+		map[(int)(Player_Pos[0].y - (Player_Scl.y/2)) / blockSize][(int)(Player_Pos[0].x + (Player_Scl.x/2)) / blockSize] == 1) {
+		Player_Pos[0].y = Old_Pos.y;
+	}
+	else if (map[(int)(Player_Pos[0].y + (Player_Scl.y / 2)) / blockSize][(int)(Player_Pos[0].x - (Player_Scl.x / 2)) / blockSize] == 1 &&
+		map[(int)(Player_Pos[0].y + (Player_Scl.y / 2)) / blockSize][(int)(Player_Pos[0].x + (Player_Scl.x / 2)) / blockSize] == 1) {
+		Player_Pos[0].y = Old_Pos.y;
 	}
 
 #pragma region 線の処理
@@ -397,11 +360,13 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
 
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 25 });
+
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 18 });
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
 
 	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 20 });
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
+
 
 	camera->Update();
 
@@ -428,9 +393,6 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		player[i]->PostDraw();
 	}
 
-	ito->PreDraw();
-	ito->Draw();
-	ito->PostDraw();
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
