@@ -178,6 +178,7 @@
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="f_Model.cpp" />
     <ClCompile Include="f_Object3d.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="Framework.h" />
     <ClInclude Include="f_Model.h" />
     <ClInclude Include="f_Object3d.h" />
+    <ClInclude Include="GameUI.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
