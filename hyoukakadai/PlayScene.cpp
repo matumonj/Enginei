@@ -6,6 +6,12 @@
 #include"MobEnemy.h"
 #include"BossEnemy.h"
 #define PI 3.14
+#define CLENGTH     (LENGTH * 2 * PI)   // 紐を伸ばして一周させた場合に出来る円の円周の長さ
+#define MASS        0.346               // ぶら下がっている物の質量
+#define G           0.05               // 重力加速度
+#define STX         320                 // 振り子の軸のx座標
+#define STY         100                 // 振り子の軸のy座標
+
 //コメントアウト
 
 //シーンのコンストラクタ
@@ -25,7 +31,7 @@ void PlayScene::SpriteCreate()
 	Sprite::LoadTexture(2, L"Resources/tyuta_C.png");
 
 	//普通のテクスチャ(スプライトじゃないよ)
-	Texture::LoadTexture(6, L"Resources/bosshp.png");
+	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/ball.png");
 	mech = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, {1,1,1,1});
 	zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
@@ -91,7 +97,7 @@ void PlayScene::SetPrm()
 	
 	
 	for (int i = 0; i < 10; i++) {
-		player[i]->SetPosition({ Player_Pos[i] });
+			player[i]->SetPosition({ Player_Pos[i] });
 		player[i]->SetScale({ Player_Scl });
 		player[i]->SetRotation({Player_Rot});
 		posX = player[i]->GetPosition().x;
@@ -147,7 +153,7 @@ void PlayScene::objUpdate()
 void PlayScene::Initialize(DirectXCommon* dxCommon)
 {
 	//
-
+	GameUI::UISpriteSet();
 	linex = Player_Pos[0].x;
 	liney = Player_Pos[0].y;
 	liney2 = liney;
@@ -164,6 +170,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
 
+	// 初期位置は軸の真下から左方向に45度傾いた位置
+	Hux = (subradius * 2 * PI) / 8.0;
 
 
 	effects->Initialize(dxCommon, camera);
@@ -219,6 +227,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos[0].x += 0.2f;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
+<<<<<<< HEAD
 		Player_Pos[0].x -= 0.2f;
 	}
 
@@ -228,6 +237,20 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
 		Player_Pos[0].y += 0.2f;
 	}
+=======
+
+		Player_Pos[0].x -= 0.2f;
+
+	}
+
+
+	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+		Player_Pos[0].y -= 0.2f;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
+		Player_Pos[0].y += 0.2f;
+	}
+>>>>>>> cbdecffafc968278b70ae44eb718e595ae4fa405
 
 	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
 		Line = 1;
@@ -248,10 +271,11 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos[0].y = Old_Pos.y;
 	}
 
+#pragma region 線の処理
 	//やけくそコード,汚いよ
 	linex = player[0]->GetPosition().x;//線の始点をプレイヤー位置に
 	liney = player[0]->GetPosition().y;
-	if (Input::GetInstance()->Pushkey(DIK_1)) {
+	if (Input::GetInstance()->Pushkey(DIK_1)&&(!returnflag && !boundflag)) {
 		lineangle += 13.0f;//移動方向の指定
 		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
 	}
@@ -273,63 +297,66 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		if (Input::GetInstance()->TriggerKey(DIK_F)) {
 			boundflag = true;//線の終点へ吸い付くフラグ
 		}
+		else if (Input::GetInstance()->TriggerKey(DIK_G)) {
+			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ
+		}
 		//線の終点とプレイヤーとの距離求める
 		float distance;
 		distance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
 			((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
 		);
 		//距離が一定以内いったら
-		if (distance <= 0.01f) {
-			subradius = 0;//長さやフラグリセット	
+		if (distance <= 0.05f) {
 			boundflag = false;
+			subradius = 0;//線の長さを0に
 		}
 	}
-	//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
+	
+	//吸い付くフラグまたは移動方向指定のフラグがtrueん時重力着る
+	if (boundflag || trigger) {
+		grav = 0.0f;
+	}
+	else {
+		grav = 0.03f;
+	}
+
+	//吸い付く処理
+	if (boundflag) {
+		FollowangleX = (linex2 - player[0]->GetPosition().x);
+		FollowangleZ = (liney2 - player[0]->GetPosition().y);//これZじゃなくてYです
+		FollowangleR = sqrtf((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)
+			+ (player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2));
+
+		Player_Pos[0].x+= (FollowangleX / FollowangleR)* FollowSpeed;
+		Player_Pos[0].y += (FollowangleZ / FollowangleR) * FollowSpeed;
+	}
+	else {
+		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
 	/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
 　　　　　　線の終点も動いてしまうから(subradiusの部分が中心点依存)*/
-	if (!boundflag) {
 		tempx = Player_Pos[0].x;
 		tempy = Player_Pos[0].y;
 	}
-	
-	//吸い付く処理
-	FollowangleX = (linex2-player[0]->GetPosition().x);
-	FollowangleZ = (liney2-player[0]->GetPosition().y);//これZじゃなくてYです
-	FollowangleR = sqrtf((player[0]->GetPosition().x-linex2) * (player[0]->GetPosition().x - linex2)
-		+ (player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2));
-	if (boundflag) {
-		Player_Pos[0].x += (FollowangleX / FollowangleR) * FollowSpeed;
-		Player_Pos[0].y += (FollowangleZ / FollowangleR) * FollowSpeed;
+	//線が戻ってくる処理
+	if (returnflag) {
+		subradius -= 1.5f;
+		if (subradius <= 0) {//先の長さが０なったら切る
+			returnflag = false;
+		}
 	}
-
 	debuga=tst[0][4]->GetPosition().y;
 	//頂点座標の更新
 	mech->CreateTexture(linex, linex2, liney, liney2);
 	
+	Player_Pos[0].y -= grav;
 	//線の長さの最大値と最小値
 	max(subradius, MinLen);
 	min(subradius, MaxLen);
-	float len[5][5];
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			if (map[i][j] == 1) {
-				len[i][j] = sqrtf((tst[j][i]->GetPosition().x - player[0]->GetPosition().x) * (tst[j][i]->GetPosition().x - player[0]->GetPosition().x) +
-					((tst[j][i]->GetPosition().y - player[0]->GetPosition().y) * (tst[j][i]->GetPosition().y - player[0]->GetPosition().y)));
-
-			}
-		
-		}
-	}
-
-	if (len[0][4] < 2) {
-		L_Cflag = 1;
-	} else {
-		L_Cflag = 0;
-
-	}
+#pragma endregion
 	//マップとの当たり判定処理
 	//右の壁にあたったとき
 	
+	GameUI::UIUpdate();
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -345,9 +372,20 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
 
+<<<<<<< HEAD
 	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 18 });
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
 
+=======
+
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 18 });
+	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
+
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z - 20 });
+	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y + 5,Player_Pos[0].z });
+
+
+>>>>>>> cbdecffafc968278b70ae44eb718e595ae4fa405
 	camera->Update();
 
 	SetPrm();//パラメータのセット
@@ -384,18 +422,13 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 
-	Sprite::PreDraw(cmdList);
-	//// 背景スプライト描画
-	debugText->DrawAll(DirectXCommon::GetInstance()->GetCmdList());
-	//// スプライト描画後処理
-	Sprite::PostDraw(cmdList);
 }
 //sプライと以外の描画
 void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 {
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
-	
+	GameUI::UIDraw(dxcomn);
 	//普通のテクスチャの描画
 	Texture::PreDraw(dxcomn->GetCmdList());
 	//zukki->Draw();//ズッキーニャの画像
