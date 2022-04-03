@@ -220,7 +220,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	effects->Update(dxCommon, camera);
 	Old_Pos = Player_Pos[0];
-	Player_Pos[0].y -= gravity;
+	//Player_Pos[0].y -= gravity;
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
