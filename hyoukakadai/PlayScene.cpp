@@ -297,6 +297,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 #pragma region 線の処理
+	float sdistance;
+	sdistance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
+		((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
+	);
 	//やけくそコード,汚いよ
 	linex = player[0]->GetPosition().x;//線の始点をプレイヤー位置に
 	liney = player[0]->GetPosition().y;
@@ -309,13 +313,16 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	liney2 = tempy + sinf((lineangle) *	PI / 180) * subradius;
 	//////////中心点//////飛ばす角度///////////////////半径(距離)
 	
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && (!returnflag && !boundflag)) {
 		trigger = true;//線を伸ばすフラグね
 	}
+
 	if (trigger) {//trigger:線伸ばすフラグ
 		subradius += LengThenSpeed;//線を伸ばす
-		if (subradius >MaxLen) {//一定以上行ったら
+		if (subradius > MaxLen) {//一定以上行ったら+ブロックに針あたったら
 			trigger = false;//フラグ切る
+			lengthserchf = true;
+			
 		}
 	}
 	else if(!trigger&&subradius>0){//フラグ切られて線の長さがまだある時
@@ -332,11 +339,16 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		);
 		//距離が一定以内いったら
 		if (distance <= 0.05f) {
+			colf = true;
 			boundflag = false;
 			subradius = 0;//線の長さを0に
 		}
 	}
-	
+	//先の長さが最大超えた、またはブロックあたったらその時点のプレイヤーと線の距離を求める
+	if (lengthserchf) {
+		olddistance = sdistance;
+		lengthserchf = false;
+	}
 	//吸い付くフラグまたは移動方向指定のフラグがtrueん時重力着る
 	if (boundflag || trigger) {
 		grav = 0.0f;
@@ -367,8 +379,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		subradius -= 1.5f;
 		if (subradius <= 0) {//先の長さが０なったら切る
 			returnflag = false;
+			colf = true;
 		}
 	}
+
 	debuga=tst[0][4]->GetPosition().y;
 	//頂点座標の更新
 	mech->CreateTexture(linex, linex2, liney, liney2);
@@ -381,7 +395,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//マップとの当たり判定処理
 	//右の壁にあたったとき
 	
-	GameUI::UIUpdate();
+	GameUI::UIUpdate(subradius,trigger,colf,olddistance);
+	
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -518,7 +533,7 @@ void PlayScene::ImGuiDraw()
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Texture_position")) {
-		ImGui::SliderFloat("positionX", &texpo.x, -100, 100);
+		ImGui::SliderFloat("positionX", &olddistance, -100, 100);
 		ImGui::SliderFloat("positionY", &texpo.y, -100, 100);
 		ImGui::SliderFloat("positionZ", &texpo.z, -100, 100);
 		ImGui::TreePop();
