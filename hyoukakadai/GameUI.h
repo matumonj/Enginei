@@ -22,9 +22,11 @@ private:
 	static Sprite* LineLengthout;
 	static XMFLOAT2 lpos,loutpos;//座標
 	static XMFLOAT2 lscl,loutscl;//スケール
+	static float tempx;
+	static float lsclMax;
 public:
 	static void UISpriteSet();
-	static void UIUpdate();
+	static void UIUpdate(float length,bool flag, bool &boundflag,float movement);
 	static void UIDraw(DirectXCommon*dxcomn);
 };
 
