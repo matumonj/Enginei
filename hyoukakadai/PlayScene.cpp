@@ -32,12 +32,20 @@ void PlayScene::SpriteCreate()
 	Sprite::LoadTexture(2, L"Resources/tyuta_C.png");
 
 	//普通のテクスチャ(スプライトじゃないよ)
+<<<<<<< HEAD
 	//Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/ball.png");
 	Line::Initialize();
 	//mech = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, {1,1,1,1});
 	zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 	GameUI::AllowUISet();
+=======
+	Texture::LoadTexture(6, L"Resources/gomi.png");
+	Texture::LoadTexture(1, L"Resources/background.png");
+	mech = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, {1,1,1,1});
+	//zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
+	
+>>>>>>> acd395d50bc815c5bc9b85bc01f8c230f6c6d297
 
 
 	background = Sprite::Create(1, { 0.0f,-200.0f });
@@ -53,6 +61,7 @@ void PlayScene::ModelCreate()
 {
 	playermodel = Model::CreateFromOBJ("player");
 	tstmodel = Model::CreateFromOBJ("block");
+	worldmodel = Model::CreateFromOBJ("skydome");
 
 	for (int i = 0; i < 10; i++) {
 		player[i] = Object3d::Create();
@@ -69,6 +78,9 @@ void PlayScene::ModelCreate()
 	
 	sentan = Object3d::Create();
 	sentan->SetModel(tstmodel);
+
+	world = Object3d::Create();
+	world->SetModel(worldmodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -102,24 +114,28 @@ void PlayScene::SetPrm()
 			player[i]->SetPosition({ Player_Pos[i] });
 		player[i]->SetScale({ Player_Scl });
 		player[i]->SetRotation({Player_Rot});
-		posX = player[i]->GetPosition().x;
-		posY = player[i]->GetPosition().y;
-		half_height = player[i]->GetScale().y / 2;
-		half_Width = player[i]->GetScale().x / 2;
 	}
 
+	posX = player[0]->GetPosition().x;
+	posY = player[0]->GetPosition().y;
+	half_height = player[0]->GetScale().y / 2;
+	half_Width = player[0]->GetScale().x / 2;
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
-			mapx = tst[j][i]->GetPosition().x;
-			mapy = tst[j][i]->GetPosition().y;
-			map_half_heigh = tst[j][i]->GetScale().y / 2;
-			map_half_width = tst[j][i]->GetScale().x / 2;
+			mapx[j][i] = tst[j][i]->GetPosition().x;
+			mapy[j][i]= tst[j][i]->GetPosition().y;
+			map_half_heigh[j][i] = tst[j][i]->GetScale().y / 2;
+			map_half_width[j][i] = tst[j][i]->GetScale().x / 2;
 		}
 	}
+
+
+	world->SetPosition({ 0,0,0 });
+	world->SetScale({ 1,1,1 });
 
 	sentan->SetPosition({ sentan_Pos });
 
@@ -147,6 +163,8 @@ void PlayScene::objUpdate()
 			tst[j][i]->Update({ 1,1,1,1 });
 		}
 	}
+
+	world->Update({ 1,1,1,1 });
 
 }
 #pragma endregion
@@ -226,9 +244,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos[0].x -= 0.2f;
 	}
 
-
-
-
 	if (Input::GetInstance()->Pushkey(DIK_UP)) {
 		Player_Pos[0].y -= 0.2f;
 	}
@@ -245,18 +260,44 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//残像
 	for (int i = 9; i > 0; i--) {
 		Player_Pos[i].x = Player_Pos[i - 1].x + zanzouSpeed;
+		Player_Pos[i].y = Player_Pos[i - 1].y + zanzouSpeed;
 	}
-	//当たり判定
-	if (map[(int)(Player_Pos[0].y - (Player_Scl.y/2)) / blockSize][(int)(Player_Pos[0].x - (Player_Scl.x/2)) / blockSize] == 1 &&
-		map[(int)(Player_Pos[0].y - (Player_Scl.y/2)) / blockSize][(int)(Player_Pos[0].x + (Player_Scl.x/2)) / blockSize] == 1) {
-		Player_Pos[0].y = Old_Pos.y;
+	////当たり判定
+	//if (map[(int)(Player_Pos[0].y - (Player_Scl.y/2)) / blockSize][(int)(Player_Pos[0].x - (Player_Scl.x/2)) / blockSize] == 1 &&
+	//	map[(int)(Player_Pos[0].y - (Player_Scl.y/2)) / blockSize][(int)(Player_Pos[0].x + (Player_Scl.x/2)) / blockSize] == 1) {
+	//	Player_Pos[0].y = Old_Pos.y;
+	//}
+	//else if (map[(int)(Player_Pos[0].y + (Player_Scl.y / 2)) / blockSize][(int)(Player_Pos[0].x - (Player_Scl.x / 2)) / blockSize] == 1 &&
+	//	map[(int)(Player_Pos[0].y + (Player_Scl.y / 2)) / blockSize][(int)(Player_Pos[0].x + (Player_Scl.x / 2)) / blockSize] == 1) {
+	//	Player_Pos[0].y = Old_Pos.y;
+	//}
+
+	//for (int i = 0; i < MAX_X; i++) {
+	//	for (int j = 0; j < MAX_Y; j++) {
+	//		if ((posX + half_Width >= mapx[j][i] - map_half_width[j][i] && posX - half_Width <= mapx[j][i] + map_half_width[j][i]) && posY - half_height >= mapy[j][i] + map_half_heigh[j][i]) {
+	//			//Player_Pos[0].y = Old_Pos.y;
+	//			Player_Rot.x++;
+	//			grav = 0;
+	//		}
+	//	}
+	//}
+
+	if (Player_Pos[0].x >= 65) {
+		Player_Pos[0].x = 65;
 	}
-	else if (map[(int)(Player_Pos[0].y + (Player_Scl.y / 2)) / blockSize][(int)(Player_Pos[0].x - (Player_Scl.x / 2)) / blockSize] == 1 &&
-		map[(int)(Player_Pos[0].y + (Player_Scl.y / 2)) / blockSize][(int)(Player_Pos[0].x + (Player_Scl.x / 2)) / blockSize] == 1) {
-		Player_Pos[0].y = Old_Pos.y;
+	else if (Player_Pos[0].x <= -65) {
+		Player_Pos[0].x = -65;
+	}
+
+	if (Player_Pos[0].y >= 65) {
+		Player_Pos[0].y = 65;
+	}
+	else if (Player_Pos[0].y <= -65) {
+		Player_Pos[0].y = -65;
 	}
 
 #pragma region 線の処理
+<<<<<<< HEAD
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos[0]);
 	//吸い付くフラグまたは移動方向指定のフラグがtrueん時重力着る
 	if (Line::GetInstance()->Getboundflag()==false ||Line::GetInstance()->Gettriggerflag()==false) {
@@ -266,6 +307,110 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	Player_Pos[0].y -= grav;
+=======
+	float sdistance;
+	sdistance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
+		((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
+	);
+	//やけくそコード,汚いよ
+	linex = player[0]->GetPosition().x;//線の始点をプレイヤー位置に
+	liney = player[0]->GetPosition().y;
+	if (Input::GetInstance()->Pushkey(DIK_1)&&(!returnflag && !boundflag)) {
+		lineangle += 13.0f;//移動方向の指定
+		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
+	}
+	
+	linex2 = tempx + cosf((lineangle) * PI/ 180) * subradius;
+	liney2 = tempy + sinf((lineangle) *	PI / 180) * subradius;
+	//////////中心点//////飛ばす角度///////////////////半径(距離)
+	
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && (!returnflag && !boundflag)) {
+		trigger = true;//線を伸ばすフラグね
+		Limitsave = 0;
+	}
+
+	if (trigger) {//trigger:線伸ばすフラグ
+		subradius += LengThenSpeed;//線を伸ばす
+		if (subradius > MaxLen) {//一定以上行ったら+ブロックに針あたったら
+			trigger = false;//フラグ切る
+			lengthserchf = true;
+			
+		}
+	}
+	else if(!trigger&&subradius>0){//フラグ切られて線の長さがまだある時
+		if (Input::GetInstance()->TriggerKey(DIK_F)) {
+			boundflag = true;//線の終点へ吸い付くフラグ
+		}
+		else if (Input::GetInstance()->TriggerKey(DIK_G)) {
+			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ
+		}
+		//線の終点とプレイヤーとの距離求める
+		float distance;
+		distance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
+			((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
+		);
+		//距離が一定以内いったら
+		if (distance <= 0.05f) {
+			colf = true;
+			boundflag = false;
+			subradius = 0;//線の長さを0に
+		}
+	}
+	//先の長さが最大超えた、またはブロックあたったらその時点のプレイヤーと線の距離を求める
+	if (lengthserchf) {
+		olddistance = sdistance;
+		lengthserchf = false;
+	}
+	//吸い付くフラグまたは移動方向指定のフラグがtrueん時重力着る
+	if (boundflag || trigger) {
+		//grav = 0.0f;
+	}
+	else {
+		//grav = 0.03f;
+	}
+
+	//吸い付く処理
+	if (boundflag) {
+		FollowangleX = (linex2 - player[0]->GetPosition().x);
+		FollowangleZ = (liney2 - player[0]->GetPosition().y);//これZじゃなくてYです
+		FollowangleR = sqrtf((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)
+			+ (player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2));
+
+		Player_Pos[0].x+= (FollowangleX / FollowangleR)* FollowSpeed;
+		Player_Pos[0].y += (FollowangleZ / FollowangleR) * FollowSpeed;
+		Limitsave += 0.2;
+		if (Limit <= Limitsave) {
+			boundflag = false;
+			returnflag = true;
+		}
+	}
+	else {
+		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
+	/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
+　　　　　　線の終点も動いてしまうから(subradiusの部分が中心点依存)*/
+		tempx = Player_Pos[0].x;
+		tempy = Player_Pos[0].y;
+	}
+	//線が戻ってくる処理
+	if (returnflag) {
+		subradius -= 1.5f;
+		if (subradius <= 0) {//先の長さが０なったら切る
+			returnflag = false;
+
+			colf = true;
+
+		}
+	}
+
+	debuga=tst[0][4]->GetPosition().y;
+	//頂点座標の更新
+	mech->CreateTexture(linex, linex2, liney, liney2);
+	
+	//Player_Pos[0].y -= grav;
+	//線の長さの最大値と最小値
+	max(subradius, MinLen);
+	min(subradius, MaxLen);
+>>>>>>> acd395d50bc815c5bc9b85bc01f8c230f6c6d297
 #pragma endregion
 	//マップとの当たり判定処理
 	//右の壁にあたったとき
@@ -285,10 +430,16 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 
+<<<<<<< HEAD
 	//mech->SetPosition(texpo);
 	//mech->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
 	//Line::Update()
 	zukki->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
+=======
+	mech->SetPosition(texpo);
+	mech->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
+	//zukki->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
+>>>>>>> acd395d50bc815c5bc9b85bc01f8c230f6c6d297
 
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
@@ -322,8 +473,13 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		player[i]->PostDraw();
 	}
 
+	world->PreDraw();
+	world->Draw();
+	world->PostDraw();
+	
 
-	for (int j = 0; j < MAX_Y; j++) {
+
+	/*for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1) {
 				tst[j][i]->PreDraw();
@@ -331,7 +487,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->PostDraw();
 			}
 		}
-	}
+	}*/
 
 }
 //sプライと以外の描画
@@ -413,6 +569,13 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderFloat("positionX", &rf, -100, 100);
 		ImGui::SliderFloat("positionY", &texpo.y, -100, 100);
 		ImGui::SliderFloat("positionZ", &texpo.z, -100, 100);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Player_position")) {
+		ImGui::SliderFloat("positionX", &Player_Pos[0].x, -100, 100);
+		ImGui::SliderFloat("positionY", &Player_Pos[0].y, -100, 100);
+		ImGui::SliderFloat("positionZ", &Player_Pos[0].z, -100, 100);
 		ImGui::TreePop();
 	}
 

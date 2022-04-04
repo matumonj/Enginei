@@ -53,10 +53,13 @@ private:
 	Object3d* player[10];
 	Object3d* tst[20][100];
 	Object3d* sentan = nullptr;
+	Object3d* world = nullptr;
+
 	Collision* mapcol;
 
 	Model* playermodel = nullptr;
 	Model* tstmodel = nullptr;
+	Model* worldmodel = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
@@ -91,7 +94,7 @@ private:
 	float zanzouSpeed = 0;
 
 	int Line = 0;
-	float Limit = 4;
+	float Limit = 10;
 	float Limitsave = 0;
 	float speed = 1.0f;
 	float vec_x = 0.0f;
@@ -99,11 +102,7 @@ private:
 	float length = 0.0f;
 	float normal_x;
 	float rot = 0;
-	float gravity = 0.1;
-
 	//map
-
-
 	int blockSize = 2;
 	int map[20][100] ={ 
 	{1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1},
@@ -126,11 +125,35 @@ private:
 	float posY = 0;
 	float half_Width;
 	float half_height = 0;
+<<<<<<< HEAD
 	float mapx = 0;
 	float mapy = 0;
 	float map_half_width = 0;
 	float map_half_heigh = 0;
 
+=======
+	float mapx[20][100];
+	float mapy[20][100];
+	float map_half_width[20][100];
+	float map_half_heigh[20][100];
+	float FollowangleX, FollowangleZ, FollowangleR;
+	float FollowSpeed = 1.0f;
+	//float Limit = 0;
+	bool trigger = false;
+	bool boundflag = false;
+	bool returnflag = false;
+	float debuga;
+	float tempx, tempy;
+	float linex, linex2, liney, liney2;
+	float lineangle = 0;
+	float subradius = 0;
+	float Startsubradius = 2.0f;
+	float olddistance = 0;
+	const float LengThenSpeed = 3.0f;
+	const float MaxLen = 30.0f;
+	const float MinLen = 0.0f;
+	bool lengthserchf = false;
+>>>>>>> acd395d50bc815c5bc9b85bc01f8c230f6c6d297
 	bool colf = false;
 	float grav = 0.05f;
 	
