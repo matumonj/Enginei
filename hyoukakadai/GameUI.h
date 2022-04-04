@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <d3dx12.h>
 #include"DirectXCommon.h"
+#include"nTexture.h"
 class GameUI
 {
 private:
@@ -24,9 +25,17 @@ private:
 	static XMFLOAT2 lscl,loutscl;//スケール
 	static float tempx;
 	static float lsclMax;
+	static float alpha;
+	static nTexture* AllowTexure;
+	static XMFLOAT3 Alowpos, Alowscl,Alowrot;//座標
 public:
+	float Getsclx() { return loutscl.x; }
 	static void UISpriteSet();
 	static void UIUpdate(float length,bool flag, bool &boundflag,float movement);
 	static void UIDraw(DirectXCommon*dxcomn);
+	static GameUI* GetInstance();
+	static void AllowUISet();
+	static void AllowUIUpdate(XMMATRIX matview, XMMATRIX matprojection,XMFLOAT3 position, float rotangle, bool flag);
+	static void AllowUIDraw(DirectXCommon*dxcomn);
 };
 

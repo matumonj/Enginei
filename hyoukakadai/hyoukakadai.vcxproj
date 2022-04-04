@@ -190,6 +190,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mEffekseer.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="nTexture.cpp" />
     <ClCompile Include="Object3d.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="LightGroup.h" />
     <ClInclude Include="mEffekseer.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="nTexture.h" />
     <ClInclude Include="Object3d.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
