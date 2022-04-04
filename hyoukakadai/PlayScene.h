@@ -125,8 +125,11 @@ private:
 	float posY = 0;
 	float half_Width;
 	float half_height = 0;
+
+
 	float mapx[20][100];
 	float mapy[20][100];
+
 	float map_half_width;
 	float map_half_heigh;
 	float FollowangleX, FollowangleZ, FollowangleR;
@@ -146,13 +149,13 @@ private:
 	const float MaxLen = 30.0f;
 	const float MinLen = 0.0f;
 	bool lengthserchf = false;
+
+	float map_half_width[20][100];
+	float map_half_heigh[20][100];
+
 	bool colf = false;
 	float grav = 0.05f;
-	float MoveSpeed = 0;
-	int nx, ny;
-	float Hux;
-	float Huangle = 0;
-	int L_Cflag = 0;
+	
 	//float botttomy = 0;
 private://点光源
 	LightGroup* lightGroup = nullptr;

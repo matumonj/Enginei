@@ -8,7 +8,7 @@
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
-class Texture
+class nTexture
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略
@@ -156,7 +156,7 @@ private:// 静的メンバ関数
 	static bool InitializeGraphicsPipeline();
 
 public: // メンバ関数
-	void CreateLineTexture(float px, float px2,float py,float py2);
+	//void CreateLineTexture(float px, float px2, float py, float py2);
 	void CreateNormalTexture();
 
 	bool Initialize();
@@ -201,14 +201,14 @@ private: // メンバ変数
 	// 親オブジェクト
 	//SoulpEffect* parent = nullptr;
 private:
-	UINT texNumber=0;
-	
+	UINT texNumber = 0;
+
 public:
 	//コンストラクタ
-	Texture(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
+	nTexture(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
 
 	static bool LoadTexture(UINT texnumber, const wchar_t* filename);
-	static Texture* Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
+	static nTexture* Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
 	void TransferVertices();
 };
 

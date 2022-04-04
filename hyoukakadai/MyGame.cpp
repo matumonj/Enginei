@@ -7,6 +7,8 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 	LightGroup::StaticInitialize(dxcomn->GetDev());
 	FbxLoader::GetInstance()->Initialize(dxcomn->GetDev());
 	Texture::StaticInitialize(dxcomn->GetDev(), WinApp::window_width, WinApp::window_height);
+	nTexture::StaticInitialize(dxcomn->GetDev(), WinApp::window_width, WinApp::window_height);
+
 	//Scene = new TitleScene();
 	//‰ŠúƒV[ƒ“
 	BaseScene*scene_ = new TitleScene(sceneManger);

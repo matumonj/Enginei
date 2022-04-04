@@ -5,6 +5,7 @@
 #include"SceneManager.h"
 #include"MobEnemy.h"
 #include"BossEnemy.h"
+#include"Line.h"
 #define PI 3.14
 #define CLENGTH     (LENGTH * 2 * PI)   // 紐を伸ばして一周させた場合に出来る円の円周の長さ
 #define MASS        0.346               // ぶら下がっている物の質量
@@ -31,12 +32,15 @@ void PlayScene::SpriteCreate()
 	Sprite::LoadTexture(2, L"Resources/tyuta_C.png");
 
 	//普通のテクスチャ(スプライトじゃないよ)
+	//Texture::LoadTexture(6, L"Resources/gomi.png");
+	Texture::LoadTexture(1, L"Resources/ball.png");
+	Line::Initialize();
+	GameUI::AllowUISet();
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
+
 	mech = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, {1,1,1,1});
 	zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
-	
-
 
 	background = Sprite::Create(1, { 0.0f,-200.0f });
 	// デバッグテキスト初期化
@@ -164,10 +168,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 {
 	//
 	GameUI::UISpriteSet();
-	linex = Player_Pos[0].x;
-	liney = Player_Pos[0].y;
-	liney2 = liney;
-	linex2 = linex;
+	
 	mapcol = new Collision();
 	c_postEffect = Default;
 
@@ -179,10 +180,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
-
-	// 初期位置は軸の真下から左方向に45度傾いた位置
-	Hux = (subradius * 2 * PI) / 8.0;
-
 
 	effects->Initialize(dxCommon, camera);
 	spotLightpos[0] = 10;
@@ -208,8 +205,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
-	
-	
 }
 #pragma endregion
 
@@ -303,60 +298,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 #pragma region 線の処理
-	float sdistance;
-	sdistance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
-		((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
-	);
-	//やけくそコード,汚いよ
-	linex = player[0]->GetPosition().x;//線の始点をプレイヤー位置に
-	liney = player[0]->GetPosition().y;
-	if (Input::GetInstance()->Pushkey(DIK_1)&&(!returnflag && !boundflag)) {
-		lineangle += 13.0f;//移動方向の指定
-		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
-	}
-	
-	linex2 = tempx + cosf((lineangle) * PI/ 180) * subradius;
-	liney2 = tempy + sinf((lineangle) *	PI / 180) * subradius;
-	//////////中心点//////飛ばす角度///////////////////半径(距離)
-	
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && (!returnflag && !boundflag)) {
-		trigger = true;//線を伸ばすフラグね
-		Limitsave = 0;
-	}
 
-	if (trigger) {//trigger:線伸ばすフラグ
-		subradius += LengThenSpeed;//線を伸ばす
-		if (subradius > MaxLen) {//一定以上行ったら+ブロックに針あたったら
-			trigger = false;//フラグ切る
-			lengthserchf = true;
-			
-		}
-	}
-	else if(!trigger&&subradius>0){//フラグ切られて線の長さがまだある時
-		if (Input::GetInstance()->TriggerKey(DIK_F)) {
-			boundflag = true;//線の終点へ吸い付くフラグ
-		}
-		else if (Input::GetInstance()->TriggerKey(DIK_G)) {
-			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ
-		}
-		//線の終点とプレイヤーとの距離求める
-		float distance;
-		distance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
-			((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
-		);
-		//距離が一定以内いったら
-		if (distance <= 0.05f) {
-			colf = true;
-			boundflag = false;
-			subradius = 0;//線の長さを0に
-		}
-	}
-	//先の長さが最大超えた、またはブロックあたったらその時点のプレイヤーと線の距離を求める
-	if (lengthserchf) {
-		olddistance = sdistance;
-		lengthserchf = false;
-	}
+	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos[0]);
 	//吸い付くフラグまたは移動方向指定のフラグがtrueん時重力着る
+
 	if (boundflag || trigger) {
 		grav = 0.0f;
 	}
@@ -392,7 +337,15 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		if (subradius <= 0) {//先の長さが０なったら切る
 			returnflag = false;
 
-			colf = true;
+	if (Line::GetInstance()->Getboundflag()==false ||Line::GetInstance()->Gettriggerflag()==false) {
+		grav = 0.0f;
+	} else {
+		grav = 0.03f;
+	}
+
+
+	Player_Pos[0].y -= grav;
+
 
 		}
 	}
@@ -405,12 +358,19 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//線の長さの最大値と最小値
 	max(subradius, MinLen);
 	min(subradius, MaxLen);
+
 #pragma endregion
 	//マップとの当たり判定処理
 	//右の壁にあたったとき
+	colf = Line::GetInstance()->GetColf();
+
+	GameUI::UIUpdate(
+		Line::GetInstance()->GetLength(),
+		Line::GetInstance()->Gettriggerflag(),
+		colf,
+		Line::GetInstance()->Getolddistance());
 	
-	GameUI::UIUpdate(subradius,trigger,colf,olddistance);
-	
+	Line::GetInstance()->SetColf(colf);
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -418,10 +378,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 
-	mech->SetPosition(texpo);
-	mech->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
-	//zukki->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
-
+	
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
@@ -432,6 +389,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 	
 	objUpdate();//オブジェクトの更新処理
+	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player[0]->GetPosition(),
+		Line::GetInstance()->GetlineAngle(),Line::GetInstance()->Gettriggerflag());
 
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
@@ -475,12 +434,12 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
 	GameUI::UIDraw(dxcomn);
-	//普通のテクスチャの描画
-	Texture::PreDraw(dxcomn->GetCmdList());
-	//zukki->Draw();//ズッキーニャの画像
-	mech->Draw();//メカバーンの画像
-	Texture::PostDraw();
 	
+	GameUI::AllowUIDraw(dxcomn);
+	
+	//普通のテクスチャの描画
+	Line::Draw(dxcomn);
+
 	effects->Draw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
@@ -538,13 +497,14 @@ void PlayScene::ImGuiDraw()
 	}
 	
 	if (ImGui::TreeNode("Effect_position")) {
-		ImGui::SliderInt("positionX", &L_Cflag, -100, 100);
-		ImGui::SliderFloat("positionY", &debuga, -100, 100);
+		//ImGui::SliderInt("positionX", &L_Cflag, -100, 100);
+		//ImGui::SliderFloat("positionY", &debuga, -100, 100);
 		ImGui::SliderFloat("positionZ", &efkposition.z, -100, 100);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Texture_position")) {
-		ImGui::SliderFloat("positionX", &olddistance, -100, 100);
+		float rf = GameUI::GetInstance()->Getsclx();
+		ImGui::SliderFloat("positionX", &rf, -100, 100);
 		ImGui::SliderFloat("positionY", &texpo.y, -100, 100);
 		ImGui::SliderFloat("positionZ", &texpo.z, -100, 100);
 		ImGui::TreePop();

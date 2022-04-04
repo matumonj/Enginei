@@ -11,6 +11,7 @@ class DebugCamera :
 {
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
+	
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
