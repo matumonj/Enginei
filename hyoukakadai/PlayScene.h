@@ -141,9 +141,12 @@ private:
 	float lineangle = 0;
 	float subradius = 0;
 	float Startsubradius = 2.0f;
-	const float LengThenSpeed = 5.0f;
+	float olddistance = 0;
+	const float LengThenSpeed = 3.0f;
 	const float MaxLen = 30.0f;
 	const float MinLen = 0.0f;
+	bool lengthserchf = false;
+	bool colf = false;
 	float grav = 0.05f;
 	float MoveSpeed = 0;
 	int nx, ny;
