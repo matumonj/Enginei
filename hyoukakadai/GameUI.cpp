@@ -100,7 +100,7 @@ void GameUI::AllowUIUpdate(XMMATRIX matview, XMMATRIX matprojection,XMFLOAT3 pos
 	if (flag) {
 		alpha -= 0.1f;
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_L)) {
+	if (Input::GetInstance()->TriggerKey(DIK_1)) {
 		alpha =0.8f;
 	}
 	max(alpha, 0.05f);
