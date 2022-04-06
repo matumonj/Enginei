@@ -6,6 +6,8 @@
 #include"MobEnemy.h"
 #include"BossEnemy.h"
 #include"Line.h"
+
+
 #define PI 3.14
 #define CLENGTH     (LENGTH * 2 * PI)   // 紐を伸ばして一周させた場合に出来る円の円周の長さ
 #define MASS        0.346               // ぶら下がっている物の質量
@@ -57,6 +59,8 @@ void PlayScene::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("block");
 	worldmodel = Model::CreateFromOBJ("skydome");
 
+	collision = new Collision();
+
 	for (int i = 0; i < 10; i++) {
 		player[i] = Object3d::Create();
 		player[i]->SetModel(playermodel);
@@ -69,6 +73,9 @@ void PlayScene::ModelCreate()
 			tst[j][i]->SetModel(tstmodel);
 		}
 	}
+
+	block = Object3d::Create();
+	block->SetModel(tstmodel);
 	
 	sentan = Object3d::Create();
 	sentan->SetModel(tstmodel);
@@ -120,13 +127,12 @@ void PlayScene::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
-			mapx[j][i] = tst[j][i]->GetPosition().x;
-			mapy[j][i]= tst[j][i]->GetPosition().y;
-			map_half_heigh = tst[j][i]->GetScale().y /2;
-			map_half_width = tst[j][i]->GetScale().x /2;
+			
 		}
 	}
 
+	block->SetPosition({ block_pos });
+	block->SetScale({ block_Scl });
 
 	world->SetPosition({ 0,0,0 });
 	world->SetScale({ 1,1,1 });
@@ -159,7 +165,7 @@ void PlayScene::objUpdate()
 	}
 
 	world->Update({ 1,1,1,1 });
-
+	block->Update({ 1,1,1,1 });
 }
 #pragma endregion
 
@@ -229,18 +235,18 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	
 
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos[0].x += 0.2f;
+		Player_Pos[0].x += moveSpeed;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 
-		Player_Pos[0].x -= 0.2f;
+		Player_Pos[0].x -= moveSpeed;
 	}
 
 	if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		Player_Pos[0].y -= 0.2f;
+		Player_Pos[0].y -= moveSpeed;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-		Player_Pos[0].y += 0.2f;
+		Player_Pos[0].y += moveSpeed;
 	}
 
 
@@ -255,43 +261,58 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos[i].y = Player_Pos[i - 1].y + zanzouSpeed;
 	}
 	////当たり判定
-	//if (map[(int)(posY - half_height) / blockSize][(int)(posX-half_Width) / blockSize] == 1 &&
-	//	map[(int)(posY - half_height) / blockSize][(int)(posX+half_Width) / blockSize] == 1) {
-	//	//Player_Pos[0].y = Old_Pos.y;
-	//	Player_Rot.x++;
-	//	grav = 0;
-	//}
-	//else if (map[(int)(posY + half_height) / blockSize][(int)(posX-half_Width) / blockSize] == 1 &&
-	//	map[(int)(posY + half_height) / blockSize][(int)(posX+half_Width) / blockSize] == 1) {
-	//	//Player_Pos[0].y = Old_Pos.y;
-	//	Player_Rot.x++;
-	//	grav = 0;
-	//}
-	//else {
-	//	grav = 0.03f;
-	//}
 
-	//if (map[(int)(posY + half_height) / blockSize][(int)(posX + half_Width) / blockSize] == 1 &&
-	//	map[(int)(posY - half_height) / blockSize][(int)(posX + half_Width) / blockSize] == 1) {
-	//	Player_Pos[0].x = Old_Pos.x;
-	//}
-	//else if (map[(int)(posY + half_height) / blockSize][(int)(posX - half_Width) / blockSize] == 1 &&
-	//	map[(int)(posY - half_height) / blockSize][(int)(posX - half_Width) / blockSize] == 1) {
-	//	Player_Pos[0].x = Old_Pos.x;
-	//}
+	//grav = 0.03;
+
+
+
+	if (posX - Player_Scl.x < block_pos.x + block_Scl.x && block_pos.x < Old_Pos.x - Player_Scl.x -1 && (block_pos.y - block_Scl.y < posY + Player_Scl.y && posY - Player_Scl.y < block_pos.y + block_Scl.y)) {
+		Player_Pos[0].x = Old_Pos.x ;
+	}
+
+
 
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
 			if (map[j][i] == 1) {
-				if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height - 1< mapy[j][i] + map_half_heigh && posY + half_height > mapy[j][i] - map_half_heigh) {
-					Player_Pos[0].y = map_half_heigh + mapy[j][i] + half_height+1;
-					//Player_Pos[0].y = Old_Pos.y;
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				map_half_heigh = tst[j][i]->GetScale().y ;
+				map_half_width = tst[j][i]->GetScale().x ;
+				//下辺の当たり判定
+				if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height - 1< mapy[j][i] + (map_half_heigh/2) && posY + half_height > mapy[j][i] - (map_half_heigh/2)) {
+					posY = map_half_heigh + mapy[j][i] + half_height+0.5;
+					Old_Pos.y = posY;
+					Player_Pos[0].y = Old_Pos.y;
+					//Player_Rot.x++;
+					grav = 0;
+					break;
+				}
+				//上辺の当たり判定
+				else if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y + half_height < mapy[j][i] && posY + half_height + 0.5 > mapy[j][i] - map_half_heigh-0.5) {
+					posY = mapy[j][i] - map_half_heigh - half_height - 0.5;
+					Old_Pos.y = posY;
+					Player_Pos[0].y = Old_Pos.y;
 					//Player_Rot.x++;
 					grav = 0;
 					break;
 				}
 				else {
-					grav = 0.03f;
+					grav = 0.03;
+				}
+				//左
+				if (posX - half_Width -0.5< mapx[j][i] + map_half_width +0.5&& mapx[j][i] < Old_Pos.x - half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
+					posX = mapx[j][i] + map_half_width + half_Width+0.55;
+					Old_Pos.x = posX;
+					Player_Pos[0].x = Old_Pos.x;
+					break;
+				}
+				//右
+				else if (posX + half_Width +0.5> mapx[j][i] - map_half_width -0.5&& mapx[j][i] > Old_Pos.x + half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
+					posX = mapx[j][i] - map_half_width - half_Width-0.55;
+					Old_Pos.x = posX;
+					Player_Pos[0].x = Old_Pos.x;
+					break;
 				}
 			}
 		}
@@ -340,7 +361,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Line::GetInstance()->Getboundflag()==false ||Line::GetInstance()->Gettriggerflag()==false) {
 		grav = 0.0f;
 	} else {
-		grav = 0.03f;
+		//grav = 0.03f;
 	}
 
 
@@ -352,7 +373,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	debuga=tst[0][4]->GetPosition().y;
 	//頂点座標の更新
-	mech->CreateTexture(linex, linex2, liney, liney2);
+	mech->CreateLineTexture(linex, linex2, liney, liney2);
 	
 	Player_Pos[0].y -= grav;
 	//線の長さの最大値と最小値
@@ -415,7 +436,9 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	world->Draw();
 	world->PostDraw();
 	
-
+	block->PreDraw();
+	block->Draw();
+	block->PostDraw();
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -522,6 +545,11 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderFloat("half_height", &half_height, -100, 100);
 		ImGui::SliderFloat("map_half_width", &map_half_width, -100, 100);
 		ImGui::SliderFloat("maphalf_height", &map_half_heigh, -100, 100);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Old")) {
+		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -100, 100);
+		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -100, 100);
 		ImGui::TreePop();
 	}
 
