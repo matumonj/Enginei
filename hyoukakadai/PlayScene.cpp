@@ -7,7 +7,6 @@
 #include"BossEnemy.h"
 #include"Line.h"
 
-
 #define PI 3.14
 #define CLENGTH     (LENGTH * 2 * PI)   // 紐を伸ばして一周させた場合に出来る円の円周の長さ
 #define MASS        0.346               // ぶら下がっている物の質量
@@ -16,6 +15,7 @@
 #define STY         100                 // 振り子の軸のy座標
 
 //コメントアウト
+
 
 //シーンのコンストラクタ
 PlayScene::PlayScene(SceneManager* sceneManager)
@@ -30,14 +30,10 @@ void PlayScene::SpriteCreate()
 {
 	// デバッグテキスト用テクスチャ読み込み
 	Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont2.png");
-	Sprite::LoadTexture(1, L"Resources/0057b6fa9ec85ae.jpg");
-	Sprite::LoadTexture(2, L"Resources/tyuta_C.png");
-
 	//普通のテクスチャ(スプライトじゃないよ)
-	//Texture::LoadTexture(6, L"Resources/gomi.png");
-	Texture::LoadTexture(1, L"Resources/ball.png");
 	Line::Initialize();
 	GameUI::AllowUISet();
+
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
 
@@ -45,6 +41,7 @@ void PlayScene::SpriteCreate()
 	zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	background = Sprite::Create(1, { 0.0f,-200.0f });
+
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -65,7 +62,6 @@ void PlayScene::ModelCreate()
 		player[i] = Object3d::Create();
 		player[i]->SetModel(playermodel);
 	}
-
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -109,8 +105,6 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
-	
-	
 	for (int i = 0; i < 10; i++) {
 			player[i]->SetPosition({ Player_Pos[i] });
 		player[i]->SetScale({ Player_Scl });
@@ -139,7 +133,6 @@ void PlayScene::SetPrm()
 
 	sentan->SetPosition({ sentan_Pos });
 
-	
 }
 #pragma endregion
 
@@ -217,29 +210,26 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void PlayScene::Update(DirectXCommon* dxCommon)
 {
-	
-	//liney += 0.01f;
-	//liney2 -= 0.01f;
 	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
 	//マウスの入力状態取得
 	if (Input::GetInstance()->PushMouseLeft()) {
 		dy = (float)mouseMove.lX;
 		dx = (float)mouseMove.lY;
 		dz = (float)mouseMove.lZ;
-		//Player_Rot.y -= -dy * 0.2;
-		//Player_Rot.z -= dx * 0.2;
 	}
-	effects->Update(dxCommon, camera);
-	Old_Pos = Player_Pos[0];
-	//Player_Pos[0].y -= gravity;
-	
 
+	Old_Pos = Player_Pos[0];
+	
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos[0].x += moveSpeed;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 
+
 		Player_Pos[0].x -= moveSpeed;
+
+		Player_Pos[0].x -= 0.2f;
+
 	}
 
 	if (Input::GetInstance()->Pushkey(DIK_UP)) {
@@ -247,12 +237,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
 		Player_Pos[0].y += moveSpeed;
-	}
-
-
-	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
-		Line = 1;
-		//ito_Scl.y+=1;
 	}
 
 	//残像
@@ -321,6 +305,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region 線の処理
 
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos[0]);
+	
 	//吸い付くフラグまたは移動方向指定のフラグがtrueん時重力着る
 
 	if (boundflag || trigger) {
@@ -381,17 +366,17 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	min(subradius, MaxLen);
 
 #pragma endregion
-	//マップとの当たり判定処理
-	//右の壁にあたったとき
+	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
 
 	GameUI::UIUpdate(
-		Line::GetInstance()->GetLength(),
-		Line::GetInstance()->Gettriggerflag(),
-		colf,
-		Line::GetInstance()->Getolddistance());
+		Line::GetInstance()->GetLength(),//
+		Line::GetInstance()->Gettriggerflag(),//
+		colf,//
+		Line::GetInstance()->Getolddistance());//
 	
 	Line::GetInstance()->SetColf(colf);
+
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -399,7 +384,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 
-	
+	effects->Update(dxCommon, camera);
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//

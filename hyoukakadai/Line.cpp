@@ -31,6 +31,7 @@ float Line::FollowangleX, Line::FollowangleZ, Line::FollowangleR;
 	 static Line instance;
 	 return &instance;
 }
+
 void Line::Initialize()
 {
 	Texture::LoadTexture(13, L"Resources/gomi.png");
