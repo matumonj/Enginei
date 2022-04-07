@@ -23,17 +23,7 @@ void PlayScene::SpriteCreate()
 	//普通のテクスチャ(スプライトじゃないよ)
 	Line::Initialize();
 	GameUI::AllowUISet();
-<<<<<<< HEAD
-	Texture::LoadTexture(6, L"Resources/gomi.png");
-	Texture::LoadTexture(1, L"Resources/background.png");
 
-	mech = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, {1,1,1,1});
-	zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
-
-	background = Sprite::Create(1, { 0.0f,-200.0f });
-=======
-	
->>>>>>> naosi
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -45,7 +35,7 @@ void PlayScene::SpriteCreate()
 void PlayScene::ModelCreate()
 {
 	playermodel = Model::CreateFromOBJ("player");
-	tstmodel = Model::CreateFromOBJ("block");
+	tstmodel = Model::CreateFromOBJ("bossenemy");
 	worldmodel = Model::CreateFromOBJ("skydome");
 
 	for (int i = 0; i < 10; i++) {
@@ -155,7 +145,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 {
 	//
 	GameUI::UISpriteSet();
-	
+	enemy = new MobEnemy();
+	enemy->Initialize();
 	mapcol = new Collision();
 	c_postEffect = Default;
 
@@ -175,6 +166,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
+	weffect = new pEffect();
+	weffect->Initialize(dxCommon, camera);
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
 	//カメラをセット
@@ -257,13 +250,17 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		for (int j = 0; j < MAX_Y; j++) {
 			if (map[j][i] == 1) {
 				if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height - 1< mapy[j][i] + map_half_heigh && posY + half_height > mapy[j][i] - map_half_heigh) {
-					Player_Pos[0].y = map_half_heigh + mapy[j][i] + half_height+1;
+					//Player_Pos[0].y = map_half_heigh + mapy[j][i] + half_height+1;
 					//Player_Pos[0].y = Old_Pos.y;
 					//Player_Rot.x++;
 					grav = 0;
+					//cff = 1;
 					break;
+					
+					
 				}
 				else {
+					//cff = 0;
 					grav = 0.03f;
 				}
 			}
@@ -272,44 +269,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 #pragma region 線の処理
 
-	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos[0]);
-	
-	//吸い付くフラグまたは移動方向指定のフラグがtrueん時重力着る
-
-	if (boundflag || trigger) {
-		grav = 0.0f;
-	}
-	else {
-		
-	}
-	
-	//吸い付く処理
-	if (boundflag) {
-		FollowangleX = (linex2 - player[0]->GetPosition().x);
-		FollowangleZ = (liney2 - player[0]->GetPosition().y);//これZじゃなくてYです
-		FollowangleR = sqrtf((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)
-			+ (player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2));
-
-		Player_Pos[0].x+= (FollowangleX / FollowangleR)* FollowSpeed;
-		Player_Pos[0].y += (FollowangleZ / FollowangleR) * FollowSpeed;
-		Limitsave += 0.2;
-		if (Limit <= Limitsave) {
-			boundflag = false;
-			returnflag = true;
-		}
-	}
-	else {
-		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
-	/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
-　　　　　　線の終点も動いてしまうから(subradiusの部分が中心点依存)*/
-		tempx = Player_Pos[0].x;
-		tempy = Player_Pos[0].y;
-	}
-	//線が戻ってくる処理
-	if (returnflag) {
-		subradius -= 1.5f;
-		if (subradius <= 0) {//先の長さが０なったら切る
-			returnflag = false;
 
 	if (Line::GetInstance()->Getboundflag()==false ||Line::GetInstance()->Gettriggerflag()==false) {
 		grav = 0.0f;
@@ -317,22 +276,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		grav = 0.03f;
 	}
 
-
 	Player_Pos[0].y -= grav;
-
-
-		}
-	}
-
-	debuga=tst[0][4]->GetPosition().y;
-	//頂点座標の更新
-	mech->CreateTexture(linex, linex2, liney, liney2);
 	
-	Player_Pos[0].y -= grav;
-	//線の長さの最大値と最小値
-	max(subradius, MinLen);
-	min(subradius, MaxLen);
-
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -345,13 +290,33 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	
 	Line::GetInstance()->SetColf(colf);
 
+	needlepos = Line::GetInstance()->getpos();
+	for (int i = 0; i < MAX_X; i++) {
+		for (int j = 0; j < MAX_Y; j++) {
+			if (map[j][i] == 1) {
+				if (needlepos.x > mapx[j][i] - map_half_width && needlepos.x  < mapx[j][i] + map_half_width &&
+					needlepos.y< mapy[j][i] + map_half_heigh && needlepos.y  > mapy[j][i] - map_half_heigh) {
+					cff = true;
+					cfff = 1;
+				//	break;
+				} 
+				else{
+					cff = false;
+				}
+			}
+		}
+	}
+	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos[0], elf);
+	Line::CollisionEnemy(elf, enemy->GetPosition());
+
+	weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
 	}
 	//FBXモデルの更新
 	object1->Updata(TRUE);
-
+	
 	effects->Update(dxCommon, camera);
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
@@ -363,6 +328,11 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 	
 	objUpdate();//オブジェクトの更新処理
+	enemy->Update(Player_Pos[0]);
+	
+	
+	enemy->EnemySearchPlayer(player[0]->GetPosition());
+	
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player[0]->GetPosition(),
 		Line::GetInstance()->GetlineAngle(),Line::GetInstance()->Gettriggerflag());
 
@@ -381,15 +351,15 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	
 	for (int i = 0; i < 10; i++) {
 		player[i]->PreDraw();
-		player[i]->Draw();
+		player[0]->Draw();
 		player[i]->PostDraw();
 	}
 
 	world->PreDraw();
-	world->Draw();
+	//world->Draw();
 	world->PostDraw();
 	
-
+	enemy->Draw();
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -407,13 +377,15 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 {
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
-	GameUI::UIDraw(dxcomn);
-	
-	GameUI::AllowUIDraw(dxcomn);
-	
+
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
 
+	weffect->Draw(dxcomn);
+	GameUI::AllowUIDraw(dxcomn);
+
+	GameUI::UIDraw(dxcomn);
+	
 	effects->Draw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
@@ -457,9 +429,9 @@ void PlayScene::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("light_position")) {
-		ImGui::SliderFloat("positionX", &Player_Pos[0].x, -100, 100);
-		ImGui::SliderFloat("positionY", &spotLightpos[1], -100, 100);
-		ImGui::SliderFloat("positionZ", &spotLightpos[2], -100, 100);
+		ImGui::SliderFloat("positionX", &needlepos.x, -100, 100);
+		ImGui::SliderFloat("positionY", &needlepos.y, -100, 100);
+		ImGui::SliderFloat("positionZ", &needlepos.z, -100, 100);
 		if (ImGui::Button("spotlight ON")) {
 			lightGroup->SetSpotLightActive(0, true);
 		}
@@ -473,17 +445,19 @@ void PlayScene::ImGuiDraw()
 	if (ImGui::TreeNode("Effect_position")) {
 		//ImGui::SliderInt("positionX", &L_Cflag, -100, 100);
 		//ImGui::SliderFloat("positionY", &debuga, -100, 100);
-		ImGui::SliderFloat("positionZ", &efkposition.z, -100, 100);
+		//ImGui::SliderInt("positionZ", &elf, -100, 100);
 		ImGui::TreePop();
 	}
-	if (ImGui::TreeNode("Texture_position")) {
-		float rf = GameUI::GetInstance()->Getsclx();
+	if (ImGui::TreeNode("enemy_position")) {
+		float rf = enemy->GetPosition().x;
+		float rf2 = enemy->GetPosition().y;
+		float rf3 = enemy->GetPosition().z;
 		ImGui::SliderFloat("positionX", &rf, -100, 100);
-		ImGui::SliderFloat("positionY", &texpo.y, -100, 100);
-		ImGui::SliderFloat("positionZ", &texpo.z, -100, 100);
+		ImGui::SliderFloat("positionY", &rf2, -100, 100);
+		ImGui::SliderFloat("positionZ", &rf3, -100, 100);
 		ImGui::TreePop();
 	}
-
+	
 	if (ImGui::TreeNode("Player_position")) {
 		ImGui::SliderFloat("positionX", &Player_Pos[0].x, -100, 100);
 		ImGui::SliderFloat("positionY", &Player_Pos[0].y, -100, 100);
@@ -494,8 +468,8 @@ void PlayScene::ImGuiDraw()
 	if (ImGui::TreeNode("half")) {
 		ImGui::SliderFloat("half_width", &half_Width, -100, 100);
 		ImGui::SliderFloat("half_height", &half_height, -100, 100);
-		ImGui::SliderFloat("map_half_width", &map_half_width, -100, 100);
-		ImGui::SliderFloat("maphalf_height", &map_half_heigh, -100, 100);
+		//ImGui::SliderFloat("map_half_width", &map_half_width, -100, 100);
+		//ImGui::SliderFloat("maphalf_height", &map_half_heigh, -100, 100);
 		ImGui::TreePop();
 	}
 

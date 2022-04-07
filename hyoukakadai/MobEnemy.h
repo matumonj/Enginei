@@ -5,6 +5,7 @@
 class MobEnemy :
     public Enemy
 {
+
 public:
     /// <summary>
     /// コンストラクタ
@@ -27,6 +28,8 @@ private:
     XMFLOAT3 Mob_Rot;
     XMFLOAT3 Mob_Scl;
 public:
+    void EnemySearchPlayer(XMFLOAT3 player)override;
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -35,7 +38,7 @@ public:
     /// <summary>
     /// 更新処理
     /// </summary>
-    void Update()override;
+    void Update(XMFLOAT3 position)override;
     
     /// <summary>
     /// 描画処理
@@ -46,6 +49,9 @@ public:
     /// 解放処理
     /// </summary>
     void Finalize()override;
+    void Follow(XMFLOAT3 player);
+    float angleXs, angleZs, angleRs;
+    float centerSpeed = 0.1f;
 public:
     /// <summary>
     /// アクセッサ

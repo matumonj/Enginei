@@ -6,7 +6,7 @@
 #include <d3dx12.h>
 #include <DirectXMath.h>
 #include <string>
-
+#include"Player.h"
 #include"Input.h"
 /// <summary>
 /// 敵キャラの基底クラス
@@ -40,6 +40,8 @@ protected:
 	XMFLOAT3 Scale;
 
 public:
+	virtual void EnemySearchPlayer(XMFLOAT3 player) = 0;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -48,16 +50,20 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	virtual void Update();
+	virtual void Update(XMFLOAT3 position);
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	virtual void Draw();
 
+	//virtual float Distance(Player* player);
+
 	/// <summary>
 	/// 解放処理
 	/// </summary>
 	virtual void Finalize();
+	void Setposition(XMFLOAT3 position) { Position = position; }
+	XMFLOAT3 GetPosition() { return Position; }
 };
 

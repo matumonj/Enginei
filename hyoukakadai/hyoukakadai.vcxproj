@@ -192,6 +192,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="nTexture.cpp" />
     <ClCompile Include="Object3d.cpp" />
+    <ClCompile Include="pEffect.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PostEffect.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="nTexture.h" />
     <ClInclude Include="Object3d.h" />
+    <ClInclude Include="pEffect.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PointLight.h" />

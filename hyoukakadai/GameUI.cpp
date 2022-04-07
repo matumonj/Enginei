@@ -6,11 +6,12 @@
 using namespace DirectX;
 Sprite*GameUI::LineLength=nullptr;
 Sprite* GameUI::LineLengthout = nullptr;
+Sprite* GameUI::Attention[3] = { nullptr };
 nTexture* GameUI::AllowTexure = nullptr;
 XMFLOAT2 GameUI::lpos, GameUI::loutpos;//座標
 XMFLOAT2 GameUI::lscl, GameUI::loutscl;//スケール
 XMFLOAT3 GameUI::Alowpos, GameUI::Alowrot, GameUI::Alowscl={ 1,0.5,10 };
-float GameUI::alpha = 0.5;
+float GameUI::alpha = 0.5,GameUI::walpha=0;
 float GameUI::tempx = 0;
 float GameUI::lsclMax;
 GameUI*GameUI::GetInstance()
@@ -26,15 +27,19 @@ void GameUI::UISpriteSet()
 	Sprite::LoadTexture(10, L"Resources/bosshp.png");
 	//内枠
 	Sprite::LoadTexture(11, L"Resources/gomi.png");
-	
+	//注意
+	Sprite::LoadTexture(12, L"Resources/attention.png");
 	LineLengthout = Sprite::Create(10, { 0.0f,-200.0f });
 	LineLength = Sprite::Create(11, { 0.0f,-200.0f });
+	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
 	loutpos = { 50,100 };
 	loutscl = { 500,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
+	Attention[0]->SetSize({ 1500,800 });
+	Attention[0]->SetPosition({ WinApp::window_width / 2-600,WinApp::window_height / 2 });
 
 }
 
@@ -64,16 +69,19 @@ void GameUI::UIUpdate(float length,bool flag,bool&boundflag,float movement)
 		//減る前の最大値を保存
 		tempx = loutscl.x;
 	}
+	AttentionUI();
 
 	LineLength->SetPosition(lpos);
 	LineLength->SetSize(lscl);
 	LineLengthout->SetPosition(loutpos);
 	LineLengthout->SetSize(loutscl);
-}
+	Attention[0]->setcolor({ walpha,1,1,1 });
+	}
 
 void GameUI::UIDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
+	Attention[0]->Draw();
 	LineLengthout->Draw();
 	LineLength->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
@@ -113,4 +121,17 @@ void GameUI::AllowUIDraw(DirectXCommon*dxcomn)
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	AllowTexure->Draw();
 	nTexture::PostDraw();
+}
+
+void GameUI::AttentionUI()
+{
+	if (loutscl.x <= 0) {
+		if (Input::GetInstance()->Pushkey(DIK_SPACE))
+		{
+			walpha =0.8f;
+		}
+	}
+	walpha -= 0.02f;
+	min(walpha, 0.8f);
+	max(walpha, 0);
 }

@@ -1,4 +1,5 @@
 #include "MobEnemy.h"
+#include<math.h>
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -18,28 +19,32 @@ MobEnemy::~MobEnemy()
 void MobEnemy::Initialize()
 {
 	//モデルの読込
-	MobModel = Model::CreateFromOBJ("subenemy");
+	MobModel = Model::CreateFromOBJ("bossenemy");
 	//モデル割り当て
 	//MobObject = new Object3d();
 	MobObject = Object3d::Create();
 	MobObject->SetModel(MobModel);
-
+	//MobObject->Initialize();
 	//パラメータのセット
 	Mob_Scl = { 2,2,2 };
 	Mob_Rot = { 0,180,0 };
 	Mob_Pos = { -10,-2,0 };
+	Position = { 20,0,0 };
 }
 
 //更新処理
-void MobEnemy::Update()
+void MobEnemy::Update(XMFLOAT3 position)
 {
 	//パラメータのセット
 	//モブ
-	MobObject->SetPosition(Mob_Pos);
+	//MobObject->SetPosition(Position);
 	MobObject->SetScale({ 1,1,1 });
-	MobObject->SetRotation(Mob_Rot);
+	MobObject->SetRotation({0,180,0});
 	
+	//Follow(position);
 	MobObject->Update({ 1,1,1,1 });
+	MobObject->SetPosition(Position);
+	
 }
 
 //描画処理
@@ -54,4 +59,24 @@ void MobEnemy::Draw()
 void MobEnemy::Finalize()
 {
 	delete MobObject, MobModel;
+}
+void MobEnemy::EnemySearchPlayer(XMFLOAT3 player)
+{
+	Follow(player);
+}
+
+void MobEnemy::Follow(XMFLOAT3 player)
+{
+	float angleX, angleZ, angleR;
+	float centerSpeed = 0.1f;
+	angleX = (player.x - Position.x);
+	angleZ = (player.y - Position.y);
+	angleR = sqrtf((Position.x - player.x) * (Position.x - player.x)
+		+ (Position.y - player.y) * (Position.y - player.y));
+	Position.x += (angleX / angleR) * centerSpeed;
+	Position.y += (angleZ / angleR) * centerSpeed;
+	//Position.x =player.x;
+	//Position.y =player.y;
+	//MobObject->SetPosition(Position);
+	//MobObject->SetPosition(Position);
 }

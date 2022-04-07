@@ -438,7 +438,7 @@ void Texture::CreateLineTexture(float px,float px2,float py,float py2)
 			{{px,py,0.0f}, { 0,0,1}, {0,1}},
 			{{px,py+0.5f,-0.0f}, { 0,0,1}, {0,0}},
 			{{px2,py2,0.0f}, { 0,0,1}, {1,1}},
-			{{px2+0.05f,py2+0.5f,-0.0f}, { 0,0,1}, {1,0}},
+			{{px2+0.05f,py2,-0.0f}, { 0,0,1}, {1,0}},
 		};
 		std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
 
