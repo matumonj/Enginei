@@ -33,9 +33,6 @@ void PlayScene::SpriteCreate()
 	//普通のテクスチャ(スプライトじゃないよ)
 	Line::Initialize();
 	GameUI::AllowUISet();
-<<<<<<< HEAD
-
-=======
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
@@ -44,8 +41,6 @@ void PlayScene::SpriteCreate()
 	zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	background = Sprite::Create(1, { 0.0f,-200.0f });
-
->>>>>>> b5ef38a5e4aca1873099a21bd22cd82eaf8f0491
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -192,8 +187,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
-	weffect = new pEffect();
-	weffect->Initialize(dxCommon, camera);
+	//weffect = new pEffect();
+	//weffect->Initialize(dxCommon, camera);
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
 	//カメラをセット
@@ -266,63 +261,58 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
 			if (map[j][i] == 1) {
-<<<<<<< HEAD
-				if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height - 1< mapy[j][i] + map_half_heigh && posY + half_height > mapy[j][i] - map_half_heigh) {
+				if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height - 1 < mapy[j][i] + map_half_heigh && posY + half_height > mapy[j][i] - map_half_heigh) {
 					//Player_Pos[0].y = map_half_heigh + mapy[j][i] + half_height+1;
 					//Player_Pos[0].y = Old_Pos.y;
-=======
-				mapx[j][i] = tst[j][i]->GetPosition().x;
-				mapy[j][i] = tst[j][i]->GetPosition().y;
-				map_half_heigh = tst[j][i]->GetScale().y ;
-				map_half_width = tst[j][i]->GetScale().x ;
-				//下辺の当たり判定
-				if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height - 1< mapy[j][i] + (map_half_heigh/2) && posY + half_height > mapy[j][i] - (map_half_heigh/2)) {
-					posY = map_half_heigh + mapy[j][i] + half_height+0.5;
-					Old_Pos.y = posY;
-					Player_Pos[0].y = Old_Pos.y;
-					//Player_Rot.x++;
-					grav = 0;
-					break;
-				}
-				//上辺の当たり判定
-				else if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y + half_height < mapy[j][i] && posY + half_height + 0.5 > mapy[j][i] - map_half_heigh-0.5) {
-					posY = mapy[j][i] - map_half_heigh - half_height - 0.5;
-					Old_Pos.y = posY;
-					Player_Pos[0].y = Old_Pos.y;
->>>>>>> b5ef38a5e4aca1873099a21bd22cd82eaf8f0491
-					//Player_Rot.x++;
-					grav = 0;
-					//cff = 1;
-					break;
-					
-					
-				}
-				else {
-<<<<<<< HEAD
-					//cff = 0;
-					grav = 0.03f;
-=======
-					grav = 0.03;
-				}
-				//左
-				if (posX - half_Width -0.5< mapx[j][i] + map_half_width +0.5&& mapx[j][i] < Old_Pos.x - half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
-					posX = mapx[j][i] + map_half_width + half_Width+0.55;
-					Old_Pos.x = posX;
-					Player_Pos[0].x = Old_Pos.x;
-					break;
-				}
-				//右
-				else if (posX + half_Width +0.5> mapx[j][i] - map_half_width -0.5&& mapx[j][i] > Old_Pos.x + half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
-					posX = mapx[j][i] - map_half_width - half_Width-0.55;
-					Old_Pos.x = posX;
-					Player_Pos[0].x = Old_Pos.x;
-					break;
->>>>>>> b5ef38a5e4aca1873099a21bd22cd82eaf8f0491
+					mapx[j][i] = tst[j][i]->GetPosition().x;
+					mapy[j][i] = tst[j][i]->GetPosition().y;
+					map_half_heigh = tst[j][i]->GetScale().y;
+					map_half_width = tst[j][i]->GetScale().x;
+					//下辺の当たり判定
+					if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height - 1 < mapy[j][i] + (map_half_heigh / 2) && posY + half_height > mapy[j][i] - (map_half_heigh / 2)) {
+						posY = map_half_heigh + mapy[j][i] + half_height + 0.5;
+						Old_Pos.y = posY;
+						Player_Pos[0].y = Old_Pos.y;
+						//Player_Rot.x++;
+						grav = 0;
+						break;
+					}
+					//上辺の当たり判定
+					else if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y + half_height < mapy[j][i] && posY + half_height + 0.5 > mapy[j][i] - map_half_heigh - 0.5) {
+						posY = mapy[j][i] - map_half_heigh - half_height - 0.5;
+						Old_Pos.y = posY;
+						Player_Pos[0].y = Old_Pos.y;
+
+						//Player_Rot.x++;
+						grav = 0;
+						//cff = 1;
+						break;
+
+
+					} else {
+						//cff = 0;
+						grav = 0.03f;
+
+					}
+					//左
+					if (posX - half_Width - 0.5 < mapx[j][i] + map_half_width + 0.5 && mapx[j][i] < Old_Pos.x - half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
+						posX = mapx[j][i] + map_half_width + half_Width + 0.55;
+						Old_Pos.x = posX;
+						Player_Pos[0].x = Old_Pos.x;
+						break;
+					}
+					//右
+					else if (posX + half_Width + 0.5 > mapx[j][i] - map_half_width - 0.5 && mapx[j][i] > Old_Pos.x + half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
+						posX = mapx[j][i] - map_half_width - half_Width - 0.55;
+						Old_Pos.x = posX;
+						Player_Pos[0].x = Old_Pos.x;
+						break;
+
+					}
 				}
 			}
 		}
 	}
-
 #pragma region 線の処理
 
 
@@ -333,18 +323,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	Player_Pos[0].y -= grav;
-<<<<<<< HEAD
-=======
 
-
-		}
-	}
-
-	debuga=tst[0][4]->GetPosition().y;
 	//頂点座標の更新
 	mech->CreateLineTexture(linex, linex2, liney, liney2);
->>>>>>> b5ef38a5e4aca1873099a21bd22cd82eaf8f0491
-	
+
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -357,26 +339,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	
 	Line::GetInstance()->SetColf(colf);
 
-	needlepos = Line::GetInstance()->getpos();
-	for (int i = 0; i < MAX_X; i++) {
-		for (int j = 0; j < MAX_Y; j++) {
-			if (map[j][i] == 1) {
-				if (needlepos.x > mapx[j][i] - map_half_width && needlepos.x  < mapx[j][i] + map_half_width &&
-					needlepos.y< mapy[j][i] + map_half_heigh && needlepos.y  > mapy[j][i] - map_half_heigh) {
-					cff = true;
-					cfff = 1;
-				//	break;
-				} 
-				else{
-					cff = false;
-				}
-			}
-		}
-	}
-	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos[0], elf);
-	Line::CollisionEnemy(elf, enemy->GetPosition());
+	//needlepos = Line::GetInstance()->getpos();
+	
+	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos[0],colf);
+	Line::CollisionEnemy(colf, enemy->GetPosition());
 
-	weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
+	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -426,13 +394,11 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	//world->Draw();
 	world->PostDraw();
 	
-<<<<<<< HEAD
 	enemy->Draw();
-=======
+
 	block->PreDraw();
 	block->Draw();
 	block->PostDraw();
->>>>>>> b5ef38a5e4aca1873099a21bd22cd82eaf8f0491
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -454,7 +420,7 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
 
-	weffect->Draw(dxcomn);
+	//weffect->Draw(dxcomn);
 	GameUI::AllowUIDraw(dxcomn);
 
 	GameUI::UIDraw(dxcomn);
@@ -502,9 +468,9 @@ void PlayScene::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("light_position")) {
-		ImGui::SliderFloat("positionX", &needlepos.x, -100, 100);
-		ImGui::SliderFloat("positionY", &needlepos.y, -100, 100);
-		ImGui::SliderFloat("positionZ", &needlepos.z, -100, 100);
+		//ImGui::SliderFloat("positionX", &needlepos.x, -100, 100);
+		///ImGui::SliderFloat("positionY", &needlepos.y, -100, 100);
+		///ImGui::SliderFloat("positionZ", &needlepos.z, -100, 100);
 		if (ImGui::Button("spotlight ON")) {
 			lightGroup->SetSpotLightActive(0, true);
 		}

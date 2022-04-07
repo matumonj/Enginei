@@ -159,7 +159,7 @@ void Line::Draw(DirectXCommon* dxcomn)
 	Texture::PostDraw();
 	
 	Object3d::PreDraw();
-	NeedleObj->Draw();
+	//NeedleObj->Draw();
 	Object3d::PostDraw();
 }
 
