@@ -1,5 +1,6 @@
 #include "MobEnemy.h"
 #include<math.h>
+#include"Line.h"
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -30,15 +31,36 @@ void MobEnemy::Initialize()
 	Mob_Rot = { 0,180,0 };
 	Mob_Pos = { -10,-2,0 };
 	Position = { 20,0,0 };
+	HP = 10;
 }
 
 //更新処理
 void MobEnemy::Update(XMFLOAT3 position)
 {
-	//パラメータのセット
+	//float lx = Line::GetInstance()->getpos().x;
+	//float ly= Line::GetInstance()->getpos().y;
+	////パラメータのセット
+	//float dis;
+	//
+	//	dis = sqrtf((lx-Position.x) * (lx - Position.x) +
+	//		(ly - Position.y) * (ly - Position.y));
+
+	//	if (dis <= 2 &&Line::GetInstance()->Gettriggerflag()) {
+	//		Line::GetInstance()->Setelf(true);
+	//	}
+
+	//	if (Line::GetInstance()->Getelf()) {
+	//		Line::GetInstance()->Setpos(Position.x,Position.y);
+	//	}
 	//モブ
 	//MobObject->SetPosition(Position);
-	MobObject->SetScale({ 1,1,1 });
+	if (HP < 0) {
+		enemyState = State::DEAD;
+	}
+	else {
+		enemyState = State::ALIVE;
+	}
+	MobObject->SetScale({ 0.5,0.5,0.5 });
 	MobObject->SetRotation({0,180,0});
 	
 	//Follow(position);

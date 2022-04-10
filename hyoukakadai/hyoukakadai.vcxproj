@@ -216,6 +216,7 @@
     <ClInclude Include="CollisionTypes.h" />
     <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="DebugTxt.h" />
+    <ClInclude Include="Destroy.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="Effects.h" />

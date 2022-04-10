@@ -30,6 +30,7 @@ float Line::FollowangleX, Line::FollowangleZ, Line::FollowangleR;
  XMFLOAT3 Line::po = { 0,0,0 },Line::needlepos;
  bool Line::elf = false;
  float Line::oldlinex, Line::oldliney;
+ int Line::index = -1;
  Line* Line::GetInstance()
  {
 	 static Line instance;
@@ -83,13 +84,17 @@ void Line::Update(XMMATRIX matview,XMMATRIX matprojection, Object3d* player[],XM
 	if (trigger) {//trigger:線伸ばすフラグ
 		subradius += LengThenSpeed;//線を伸ばす
 		if (subradius > MaxLen||elf) {//一定以上行ったら+ブロックに針あたったら
-			
 			trigger = false;
 			lengthserchf = true;
-		
 		}
+		if (subradius > MaxLen && !elf) {//一定以上行って何も当たらなかったら
+			trigger = false;
+			lengthserchf = true;
+			returnflag = true;
+		}
+		
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
-		if (Input::GetInstance()->TriggerKey(DIK_F)&&elf) {
+		if (Input::GetInstance()->TriggerKey(DIK_F)&&elf) {//線が伸び切って何もあたっていないとき
 			boundflag = true;//線の終点へ吸い付くフラグ
 		} else if (Input::GetInstance()->TriggerKey(DIK_G)) {
 			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ,紐の長さがmaxlen超えて針がブロックとあたっていなかったらこれtrueに
@@ -163,26 +168,31 @@ void Line::Draw(DirectXCommon* dxcomn)
 	Object3d::PostDraw();
 }
 
-void Line::CollisionEnemy(bool flag, XMFLOAT3 position)
-{
-	float dis;
-	dis = sqrtf((position.x - needlepos.x) * (position.x - needlepos.x) +
-		(position.y - needlepos.y) * (position.y - needlepos.y));
-	if (dis <= 5&&trigger) {
-		elf = true;
-	} 
-	if (elf) {
-		oldlinex = position.x;
-		oldliney = position.y;
 
-		linex2 = oldlinex;
-		liney2 = oldliney;
-		if (colf) {
-			//boundflag = false;
+void Line::CollisionEnemy(Enemy* position[])
+{
+	//int in = -1;
+	float dis[2];
+	for (int i = 0; i < 2; i++) {
+		if (position[i] != nullptr) {
+			dis[i] = sqrtf((position[i]->GetPosition().x - needlepos.x) * (position[i]->GetPosition().x - needlepos.x) +
+				(position[i]->GetPosition().y - needlepos.y) * (position[i]->GetPosition().y - needlepos.y));
+
+
+			if (dis[i] <= 2 && trigger && !elf) {
+				elf = true;
+				index = i;//あたった敵の要素番号を割り当て
+			}
 		}
-	}
-	if (returnflag||colf) {
-		elf = false;
+		if (elf) {
+			linex2 = position[index]->GetPosition().x;
+			liney2 = position[index]->GetPosition().y;
+		
+		}
+	
+		if (returnflag || colf) {
+			elf = false;
+		}
 	}
 }
 //フラグ説明

@@ -2,19 +2,23 @@
 #include<stdio.h>
 #include"Input.h"
 #include"DebugCamera.h"
+#include"Line.h"
 //糸にかかわるUI
 using namespace DirectX;
-Sprite*GameUI::LineLength=nullptr;
+Sprite* GameUI::LineLength = nullptr;
 Sprite* GameUI::LineLengthout = nullptr;
 Sprite* GameUI::Attention[3] = { nullptr };
 nTexture* GameUI::AllowTexure = nullptr;
+nTexture* GameUI::TargetTexture = nullptr;
+
 XMFLOAT2 GameUI::lpos, GameUI::loutpos;//座標
 XMFLOAT2 GameUI::lscl, GameUI::loutscl;//スケール
-XMFLOAT3 GameUI::Alowpos, GameUI::Alowrot, GameUI::Alowscl={ 1,0.5,10 };
-float GameUI::alpha = 0.5,GameUI::walpha=0;
+XMFLOAT3 GameUI::Alowpos, GameUI::Alowrot, GameUI::Alowscl = { 1,0.5,10 };
+XMFLOAT3 GameUI::Targetpos, GameUI::Targetrot, GameUI::Targetscl = { 0.8,0.8,1 };
+float GameUI::alpha = 0.5, GameUI::walpha = 0, GameUI::Targetalpha = 0;
 float GameUI::tempx = 0;
 float GameUI::lsclMax;
-GameUI*GameUI::GetInstance()
+GameUI* GameUI::GetInstance()
 {
 	static GameUI instance;
 	return &instance;
@@ -39,11 +43,11 @@ void GameUI::UISpriteSet()
 	lpos = { 70,120 };
 	lscl = { 0,40 };
 	Attention[0]->SetSize({ 1500,800 });
-	Attention[0]->SetPosition({ WinApp::window_width / 2-600,WinApp::window_height / 2 });
+	Attention[0]->SetPosition({ WinApp::window_width / 2 - 600,WinApp::window_height / 2 });
 
 }
 
-void GameUI::UIUpdate(float length,bool flag,bool&boundflag,float movement)
+void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 {
 	lsclMax = loutscl.x - 30;
 
@@ -56,16 +60,15 @@ void GameUI::UIUpdate(float length,bool flag,bool&boundflag,float movement)
 		lscl.x++;
 	}
 	if (boundflag) {
-		if(loutscl.x>=0)
-		loutscl.x -= 10;//最大値を減らす
-		if (tempx - loutscl.x > movement*4) {//最大値の減る量(減る前と減ったあとの最大値を計算)
+		if (loutscl.x >= 0)
+			loutscl.x -= 10;//最大値を減らす
+		if (tempx - loutscl.x > movement * 4) {//最大値の減る量(減る前と減ったあとの最大値を計算)
 			boundflag = false;//!boundflag->colf
 		}
 		if (lscl.x >= lsclMax) {//最大値が減ったあと紐の長さがそれ超えるようであれば最大値に合わせる
 			lscl.x = lsclMax;
 		}
-	}
-	else {
+	} else {
 		//減る前の最大値を保存
 		tempx = loutscl.x;
 	}
@@ -76,7 +79,7 @@ void GameUI::UIUpdate(float length,bool flag,bool&boundflag,float movement)
 	LineLengthout->SetPosition(loutpos);
 	LineLengthout->SetSize(loutscl);
 	Attention[0]->setcolor({ walpha,1,1,1 });
-	}
+}
 
 void GameUI::UIDraw(DirectXCommon* dxcomn)
 {
@@ -95,11 +98,11 @@ void GameUI::AllowUISet()
 	AllowTexure->CreateNormalTexture();
 }
 
-void GameUI::AllowUIUpdate(XMMATRIX matview, XMMATRIX matprojection,XMFLOAT3 position,float rotangle,bool flag)
+void GameUI::AllowUIUpdate(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position, float rotangle, bool flag)
 {
 	Alowpos.x = position.x;
 	Alowpos.y = position.y;
-	Alowrot.z=rotangle;
+	Alowrot.z = rotangle;
 
 	AllowTexure->SetPosition(Alowpos);
 	AllowTexure->SetScale(Alowscl);
@@ -109,14 +112,14 @@ void GameUI::AllowUIUpdate(XMMATRIX matview, XMMATRIX matprojection,XMFLOAT3 pos
 		alpha -= 0.1f;
 	}
 	if (Input::GetInstance()->TriggerKey(DIK_1)) {
-		alpha =0.8f;
+		alpha = 0.8f;
 	}
 	max(alpha, 0.05f);
 	min(alpha, 0.8f);
-	AllowTexure->Update(matview,matprojection);
+	AllowTexure->Update(matview, matprojection);
 }
 
-void GameUI::AllowUIDraw(DirectXCommon*dxcomn)
+void GameUI::AllowUIDraw(DirectXCommon* dxcomn)
 {
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	AllowTexure->Draw();
@@ -128,10 +131,53 @@ void GameUI::AttentionUI()
 	if (loutscl.x <= 0) {
 		if (Input::GetInstance()->Pushkey(DIK_SPACE))
 		{
-			walpha =0.8f;
+			walpha = 0.8f;
 		}
 	}
 	walpha -= 0.02f;
 	min(walpha, 0.8f);
 	max(walpha, 0);
+}
+
+void GameUI::TargetUISet()
+{
+	//矢印
+	nTexture::LoadTexture(13, L"Resources/target.png");
+	TargetTexture = nTexture::Create(13, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
+
+	TargetTexture->CreateNormalTexture();
+}
+void GameUI::TargetUIUpdate(XMMATRIX matview, XMMATRIX matprojection, bool flag)
+{
+	if (flag) {
+		if (Targetalpha <= 1.0f) {
+			Targetalpha += 0.05f;
+		}
+		if (Targetscl.y >= 0.4) {
+			Targetscl.y -= 0.02f;
+		}
+		if (Targetscl.x >= 0.4) {
+			Targetscl.x -= 0.02f;
+		}
+		Targetpos = Line::GetInstance()->getpos();
+		//TargetTexture->SetPosition();
+	}
+	else {
+		Targetscl = { 1,1,1 };
+		if (Targetalpha >= 0) {
+			Targetalpha -= 0.1f;
+		}
+	}
+	TargetTexture->SetColor({ 1,1,1,Targetalpha });
+	TargetTexture->SetPosition(Targetpos);
+	TargetTexture->SetScale(Targetscl);
+	TargetTexture->SetRotation(Targetrot);
+
+	TargetTexture->Update(matview, matprojection);
+}
+void GameUI::TargetUIDraw(DirectXCommon* dxcomn)
+{
+	nTexture::PreDraw(dxcomn->GetCmdList());
+	TargetTexture->Draw();
+	nTexture::PostDraw();
 }

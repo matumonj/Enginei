@@ -39,7 +39,17 @@ protected:
 	XMFLOAT3 Rotation;
 	XMFLOAT3 Scale;
 
+	enum class State {
+		ALIVE,
+		DEAD,
+	};
+	State enemyState;
+	int HP=10;
 public:
+	
+	bool GetState_DEAD() { if(enemyState==State::DEAD)return true; }
+	void SetHP(int HP) { this->HP = HP; }
+
 	virtual void EnemySearchPlayer(XMFLOAT3 player) = 0;
 
 	/// <summary>

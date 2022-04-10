@@ -30,6 +30,9 @@ private:
 	static float walpha;
 	static nTexture* AllowTexure;
 	static XMFLOAT3 Alowpos, Alowscl,Alowrot;//ç¿ïW
+	static nTexture* TargetTexture;
+	static XMFLOAT3 Targetpos, Targetscl, Targetrot;//ç¿ïW
+	static float Targetalpha;
 public:
 	float Getsclx() { return loutscl.x; }
 	static void UISpriteSet();
@@ -40,5 +43,11 @@ public:
 	static void AllowUISet();
 	static void AllowUIUpdate(XMMATRIX matview, XMMATRIX matprojection,XMFLOAT3 position, float rotangle, bool flag);
 	static void AllowUIDraw(DirectXCommon*dxcomn);
+
+	static void TargetUISet();
+
+	static void TargetUIUpdate(XMMATRIX matview, XMMATRIX matprojection, bool flag);
+
+	static void TargetUIDraw(DirectXCommon* dxcomn);
 };
 

@@ -7,6 +7,7 @@
 #include"Texture.h"
 #include"Object3d.h"
 #include"Model.h"
+#include"Enemy.h"
 class Line
 {
 private:
@@ -39,6 +40,7 @@ private:
 	static bool lengthserchf ;
 	static bool colf ;
 	static float grav ;
+	static int index;
 	static float MoveSpeed;
 	static int L_Cflag;
 	static XMFLOAT3 po;
@@ -52,7 +54,7 @@ public:
 	static void Update(XMMATRIX matview, XMMATRIX matprojection,Object3d*player[],XMFLOAT3&Player_Pos,bool& colf);
 	static void Draw(DirectXCommon* dxcomn);
 	static void CollisionBlock(int** map, float** mapxy[2],float maphalf[2], const int MapX, const int MapY);
-	static void CollisionEnemy(bool flag, XMFLOAT3 position);
+	static void CollisionEnemy(Enemy*Position[]);
 public:
 	float GetLength() { return subradius; }
 	bool GetColf() { return colf; }
@@ -65,5 +67,7 @@ public:
 	bool Getreturnflag() { return returnflag; }
 	bool Gettriggerflag() { return trigger; }
 	XMFLOAT3 getpos() { return {linex2,liney2,needlepos.z}; }
+	bool Getelf() { return elf; }
+	void Setelf(bool flag) { elf = flag; }
 };
 
