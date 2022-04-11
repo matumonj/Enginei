@@ -37,8 +37,11 @@ void PlayScene::SpriteCreate()
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
 
-	mech = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, {1,1,1,1});
-	zukki = Texture::Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
+	mech = std::make_unique<Texture>();
+	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
+	
+	zukki = std::make_unique<Texture>();
+	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	background = Sprite::Create(1, { 0.0f,-200.0f });
 	// デバッグテキスト初期化
@@ -58,24 +61,28 @@ void PlayScene::ModelCreate()
 	collision = new Collision();
 
 	for (int i = 0; i < 10; i++) {
-		player[i] = Object3d::Create();
+		player[i] = std::make_unique<Object3d>();
+		player[i]->Initialize();// = Object3d::Create();
 		player[i]->SetModel(playermodel);
 	}
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i] = Object3d::Create();
+			tst[j][i] = std::make_unique<Object3d>();
+			tst[j][i]->Initialize();// Object3d::Create();
 			tst[j][i]->SetModel(tstmodel);
 		}
 	}
-
-	block = Object3d::Create();
+	block= std::make_unique<Object3d>();
+	block->Initialize();// = Object3d::Create();
 	block->SetModel(tstmodel);
 	
-	sentan = Object3d::Create();
+	sentan = std::make_unique<Object3d>();
+	sentan->Initialize();// = Object3d::Create();
 	sentan->SetModel(tstmodel);
 
-	world = Object3d::Create();
+	world = std::make_unique<Object3d>();
+	world->Initialize();// = Object3d::Create();
 	world->SetModel(worldmodel);
 
 	// ライト生成
@@ -168,9 +175,10 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
-	enemy[0] = new MobEnemy();
+	enemy[0] = std::make_unique<MobEnemy>();
+	//enemy[0] = new MobEnemy();
 	enemy[0]->Initialize();
-	enemy[1] = new MobEnemy();
+	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[1]->Initialize();
 	enemy[1]->Setposition({ -40, 0, 0
 		});
@@ -367,6 +375,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	effects->Update(dxCommon, camera, enemy);
+
+	//enemyにnullptr代入するときは敵が死んだら
 	for (int i = 0; i < 2; i++) {
 		if (enemy[i] != nullptr) {
 
@@ -375,7 +385,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			enemy[i]->EnemySearchPlayer(player[0]->GetPosition());
 			//もし敵が死んだら破棄
 			if (enemy[i]->GetState_DEAD()==true) {
-				Destroy(enemy[i]);
+				Destroy_unique(enemy[i]);
 			}
 		}
 	}
@@ -558,7 +568,6 @@ void PlayScene::ImGuiDraw()
 void PlayScene::Finalize()
 {	
 	//delete efk,efk1;
-	delete mech, zukki;
 	
 	delete debugText;
 	delete collision;

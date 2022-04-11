@@ -47,7 +47,7 @@ protected:
 	int HP = 10;
 public:
 
-	bool GetState_DEAD() {
+	inline bool GetState_DEAD() {
 		if (enemyState == State::DEAD) {
 			return true;
 		} else {

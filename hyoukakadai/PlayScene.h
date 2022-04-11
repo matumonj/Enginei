@@ -20,6 +20,7 @@
 #include"Enemy.h"
 #include"Effects.h"
 #include"GameUI.h"
+#include<memory>
 class PlayScene :public BaseScene
 {
 public:
@@ -44,17 +45,21 @@ private:
 private:
 	DirectXCommon* dxcomn;
 	Sprite* background = nullptr;
-	Texture* mech = nullptr;
-	Texture* zukki = nullptr;
+	
 	DebugTxt* debugText;
-	Enemy* enemy[2];
+	std::unique_ptr<Enemy>enemy[2];
+	//Enemy* enemy[2];
 	Effects* efk;
 	Collision* collision = nullptr;
-	Object3d* player[10];
-	Object3d* tst[20][100];
-	Object3d* sentan = nullptr;
-	Object3d* world = nullptr;
-	Object3d* block = nullptr;
+
+	std::unique_ptr <Texture>mech = nullptr;
+	std::unique_ptr <Texture>zukki = nullptr;
+
+	std::unique_ptr<Object3d>player[10];
+	std::unique_ptr<Object3d>tst[20][100];
+	std::unique_ptr<Object3d> sentan = nullptr;
+	std::unique_ptr<Object3d> world = nullptr;
+	std::unique_ptr<Object3d>block = nullptr;
 
 	Collision* mapcol;
 

@@ -9,6 +9,7 @@
 #include"DirectXCommon.h"
 #include"DebugCamera.h"
 #include"Enemy.h"
+#include<memory>
 class Effects
 {
 private:
@@ -33,7 +34,7 @@ public:
 
 public:
 	void Initialize(DirectXCommon* dxcomn, DebugCamera* camera);
-	void Update(DirectXCommon* dxcomn, DebugCamera* camera, Enemy*enemy[]);
+	void Update(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[]);
 	void Draw(DirectXCommon*dxcomn);
 	void Finalize();
 };

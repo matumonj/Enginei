@@ -48,7 +48,7 @@ void Line::Initialize()
 	
 }
 
-void Line::Update(XMMATRIX matview,XMMATRIX matprojection, Object3d* player[],XMFLOAT3& Player_Pos,bool& mapcolf)
+void Line::Update(XMMATRIX matview,XMMATRIX matprojection,std::unique_ptr<Object3d>player[],XMFLOAT3& Player_Pos,bool& mapcolf)
 {
 	float sdistance;
 	sdistance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
@@ -169,7 +169,7 @@ void Line::Draw(DirectXCommon* dxcomn)
 }
 
 
-void Line::CollisionEnemy(Enemy* position[])
+void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 {
 	//int in = -1;
 	float dis[2];

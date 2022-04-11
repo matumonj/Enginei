@@ -11,7 +11,7 @@ void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 	//efk1->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/SimpleLaser.efk", (const EFK_CHAR*)L"effect/10");
 }
 
-void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera, Enemy* enemy[])
+void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<Enemy>enemy[])
 {
 	for (int i=0; i < 2; i++) {
 		if (enemy[i] != nullptr) {
