@@ -1,4 +1,5 @@
 #pragma once
+#include"mEffekseer.h"
 #include"Object3d.h"
 #include"Model.h"
 #include "Enemy.h"
@@ -22,7 +23,8 @@ private:
     Object3d* MobObject=nullptr;
     //モデルのインスタンス
     Model* MobModel=nullptr;
-
+    //
+    mEffekseer* effect_dead;
 private:
     XMFLOAT3 Mob_Pos;
     XMFLOAT3 Mob_Rot;
@@ -50,6 +52,7 @@ public:
     /// </summary>
     void Finalize()override;
     void Follow(XMFLOAT3 player);
+    void Motion(int time)override;
     float angleXs, angleZs, angleRs;
     float centerSpeed = 0.1f;
 public:

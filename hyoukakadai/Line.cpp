@@ -178,7 +178,6 @@ void Line::CollisionEnemy(Enemy* position[])
 			dis[i] = sqrtf((position[i]->GetPosition().x - needlepos.x) * (position[i]->GetPosition().x - needlepos.x) +
 				(position[i]->GetPosition().y - needlepos.y) * (position[i]->GetPosition().y - needlepos.y));
 
-
 			if (dis[i] <= 2 && trigger && !elf) {
 				elf = true;
 				index = i;//‚ ‚½‚Á‚½“G‚Ì—v‘f”Ô†‚ðŠ„‚è“–‚Ä
@@ -186,8 +185,7 @@ void Line::CollisionEnemy(Enemy* position[])
 		}
 		if (elf) {
 			linex2 = position[index]->GetPosition().x;
-			liney2 = position[index]->GetPosition().y;
-		
+			liney2 = position[index]->GetPosition().y;	
 		}
 	
 		if (returnflag || colf) {

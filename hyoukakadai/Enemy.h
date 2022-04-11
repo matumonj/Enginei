@@ -43,11 +43,26 @@ protected:
 		ALIVE,
 		DEAD,
 	};
-	State enemyState;
-	int HP=10;
+	State enemyState = State::ALIVE;
+	int HP = 10;
 public:
-	
-	bool GetState_DEAD() { if(enemyState==State::DEAD)return true; }
+
+	bool GetState_DEAD() {
+		if (enemyState == State::DEAD) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	inline bool GetState_ALIVE() {
+		if (enemyState == State::ALIVE) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	void SetDead(bool f) { if (f) { enemyState = State::DEAD; } }
 	void SetHP(int HP) { this->HP = HP; }
 
 	virtual void EnemySearchPlayer(XMFLOAT3 player) = 0;
@@ -56,7 +71,7 @@ public:
 	/// ‰Šú‰»
 	/// </summary>
 	virtual void Initialize();
-	
+
 	/// <summary>
 	/// XVˆ—
 	/// </summary>
@@ -67,6 +82,7 @@ public:
 	/// </summary>
 	virtual void Draw();
 
+	virtual void Motion(int timer)=0;
 	//virtual float Distance(Player* player);
 
 	/// <summary>

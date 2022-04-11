@@ -32,6 +32,7 @@ void MobEnemy::Initialize()
 	Mob_Pos = { -10,-2,0 };
 	Position = { 20,0,0 };
 	HP = 10;
+
 }
 
 //XVˆ—
@@ -56,17 +57,16 @@ void MobEnemy::Update(XMFLOAT3 position)
 	//MobObject->SetPosition(Position);
 	if (HP < 0) {
 		enemyState = State::DEAD;
-	}
-	else {
-		enemyState = State::ALIVE;
+	} else {
+	//	enemyState = State::ALIVE;
 	}
 	MobObject->SetScale({ 0.5,0.5,0.5 });
-	MobObject->SetRotation({0,180,0});
-	
+	MobObject->SetRotation({ 0,180,0 });
+
 	//Follow(position);
 	MobObject->Update({ 1,1,1,1 });
 	MobObject->SetPosition(Position);
-	
+
 }
 
 //•`‰æˆ—
@@ -101,4 +101,19 @@ void MobEnemy::Follow(XMFLOAT3 player)
 	//Position.y =player.y;
 	//MobObject->SetPosition(Position);
 	//MobObject->SetPosition(Position);
+}
+
+void MobEnemy::Motion(int timer)
+{
+	switch (enemyState)
+	{
+	case State::ALIVE:
+
+		break;
+
+	case State::DEAD:
+
+		break;
+	}
+
 }

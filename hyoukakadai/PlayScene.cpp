@@ -165,6 +165,7 @@ void PlayScene::objUpdate()
 void PlayScene::Initialize(DirectXCommon* dxCommon)
 {
 	//
+	
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	enemy[0] = new MobEnemy();
@@ -191,7 +192,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-
+	efk = new Effects();
+	efk->Initialize(dxCommon, camera);
 	//weffect = new pEffect();
 	//weffect->Initialize(dxCommon, camera);
 	//デバイスをセット
@@ -347,7 +349,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	
-	effects->Update(dxCommon, camera);
+	
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
@@ -358,13 +360,21 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 	
 	objUpdate();//オブジェクトの更新処理
+
+	//デバッグ用、敵滅殺
+	if (Input::GetInstance()->TriggerKey(DIK_D)&&enemy[0]!=nullptr) {
+		enemy[0]->SetDead(true);
+	}
+
+	effects->Update(dxCommon, camera, enemy);
 	for (int i = 0; i < 2; i++) {
 		if (enemy[i] != nullptr) {
+
 			enemy[i]->Update(Player_Pos[0]);
-
+			//プレイヤーの検知
 			enemy[i]->EnemySearchPlayer(player[0]->GetPosition());
-
-			if (enemy[i]->GetState_DEAD()) {
+			//もし敵が死んだら破棄
+			if (enemy[i]->GetState_DEAD()==true) {
 				Destroy(enemy[i]);
 			}
 		}

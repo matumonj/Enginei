@@ -48,7 +48,7 @@ private:
 	Texture* zukki = nullptr;
 	DebugTxt* debugText;
 	Enemy* enemy[2];
-
+	Effects* efk;
 	Collision* collision = nullptr;
 	Object3d* player[10];
 	Object3d* tst[20][100];
