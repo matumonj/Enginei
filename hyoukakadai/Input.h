@@ -20,6 +20,10 @@ private:
 	DIMOUSESTATE2 mouseState = {};
 	DIMOUSESTATE2 mouseStatePre = {};
 
+	ComPtr<IDirectInputDevice8> devC;
+	DIJOYSTATE2 CState = {};
+	DIJOYSTATE2 CStatePre = {};
+
 	WinApp* winapp = nullptr;
 public:
 	static Input* GetInstance();
@@ -30,6 +34,15 @@ public:
 		LONG    lX;
 		LONG    lY;
 		LONG    lZ;
+	};
+	struct CMove {
+		LONG    lX;
+		LONG    lY;
+		LONG    lZ;
+		LONG    lRx;
+		LONG    lRy;
+		LONG    lRz;
+		BYTE    rgbButtons[32];
 	};
 	//èâä˙âª
 	void Initialize(WinApp*winapp);
@@ -71,5 +84,9 @@ public:
 	/// <returns>É}ÉEÉXà⁄ìÆó </returns>
 	MouseMove GetMouseMove();
 
+	bool TriggerButtonA();
+	bool TriggerButtonRB();
+	bool PushButtonA();
+	CMove GetCMove();
 };
 

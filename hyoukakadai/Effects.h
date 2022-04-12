@@ -24,9 +24,10 @@ private:
 private:
 	//エフェクト用(ただプログラムでつくれるものはプログラムで作る方がいい　多用はいくない)
 	mEffekseer* efk = nullptr;
-	mEffekseer* efk1 = nullptr;
+	//mEffekseer* efk1 = nullptr;
 	bool df;
 public:
+	~Effects();
 	//XMFLOAT3 GetPosition
 	XMFLOAT3 Effect_Pos = { -50,-10,90 };
 	XMFLOAT3 Effect_Rot;

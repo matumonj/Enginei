@@ -5,50 +5,50 @@
 using namespace DirectX;
 Texture* Line::Twine = nullptr;
 float Line::FollowangleX, Line::FollowangleZ, Line::FollowangleR;
- float Line::FollowSpeed = 1.0f;
- bool Line::trigger = false;
- int Line::f;
- bool Line::boundflag = false;
- bool Line::returnflag = false;
- float Line::tempx, Line::tempy;
- float Line::linex, Line::linex2, Line::liney, Line::liney2;
- float Line::lineangle = 0;
- float Line::subradius = 0;
- float Line::Startsubradius = 2.0f;
- float Line::olddistance = 0;
- const float Line::LengThenSpeed = 1.0f;
- const float Line::MaxLen = 30.0f;
- const float Line::MinLen = 0.0f;
- float Line::LimitGauge;
- bool Line::lengthserchf = false;
- bool Line::colf = false;
- float Line::grav = 0.05f;
- float Line::MoveSpeed = 0;
- Object3d* Line::NeedleObj=nullptr;
- Model* Line::NeedleModel=nullptr;
- int Line::L_Cflag = 0;
- XMFLOAT3 Line::po = { 0,0,0 },Line::needlepos;
- bool Line::elf = false;
- float Line::oldlinex, Line::oldliney;
- int Line::index = -1;
- Line* Line::GetInstance()
- {
-	 static Line instance;
-	 return &instance;
+float Line::FollowSpeed = 1.0f;
+bool Line::trigger = false;
+int Line::f;
+bool Line::boundflag = false;
+bool Line::returnflag = false;
+float Line::tempx, Line::tempy;
+float Line::linex, Line::linex2, Line::liney, Line::liney2;
+float Line::lineangle = 0;
+float Line::subradius = 0;
+float Line::Startsubradius = 2.0f;
+float Line::olddistance = 0;
+const float Line::LengThenSpeed = 1.0f;
+const float Line::MaxLen = 30.0f;
+const float Line::MinLen = 0.0f;
+float Line::LimitGauge;
+bool Line::lengthserchf = false;
+bool Line::colf = false;
+float Line::grav = 0.05f;
+float Line::MoveSpeed = 0;
+Object3d* Line::NeedleObj = nullptr;
+Model* Line::NeedleModel = nullptr;
+int Line::L_Cflag = 0;
+XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos;
+bool Line::elf = false;
+float Line::oldlinex, Line::oldliney;
+int Line::index = -1;
+Line* Line::GetInstance()
+{
+	static Line instance;
+	return &instance;
 }
 
 void Line::Initialize()
 {
 	Texture::LoadTexture(13, L"Resources/gomi.png");
 	Twine = Texture::Create(13, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
-	
-	NeedleModel= Model::CreateFromOBJ("sphere");
+
+	NeedleModel = Model::CreateFromOBJ("sphere");
 	NeedleObj = Object3d::Create();
 	NeedleObj->SetModel(NeedleModel);
-	
+
 }
 
-void Line::Update(XMMATRIX matview,XMMATRIX matprojection,std::unique_ptr<Object3d>player[],XMFLOAT3& Player_Pos,bool& mapcolf)
+void Line::Update(XMMATRIX matview, XMMATRIX matprojection, std::unique_ptr<Object3d>player[], XMFLOAT3& Player_Pos, bool& mapcolf)
 {
 	float sdistance;
 	sdistance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
@@ -66,6 +66,7 @@ void Line::Update(XMMATRIX matview,XMMATRIX matprojection,std::unique_ptr<Object
 	//やけくそコード,汚いよ
 	linex = player[0]->GetPosition().x;//線の始点をプレイヤー位置に
 	liney = player[0]->GetPosition().y;
+
 	if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
 		lineangle += 13.0f;//移動方向の指定
 		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
@@ -83,7 +84,7 @@ void Line::Update(XMMATRIX matview,XMMATRIX matprojection,std::unique_ptr<Object
 
 	if (trigger) {//trigger:線伸ばすフラグ
 		subradius += LengThenSpeed;//線を伸ばす
-		if (subradius > MaxLen||elf) {//一定以上行ったら+ブロックに針あたったら
+		if (subradius > MaxLen || elf) {//一定以上行ったら+ブロックに針あたったら
 			trigger = false;
 			lengthserchf = true;
 		}
@@ -92,9 +93,9 @@ void Line::Update(XMMATRIX matview,XMMATRIX matprojection,std::unique_ptr<Object
 			lengthserchf = true;
 			returnflag = true;
 		}
-		
+
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
-		if (Input::GetInstance()->TriggerKey(DIK_F)&&elf) {//線が伸び切って何もあたっていないとき
+		if (Input::GetInstance()->TriggerKey(DIK_F) && elf) {//線が伸び切って何もあたっていないとき
 			boundflag = true;//線の終点へ吸い付くフラグ
 		} else if (Input::GetInstance()->TriggerKey(DIK_G)) {
 			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ,紐の長さがmaxlen超えて針がブロックとあたっていなかったらこれtrueに
@@ -149,9 +150,9 @@ void Line::Update(XMMATRIX matview,XMMATRIX matprojection,std::unique_ptr<Object
 	Twine->CreateLineTexture(linex, linex2, liney, liney2);
 	Twine->SetPosition(po);
 	Twine->Update(matview, matprojection);
-	
-	
-	NeedleObj->SetPosition({linex2,liney2,Player_Pos.z});
+
+
+	NeedleObj->SetPosition({ linex2,liney2,Player_Pos.z });
 	needlepos = NeedleObj->GetPosition();
 	NeedleObj->SetScale({ 0.8,0.4,0.5 });
 	NeedleObj->Update({ 1,1,1,1 });
@@ -162,7 +163,7 @@ void Line::Draw(DirectXCommon* dxcomn)
 	Texture::PreDraw(dxcomn->GetCmdList());
 	Twine->Draw();
 	Texture::PostDraw();
-	
+
 	Object3d::PreDraw();
 	//NeedleObj->Draw();
 	Object3d::PostDraw();
@@ -183,14 +184,20 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 				index = i;//あたった敵の要素番号を割り当て
 			}
 		}
+
+		//衝突時
 		if (elf) {
-			linex2 = position[index]->GetPosition().x;
-			liney2 = position[index]->GetPosition().y;	
+			if (position[index] != nullptr) {
+				linex2 = position[index]->GetPosition().x;
+				liney2 = position[index]->GetPosition().y;
+			} else {
+				returnflag = true;
+			}
 		}
-	
-		if (returnflag || colf) {
-			elf = false;
-		}
+	}
+
+	if (returnflag || colf) {
+		elf = false;
 	}
 }
 //フラグ説明
