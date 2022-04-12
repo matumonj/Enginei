@@ -70,5 +70,6 @@ public:
 	XMFLOAT3 getpos() { return {linex2,liney2,needlepos.z}; }
 	bool Getelf() { return elf; }
 	void Setelf(bool flag) { elf = flag; }
+	void SetTrigger(bool flag) { trigger = flag; }
 };
 

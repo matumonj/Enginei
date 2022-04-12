@@ -24,10 +24,11 @@
 class PlayScene :public BaseScene
 {
 public:
+	
 	//シーンのコンストラクタ
 	PlayScene(SceneManager* sceneManager);
 private: // エイリアス
-// Microsoft::WRL::を省略
+		 // Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -49,7 +50,7 @@ private:
 	DebugTxt* debugText;
 	std::unique_ptr<Enemy>enemy[2];
 	//Enemy* enemy[2];
-	Effects* efk;
+	std::unique_ptr <Effects> effects;
 	Collision* collision = nullptr;
 
 	std::unique_ptr <Texture>mech = nullptr;
@@ -70,7 +71,7 @@ private:
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
 
-	Effects* effects;
+	//Effects* effects;
 private:
 	//Plyer
 

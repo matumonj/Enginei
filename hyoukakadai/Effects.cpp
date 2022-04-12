@@ -1,5 +1,8 @@
 #include "Effects.h"
-
+Effects::~Effects()
+{
+	delete efk;
+}
 void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 {
 	//エフェクトのインスタンス生成

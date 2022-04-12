@@ -103,7 +103,7 @@ void PlayScene::ModelCreate()
 	lightGroup->SetSpotLightActive(0, true);
 
 
-	effects = new Effects();
+	effects = std::make_unique<Effects>();;
 
 }
 #pragma endregion
@@ -200,8 +200,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-	efk = new Effects();
-	efk->Initialize(dxCommon, camera);
+	//efk = new Effects();
+	//efk = std::make_unique<Effects>();
+	//effects->Initialize(dxCommon, camera);
 	//weffect = new pEffect();
 	//weffect->Initialize(dxCommon, camera);
 	//デバイスをセット
@@ -237,6 +238,75 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	Old_Pos = Player_Pos[0];
 	
+	//コントローラー
+	if (Input::GetInstance()->TriggerButtonA()) {
+		//攻撃処理
+		
+	}
+
+	if (Input::GetInstance()->TriggerButtonRB()) {
+		Line::GetInstance()->SetTrigger(true);
+		//Line = 1;
+	}
+
+	///////// コントローラー //////////
+	// スティックの方向判定
+	// 無反応範囲
+	LONG u_r = 32768;
+	LONG a = 2000;
+
+	//左
+	// 方向だけを調べる方法
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+		// 左に傾けた
+		Player_Pos[0].x -= 1;
+		
+	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+		// 右に傾けた
+		Player_Pos[0].x += 1;
+	}
+
+	if (Input::GetInstance()->GetCMove().lY < u_r - a)
+	{
+		// 左に傾けた
+
+		
+	} else if (Input::GetInstance()->GetCMove().lY > u_r + a)
+	{
+		// 右に傾けた
+		
+	}
+
+	//// 右
+	//// 方向だけを調べる方法
+	//if (Input::GetInstance()->GetCMove().lRx < u_r - a)
+	//{
+	//	// 左に傾けた
+	//	
+	//} else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
+	//{
+	//	// 右に傾けた
+	//	
+	//}
+
+	//if (Input::GetInstance()->GetCMove().lRy < u_r - a)
+	//{
+	//	// 左に傾けた
+	//	
+	//} else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
+	//{
+	//	// 右に傾けた
+	//	
+	//}
+
+	// 傾きの比率を調べる方法
+	//LONG length = 32768; // 原点から最小、最大までの長さ
+	//float y_vec = (Input::GetInstance()->GetCMove().lY - u_r) / (length - u_r);
+
+	///
+
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos[0].x += moveSpeed;
 	}
@@ -370,8 +440,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	objUpdate();//オブジェクトの更新処理
 
 	//デバッグ用、敵滅殺
-	if (Input::GetInstance()->TriggerKey(DIK_D)&&enemy[0]!=nullptr) {
-		enemy[0]->SetDead(true);
+	if (Input::GetInstance()->TriggerKey(DIK_D)&&enemy[1]!=nullptr) {
+		enemy[1]->SetDead(true);
 	}
 
 	effects->Update(dxCommon, camera, enemy);
@@ -397,6 +467,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
 	BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
 	sceneManager_->SetnextScene(scene);//シーンのセット
+	//delete scene;
+
+
 	}
 }
 #pragma endregion 
@@ -567,12 +640,9 @@ void PlayScene::ImGuiDraw()
 #pragma region 解放部分
 void PlayScene::Finalize()
 {	
+	//delete sceneManager_;
+	
 	//delete efk,efk1;
 	
-	delete debugText;
-	delete collision;
-	delete lightGroup;
-	delete camera;
-	delete background;
 }
 #pragma endregion
