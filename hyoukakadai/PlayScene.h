@@ -61,12 +61,14 @@ private:
 	std::unique_ptr<Object3d> sentan = nullptr;
 	std::unique_ptr<Object3d> world = nullptr;
 	std::unique_ptr<Object3d>block = nullptr;
+	std::unique_ptr<Object3d>hari = nullptr;
 
 	Collision* mapcol;
 
 	Model* playermodel = nullptr;
 	Model* tstmodel = nullptr;
 	Model* worldmodel = nullptr;
+	Model* harimodel = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
@@ -91,8 +93,8 @@ private:
 	//block
 	XMFLOAT3 block_pos = { -5,0,0 };
 	XMFLOAT3 block_Scl = { 1,1,1 };
-
-
+	//hari
+	XMFLOAT3 hari_Pos;
 
 	XMFLOAT3 old_Scl = { 1,1,1 };
 

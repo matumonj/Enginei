@@ -55,8 +55,9 @@ void PlayScene::SpriteCreate()
 void PlayScene::ModelCreate()
 {
 	playermodel = Model::CreateFromOBJ("player");
-	tstmodel = Model::CreateFromOBJ("block");
+	tstmodel = Model::CreateFromOBJ("box1");
 	worldmodel = Model::CreateFromOBJ("skydome");
+	harimodel = Model::CreateFromOBJ("hari");
 
 	collision = new Collision();
 
@@ -84,6 +85,10 @@ void PlayScene::ModelCreate()
 	world = std::make_unique<Object3d>();
 	world->Initialize();// = Object3d::Create();
 	world->SetModel(worldmodel);
+
+	hari = std::make_unique<Object3d>();
+	hari->Initialize();
+	hari->SetModel(harimodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -117,6 +122,10 @@ void PlayScene::SetPrm()
 		player[i]->SetRotation({Player_Rot});
 	}
 
+	hari_Pos = Player_Pos[0];
+
+	hari->SetPosition({ hari_Pos.x+2.0f,hari_Pos.y,hari_Pos.z });
+
 	posX = player[0]->GetPosition().x;
 	posY = player[0]->GetPosition().y;
 	half_height = player[0]->GetScale().y / 2;
@@ -138,6 +147,9 @@ void PlayScene::SetPrm()
 	world->SetScale({ 1,1,1 });
 
 	sentan->SetPosition({ sentan_Pos });
+	
+
+
 
 }
 #pragma endregion
@@ -165,6 +177,7 @@ void PlayScene::objUpdate()
 
 	world->Update({ 1,1,1,1 });
 	block->Update({ 1,1,1,1 });
+	hari->Update({ 1,1,1,1 });
 }
 #pragma endregion
 
@@ -431,7 +444,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z - 18 });
+	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y+5 ,Player_Pos[0].z - 18 });
 	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
 	camera->Update();
 
@@ -506,6 +519,10 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 	}
+
+	hari->PreDraw();
+	hari->Draw();
+	hari->PostDraw();
 
 }
 //sプライと以外の描画
