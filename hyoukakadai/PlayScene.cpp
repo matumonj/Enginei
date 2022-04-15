@@ -352,7 +352,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (posX - Player_Scl.x < block_pos.x + block_Scl.x && block_pos.x < Old_Pos.x - Player_Scl.x -1 && (block_pos.y - block_Scl.y < posY + Player_Scl.y && posY - Player_Scl.y < block_pos.y + block_Scl.y)) {
 		Player_Pos[0].x = Old_Pos.x ;
 	}
-
+	//a
 
 
 	for (int i = 0; i < MAX_X; i++) {
