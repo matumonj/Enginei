@@ -20,6 +20,7 @@
 #include"Enemy.h"
 #include"Effects.h"
 #include"GameUI.h"
+#include"Player.h"
 #include<memory>
 class PlayScene :public BaseScene
 {
@@ -51,12 +52,14 @@ private:
 	std::unique_ptr<Enemy>enemy[2];
 	//Enemy* enemy[2];
 	std::unique_ptr <Effects> effects;
+	std::unique_ptr <Effects> attackeffects;
 	Collision* collision = nullptr;
 
 	std::unique_ptr <Texture>mech = nullptr;
 	std::unique_ptr <Texture>zukki = nullptr;
 
-	std::unique_ptr<Object3d>player[10];
+	Player* player;
+	//std::unique_ptr<Object3d>player[10];
 	std::unique_ptr<Object3d>tst[20][100];
 	std::unique_ptr<Object3d> sentan = nullptr;
 	std::unique_ptr<Object3d> world = nullptr;
@@ -75,7 +78,7 @@ private:
 private:
 	//Plyer
 
-	XMFLOAT3 Player_Pos[10];// = player->GetPosition();
+	XMFLOAT3 Player_Pos;// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;

@@ -52,7 +52,7 @@ private:
 public:
 	static Line* GetInstance();
 	static void Initialize();
-	static void Update(XMMATRIX matview, XMMATRIX matprojection,std::unique_ptr<Object3d>Player[],XMFLOAT3&Player_Pos,bool& colf);
+	static void Update(XMMATRIX matview, XMMATRIX matprojection,Player*player,XMFLOAT3&Player_Pos,bool& colf);
 	static void Draw(DirectXCommon* dxcomn);
 	static void CollisionBlock(int** map, float** mapxy[2],float maphalf[2], const int MapX, const int MapY);
 	static void CollisionEnemy(std::unique_ptr<Enemy> Position[]);
