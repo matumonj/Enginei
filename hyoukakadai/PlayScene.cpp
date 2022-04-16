@@ -363,26 +363,31 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				map_half_heigh = tst[j][i]->GetScale().y;
 				map_half_width = tst[j][i]->GetScale().x;
 
-				if ((Player_Pos[0].x + (Player_Scl.x/2) > mapx[j][i] - (map_half_width/2) && Player_Pos[0].x - (Player_Scl.x/2) < mapx[j][i] + (map_half_width/2)) && Old_Pos.y - Player_Scl.y<mapy[j][i] + map_half_heigh && Player_Pos[0].y + half_height>mapy[j][i] - (map_half_heigh/2)) {
+				if ((Player_Pos[0].x + (Player_Scl.x) > mapx[j][i] - (map_half_width) && Player_Pos[0].x - (Player_Scl.x) < mapx[j][i] + (map_half_width)) && Old_Pos.y - Player_Scl.y>mapy[j][i] && Player_Pos[0].y - half_height<mapy[j][i]+map_half_heigh ) {
 					Player_Pos[0].y = map_half_heigh + mapy[j][i] + Player_Scl.y + 0.001f;
-
 					grav = 0.0f;
 					break;
 				}
-				else if ((Player_Pos[0].x + (Player_Scl.x / 2) > mapx[j][i] - (map_half_width / 2) && Player_Pos[0].x - (Player_Scl.x / 2) < mapx[j][i] + (map_half_width / 2)) && Old_Pos.y + Player_Scl.y<mapy[j][i] && Player_Pos[0].y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
-					Player_Pos[0].y = Player_Pos[0].y -  (Player_Scl.y/10);
+				else if ((Player_Pos[0].x + (Player_Scl.x) > mapx[j][i] - (map_half_width ) && Player_Pos[0].x - (Player_Scl.x) < mapx[j][i] + (map_half_width )) && Old_Pos.y + Player_Scl.y<mapy[j][i] && Player_Pos[0].y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
+					Player_Pos[0].y = Player_Pos[0].y -  moveSpeed;
 					break;
 				}
 				else {
 					grav = 0.03;
 				}
-				if ((Player_Pos[0].y - (Player_Scl.y/2) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos[0].y + (Player_Scl.y/2)) && Player_Pos[0].x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x - Player_Scl.y) {
+				//プレイヤーの左辺
+				if ((Player_Pos[0].y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos[0].y + (Player_Scl.y)) && Player_Pos[0].x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x - Player_Scl.y) {
 					Player_Pos[0].x = map_half_width + mapx[j][i] + Player_Scl.x + 0.001f;
 					break;
 				}
-				else if ((Player_Pos[0].y - (Player_Scl.y/2) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos[0].y + (Player_Scl.y/2))&&Player_Pos[0].x+Player_Scl.x>mapx[j][i]-map_half_width&&mapx[j][i]>Old_Pos.x+Player_Scl.x) {
-					Player_Pos[0].x = Player_Pos[0].x - (Player_Scl.x / 10);
+				//プレイヤーの右辺
+				else if ((Player_Pos[0].y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos[0].y + (Player_Scl.y))&&Player_Pos[0].x+Player_Scl.x > mapx[j][i]-map_half_width&&mapx[j][i]>Old_Pos.x+Player_Scl.x-0.5f) {
+					Player_Pos[0].x = Player_Pos[0].x - moveSpeed;
+					moveSpeed = 0;
 					break;
+				}
+				else {
+					moveSpeed = 0.2f;
 				}
 
 
