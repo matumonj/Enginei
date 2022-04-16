@@ -55,13 +55,9 @@ void PlayScene::SpriteCreate()
 void PlayScene::ModelCreate()
 {
 	playermodel = Model::CreateFromOBJ("player");
-<<<<<<< HEAD
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("block");
-=======
 	tstmodel = Model::CreateFromOBJ("box1");
->>>>>>> 6c88f78ac56c1a5dc84a758497da89244adc2473
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
 
@@ -121,28 +117,27 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
-<<<<<<< HEAD
-		
+
 	posX = player->GetPosition().x;
 	posY = player->GetPosition().y;
 	half_height = player->GetScale().y / 2;
 	half_Width = player->GetScale().x / 2;
-=======
-	for (int i = 0; i < 10; i++) {
-			player[i]->SetPosition({ Player_Pos[i] });
-		player[i]->SetScale({ Player_Scl });
-		player[i]->SetRotation({Player_Rot});
-	}
 
-	hari_Pos = Player_Pos[0];
+
+		player->SetPosition({ Player_Pos });
+		player->SetScale({ Player_Scl });
+		player->SetRotation({Player_Rot});
+
+
+	hari_Pos = Player_Pos;
 
 	hari->SetPosition({ hari_Pos.x+2.0f,hari_Pos.y,hari_Pos.z });
 
-	posX = player[0]->GetPosition().x;
-	posY = player[0]->GetPosition().y;
-	half_height = player[0]->GetScale().y;
-	half_Width = player[0]->GetScale().x ;
->>>>>>> 6c88f78ac56c1a5dc84a758497da89244adc2473
+	posX = player->GetPosition().x;
+	posY = player->GetPosition().y;
+	half_height = player->GetScale().y;
+	half_Width = player->GetScale().x ;
+
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -288,12 +283,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->GetCMove().lX < u_r - a)
 	{
 		// 左に傾けた
-		//Player_Pos[0].x -= 1;
+		//Player_Pos.x -= 1;
 
 	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	{
 		// 右に傾けた
-		//Player_Pos[0].x += 1;
+		//Player_Pos.x += 1;
 	}
 
 	if (Input::GetInstance()->GetCMove().lY < u_r - a)
@@ -335,45 +330,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	///
 
-<<<<<<< HEAD
-	if (posX - Player_Scl.x < block_pos.x + block_Scl.x && block_pos.x < Old_Pos.x - Player_Scl.x - 1 && (block_pos.y - block_Scl.y < posY + Player_Scl.y && posY - Player_Scl.y < block_pos.y + block_Scl.y)) {
-		Player_Pos.x = Old_Pos.x;
-=======
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos[0].x += moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 
 
-		Player_Pos[0].x -= moveSpeed;
 
-
-	}
-
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		Player_Pos[0].y -= moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-		Player_Pos[0].y += moveSpeed;
-	}
-
-	//残像
-	for (int i = 9; i > 0; i--) {
-		Player_Pos[i].x = Player_Pos[i - 1].x + zanzouSpeed;
-		Player_Pos[i].y = Player_Pos[i - 1].y + zanzouSpeed;
-	}
 	////当たり判定
-
-	//grav = 0.03;
-
-	//Player_Pos[0].y = block_pos.y + block_Scl.y+Player_Scl.y+0.01;
-
-	if (posX - Player_Scl.x < block_pos.x + block_Scl.x && block_pos.x < Old_Pos.x - Player_Scl.x -1 && (block_pos.y - block_Scl.y < posY + Player_Scl.y && posY - Player_Scl.y < block_pos.y + block_Scl.y)) {
-		Player_Pos[0].x = Old_Pos.x ;
->>>>>>> 6c88f78ac56c1a5dc84a758497da89244adc2473
-	}
-	//a
-
 
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
@@ -382,104 +342,35 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				mapy[j][i] = tst[j][i]->GetPosition().y;
 				map_half_heigh = tst[j][i]->GetScale().y;
 				map_half_width = tst[j][i]->GetScale().x;
-<<<<<<< HEAD
-				//下辺の当たり判定
-				if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height - 1 < mapy[j][i] + (map_half_heigh / 2) && posY + half_height > mapy[j][i] - (map_half_heigh / 2)) {
-					posY = map_half_heigh + mapy[j][i] + half_height + 0.5;
-					Old_Pos.y = posY;
-					Player_Pos.y = Old_Pos.y;
-					//Player_Rot.x++;
-					grav = 0;
-					break;
-				}
-				//上辺の当たり判定
-				else if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y + half_height < mapy[j][i] && posY + half_height + 0.5 > mapy[j][i] - map_half_heigh - 0.5) {
-					posY = mapy[j][i] - map_half_heigh - half_height - 0.5;
-					Old_Pos.y = posY;
-					Player_Pos.y = Old_Pos.y;
-					//Player_Rot.x++;
-					grav = 0;
-=======
 
-				if ((Player_Pos[0].x + (Player_Scl.x) > mapx[j][i] - (map_half_width) && Player_Pos[0].x - (Player_Scl.x) < mapx[j][i] + (map_half_width)) && Old_Pos.y - Player_Scl.y>mapy[j][i] && Player_Pos[0].y - half_height<mapy[j][i]+map_half_heigh ) {
-					Player_Pos[0].y = map_half_heigh + mapy[j][i] + Player_Scl.y + 0.001f;
+
+				if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width)) && Old_Pos.y - Player_Scl.y>mapy[j][i] && Player_Pos.y - half_height < mapy[j][i]+map_half_heigh ) {
+					Player_Pos.y = map_half_heigh + mapy[j][i] + Player_Scl.y;
 					grav = 0.0f;
 					break;
 				}
-				else if ((Player_Pos[0].x + (Player_Scl.x) > mapx[j][i] - (map_half_width ) && Player_Pos[0].x - (Player_Scl.x) < mapx[j][i] + (map_half_width )) && Old_Pos.y + Player_Scl.y<mapy[j][i] && Player_Pos[0].y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
-					Player_Pos[0].y = Player_Pos[0].y -  moveSpeed;
->>>>>>> 6c88f78ac56c1a5dc84a758497da89244adc2473
+				else if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width ) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width )) && Old_Pos.y + Player_Scl.y<mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
+					Player_Pos.y = Player_Pos.y -  moveSpeed;
 					break;
 				}
 				else {
 					grav = 0.03;
 				}
-<<<<<<< HEAD
-				//左
-				if (posX - half_Width - 0.5 < mapx[j][i] + map_half_width + 0.5 && mapx[j][i] < Old_Pos.x - half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
-					posX = mapx[j][i] + map_half_width + half_Width + 0.55;
-					Old_Pos.x = posX;
-					Player_Pos.x = Old_Pos.x;
-					break;
-				}
-				//右
-				else if (posX + half_Width + 0.5 > mapx[j][i] - map_half_width - 0.5 && mapx[j][i] > Old_Pos.x + half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
-					posX = mapx[j][i] - map_half_width - half_Width - 0.55;
-					Old_Pos.x = posX;
-					Player_Pos.x = Old_Pos.x;
-=======
+
 				//プレイヤーの左辺
-				if ((Player_Pos[0].y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos[0].y + (Player_Scl.y)) && Player_Pos[0].x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x - Player_Scl.y) {
-					Player_Pos[0].x = map_half_width + mapx[j][i] + Player_Scl.x + 0.001f;
+				if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y)) && Player_Pos.x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x - Player_Scl.y) {
+					Player_Pos.x = map_half_width + mapx[j][i] + Player_Scl.x;
 					break;
 				}
 				//プレイヤーの右辺
-				else if ((Player_Pos[0].y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos[0].y + (Player_Scl.y))&&Player_Pos[0].x+Player_Scl.x > mapx[j][i]-map_half_width&&mapx[j][i]>Old_Pos.x+Player_Scl.x-0.5f) {
-					Player_Pos[0].x = Player_Pos[0].x - moveSpeed;
+				else if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y))&&Player_Pos.x+Player_Scl.x > mapx[j][i]-map_half_width&&mapx[j][i]>Old_Pos.x+Player_Scl.x-0.5f) {
+					Player_Pos.x = Player_Pos.x - moveSpeed;
 					moveSpeed = 0;
->>>>>>> 6c88f78ac56c1a5dc84a758497da89244adc2473
 					break;
 				}
 				else {
 					moveSpeed = 0.2f;
 				}
-
-
-					////右
-				//else if (posX + half_Width  > mapx[j][i] - map_half_width  && mapx[j][i] > Old_Pos.x + half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
-				//	posX = mapx[j][i] - map_half_width - Player_Scl.x;
-				//	Old_Pos.x = posX;
-				//	Player_Pos[0].x = Old_Pos.x;
-				//	break;
-				//}
-				////下辺の当たり判定
-				//if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y - half_height  < mapy[j][i] + map_half_heigh && posY + half_height > mapy[j][i] - (map_half_heigh / 2)) {
-				//	posY = map_half_heigh + mapy[j][i] + Player_Scl.y;
-				//	Old_Pos.y = posY;
-				//	Player_Pos[0].y = Old_Pos.y;
-				//	//Player_Rot.x++;
-				//	grav = 0;
-				//	break;
-				//}
-				////上辺の当たり判定
-				//else if ((posX + half_Width > mapx[j][i] - map_half_width && posX - half_Width < mapx[j][i] + map_half_width) && Old_Pos.y + half_height < mapy[j][i]  && posY + half_height > mapy[j][i] - map_half_heigh - Player_Scl.y) {
-				//	posY = mapy[j][i] - map_half_heigh - Player_Scl.y;
-				//	Old_Pos.y = posY;
-				//	Player_Pos[0].y = Old_Pos.y;
-				//	//Player_Rot.x++;
-				//	grav = 0;
-				//	break;
-				//} else {
-				//	grav = 0.03;
-				//}
-				////左
-				//if (posX - half_Width  < mapx[j][i] + map_half_width  && mapx[j][i] < Old_Pos.x - half_Width && (mapy[j][i] - map_half_heigh < posY + half_Width && posY - half_Width < mapy[j][i] + map_half_width)) {
-				//	posX = mapx[j][i] + map_half_width + Player_Scl.x;
-				//	Old_Pos.x = posX;
-				//	Player_Pos[0].x = Old_Pos.x;
-				//	break;
-				//}
-				
 			}
 		}
 	}
@@ -487,22 +378,15 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region 線の処理
 
 
-<<<<<<< HEAD
-	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
-		grav = 0.0f;
-=======
 	if (Line::GetInstance()->Getboundflag()==false ||Line::GetInstance()->Gettriggerflag()==false) {
 		//grav = 0.0f;
->>>>>>> 6c88f78ac56c1a5dc84a758497da89244adc2473
 	} else {
 		//grav = 0.03f;
 	}
 
-<<<<<<< HEAD
-	Player_Pos.y -= grav;
-=======
-//	Player_Pos[0].y -= grav;
->>>>>>> 6c88f78ac56c1a5dc84a758497da89244adc2473
+
+//	Player_Pos.y -= grav;
+
 
 	//頂点座標の更新
 	mech->CreateLineTexture(linex, linex2, liney, liney2);
@@ -551,13 +435,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-<<<<<<< HEAD
-	camera->SetEye({ Player_Pos.x,Player_Pos.y ,Player_Pos.z - 18 });
+	camera->SetEye({ Player_Pos.x,Player_Pos.y+5 ,Player_Pos.z - 18 });
 	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
-=======
-	camera->SetEye({ Player_Pos[0].x,Player_Pos[0].y+5 ,Player_Pos[0].z - 18 });
-	camera->SetTarget({ Player_Pos[0].x,Player_Pos[0].y ,Player_Pos[0].z });
->>>>>>> 6c88f78ac56c1a5dc84a758497da89244adc2473
+
 	camera->Update();
 
 

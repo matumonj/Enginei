@@ -80,7 +80,7 @@ private:
 private:
 	//Plyer
 
-	XMFLOAT3 Player_Pos;// = player->GetPosition();
+	XMFLOAT3 Player_Pos = {0,0,0};// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;
