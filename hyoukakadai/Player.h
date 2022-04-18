@@ -61,5 +61,6 @@ private:
 	State playerRot = State::Right;
 	Action action = Action::None;
 	bool EAcol[2] = { false };
+	float timer=0;
 };
 

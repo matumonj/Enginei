@@ -72,8 +72,14 @@ void Player::Attack(XMFLOAT3 playerpos)
 	if (Input::GetInstance()->TriggerKey(DIK_P)) {
 		action = Action::Attack;
 	}
+	if (Input::GetInstance()->TriggerKey(DIK_N)) {
+		action = Action::None;
+	}
+
 
 	if (action == Action::Attack) {
+
+		timer++;
 		switch (playerRot)
 		{
 		case State::Left:
@@ -84,53 +90,30 @@ void Player::Attack(XMFLOAT3 playerpos)
 			Area_X = 50;
 			break;
 		}
-		//action = Action::None;
-	} else if (action == Action::None) {
-	//	Area_X = 0;
-	}
-
+		
+		if (timer >= 2) {
+			action = Action::None;
+			timer = 0;
+		}
+	} 
 
 }
 
 void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 {
-	damageArea.Area_s = { position.x-100 ,position.y+100  };
-	damageArea.Area_e = { position.x+100 ,position.y-100 };
+	damageArea.Area_s = { position.x ,position.y - 5 };
+	damageArea.Area_e = { position.x + 5 ,position.y + 5 };
 
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
-		for (int i = 0; i < 2; i++)
-		{
-			if (enemy[i] != nullptr) {
-				//enemy[i]->SetDead(true);
-			}
-		}
-	}
 	//“–‚½‚è”»’è
 
-	//if (action == Action::Attack) {
-		for (int i = 0; i < 2; i++)
-		{
-			if (enemy[i] != nullptr) {
-				
-			//	dis[i] = sqrt(((damageArea.Area_s.x- enemy[i]->GetPosition().x) * (damageArea.Area_s.x - enemy[i]->GetPosition().x)) + ((damageArea.Area_s.y - enemy[i]->GetPosition().y) * (damageArea.Area_s.y- enemy[i]->GetPosition().y)));
-				if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy[i]->GetPosition().x-50,enemy[i]->GetPosition().y+50 }, { enemy[i]->GetPosition().x+50,enemy[i]->GetPosition().y-50 }) == true)
-				{
-				//if ((enemy[i]->GetPosition().x-1 < position.x+1 &&position.x-1< enemy[i]->GetPosition().x+1) &&
-					//	(enemy[i]->GetPosition().y+1 <position.y-1 &&position.y+1< enemy[i]->GetPosition().y-1)) {
-					//if(dis[i]<=1.5f){
-				//EAcol[i] = true;
+	if (action == Action::Attack) {
+	for (int i = 0; i < 2; i++)
+	{
+		if (enemy[i] != nullptr) {
+			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy[i]->GetPosition().x - 1,enemy[i]->GetPosition().y - 1 }, { enemy[i]->GetPosition().x + 1,enemy[i]->GetPosition().y + 1 }) == true) {
 				enemy[i]->SetDead(true);
-				break;
-			}
-
-				if (EAcol[i]) {
-					enemy[i]->SetDead(true);
-					//EAcol[0] = false;
-					
-				}
-				///break;
 			}
 		}
-	//}
-
+		}
+	}
 }
