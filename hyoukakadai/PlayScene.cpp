@@ -118,26 +118,21 @@ void PlayScene::ModelCreate()
 void PlayScene::SetPrm()
 {
 
-	posX = player->GetPosition().x;
-	posY = player->GetPosition().y;
-	half_height = player->GetScale().y / 2;
-	half_Width = player->GetScale().x / 2;
+	
 
-
-		player->SetPosition({ Player_Pos });
-		player->SetScale({ Player_Scl });
-		player->SetRotation({Player_Rot});
 
 
 	hari_Pos = Player_Pos;
 
 	hari->SetPosition({ hari_Pos.x+2.0f,hari_Pos.y,hari_Pos.z });
 
-	posX = player->GetPosition().x;
-	posY = player->GetPosition().y;
 	half_height = player->GetScale().y;
 	half_Width = player->GetScale().x ;
 
+
+	player->SetPosition({ Player_Pos });
+	player->SetScale({ Player_Scl });
+	player->SetRotation({ Player_Rot });
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -344,27 +339,29 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				map_half_width = tst[j][i]->GetScale().x;
 
 
-				if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width)) && Old_Pos.y - Player_Scl.y>mapy[j][i] && Player_Pos.y - half_height < mapy[j][i]+map_half_heigh ) {
+				if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width)) && Old_Pos.y >mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i]+map_half_heigh ) {
+					moveSpeed = 0;
 					Player_Pos.y = map_half_heigh + mapy[j][i] + Player_Scl.y;
 					grav = 0.0f;
 					break;
 				}
-				else if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width ) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width )) && Old_Pos.y + Player_Scl.y<mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
-					Player_Pos.y = Player_Pos.y -  moveSpeed;
+				else if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width ) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width )) && Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
+					Player_Pos.y = mapy[j][i]-(Player_Scl.y+map_half_heigh);
 					break;
 				}
 				else {
+					moveSpeed = 0.2f;
 					grav = 0.03;
 				}
 
 				//プレイヤーの左辺
-				if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y)) && Player_Pos.x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x - Player_Scl.y) {
+				if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y)) && Player_Pos.x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x) {
 					Player_Pos.x = map_half_width + mapx[j][i] + Player_Scl.x;
 					break;
 				}
 				//プレイヤーの右辺
-				else if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y))&&Player_Pos.x+Player_Scl.x > mapx[j][i]-map_half_width&&mapx[j][i]>Old_Pos.x+Player_Scl.x-0.5f) {
-					Player_Pos.x = Player_Pos.x - moveSpeed;
+				else if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y))&&Player_Pos.x+Player_Scl.x > mapx[j][i]-map_half_width&&mapx[j][i]+0.2f>Old_Pos.x) {
+					Player_Pos.x = mapx[j][i]-(Player_Scl.x + map_half_width);
 					moveSpeed = 0;
 					break;
 				}
