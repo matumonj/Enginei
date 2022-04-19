@@ -37,7 +37,7 @@ public:
     /// <summary>
     /// 更新処理
     /// </summary>
-    void Update()override;
+    void Update(XMFLOAT3 position)override;
 
     /// <summary>
     /// 描画処理
@@ -48,6 +48,9 @@ public:
     /// 解放処理
     /// </summary>
     void Finalize()override;
+
+    void EnemySearchPlayer(XMFLOAT3 player)override;
+
 public:
     /// <summary>
    /// アクセッサ

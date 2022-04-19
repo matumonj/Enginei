@@ -9,6 +9,10 @@ BossEnemy::~BossEnemy()
 	delete BossObject, BossModel;
 }
 
+void BossEnemy::EnemySearchPlayer(XMFLOAT3 player)
+{
+
+}
 //初期化処理
 void BossEnemy::Initialize()
 {
@@ -26,7 +30,7 @@ void BossEnemy::Initialize()
 }
 
 //更新処理
-void BossEnemy::Update()
+void BossEnemy::Update(XMFLOAT3 position)
 {
 	//パラメータのセット
 	//モブ

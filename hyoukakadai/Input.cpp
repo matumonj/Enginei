@@ -22,6 +22,8 @@ void Input::Initialize(WinApp* winapp)
 	// マウスデバイスの生成	
 	result = dinput->CreateDevice(GUID_SysMouse, &devMouse, NULL);
 
+	//
+	result = dinput->CreateDevice(GUID_Joystick , &devC, NULL);
 	//入力データ形式のセット
 	result = devkeyboard->SetDataFormat(&c_dfDIKeyboard);
 	//排他制御レベルのセット
@@ -32,6 +34,14 @@ void Input::Initialize(WinApp* winapp)
 	
 	// 排他制御レベルのセット
 	result = devMouse->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+
+
+	////c
+	//// 入力データ形式のセット
+	//result = devC->SetDataFormat(&c_dfDIJoystick2); // 標準形式
+
+	//// 排他制御レベルのセット
+	//result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
 }
 void Input::update()
@@ -55,6 +65,15 @@ void Input::update()
 		// マウスの入力
 		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 	}
+	//{// c
+	//	result = devC->Acquire();	// マウス動作開始
+
+	//	// 前回の入力を保存
+	//	CStatePre = CState;
+
+	//	// マウスの入力
+	//	result = devC->GetDeviceState(sizeof(CState), &CState);
+	//}
 }
 
 bool Input::Pushkey(BYTE keyNumber)
@@ -126,5 +145,38 @@ Input::MouseMove Input::GetMouseMove()
 	tmp.lX = mouseState.lX;
 	tmp.lY = mouseState.lY;
 	tmp.lZ = mouseState.lZ;
+	return tmp;
+}
+bool Input::TriggerButtonA()
+{
+	// 前回が0で、今回が0でなければトリガー
+	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
+		return true;
+	}
+
+	// トリガーでない
+	return false;
+}
+
+bool Input::TriggerButtonRB()
+{
+	// 前回が0で、今回が0でなければトリガー
+	if (!CStatePre.rgbButtons[5] && CState.rgbButtons[5]) {
+		return true;
+	}
+
+	// トリガーでない
+	return false;
+}
+
+Input::CMove Input::GetCMove()
+{
+	CMove tmp;
+	tmp.lX = CState.lX;
+	tmp.lY = CState.lY;
+	tmp.lZ = CState.lZ;
+	tmp.lRx = CState.lRx;
+	tmp.lRy = CState.lRy;
+	tmp.lRz = CState.lRz;
 	return tmp;
 }

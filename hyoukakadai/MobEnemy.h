@@ -1,10 +1,12 @@
 #pragma once
+#include"mEffekseer.h"
 #include"Object3d.h"
 #include"Model.h"
 #include "Enemy.h"
 class MobEnemy :
     public Enemy
 {
+
 public:
     /// <summary>
     /// コンストラクタ
@@ -21,12 +23,15 @@ private:
     Object3d* MobObject=nullptr;
     //モデルのインスタンス
     Model* MobModel=nullptr;
-
+    //
+    mEffekseer* effect_dead;
 private:
     XMFLOAT3 Mob_Pos;
     XMFLOAT3 Mob_Rot;
     XMFLOAT3 Mob_Scl;
 public:
+    void EnemySearchPlayer(XMFLOAT3 player)override;
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -35,7 +40,7 @@ public:
     /// <summary>
     /// 更新処理
     /// </summary>
-    void Update()override;
+    void Update(XMFLOAT3 position)override;
     
     /// <summary>
     /// 描画処理
@@ -46,6 +51,10 @@ public:
     /// 解放処理
     /// </summary>
     void Finalize()override;
+    void Follow(XMFLOAT3 player);
+    void Motion(int time)override;
+    float angleXs, angleZs, angleRs;
+    float centerSpeed = 0.1f;
 public:
     /// <summary>
     /// アクセッサ

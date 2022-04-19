@@ -35,7 +35,7 @@
 #include"PlayScene.h"
 #include"TitleScene.h"
 #include"DirectXCommon.h"
-
+#include"nTexture.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
