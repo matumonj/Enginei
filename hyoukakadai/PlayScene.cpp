@@ -340,6 +340,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	////当たり判定
+	//入力処理より後に当たり判定を描け
 
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
