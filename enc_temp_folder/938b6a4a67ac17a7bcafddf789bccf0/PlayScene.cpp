@@ -5,7 +5,6 @@
 #include"SceneManager.h"
 #include"MobEnemy.h"
 #include"BossEnemy.h"
-#include"ThrowEnemy.h"
 #include"Line.h"
 #include"Destroy.h"
 #define PI 3.14
@@ -188,16 +187,14 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	enemy[0] = std::make_unique<MobEnemy>();
-	enemy[1] = std::make_unique<MobEnemy>();
-	enemy[2]= std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
 	enemy[0]->Initialize();
+	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[1]->Initialize();
-	enemy[2]->Initialize();
-
-	enemy[2]->Setposition({ 0,20,0 });
-	enemy[1]->Setposition({ -40, 0, 0});
-	enemy[0]->Setposition({ 20, 0, 0 });
+	enemy[1]->Setposition({ -40, 0, 0
+		});
+	enemy[0]->Setposition({ 
+		20, 0, 0 });
 	mapcol = new Collision();
 	c_postEffect = Default;
 
@@ -212,11 +209,16 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 
 	effects->Initialize(dxCommon, camera);
 	attackeffects->Initialize(dxCommon, camera);
-
+	spotLightpos[0] = 10;
+	spotLightpos[2] = 0;
 
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-	
+	//efk = new Effects();
+	//efk = std::make_unique<Effects>();
+	//effects->Initialize(dxCommon, camera);
+	//weffect = new pEffect();
+	//weffect->Initialize(dxCommon, camera);
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
 	//カメラをセット
@@ -249,9 +251,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	Old_Pos = Player_Pos;
-	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y+10;
-	spotLightpos[2] = 0;
+
 	//コントローラー
 	if (Input::GetInstance()->TriggerButtonA()) {
 		//攻撃処理
@@ -353,7 +353,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (width - 0.1f) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (width - 0.1f))) {
 					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
 						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						moveSpeed = 0;
+						//moveSpeed = 0;
 						grav = 0.0f;
 						time = 0;
 						break;
@@ -365,7 +365,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				}
 				else {
 					moveSpeed = 0.2f;
-					grav = 0.03;
+					//grav = 0.03;
 				}
 
 				//プレイヤーの左辺
@@ -391,7 +391,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
-
 
 #pragma region 線の処理
 
@@ -461,15 +460,20 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	objUpdate();//オブジェクトの更新処理
 
+	//デバッグ用、敵滅殺
+	if (Input::GetInstance()->TriggerKey(DIK_D) && enemy[1] != nullptr) {
+		enemy[1]->SetDead(true);
+	}
+
 	effects->Update(dxCommon, camera, enemy, player);
 
 	//enemyにnullptr代入するときは敵が死んだら
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (enemy[i] != nullptr) {
 
 			enemy[i]->Update(Player_Pos);
 			//プレイヤーの検知
-			enemy[i]->EnemySearchPlayer(player);
+			enemy[i]->EnemySearchPlayer(player->GetPosition());
 			//もし敵が死んだら破棄
 			if (enemy[i]->GetState_DEAD() == true) {
 				Destroy_unique(enemy[i]);
@@ -502,7 +506,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	world->PreDraw();
 	//world->Draw();
 	world->PostDraw();
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (enemy[i] != nullptr) {
 			enemy[i]->Draw();
 		}
@@ -642,7 +646,6 @@ void PlayScene::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-
 	/*if (ImGui::TreeNode("1")) {
 		ImGui::SliderFloat("+_width", &half_Width, -100, 100);
 		ImGui::SliderFloat("+_height", &half_height, -100, 100);
@@ -652,7 +655,6 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderFloat("map_1_height", &height, -100, 100);
 		ImGui::TreePop();
 	}*/
-
 
 	ImGui::End();
 

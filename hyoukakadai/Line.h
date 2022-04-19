@@ -22,12 +22,15 @@ private:
 	static Texture* Twine;
 	static Model* NeedleModel;
 	static Object3d* NeedleObj;
+
+
 private:
 	static float FollowangleX, FollowangleZ, FollowangleR;
 	static float FollowSpeed ;
 	static bool trigger ;
 	static bool boundflag ;
 	static bool returnflag ;
+	static bool drawflag;
 	static 	float tempx, tempy;
 	static float linex, linex2, liney, liney2;
 	static float lineangle ;
@@ -46,6 +49,7 @@ private:
 	static int L_Cflag;
 	static XMFLOAT3 po;
 	static XMFLOAT3 needlepos;
+	static XMFLOAT3 needlerot;
 	static int f;
 	static bool elf;
 	static float oldlinex, oldliney;
