@@ -6,7 +6,6 @@
 #include <d3dx12.h>
 #include <DirectXMath.h>
 #include <string>
-#include"Player.h"
 #include"Input.h"
 /// <summary>
 /// “GƒLƒƒƒ‰‚ÌŠî’êƒNƒ‰ƒX

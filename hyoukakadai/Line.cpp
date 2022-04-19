@@ -48,11 +48,11 @@ void Line::Initialize()
 
 }
 
-void Line::Update(XMMATRIX matview, XMMATRIX matprojection, std::unique_ptr<Object3d>player[], XMFLOAT3& Player_Pos, bool& mapcolf)
+void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLOAT3& Player_Pos, bool& mapcolf)
 {
 	float sdistance;
-	sdistance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
-		((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
+	sdistance = sqrtf(((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)) +
+		((player->GetPosition().y - liney2) * (player->GetPosition().y - liney2))
 	);
 	//UI部分の外枠ゲージが０なったら紐出せなくなる
 	LimitGauge = GameUI::GetInstance()->Getsclx();
@@ -64,8 +64,22 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, std::unique_ptr<Obje
 	}
 
 	//やけくそコード,汚いよ
-	linex = player[0]->GetPosition().x;//線の始点をプレイヤー位置に
-	liney = player[0]->GetPosition().y;
+	linex = player->GetPosition().x;//線の始点をプレイヤー位置に
+	liney = player->GetPosition().y;
+
+	/*
+	if ((!returnflag && !boundflag)) {
+		if (Input::GetInstance()->GetCMove().lRx < u_r - a|| Input::GetInstance()->GetCMove().lRy < u_r - a) {
+			lineangle += 13.0f;//移動方向の指定
+			subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
+
+		}
+		else if (Input::GetInstance()->GetCMove().lRx > u_r + a|| Input::GetInstance()->GetCMove().lRy > u_r + a) {
+			lineangle -= 13.0f;//移動方向の指定
+			subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
+
+		}
+			}*/
 
 	if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
 		lineangle += 13.0f;//移動方向の指定
@@ -102,8 +116,8 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, std::unique_ptr<Obje
 		}
 		//線の終点とプレイヤーとの距離求める
 		float distance;
-		distance = sqrtf(((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)) +
-			((player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2))
+		distance = sqrtf(((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)) +
+			((player->GetPosition().y - liney2) * (player->GetPosition().y - liney2))
 		);
 		//プレイヤーと紐の距離が一定以内に縮まったら
 		if (distance <= 1.0f) {
@@ -121,10 +135,10 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, std::unique_ptr<Obje
 
 	//吸い付く処理
 	if (boundflag) {
-		FollowangleX = (linex2 - player[0]->GetPosition().x);
-		FollowangleZ = (liney2 - player[0]->GetPosition().y);//これZじゃなくてYです
-		FollowangleR = sqrtf((player[0]->GetPosition().x - linex2) * (player[0]->GetPosition().x - linex2)
-			+ (player[0]->GetPosition().y - liney2) * (player[0]->GetPosition().y - liney2));
+		FollowangleX = (linex2 - player->GetPosition().x);
+		FollowangleZ = (liney2 - player->GetPosition().y);//これZじゃなくてYです
+		FollowangleR = sqrtf((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)
+			+ (player->GetPosition().y - liney2) * (player->GetPosition().y - liney2));
 
 		Player_Pos.x += (FollowangleX / FollowangleR) * FollowSpeed;
 		Player_Pos.y += (FollowangleZ / FollowangleR) * FollowSpeed;

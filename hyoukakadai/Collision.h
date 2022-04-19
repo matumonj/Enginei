@@ -15,6 +15,8 @@ public:
 		float Right;
 	};
 public:
+	static bool Boxcol(XMFLOAT2 a1, XMFLOAT2 a2, XMFLOAT2 b1, XMFLOAT2 b2);
+
 	 float LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d** map[],Player*player, float radius);
 	/// <summary>
 	/// 点と三角形の最近接点を求める

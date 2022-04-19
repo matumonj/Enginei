@@ -127,6 +127,14 @@ bool Collision::CheckSphere2Triangle(const Sphere& sphere, const Triangle& trian
 	return true;
 }
 
+bool Collision::Boxcol(XMFLOAT2 a1, XMFLOAT2 a2, XMFLOAT2 b1, XMFLOAT2 b2)
+{
+	if (b1.x > a2.x) { return false; }
+	if (a1.x > b2.x) { return false; }
+	if (b1.y > a2.y) { return false; }
+	if (a1.y > b2.y) { return false; }
+	return true;
+}
 bool Collision::CheckBox2Box(XMFLOAT3 object1, XMFLOAT3& object2, XMFLOAT3 r, XMFLOAT3 r2)
 {
 	BoxVertex Object1;

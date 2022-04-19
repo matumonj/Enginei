@@ -99,7 +99,7 @@ void MobEnemy::Follow(XMFLOAT3 player)
 	Position.y += (angleZ / angleR) * centerSpeed;
 	//Position.x =player.x;
 	//Position.y =player.y;
-	//MobObject->SetPosition(Position);
+	MobObject->SetPosition(Position);
 	//MobObject->SetPosition(Position);
 }
 
