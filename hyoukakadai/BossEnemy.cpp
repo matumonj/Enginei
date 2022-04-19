@@ -9,7 +9,7 @@ BossEnemy::~BossEnemy()
 	delete BossObject, BossModel;
 }
 
-void BossEnemy::EnemySearchPlayer(XMFLOAT3 player)
+void BossEnemy::EnemySearchPlayer(Player* player)
 {
 
 }

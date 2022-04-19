@@ -49,7 +49,7 @@ public:
     /// </summary>
     void Finalize()override;
 
-    void EnemySearchPlayer(XMFLOAT3 player)override;
+    void EnemySearchPlayer(Player*player)override;
 
 public:
     /// <summary>
