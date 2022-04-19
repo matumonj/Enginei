@@ -353,7 +353,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (width - 0.1f) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (width - 0.1f))) {
 					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
 						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						moveSpeed = 0;
+						//moveSpeed = 0;
 						grav = 0.0f;
 						time = 0;
 						break;
@@ -365,7 +365,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				}
 				else {
 					moveSpeed = 0.2f;
-					grav = 0.03;
+					//grav = 0.03;
 				}
 
 				//プレイヤーの左辺
