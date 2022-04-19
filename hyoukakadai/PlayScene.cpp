@@ -120,10 +120,6 @@ void PlayScene::SetPrm()
 
 	
 
-
-
-	hari_Pos = Player_Pos;
-
 	hari->SetPosition({ hari_Pos.x+2.0f,hari_Pos.y,hari_Pos.z });
 
 	half_height = player->GetScale().y;
@@ -389,6 +385,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//頂点座標の更新
 	mech->CreateLineTexture(linex, linex2, liney, liney2);
 
+	hari_Pos.x = Line::GetInstance()->getpos().x;
+	hari_Pos.y = Line::GetInstance()->getpos().y;
+
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -518,9 +517,9 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 
-	hari->PreDraw();
+	/*hari->PreDraw();
 	hari->Draw();
-	hari->PostDraw();
+	hari->PostDraw();*/
 
 }
 //sプライと以外の描画
