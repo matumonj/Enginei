@@ -28,7 +28,7 @@ void PlayScene::SpriteCreate()
 	zukki = Texture::Create(1, { 0,-20,50 }, { 2,2,2 }, { 1,1,1,1 });
 	mech->CreateTexture();
 	zukki->CreateTexture();
-	
+
 	background = Sprite::Create(1, { 0.0f,-200.0f });
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
@@ -43,7 +43,7 @@ void PlayScene::ModelCreate()
 	
 	playermodel = Model::CreateFromOBJ("chr_sword");
 	itomodel = Model::CreateFromOBJ("ito");
-	blockmodel = Model::CreateFromOBJ("block");
+
 	
 
 	player = Object3d::Create();
@@ -52,8 +52,6 @@ void PlayScene::ModelCreate()
 	ito = Object3d::Create();
 	ito->SetModel(itomodel);
 
-	block = Object3d::Create();
-	block->SetModel(blockmodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -85,14 +83,10 @@ void PlayScene::SetPrm()
 	//ito_Pos = Player_Pos;
 	Player_Scl = { 1,1,1 };
 	ito_Scl = { 1,1,1 };
-	block_Scl = { 1,1,1 };
-	block_Pos = { 1,-1,1 };
 	player->SetPosition({ Player_Pos });
 	player->SetScale({ Player_Scl });
 	ito->SetPosition({ ito_Pos });
 	ito->SetScale({ ito_Scl });
-	block->SetPosition({ block_Pos });
-	block->SetScale({ block_Scl });
 }
 #pragma endregion
 
@@ -109,7 +103,6 @@ void PlayScene::objUpdate()
 	lightGroup->Update();
 	player->Update({ 1,1,1,1 });
 	ito->Update({ 1,1,1,1 });
-	block->Update({ 1,1,1,1 });
 	}
 #pragma endregion
 
@@ -237,10 +230,6 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	ito->PreDraw();
 	ito->Draw();
 	ito->PostDraw();
-
-	block->PreDraw();
-	block->Draw();
-	block->PostDraw();
 
 	Sprite::PreDraw(cmdList);
 	//// 背景スプライト描画

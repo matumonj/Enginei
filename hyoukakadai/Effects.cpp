@@ -39,6 +39,6 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera)
 void Effects::Draw(DirectXCommon*dxcomn)
 {
 	//エフェクトの画像
-	/*efk->EffekseerDraw(dxcomn->GetCmdList());
-	efk1->EffekseerDraw(dxcomn->GetCmdList());*/
+	efk->EffekseerDraw(dxcomn->GetCmdList());
+	efk1->EffekseerDraw(dxcomn->GetCmdList());
 }

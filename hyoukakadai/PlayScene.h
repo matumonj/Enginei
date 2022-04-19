@@ -49,12 +49,10 @@ private:
 	Collision* collision = nullptr;
 	Object3d* player = nullptr;
 	Object3d* ito = nullptr;
-	Object3d* block = nullptr;
 
 
 	Model* playermodel = nullptr;
 	Model* itomodel = nullptr;
-	Model* blockmodel = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
@@ -69,11 +67,6 @@ private:
 	XMFLOAT3 ito_Pos;
 	XMFLOAT3 ito_Scl;
 	XMFLOAT3 ito_Rot;
-
-	//block
-	XMFLOAT3 block_Pos;
-	XMFLOAT3 block_Scl;
-	XMFLOAT3 block_Rot;
 
 	float distance = 30;
 
