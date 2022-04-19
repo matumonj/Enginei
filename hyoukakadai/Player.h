@@ -35,7 +35,14 @@ public:
 	XMFLOAT2 GetArea_S() { return damageArea.Area_s; }
 	XMFLOAT2 GetArea_e() { return damageArea.Area_e; }
 	float getdis() { return dis[0]; }
+	int getHp() { return HP; }
+	void SetHp(int Hp) { HP = Hp; }
+	bool GetRot_Left() { if (playerRot==State::Left) return true; }
+	bool GetRot_Right() { if (playerRot == State::Right) return true; }
+
 private:
+	int HP = 10;
+	int AttackCoolTime = 10;
 	int index = -1;
 	float dis[2];
 	//É_ÉÅÅ[ÉWîÕàÕ
@@ -56,7 +63,8 @@ private:
 		Move_Stick,
 		Move_Shotline,
 	};
-	float Area_X;
+	float Area_X_s;
+	float Area_X_e;
 	DamageArea damageArea;
 	State playerRot = State::Right;
 	Action action = Action::None;
