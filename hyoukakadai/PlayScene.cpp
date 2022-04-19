@@ -339,6 +339,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos.y += moveSpeed;
 	}
 
+	///これより上に入力処理をかけ
 	////当たり判定
 
 	for (int i = 0; i < MAX_X; i++) {
