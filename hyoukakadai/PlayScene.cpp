@@ -343,6 +343,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 					moveSpeed = 0;
 					Player_Pos.y = map_half_heigh + mapy[j][i] + Player_Scl.y;
 					grav = 0.0f;
+					time = 0;
 					break;
 				}
 				else if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width ) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width )) && Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
@@ -378,11 +379,11 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Line::GetInstance()->Getboundflag()==false ||Line::GetInstance()->Gettriggerflag()==false) {
 		//grav = 0.0f;
 	} else {
-		//grav = 0.03f;
+		grav = 0.03f;
 	}
 
-
-//	Player_Pos.y -= grav;
+	time += 0.04f;
+	Player_Pos.y -= grav*time*time;
 
 
 	//頂点座標の更新
@@ -432,7 +433,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y+5 ,Player_Pos.z - 18 });
+	camera->SetEye({ Player_Pos.x,Player_Pos.y +1,Player_Pos.z - 23 });
 	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
 
 	camera->Update();
