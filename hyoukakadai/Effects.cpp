@@ -18,7 +18,7 @@ void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 
 void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<Enemy>enemy[],Player*player)
 {
-	for (int i=0; i < 3; i++) {
+	for (int i=0; i < 4; i++) {
 		if (enemy[i] != nullptr) {
 			if (enemy[i]->GetState_DEAD() == true) {
 				df = true;

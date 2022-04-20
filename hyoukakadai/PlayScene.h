@@ -49,7 +49,7 @@ private:
 	Sprite* background = nullptr;
 	
 	DebugTxt* debugText;
-	std::unique_ptr<Enemy>enemy[3];
+	std::unique_ptr<Enemy>enemy[4];
 	//Enemy* enemy[2];
 	std::unique_ptr <Effects> effects;
 	std::unique_ptr <Effects> attackeffects;

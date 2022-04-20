@@ -127,5 +127,5 @@ void MobEnemy::Motion(int timer)
 }
 void MobEnemy::Attack(Player*player)
 {
-		player->SetHp(player->getHp() - AttackDamage);
+		//player->SetHp(player->getHp() - AttackDamage);
 }
