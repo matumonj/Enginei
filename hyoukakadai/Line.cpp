@@ -170,7 +170,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 	NeedleObj->SetPosition({ linex2,liney2,Player_Pos.z });
 	//needlerot = player->GetRotation();
 	needlepos = NeedleObj->GetPosition();
-	NeedleObj->SetScale({ 1.8,1.4,1.5 });
+	NeedleObj->SetScale({ 1.4,1.4,1.5 });
 	NeedleObj->SetRotation({ needlerot });
 	NeedleObj->Update({ 1,1,1,1 });
 }

@@ -352,10 +352,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				width = tst[j][i]->GetScale().x;
 
 
-				if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (width - 0.1f) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (width - 0.1f))) {
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width-0.3f) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width-0.3f) )) {
 					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
 						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						moveSpeed = 0;
+						//moveSpeed = 0;
 						grav = 0.0f;
 						time = 0;
 						break;
@@ -371,19 +371,20 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				}
 
 				//プレイヤーの左辺
-				if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + (Player_Scl.y))) {
-					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x-0.2f) {
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						Player_Pos.y = Player_Pos.y + 0.001f;
 						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-						grav = 0.0f;
-						time = 0;
+						//grav = 0.0f;
+						//time = 0;
 						break;
 					}
 					//プレイヤーの右辺
 					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
 						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-						grav = 0.0f;
-						time = 0;
-						moveSpeed = 0;
+						//grav = 0.0f;
+						//time = 0;
+						//moveSpeed = 0;
 						break;
 					}
 				}
