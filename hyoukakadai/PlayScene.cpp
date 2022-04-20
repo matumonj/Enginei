@@ -352,7 +352,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				width = tst[j][i]->GetScale().x;
 
 
-				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width-0.3f) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width-0.3f) )) {
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width-moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width-moveSpeed) )) {
 					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
 						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
 						//moveSpeed = 0;
