@@ -49,7 +49,9 @@ private:
 	static int f;
 	static bool elf;
 	static float oldlinex, oldliney;
+	static bool mapcol;// = false;
 public:
+
 	static Line* GetInstance();
 	static void Initialize();
 	static void Update(XMMATRIX matview, XMMATRIX matprojection,Player*player,XMFLOAT3&Player_Pos,bool& colf);
@@ -57,6 +59,7 @@ public:
 	static void CollisionBlock(int** map, float** mapxy[2],float maphalf[2], const int MapX, const int MapY);
 	static void CollisionEnemy(std::unique_ptr<Enemy> Position[]);
 public:
+	void Setmapcol(bool f) { mapcol = f; }
 	float GetLength() { return subradius; }
 	bool GetColf() { return colf; }
 	void Setpos(float lx,float ly) { linex2=lx;  liney2 = ly;

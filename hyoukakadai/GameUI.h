@@ -34,6 +34,8 @@ private:
 	static XMFLOAT3 Alowpos, Alowscl,Alowrot;//座標
 	static nTexture* TargetTexture;
 	static XMFLOAT3 Targetpos, Targetscl, Targetrot;//座標
+	static nTexture* EnemySearchTexure;
+	static XMFLOAT3 Espos, Esscl, Esrot;//座標
 	static XMFLOAT2 playerHPPos, playerHPScl;//座標 
 	static float Targetalpha;
 public:
@@ -50,6 +52,10 @@ public:
 	static void PlayerUISet();
 	static void PlayerUIUpdate(Player* player);
 	static void PlayerUIDraw(DirectXCommon* dxcomn);
+
+	static void EnemyUISet();
+	static void EnemyUIUpdate(std::unique_ptr<Enemy>enemy);
+	static void EnemyUIDraw(DirectXCommon* dxcomn);
 
 	static void TargetUISet();
 

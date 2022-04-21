@@ -219,7 +219,7 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="ThrowEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,7 +371,7 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ThrowEnemy.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

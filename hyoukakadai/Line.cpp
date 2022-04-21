@@ -31,6 +31,7 @@ XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos;
 bool Line::elf = false;
 float Line::oldlinex, Line::oldliney;
 int Line::index = -1;
+bool Line::mapcol = false;
 Line* Line::GetInstance()
 {
 	static Line instance;
@@ -186,6 +187,12 @@ void Line::Draw(DirectXCommon* dxcomn)
 
 void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 {
+	if (elf) {
+		Twine->SetColor({ 1,0,0,1 });
+	}
+	else {
+		Twine->SetColor({ 1,1,1,1 });
+	}
 	//int in = -1;
 	float dis[4];
 	for (int i = 0; i < 4; i++) {
@@ -200,18 +207,28 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 		}
 
 		//Õ“Ë
-		if (elf) {
+		if (elf&&!mapcol) {
 			if (position[index] != nullptr) {
 				linex2 = position[index]->GetPosition().x;
 				liney2 = position[index]->GetPosition().y;
 			} else {
 				returnflag = true;
 			}
+
+		}
+	}
+	if (mapcol ) {
+		oldlinex = linex2;
+		oldliney = liney2;
+		if (elf) {
+			linex2 =oldlinex;
+			liney2 =oldliney;
 		}
 	}
 
 	if (returnflag || colf) {
 		elf = false;
+		mapcol = false;
 	}
 }
 //ƒtƒ‰ƒOà–¾

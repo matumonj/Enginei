@@ -95,7 +95,7 @@ void MobEnemy::Follow(Player*player)
 	angleZ = (player->GetPosition().y - Position.y);
 	angleR = sqrtf((Position.x - player->GetPosition().x) * (Position.x - player->GetPosition().x)
 		+ (Position.y - player->GetPosition().y) * (Position.y - player->GetPosition().y));
-	if (angleR < 17) {
+	if (angleR>5) {
 		Position.x += (angleX / angleR) * centerSpeed;
 		Position.y += (angleZ / angleR) * centerSpeed;
 	}
@@ -128,4 +128,8 @@ void MobEnemy::Motion(int timer)
 void MobEnemy::Attack(Player*player)
 {
 		//player->SetHp(player->getHp() - AttackDamage);
+}
+void MobEnemy::ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y)
+{
+	
 }

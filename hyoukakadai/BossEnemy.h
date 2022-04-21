@@ -62,6 +62,6 @@ public:
     XMFLOAT3 GetRotation() { return Boss_Rot; }
     //ÉXÉPÅ[Éã
     XMFLOAT3 GetScale() { return Boss_Scl; }
-
+    void ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y);
 };
 

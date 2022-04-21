@@ -98,7 +98,8 @@ void Player::Attack(XMFLOAT3 playerpos)
 			timer = 0;
 		}
 	} 
-
+	HP = max(HP, 0);
+	HP = min(HP, 10);
 }
 
 void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)

@@ -339,16 +339,23 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 
 	////当たり判定
-
+	float disl;
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
+
 			if (map[j][i] == 1) {
 				mapx[j][i] = tst[j][i]->GetPosition().x;
 				mapy[j][i] = tst[j][i]->GetPosition().y;
 				map_half_heigh = tst[j][i]->GetScale().y;
 				map_half_width = tst[j][i]->GetScale().x;
 
-
+				if ((Line::GetInstance()->getpos().x+0.5f > mapx[j][i] - (map_half_width) && Line::GetInstance()->getpos().x-0.5f  < mapx[j][i] + (map_half_width)) && Line::GetInstance()->getpos().y+0.5f > mapy[j][i] && Line::GetInstance()->getpos().y-0.5f < mapy[j][i] + map_half_heigh) {
+					if (Line::GetInstance()->Getreturnflag() != true&& Line::GetInstance()->Gettriggerflag()==true) {
+						Line::GetInstance()->Setmapcol(true);
+						Line::GetInstance()->Setelf(true);
+					}
+				}
+				
 				if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width)) && Old_Pos.y - Player_Scl.y>mapy[j][i] && Player_Pos.y - half_height < mapy[j][i]+map_half_heigh ) {
 					Player_Pos.y = map_half_heigh + mapy[j][i] + Player_Scl.y;
 					grav = 0.0f;
@@ -468,6 +475,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
 			enemy[i]->Attack(player);
+			enemy[i]->ColMap(map, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
 		
 			enemy[i]->EnemySearchPlayer(player);
@@ -610,16 +618,17 @@ void PlayScene::ImGuiDraw()
 		float rf2 = enemy[0]->GetPosition().y;
 		float rrr = player->getdis();
 		//float rf3 = enemy->GetPosition().z;
-	ImGui::SliderFloat("positionX", &rf, -100, 100);
+	ImGui::SliderInt("positionX", &co, -100, 100);
 		ImGui::SliderFloat("positionY", &rf2, -100, 100);
 		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
 		ImGui::TreePop();
 	}
-
+	float linex = Line::GetInstance()->getpos().x;
+	float liney = Line::GetInstance()->getpos().y;
 	float rr = player->GetPosition().x;
 	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &rr, -100, 100);
-		ImGui::SliderFloat("positionY", &Player_Pos.y, -100, 100);
+		ImGui::SliderFloat("positionX", &linex, -100, 100);
+		ImGui::SliderFloat("positionY", &liney, -100, 100);
 		ImGui::SliderFloat("positionZ", &Player_Pos.z, -100, 100);
 		ImGui::TreePop();
 	}

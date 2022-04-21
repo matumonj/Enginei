@@ -94,5 +94,6 @@ public:
 	void SetScale(XMFLOAT3 scale) { Scale = scale; }
 	void SetRotation(XMFLOAT3 rot) { Rotation = rot; }
 	XMFLOAT3 GetPosition() { return Position; }
+	virtual void ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y) =0;
 };
 

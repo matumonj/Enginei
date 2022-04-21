@@ -40,6 +40,7 @@ private:
     };
     ThrowParam throwparam[3];
     int attackf[3] = { false };
+    int attackcount = 0;
     State enemyState = State::None;
     int cooltime = 0;
     int Damage = 1;
@@ -51,5 +52,7 @@ public:
     void Attack(Player* player)override;
     void Motion(int time)override;
     void ProjectileMotion();
+    void ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y)override;
+    bool GetStateAttack() { if (enemyState == State::Attack)return true; }
 };
 

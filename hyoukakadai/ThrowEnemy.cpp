@@ -23,7 +23,7 @@ void ThrowEnemy::Initialize()
 	EnemyObj = Object3d::Create();
 	EnemyObj->SetModel(EnemyModel);
 	scale = { 0.5f,0.5f,0.5 };
-	rotation = { 0,180,0 };
+	rotation = { 0,-90,0 };
 	//position = { 0,20,0 };
 	HP = 10;
 
@@ -60,6 +60,7 @@ void ThrowEnemy::Update(XMFLOAT3 position)
 		break;
 	case State::Attack:
 		ProjectileMotion();
+		rotation.x++;
 		break;
 	case State::None:
 
@@ -77,6 +78,7 @@ void ThrowEnemy::Update(XMFLOAT3 position)
 		}
 		EnemyObj->SetPosition(Position);
 		EnemyObj->SetScale(scale);
+		EnemyObj->SetRotation(rotation);
 		EnemyObj->Update({ 1,1,1,1 });
 	}
 }
@@ -84,11 +86,14 @@ void ThrowEnemy::Update(XMFLOAT3 position)
 void ThrowEnemy::Attack(Player* player)
 {
 	float dis;
-	for (int i = 0; i < _countof(ThrowModel); i++) {
-		dis = sqrtf((thposition[i].x - player->GetPosition().x) * (thposition[i].x - player->GetPosition().x) +
-			(thposition[i].y - player->GetPosition().y) * (thposition[i].y - player->GetPosition().y));
-		if (dis <= 2) {
-		//	player->SetHp(player->getHp() - Damage);
+	if(enemyState==State::Attack){
+		for (int i = 0; i < _countof(ThrowModel); i++) {
+			dis = sqrtf((thposition[i].x - player->GetPosition().x) * (thposition[i].x - player->GetPosition().x) +
+				(thposition[i].y - player->GetPosition().y) * (thposition[i].y - player->GetPosition().y));
+			if (dis <= 2&& throwparam[i].flag ==true) {
+				player->SetHp(player->getHp() - Damage);
+				throwparam[i].flag = false;
+			}
 		}
 	}
 }
@@ -126,20 +131,46 @@ void ThrowEnemy::ProjectileMotion()
 	for (int i = 0; i < 3; i++) {
 		if (throwparam[i].flag == true) {
 			throwparam[i].time++;
-			throwparam[i].movex=(throwparam[i].initialvec_x* throwparam[i].time)/800;
+			throwparam[i].movex=(throwparam[i].initialvec_x* throwparam[i].time)/600/(i+1);
 			throwparam[i].movey=(throwparam[i].initialvec_y * throwparam[i].time+
-				0.5f * throwparam[i].grav * throwparam[i].time * throwparam[i].time) / 800;
+				0.5f * throwparam[i].grav * throwparam[i].time * throwparam[i].time) / 600/(i+1);
 			thposition[i].x -= throwparam[i].movex*2;
 			thposition[i].y += throwparam[i].movey*2;
+			if (thposition[i].y < Position.y) {
+				//throwparam[i].flag = false;
+			}
+		}
+		if(attackcount%20==0){
+			if (throwparam[i].flag == false) {
+				throwparam[i].flag = true;
+				thposition[i] = Position;
+				throwparam[i].time = 0;
+				throwparam[i].movex = 0;
+				throwparam[i].movey = 0;
+				break;
+			}
+		}
 
+}
+	attackcount++;
+}
+
+void ThrowEnemy::ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y)
+{
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			for (int k = 0; k < 3; k++) {
+				if (map[j][i] == 1) {
+					if ((thposition[k].x + 0.5f > mapx[j][i] - 0.5f && thposition[k].x - 0.5f < mapx[j][i] + 0.5f) &&
+						thposition[k].y + 0.5f > mapy[j][i] && thposition[k].y - 0.5f < mapy[j][i] + 0.5f) {
+						throwparam[k].flag = false;
+					}
+					if (throwparam[k].time > 200) {
+						throwparam[k].flag = false;
+					}
+				}
+			}
 		}
-		else if (throwparam[i].flag == false) {
-			throwparam[i].flag = true;
-			thposition[i] = Position;
-			throwparam[i].time = 0;
-			throwparam[i].movex = 0;
-			throwparam[i].movey = 0;
-			break;
-		}
-	}
+				}
+	
 }
