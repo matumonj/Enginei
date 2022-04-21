@@ -55,14 +55,6 @@ void PlayScene::SpriteCreate()
 #pragma region 
 void PlayScene::ModelCreate()
 {
-<<<<<<< HEAD
-	playermodel = Model::CreateFromOBJ("chr_sword");
-	itomodel = Model::CreateFromOBJ("ito");
-	tstmodel = Model::CreateFromOBJ("block");
-
-	player = Object3d::Create();
-	player->SetModel(playermodel);
-=======
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
@@ -86,7 +78,6 @@ void PlayScene::ModelCreate()
 	sentan = std::make_unique<Object3d>();
 	sentan->Initialize();// = Object3d::Create();
 	sentan->SetModel(tstmodel);
->>>>>>> master
 
 	world = std::make_unique<Object3d>();
 	world->Initialize();// = Object3d::Create();
@@ -128,12 +119,12 @@ void PlayScene::ModelCreate()
 void PlayScene::SetPrm()
 {
 
-	
 
-	hari->SetPosition({ hari_Pos.x+2.0f,hari_Pos.y,hari_Pos.z });
+
+	hari->SetPosition({ hari_Pos.x + 2.0f,hari_Pos.y,hari_Pos.z });
 
 	half_height = player->GetScale().y;
-	half_Width = player->GetScale().x ;
+	half_Width = player->GetScale().x;
 
 
 	player->SetPosition({ Player_Pos });
@@ -156,7 +147,7 @@ void PlayScene::SetPrm()
 	world->SetScale({ 1,1,1 });
 
 	sentan->SetPosition({ sentan_Pos });
-	
+
 
 
 
@@ -192,17 +183,14 @@ void PlayScene::objUpdate()
 #pragma region 初期化
 void PlayScene::Initialize(DirectXCommon* dxCommon)
 {
-<<<<<<< HEAD
-	
-=======
 	//
-	
+
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
 	enemy[0] = std::make_unique<MobEnemy>();
 	enemy[1] = std::make_unique<MobEnemy>();
-	enemy[2]= std::make_unique<ThrowEnemy>();
+	enemy[2] = std::make_unique<ThrowEnemy>();
 	enemy[3] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
 
@@ -216,8 +204,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	enemy[3]->Initialize();
 
 	mapcol = new Collision();
->>>>>>> master
 	c_postEffect = Default;
+
 	collision = new Collision();
 	SpriteCreate();//
 	ModelCreate();//
@@ -233,7 +221,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-	
+
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
 	//カメラをセット
@@ -300,44 +288,22 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		//Player_Pos.x += 1;
 	}
 
-<<<<<<< HEAD
-	if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
-		Line = 1;
-		//ito_Scl.y+=1;
-=======
 	if (Input::GetInstance()->GetCMove().lY < u_r - a)
 	{
 		// 左に傾けた
 
 
->>>>>>> master
 	}
 	else if (Input::GetInstance()->GetCMove().lY > u_r + a)
 	{
 		// 右に傾けた
 
-<<<<<<< HEAD
-	if (Line == 1) {
-		ito_Scl.x += ito_speed.x;
-		//ito_Pos.x += ito_speed.x;
-		Limit -= 0.1f;
-	}
-
-	if (Limit <= 0) {
-		//ito_Scl.x--;
-		ito_speed.x = -0.5;
-		if (ito_Scl.x == old_Scl.x) {
-			Line = 0;
-			Limit = 4;
-		}
-=======
 	}
 
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += moveSpeed;
->>>>>>> master
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos.x -= moveSpeed;
@@ -421,14 +387,15 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region 線の処理
 
 
-	if (Line::GetInstance()->Getboundflag()==false ||Line::GetInstance()->Gettriggerflag()==false) {
+	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 		//grav = 0.0f;
-	} else {
+	}
+	else {
 		grav = 0.03f;
 	}
 
 	time += 0.04f;
-	Player_Pos.y -= grav*time*time;
+	Player_Pos.y -= grav * time * time;
 
 
 	//頂点座標の更新
@@ -451,7 +418,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	//needlepos = Line::GetInstance()->getpos();
 
-	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf,moveSpeed);
+	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
 	Line::CollisionEnemy(enemy);
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
@@ -460,13 +427,13 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		object1->PlayAnimation();
 	}
 
-	
 
-		//}
-		//カメラ関係の処理
+
+	//}
+	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y +1,Player_Pos.z - 23 });
+	camera->SetEye({ Player_Pos.x,Player_Pos.y + 1,Player_Pos.z - 23 });
 	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
 
 	camera->Update();
@@ -480,7 +447,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
-	player->CollisionAttack(enemy,Player_Pos);
+	player->CollisionAttack(enemy, Player_Pos);
 
 	SetPrm();//パラメータのセット
 
@@ -495,7 +462,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			enemy[i]->Attack(player);
 			enemy[i]->ColMap(map, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
-		
+
 			enemy[i]->EnemySearchPlayer(player);
 			//もし敵が死んだら破棄
 			if (enemy[i]->GetState_DEAD() == true) {
@@ -503,7 +470,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
-	
+
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -621,7 +588,7 @@ void PlayScene::ImGuiDraw()
 		}
 		ImGui::ColorPicker3("light_color", spotLightColor);
 		ImGui::TreePop();
-}
+	}
 
 	if (ImGui::TreeNode("Effect_position")) {
 		//ImGui::SliderInt("positionX", &L_Cflag, -100, 100);
@@ -634,7 +601,7 @@ void PlayScene::ImGuiDraw()
 		float rf2 = enemy[0]->GetPosition().y;
 		float rrr = player->getdis();
 		//float rf3 = enemy->GetPosition().z;
-	ImGui::SliderInt("positionX", &co, -100, 100);
+		ImGui::SliderInt("positionX", &co, -100, 100);
 		ImGui::SliderFloat("positionY", &rf2, -100, 100);
 		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
 		ImGui::TreePop();
@@ -653,7 +620,7 @@ void PlayScene::ImGuiDraw()
 	float sx = player->GetArea_S().x;
 	float sy = player->GetArea_S().y;
 
-		float ex= player->GetArea_e().x;
+	float ex = player->GetArea_e().x;
 	float ey = player->GetArea_e().y;
 
 	if (ImGui::TreeNode("half")) {
