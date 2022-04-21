@@ -49,7 +49,7 @@ void Line::Initialize()
 
 }
 
-void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLOAT3& Player_Pos, bool& mapcolf)
+void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLOAT3& Player_Pos, bool& mapcolf,float& moveSpeed)
 {
 	float sdistance;
 	sdistance = sqrtf(((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)) +
@@ -83,9 +83,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 			}*/
 
 	if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
-		lineangle += 13.0f;//移動方向の指定
+		lineangle += 5.0f;//移動方向の指定
 		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
-		needlerot.z += 13;
+		needlerot.z += 5;
 	}
 	if (!elf) {
 		linex2 = tempx + cosf((lineangle)*PI / 180) * subradius;
@@ -122,7 +122,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 			((player->GetPosition().y - liney2) * (player->GetPosition().y - liney2))
 		);
 		//プレイヤーと紐の距離が一定以内に縮まったら
-		if (distance <= 1.0f) {
+		if (distance <= 1.5f) {
 			colf = true;//UIゲージ減らす処理gameui.cppの方
 			//elf = false;
 			boundflag = false;
@@ -141,9 +141,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 		FollowangleZ = (liney2 - player->GetPosition().y);//これZじゃなくてYです
 		FollowangleR = sqrtf((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)
 			+ (player->GetPosition().y - liney2) * (player->GetPosition().y - liney2));
-
-		Player_Pos.x += (FollowangleX / FollowangleR) * FollowSpeed;
-		Player_Pos.y += (FollowangleZ / FollowangleR) * FollowSpeed;
+		moveSpeed = 0.5f;
+		Player_Pos.x += (FollowangleX / FollowangleR) * moveSpeed;
+		Player_Pos.y += (FollowangleZ / FollowangleR) * moveSpeed;
 	} else {
 		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
 		/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
