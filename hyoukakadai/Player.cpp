@@ -83,13 +83,13 @@ void Player::Attack(XMFLOAT3 playerpos)
 		switch (playerRot)
 		{
 		case State::Left:
-			Area_X_s = 4;
-			Area_X_e = position.x+10;
+			Area_X_s = 5;
+			Area_X_e =0;
 			break;
 
 		case State::Right:
 			Area_X_e = 4;
-			Area_X_s = position.x;
+			Area_X_s = 0;
 			break;
 		}
 		
