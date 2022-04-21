@@ -332,15 +332,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				mapy[j][i] = tst[j][i]->GetPosition().y;
 				height = tst[j][i]->GetScale().y;
 				width = tst[j][i]->GetScale().x;
-				if ((Line::GetInstance()->getpos().x + 0.5f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 0.5f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 0.5f > mapy[j][i] && Line::GetInstance()->getpos().y - 0.5f < mapy[j][i] + height) {
+				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
 					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
 						Line::GetInstance()->Setmapcol(true);
 						Line::GetInstance()->Setelf(true);
 					}
 				}
-
-
-
 
 				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
 					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
@@ -420,7 +417,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	//needlepos = Line::GetInstance()->getpos();
 
-	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf);
+	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf,moveSpeed);
 
 	Line::CollisionEnemy(enemy);
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
