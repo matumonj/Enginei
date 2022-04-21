@@ -330,8 +330,22 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	///
 
+	//FBXモデルの更新
+	object1->Updata(TRUE);
+	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+		Player_Pos.x += moveSpeed;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
+		Player_Pos.x -= moveSpeed;
 
+	}
 
+	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+		Player_Pos.y -= moveSpeed;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
+		Player_Pos.y += moveSpeed;
+	}
 
 	////当たり判定
 
@@ -358,8 +372,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				}
 
 				//プレイヤーの左辺
-				if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y)) && Player_Pos.x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x - Player_Scl.y) {
-					Player_Pos.x = map_half_width + mapx[j][i] + Player_Scl.x;
+				if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y)) && Player_Pos.x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x - Player_Scl.y - 0.5f) {
+					Player_Pos.x = map_half_width + mapx[j][i];
 					break;
 				}
 				//プレイヤーの右辺
@@ -412,23 +426,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
-	}
-
-	//FBXモデルの更新
-	object1->Updata(TRUE);
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= moveSpeed;
-
-	}
-
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		Player_Pos.y -= moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-		Player_Pos.y += moveSpeed;
 	}
 
 		//}
