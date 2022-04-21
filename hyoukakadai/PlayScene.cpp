@@ -62,6 +62,8 @@ void PlayScene::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("box1");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
+	goalmodel = Model::CreateFromOBJ("box2");
+
 
 	collision = new Collision();
 
@@ -87,6 +89,10 @@ void PlayScene::ModelCreate()
 	hari = std::make_unique<Object3d>();
 	hari->Initialize();
 	hari->SetModel(harimodel);
+
+	goal = std::make_unique<Object3d>();
+	goal->Initialize();
+	goal->SetModel(goalmodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -138,9 +144,11 @@ void PlayScene::SetPrm()
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
 
+			
+
 		}
 	}
-
+	goal->SetPosition({ goal_pos.x + 185.0f,goal_pos.y-5 ,goal_pos.z });
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
 
@@ -179,7 +187,7 @@ void PlayScene::objUpdate()
 	world->Update({ 1,1,1,1 });
 	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
-
+	goal->Update({ 1,1,1,1 });
 	
 }
 #pragma endregion
@@ -388,6 +396,11 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 
+	if (Line::GetInstance()->Getboundflag()==true) {
+		grav = 0;
+		time = 0;
+	}
+
 #pragma region 線の処理
 
 
@@ -515,6 +528,11 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
+			}
+			if (map[j][i] == 2) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
 			}
 		}
 	}
