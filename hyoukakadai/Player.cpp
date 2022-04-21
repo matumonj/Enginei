@@ -69,10 +69,10 @@ void Player::Attack(XMFLOAT3 playerpos)
 		playerRot = State::Left;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+	if (Input::GetInstance()->TriggerKey(DIK_W)) {
 		action = Action::Attack;
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_N)) {
+	if (Input::GetInstance()->TriggerKey(DIK_S)) {
 		action = Action::None;
 	}
 

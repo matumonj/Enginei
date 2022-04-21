@@ -38,6 +38,7 @@ void PlayScene::SpriteCreate()
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
 	Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
 	mech = std::make_unique<Texture>();
 	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
@@ -46,6 +47,7 @@ void PlayScene::SpriteCreate()
 	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	background = Sprite::Create(1, { 0.0f,0.0f });
+	setumei = Sprite::Create(2, { 0.0f,0.0f });
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -126,7 +128,9 @@ void PlayScene::ModelCreate()
 void PlayScene::SetPrm()
 {
 
-	
+	setumei->SetPosition({ 0, 400 });
+	setumei->SetSize({ 500,300 });
+	setumei->setcolor({ 1,1,1,1 });
 
 	hari->SetPosition({ hari_Pos.x+2.0f,hari_Pos.y,hari_Pos.z });
 
@@ -160,6 +164,8 @@ void PlayScene::SetPrm()
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
+
+	
 
 }
 #pragma endregion
@@ -396,6 +402,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 
+	
+
 	if (Line::GetInstance()->Getboundflag()==true) {
 		grav = 0;
 		time = 0;
@@ -492,7 +500,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
+	if (Input::GetInstance()->TriggerKey(DIK_R)||(Player_Pos.y<=-50)) {//押されたら
 		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
@@ -547,12 +555,14 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	background->Draw();
+	setumei->Draw();
 	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
 
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
+
 
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
