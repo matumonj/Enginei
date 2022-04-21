@@ -25,7 +25,7 @@
 class PlayScene :public BaseScene
 {
 public:
-	
+
 	//シーンのコンストラクタ
 	PlayScene(SceneManager* sceneManager);
 private: // エイリアス
@@ -47,7 +47,7 @@ private:
 private:
 	DirectXCommon* dxcomn;
 	Sprite* background = nullptr;
-	
+
 	DebugTxt* debugText;
 	std::unique_ptr<Enemy>enemy[4];
 	//Enemy* enemy[2];
@@ -80,7 +80,7 @@ private:
 private:
 	//Plyer
 
-	XMFLOAT3 Player_Pos = {0,0,0};// = player->GetPosition();
+	XMFLOAT3 Player_Pos = { 0,0,0 };// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;

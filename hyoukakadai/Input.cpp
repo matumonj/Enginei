@@ -127,56 +127,56 @@ bool Input::TriggerMouseLeft()
 	// トリガーでない
 	return false;
 }
-
-bool Input::TriggerMouseMiddle()
-{
-	// 前回が0で、今回が0でなければトリガー
-	if (!mouseStatePre.rgbButtons[2] && mouseState.rgbButtons[2]) {
-		return true;
-	}
-
-	// トリガーでない
-	return false;
-}
-
-Input::MouseMove Input::GetMouseMove()
-{
-	MouseMove tmp;
-	tmp.lX = mouseState.lX;
-	tmp.lY = mouseState.lY;
-	tmp.lZ = mouseState.lZ;
-	return tmp;
-}
-bool Input::TriggerButtonA()
-{
-	// 前回が0で、今回が0でなければトリガー
-	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
-		return true;
-	}
-
-	// トリガーでない
-	return false;
-}
-
-bool Input::TriggerButtonRB()
-{
-	// 前回が0で、今回が0でなければトリガー
-	if (!CStatePre.rgbButtons[5] && CState.rgbButtons[5]) {
-		return true;
-	}
-
-	// トリガーでない
-	return false;
-}
-
-Input::CMove Input::GetCMove()
-{
-	CMove tmp;
-	tmp.lX = CState.lX;
-	tmp.lY = CState.lY;
-	tmp.lZ = CState.lZ;
-	tmp.lRx = CState.lRx;
-	tmp.lRy = CState.lRy;
-	tmp.lRz = CState.lRz;
-	return tmp;
-}
+//
+//bool Input::TriggerMouseMiddle()
+//{
+//	// 前回が0で、今回が0でなければトリガー
+//	if (!mouseStatePre.rgbButtons[2] && mouseState.rgbButtons[2]) {
+//		return true;
+//	}
+//
+//	// トリガーでない
+//	return false;
+//}
+//
+//Input::MouseMove Input::GetMouseMove()
+//{
+//	MouseMove tmp;
+//	tmp.lX = mouseState.lX;
+//	tmp.lY = mouseState.lY;
+//	tmp.lZ = mouseState.lZ;
+//	return tmp;
+//}
+//bool Input::TriggerButtonA()
+//{
+//	// 前回が0で、今回が0でなければトリガー
+//	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
+//		return true;
+//	}
+//
+//	// トリガーでない
+//	return false;
+//}
+//
+//bool Input::TriggerButtonRB()
+//{
+//	// 前回が0で、今回が0でなければトリガー
+//	if (!CStatePre.rgbButtons[5] && CState.rgbButtons[5]) {
+//		return true;
+//	}
+//
+//	// トリガーでない
+//	return false;
+//}
+//
+//Input::CMove Input::GetCMove()
+//{
+//	CMove tmp;
+//	tmp.lX = CState.lX;
+//	tmp.lY = CState.lY;
+//	tmp.lZ = CState.lZ;
+//	tmp.lRx = CState.lRx;
+//	tmp.lRy = CState.lRy;
+//	tmp.lRz = CState.lRz;
+//	return tmp;
+//}

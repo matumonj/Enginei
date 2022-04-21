@@ -27,7 +27,7 @@ float Line::MoveSpeed = 0;
 Object3d* Line::NeedleObj = nullptr;
 Model* Line::NeedleModel = nullptr;
 int Line::L_Cflag = 0;
-XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos,Line::needlerot;
+XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos, Line::needlerot;
 bool Line::elf = false;
 float Line::oldlinex, Line::oldliney;
 int Line::index = -1;
@@ -49,7 +49,7 @@ void Line::Initialize()
 
 }
 
-void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLOAT3& Player_Pos, bool& mapcolf,float& moveSpeed)
+void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFLOAT3& Player_Pos, bool& mapcolf, float& moveSpeed)
 {
 	float sdistance;
 	sdistance = sqrtf(((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)) +
@@ -192,8 +192,7 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 {
 	if (elf) {
 		Twine->SetColor({ 1,0,0,1 });
-	}
-	else {
+	} else {
 		Twine->SetColor({ 1,1,1,1 });
 	}
 	//int in = -1;
@@ -210,7 +209,7 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 		}
 
 		//Õ“ËŽž
-		if (elf&&!mapcol) {
+		if (elf && !mapcol) {
 			if (position[index] != nullptr) {
 				linex2 = position[index]->GetPosition().x;
 				liney2 = position[index]->GetPosition().y;
@@ -220,12 +219,12 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 
 		}
 	}
-	if (mapcol ) {
+	if (mapcol) {
 		oldlinex = linex2;
 		oldliney = liney2;
 		if (elf) {
-			linex2 =oldlinex;
-			liney2 =oldliney;
+			linex2 = oldlinex;
+			liney2 = oldliney;
 		}
 	}
 

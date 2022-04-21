@@ -36,7 +36,7 @@ void GameUI::UISpriteSet()
 	Sprite::LoadTexture(11, L"Resources/gomi.png");
 	//注意
 	Sprite::LoadTexture(12, L"Resources/attention.png");
-	
+
 	LineLengthout = Sprite::Create(10, { 0.0f,-200.0f });
 	LineLength = Sprite::Create(11, { 0.0f,-200.0f });
 	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
@@ -65,7 +65,7 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 	}
 	if (boundflag) {
 		if (loutscl.x >= 0)
-		//	loutscl.x -= 10;//最大値を減らす
+			loutscl.x -= 10;//最大値を減らす
 		if (tempx - loutscl.x > movement * 4) {//最大値の減る量(減る前と減ったあとの最大値を計算)
 			boundflag = false;//!boundflag->colf
 		}
@@ -165,8 +165,7 @@ void GameUI::TargetUIUpdate(XMMATRIX matview, XMMATRIX matprojection, bool flag)
 		}
 		Targetpos = Line::GetInstance()->getpos();
 		//TargetTexture->SetPosition();
-	}
-	else {
+	} else {
 		Targetscl = { 1,1,1 };
 		if (Targetalpha >= 0) {
 			Targetalpha -= 0.1f;
@@ -191,15 +190,15 @@ void GameUI::PlayerUISet()
 	//playerhp
 	Sprite::LoadTexture(13, L"Resources/bosshp.png");
 	PlayerHP = Sprite::Create(13, { 0.0f,-200.0f });
-	
+
 	playerHPScl = { 500,50 };
 	playerHPPos = { 40,300 };
 }
 
-void GameUI::PlayerUIUpdate(Player*player)
+void GameUI::PlayerUIUpdate(Player* player)
 {
-	
-	playerHPScl.x = player->getHp()*50;
+
+	playerHPScl.x = player->getHp() * 50;
 	PlayerHP->SetSize(playerHPScl);
 	PlayerHP->SetPosition(playerHPPos);
 	PlayerHP->setcolor({ 1,1,1,1 });
