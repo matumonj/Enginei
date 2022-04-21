@@ -255,7 +255,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y+10;
+	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
 	//コントローラー
 	if (Input::GetInstance()->TriggerButtonA()) {
@@ -281,7 +281,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		// 左に傾けた
 		//Player_Pos.x -= 1;
 
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	}
+	else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	{
 		// 右に傾けた
 		//Player_Pos.x += 1;
@@ -292,40 +293,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		// 左に傾けた
 
 
-	} else if (Input::GetInstance()->GetCMove().lY > u_r + a)
+	}
+	else if (Input::GetInstance()->GetCMove().lY > u_r + a)
 	{
 		// 右に傾けた
 
 	}
-
-	//// 右
-	//// 方向だけを調べる方法
-	//if (Input::GetInstance()->GetCMove().lRx < u_r - a)
-	//{
-	//	// 左に傾けた
-	//	
-	//} else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
-	//{
-	//	// 右に傾けた
-	//	
-	//}
-
-	//if (Input::GetInstance()->GetCMove().lRy < u_r - a)
-	//{
-	//	// 左に傾けた
-	//	
-	//} else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
-	//{
-	//	// 右に傾けた
-	//	
-	//}
-
-	// 傾きの比率を調べる方法
-	//LONG length = 32768; // 原点から最小、最大までの長さ
-	//float y_vec = (Input::GetInstance()->GetCMove().lY - u_r) / (length - u_r);
-
-	///
-
 
 	//FBXモデルの更新
 	object1->Updata(TRUE);
@@ -346,43 +319,30 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	///これより上に入力処理をかけ
 	////当たり判定
-<<<<<<< HEAD
+
 	float disl;
-=======
+
 	//入力処理より後に当たり判定を描け
 
->>>>>>> b4ee82db3a6aaa410c8443ea749607da1ca38caa
+
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
-
 			if (map[j][i] == 1) {
 				mapx[j][i] = tst[j][i]->GetPosition().x;
 				mapy[j][i] = tst[j][i]->GetPosition().y;
-<<<<<<< HEAD
-				map_half_heigh = tst[j][i]->GetScale().y;
-				map_half_width = tst[j][i]->GetScale().x;
-
-				if ((Line::GetInstance()->getpos().x+0.5f > mapx[j][i] - (map_half_width) && Line::GetInstance()->getpos().x-0.5f  < mapx[j][i] + (map_half_width)) && Line::GetInstance()->getpos().y+0.5f > mapy[j][i] && Line::GetInstance()->getpos().y-0.5f < mapy[j][i] + map_half_heigh) {
-					if (Line::GetInstance()->Getreturnflag() != true&& Line::GetInstance()->Gettriggerflag()==true) {
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+				if ((Line::GetInstance()->getpos().x + 0.5f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 0.5f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 0.5f > mapy[j][i] && Line::GetInstance()->getpos().y - 0.5f < mapy[j][i] + height) {
+					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
 						Line::GetInstance()->Setmapcol(true);
 						Line::GetInstance()->Setelf(true);
 					}
 				}
-				
-				if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width)) && Old_Pos.y - Player_Scl.y>mapy[j][i] && Player_Pos.y - half_height < mapy[j][i]+map_half_heigh ) {
-					Player_Pos.y = map_half_heigh + mapy[j][i] + Player_Scl.y;
-					grav = 0.0f;
-					break;
-				}
-				else if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width ) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width )) && Old_Pos.y + Player_Scl.y<mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
-					Player_Pos.y = Player_Pos.y -  moveSpeed;
-					break;
-=======
-				height = tst[j][i]->GetScale().y;
-				width = tst[j][i]->GetScale().x;
 
 
-				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width-moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width-moveSpeed) )) {
+
+
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
 					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
 						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
 						//moveSpeed = 0;
@@ -394,7 +354,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
 						break;
 					}
->>>>>>> b4ee82db3a6aaa410c8443ea749607da1ca38caa
+
 				}
 				else {
 					moveSpeed = 0.2f;
@@ -522,8 +482,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
-
-
 	}
 }
 #pragma endregion 
