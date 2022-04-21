@@ -37,6 +37,7 @@ void PlayScene::SpriteCreate()
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
+	Sprite::LoadTexture(1, L"Resources/haikei2.png");
 
 	mech = std::make_unique<Texture>();
 	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
@@ -44,7 +45,7 @@ void PlayScene::SpriteCreate()
 	zukki = std::make_unique<Texture>();
 	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
-	background = Sprite::Create(1, { 0.0f,-200.0f });
+	background = Sprite::Create(1, { 0.0f,0.0f });
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -148,8 +149,9 @@ void PlayScene::SetPrm()
 
 	sentan->SetPosition({ sentan_Pos });
 	
-
-
+	background->SetPosition({ 0, 0 });
+	background->SetSize({ WinApp::window_width,WinApp::window_height });
+	background->setcolor({ 1,1,1,1 });
 
 }
 #pragma endregion
@@ -177,6 +179,8 @@ void PlayScene::objUpdate()
 	world->Update({ 1,1,1,1 });
 	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
+
+	
 }
 #pragma endregion
 
@@ -310,12 +314,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	}
 
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+	/*if (Input::GetInstance()->Pushkey(DIK_UP)) {
 		Player_Pos.y -= moveSpeed;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
 		Player_Pos.y += moveSpeed;
-	}
+	}*/
 
 	///これより上に入力処理をかけ
 	////当たり判定
@@ -487,6 +491,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
+	
+
 	player->PreDraw();
 	player->Draw();
 	player->PostDraw();
@@ -516,11 +522,17 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	/*hari->PreDraw();
 	hari->Draw();
 	hari->PostDraw();*/
-
+	
 }
 //sプライと以外の描画
 void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 {
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	background->Draw();
+	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
+
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
 
@@ -532,6 +544,7 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 	GameUI::TargetUIDraw(dxcomn);
 	GameUI::UIDraw(dxcomn);
 	GameUI::PlayerUIDraw(dxcomn);
+	
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
 	//FBXの描画
