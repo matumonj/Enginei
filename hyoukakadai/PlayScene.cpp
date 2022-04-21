@@ -323,7 +323,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	float disl;
 
 	//入力処理より後に当たり判定を描け
-
+	//aaaaaaa
 
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
