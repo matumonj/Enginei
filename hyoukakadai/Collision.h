@@ -1,6 +1,8 @@
 #pragma once
 #include"CollisionPrimitive.h"
 #include<DirectXMath.h>
+#include"Object3d.h"
+#include"Player.h"
 using namespace DirectX;
 class Collision
 {
@@ -13,6 +15,9 @@ public:
 		float Right;
 	};
 public:
+	static bool Boxcol(XMFLOAT2 a1, XMFLOAT2 a2, XMFLOAT2 b1, XMFLOAT2 b2);
+
+	 float LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d** map[],Player*player, float radius);
 	/// <summary>
 	/// 点と三角形の最近接点を求める
 	/// </summary>
@@ -73,5 +78,13 @@ public:
 	/// <returns>交差しているか否か</returns>
 	static bool CheckRay2Sphere(const Ray& lay, const Sphere& sphere, float* distance = nullptr, DirectX::XMVECTOR* inter = nullptr);
 
+
+	bool BoxCollision_Down(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2);
+
+	bool BoxCollision_Up(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2);
+
+	bool BoxCollision_Left(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2);
+
+	bool BoxCollision_Right(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2);
 };
 

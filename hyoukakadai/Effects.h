@@ -8,6 +8,9 @@
 #include"mEffekseer.h"
 #include"DirectXCommon.h"
 #include"DebugCamera.h"
+#include"Enemy.h"
+#include"Player.h"
+#include<memory>
 class Effects
 {
 private:
@@ -22,17 +25,23 @@ private:
 private:
 	//エフェクト用(ただプログラムでつくれるものはプログラムで作る方がいい　多用はいくない)
 	mEffekseer* efk = nullptr;
-	mEffekseer* efk1 = nullptr;
-
+	mEffekseer* attackefk = nullptr;
+	bool df;
+	bool attack;
 public:
+	~Effects();
 	//XMFLOAT3 GetPosition
-	XMFLOAT3 Effect_Pos={ -50,-10,90 };
+	XMFLOAT3 Effect_Pos = { -50,-10,90 };
 	XMFLOAT3 Effect_Rot;
 	XMFLOAT3 Effect_SCl;
 
+	XMFLOAT3 a_Effect_Pos = { -50,-10,90 };
+	XMFLOAT3 a_Effect_Rot;
+	XMFLOAT3 a_Effect_SCl;
+
 public:
 	void Initialize(DirectXCommon* dxcomn, DebugCamera* camera);
-	void Update(DirectXCommon*dxcomn,DebugCamera*camera);
+	void Update(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[],Player*player);
 	void Draw(DirectXCommon*dxcomn);
 	void Finalize();
 };

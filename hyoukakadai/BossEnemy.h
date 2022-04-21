@@ -37,7 +37,7 @@ public:
     /// <summary>
     /// 更新処理
     /// </summary>
-    void Update()override;
+    void Update(XMFLOAT3 position)override;
 
     /// <summary>
     /// 描画処理
@@ -48,6 +48,9 @@ public:
     /// 解放処理
     /// </summary>
     void Finalize()override;
+
+    void EnemySearchPlayer(Player*player)override;
+
 public:
     /// <summary>
    /// アクセッサ
@@ -59,6 +62,6 @@ public:
     XMFLOAT3 GetRotation() { return Boss_Rot; }
     //スケール
     XMFLOAT3 GetScale() { return Boss_Scl; }
-
+    void ColMap(int map[15][100], float mapx[15][100], float mapy[15][100], const int X, const int Y);
 };
 

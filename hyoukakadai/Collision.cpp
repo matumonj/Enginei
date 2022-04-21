@@ -127,6 +127,14 @@ bool Collision::CheckSphere2Triangle(const Sphere& sphere, const Triangle& trian
 	return true;
 }
 
+bool Collision::Boxcol(XMFLOAT2 a1, XMFLOAT2 a2, XMFLOAT2 b1, XMFLOAT2 b2)
+{
+	if (b1.x > a2.x) { return false; }
+	if (a1.x > b2.x) { return false; }
+	if (b1.y > a2.y) { return false; }
+	if (a1.y > b2.y) { return false; }
+	return true;
+}
 bool Collision::CheckBox2Box(XMFLOAT3 object1, XMFLOAT3& object2, XMFLOAT3 r, XMFLOAT3 r2)
 {
 	BoxVertex Object1;
@@ -265,4 +273,132 @@ bool Collision::CheckRay2Sphere(const Ray& lay, const Sphere& sphere, float* dis
 	}
 
 	return true;
+}
+
+float Collision::LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d** map[], Player*player,float radius)
+{
+	BoxVertex** MapObject;
+	BoxVertex PlayerObject;
+
+	PlayerObject.Left = player->GetPosition().x - 1;
+	PlayerObject.Right = player->GetPosition().x + 1;
+	PlayerObject.Up = player->GetPosition().y+ 1;
+	PlayerObject.Down= player->GetPosition().y - 1;
+	
+	for (int i = 0; i < Map_Y; i++) {
+		for (int j = 0; j < Map_X; j++) {
+			MapObject[i][j].Right = map[i][j]->GetPosition().x + 1;
+			MapObject[i][j].Left = map[i][j]->GetPosition().x - 1;
+			MapObject[i][j].Up = map[i][j]->GetPosition().y + 1;
+			MapObject[i][j].Down = map[i][j]->GetPosition().y - 1;
+
+		}
+	}
+	for (int i = 0; i < Map_Y; i++) {
+		for (int j = 0; j < Map_X; j++) {
+			return MapObject[i][j].Right >= PlayerObject.Left && PlayerObject.Right >= MapObject[i][j].Left && MapObject[i][j].Up >= PlayerObject.Down && PlayerObject.Up >= MapObject[i][j].Down;
+		}
+	}
+	
+}
+
+bool Collision::BoxCollision_Down(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2) {
+	BoxVertex Object1;
+	BoxVertex Object2;
+
+	//object1‚Ì‰E’¸“_
+	Object1.Right = object1.x + radius1.x;
+	//object1‚Ì¶’¸“_
+	Object1.Left = object1.x - radius1.x;
+	//object1‚Ìã’¸“_
+	Object1.Up = object1.y + radius1.y;
+	//object1‚Ì‰º’¸“_
+	Object1.Down = object1.y - radius1.y;
+
+	//object1‚Ì¶’¸“_
+	Object2.Left = object2.x - radius2.x;
+	//object1‚Ì‰E’¸“_
+	Object2.Right = object2.x + radius2.x;
+	//object1‚Ì‰º’¸“_
+	Object2.Down = object2.y - radius2.y;
+	//object1‚Ìã’¸“_
+	Object2.Up = Object2.Down + 2;
+	//¨‚P‚Æ¶‚Q@¨‚Q‚Æ¶‚P@ã‚P‚Æ‰º‚Q@ã‚Q‚Æ‰º‚P
+	return Object1.Right > Object2.Left && Object2.Right > Object1.Left && Object1.Up > Object2.Down && Object2.Up > Object1.Down;
+}
+
+bool Collision::BoxCollision_Up(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2) {
+	BoxVertex Object1;
+	BoxVertex Object2;
+
+	//object1‚Ì‰E’¸“_
+	Object1.Right = object1.x + radius1.x;
+	//object1‚Ì¶’¸“_
+	Object1.Left = object1.x - radius1.x;
+	//object1‚Ìã’¸“_
+	Object1.Up = object1.y + radius1.y;
+	//object1‚Ì‰º’¸“_
+	Object1.Down = object1.y - radius1.y;
+
+	//object1‚Ì¶’¸“_
+	Object2.Left = object2.x - radius2.x;
+	//object1‚Ì‰E’¸“_
+	Object2.Right = object2.x + radius2.x;
+	//object1‚Ì‰º’¸“_
+	Object2.Down = object2.y - radius2.y;
+	//object1‚Ìã’¸“_
+	Object2.Up = Object2.Down - 2;
+	//¨‚P‚Æ¶‚Q@¨‚Q‚Æ¶‚P@ã‚P‚Æ‰º‚Q@ã‚Q‚Æ‰º‚P
+	return Object1.Right > Object2.Left && Object2.Right > Object1.Left && Object1.Up >= Object2.Down && Object2.Up >= Object1.Down;
+}
+
+
+bool Collision::BoxCollision_Left(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2) {
+	BoxVertex Object1;
+	BoxVertex Object2;
+
+	//object1‚Ì‰E’¸“_
+	Object1.Right = object1.x + radius1.x;
+	//object1‚Ì¶’¸“_
+	Object1.Left = object1.x;
+	//object1‚Ìã’¸“_
+	Object1.Up = object1.y + radius1.y;
+	//object1‚Ì‰º’¸“_
+	Object1.Down = object1.y - radius1.y;
+
+	//object1‚Ì¶’¸“_
+	Object2.Left = object2.x - radius2.x;
+	//object1‚Ì‰E’¸“_
+	Object2.Right = Object2.Left+2;
+	//object1‚Ì‰º’¸“_
+	Object2.Down = object2.y - radius2.y;
+	//object1‚Ìã’¸“_
+	Object2.Up = object2.y + radius2.y;
+	//¨‚P‚Æ¶‚Q@¨‚Q‚Æ¶‚P@ã‚P‚Æ‰º‚Q@ã‚Q‚Æ‰º‚P
+	return Object1.Right >= Object2.Left && Object2.Right >= Object1.Left && Object1.Up >= Object2.Down && Object2.Up >= Object1.Down;
+}
+
+bool Collision::BoxCollision_Right(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2) {
+	BoxVertex Object1;
+	BoxVertex Object2;
+
+	//object1‚Ì‰E’¸“_
+	Object1.Right = object1.x + radius1.x;
+	//object1‚Ì¶’¸“_
+	Object1.Left = object1.x;
+	//object1‚Ìã’¸“_
+	Object1.Up = object1.y + radius1.y;
+	//object1‚Ì‰º’¸“_
+	Object1.Down = object1.y - radius1.y;
+
+	//object1‚Ì‰E’¸“_
+	Object2.Right = object2.x + radius2.x;
+	//object1‚Ì¶’¸“_
+	Object2.Left = Object2.Right-2;
+	//object1‚Ì‰º’¸“_
+	Object2.Down = object2.y - radius2.y;
+	//object1‚Ìã’¸“_
+	Object2.Up = object2.y + radius2.y;
+	//¨‚P‚Æ¶‚Q@¨‚Q‚Æ¶‚P@ã‚P‚Æ‰º‚Q@ã‚Q‚Æ‰º‚P
+	return Object1.Right >= Object2.Left && Object2.Right >= Object1.Left && Object1.Up >= Object2.Down && Object2.Up >= Object1.Down;
 }

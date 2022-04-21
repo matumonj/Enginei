@@ -340,8 +340,90 @@ bool Texture::LoadTexture(UINT texnumber, const wchar_t* filename)
 
 	return true;
 }
+void Texture::CreateNormalTexture()
+{
+	HRESULT result = S_FALSE;
 
-void Texture::CreateTexture()
+	std::vector<VertexPosNormalUv> realVertices;
+	// テクスチャ情報取得
+
+	if (texbuff[texNumber])
+	{
+		D3D12_RESOURCE_DESC resDesc = texbuff[texNumber]->GetDesc();
+
+		VertexPosNormalUv verticesSquare[] = {
+			{{-5.0f,-5.0f,0.0f}, { 0,0,1}, {0,1}},
+			{{-5.0f,+5.0f,0.0f}, { 0,0,1}, {0,0}},
+			{{+5.0f,-5.0f,0.0f}, { 0,0,1}, {1,1}},
+			{{+5.0f,+5.0f,0.0f}, { 0,0,1}, {1,0}},
+		};
+		std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
+
+		unsigned short indicesSquare[] = {
+			0,1,2,
+			2,1,3,
+		};
+		std::copy(std::begin(indicesSquare), std::end(indicesSquare), indices);
+	}
+	// 頂点バッファ生成
+	result = device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(vertices)),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&vertBuff));
+	if (FAILED(result)) {
+		assert(0);
+		return;
+	}
+
+	// インデックスバッファ生成
+	result = device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(indices)),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&indexBuff));
+	if (FAILED(result)) {
+		assert(0);
+		return;
+	}
+
+	// 頂点バッファへのデータ転送
+	VertexPosNormalUv* vertMap = nullptr;
+	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
+	if (SUCCEEDED(result)) {
+		memcpy(vertMap, vertices, sizeof(vertices));
+		vertBuff->Unmap(0, nullptr);
+	}
+
+	// インデックスバッファへのデータ転送
+	unsigned short* indexMap = nullptr;
+	result = indexBuff->Map(0, nullptr, (void**)&indexMap);
+	if (SUCCEEDED(result)) {
+
+		// 全インデックスに対して
+		for (int i = 0; i < _countof(indices); i++)
+		{
+			indexMap[i] = indices[i];	// インデックスをコピー
+		}
+
+		indexBuff->Unmap(0, nullptr);
+	}
+
+	// 頂点バッファビューの作成
+	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
+	vbView.SizeInBytes = sizeof(vertices);
+	vbView.StrideInBytes = sizeof(vertices[0]);
+
+	// インデックスバッファビューの作成
+	ibView.BufferLocation = indexBuff->GetGPUVirtualAddress();
+	ibView.Format = DXGI_FORMAT_R16_UINT;
+	ibView.SizeInBytes = sizeof(indices);
+}
+void Texture::CreateLineTexture(float px,float px2,float py,float py2)
 {
 	HRESULT result = S_FALSE;
 
@@ -353,10 +435,10 @@ void Texture::CreateTexture()
 		D3D12_RESOURCE_DESC resDesc = texbuff[texNumber]->GetDesc();
 
 		VertexPosNormalUv verticesSquare[] = {
-			{{-5.0f,-5.0f,0.0f}, { 0,0,1}, {0,1}},
-			{{-5.0f,+5.0f,0.0f}, { 0,0,1}, {0,0}},
-			{{+5.0f,-5.0f,0.0f}, { 0,0,1}, {1,1}},
-			{{+5.0f,+5.0f,0.0f}, { 0,0,1}, {1,0}},
+			{{px,py,0.0f}, { 0,0,1}, {0,1}},
+			{{px,py+0.5f,-0.0f}, { 0,0,1}, {0,0}},
+			{{px2,py2,0.0f}, { 0,0,1}, {1,1}},
+			{{px2+0.05f,py2,-0.0f}, { 0,0,1}, {1,0}},
 		};
 		std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
 
@@ -506,7 +588,7 @@ Texture* Texture::Create(UINT texNumber, XMFLOAT3 position,XMFLOAT3 size, XMFLOA
 		// テクスチャ情報取得
 		D3D12_RESOURCE_DESC resDesc = texbuff[texNumber]->GetDesc();
 		// スプライトのサイズをテクスチャのサイズに設定
-		size ={ 10,10, 10 };
+		size ={ 1,1,1 };
 	}
 
 	// Spriteのインスタンスを生成

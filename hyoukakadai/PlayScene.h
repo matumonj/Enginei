@@ -19,15 +19,19 @@
 #include"PostEffect.h"
 #include"Enemy.h"
 #include"Effects.h"
+#include"GameUI.h"
+#include"Player.h"
+#include<memory>
 class PlayScene :public BaseScene
 {
 public:
-	//ÉVÅ[ÉìÇÃÉRÉìÉXÉgÉâÉNÉ^
+	
+	//„Ç∑„Éº„É≥„ÅÆ„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
 	PlayScene(SceneManager* sceneManager);
-private: // ÉGÉCÉäÉAÉX
-// Microsoft::WRL::Çè»ó™
+private: // „Ç®„Ç§„É™„Ç¢„Çπ
+		 // Microsoft::WRL::„ÇíÁúÅÁï•
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::Çè»ó™
+	// DirectX::„ÇíÁúÅÁï•
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -38,50 +42,62 @@ private:
 	const float window_width = 1900;
 	const float window_height = 1020;
 	static const int debugTextTexNumber = 0;
-
+	const int MAX_X = 100;
+	const int MAX_Y = 20;
 private:
 	DirectXCommon* dxcomn;
 	Sprite* background = nullptr;
-	Texture* mech = nullptr;
-	Texture* zukki = nullptr;
+	
 	DebugTxt* debugText;
-
+	std::unique_ptr<Enemy>enemy[4];
+	//Enemy* enemy[2];
+	std::unique_ptr <Effects> effects;
+	std::unique_ptr <Effects> attackeffects;
 	Collision* collision = nullptr;
-	Object3d* player = nullptr;
-	Object3d* ito = nullptr;
-	Object3d* tst = nullptr;
-	Object3d* sentan = nullptr;
+
+	std::unique_ptr <Texture>mech = nullptr;
+	std::unique_ptr <Texture>zukki = nullptr;
+
+	Player* player;
+	//std::unique_ptr<Object3d>player[10];
+	std::unique_ptr<Object3d>tst[20][100];
+	std::unique_ptr<Object3d> sentan = nullptr;
+	std::unique_ptr<Object3d> world = nullptr;
+	std::unique_ptr<Object3d>block = nullptr;
+	std::unique_ptr<Object3d>hari = nullptr;
+
+	Collision* mapcol;
 
 	Model* playermodel = nullptr;
-	Model* itomodel = nullptr;
 	Model* tstmodel = nullptr;
-	Model* sentanmodel = nullptr;
+	Model* worldmodel = nullptr;
+	Model* harimodel = nullptr;
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
 
-	Effects* effects;
+	//Effects* effects;
 private:
 	//Plyer
-	XMFLOAT3 Player_Pos={1,1,0};// = player->GetPosition();
+
+	XMFLOAT3 Player_Pos = {0,0,0};// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
-	//ito
-	XMFLOAT3 ito_Pos = {0,0,0};
-	XMFLOAT3 ito_Scl = {1,1,1};
-	XMFLOAT3 ito_Rot;
-	XMFLOAT3 ito_PS = { 0,0,0 };
-	
+	XMFLOAT3 Old_Pos;
+	float moveSpeed = 0.1f;
 	//tst
-	XMFLOAT3 tst_Pos = { 15,1,0 };
-	XMFLOAT3 tst_Scl = {1,1,1};
+	XMFLOAT3 tst_Pos = { 0,11,0 };
+	XMFLOAT3 tst_Scl = { 1,1,1 };
 	XMFLOAT3 tst_Rot;
 	//sentan
 	XMFLOAT3 sentan_Pos;
-	XMFLOAT3 sentan_Scl = {1,1,0};
+	XMFLOAT3 sentan_Scl = { 1,1,0 };
 	XMFLOAT3 sentan_Rot;
-
-
+	//block
+	XMFLOAT3 block_pos = { -5,-1,0 };
+	XMFLOAT3 block_Scl = { 1,1,1 };
+	//hari
+	XMFLOAT3 hari_Pos;
 
 	XMFLOAT3 old_Scl = { 1,1,1 };
 
@@ -91,12 +107,71 @@ private:
 	float dx;
 	float dz;
 
-	int Line = 0;
-	float Limit = 4;
-	float Limitsave = 0;
-	XMFLOAT3 ito_speed = { 1,1,1 };
+	float zanzouSpeed = 0;
 
-private://ì_åıåπ
+	int Line = 0;
+	float Limit = 10;
+	float Limitsave = 0;
+	float speed = 1.0f;
+	float vec_x = 0.0f;
+	float vec_y = 0.0f;
+	float length = 0.0f;
+	float normal_x;
+	float rot = 0;
+	//map
+	int blockSize = 2;
+	int map[20][100] = {
+	{0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1},
+	{0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	};
+	float posX = 0;
+	float posY = 0;
+	float half_Width;
+	float half_height = 0;
+
+
+	float mapx[20][100];
+	float mapy[20][100];
+
+	float width;
+	float height;
+	float FollowangleX, FollowangleZ, FollowangleR;
+	float FollowSpeed = 1.0f;
+	//float Limit = 0;
+	bool trigger = false;
+	bool boundflag = false;
+	bool returnflag = false;
+	float debuga;
+	float tempx, tempy;
+	float linex, linex2, liney, liney2;
+	float lineangle = 0;
+	float subradius = 0;
+	float Startsubradius = 2.0f;
+	float olddistance = 0;
+	const float LengThenSpeed = 3.0f;
+	const float MaxLen = 30.0f;
+	const float MinLen = 0.0f;
+	bool lengthserchf = false;
+
+
+	bool colf = false;
+	float grav = 0.05f;
+	float time = 0.1;
+	//float botttomy = 0;
+private://ÁÇπÂÖâÊ∫ê
 	LightGroup* lightGroup = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
 
@@ -114,7 +189,7 @@ private://ì_åıåπ
 	float pointLightAtten[3] = { 0.05f,0.05f,0.05f };
 
 	int SpotLightflag = false;
-private://ÉXÉ|ÉbÉgÉâÉCÉg
+private://„Çπ„Éù„ÉÉ„Éà„É©„Ç§„Éà
 	float spotLightDir[3] = { 0,-1,0 };
 	float spotLightpos[3] = { 0,5,0 };
 	float spotLightColor[3] = { 1,1,1 };
@@ -129,7 +204,7 @@ public:
 	void objUpdate();
 
 public:
-	XMFLOAT3 texpo={0,0,0};
+	XMFLOAT3 texpo = { 0,0,0 };
 	void Initialize(DirectXCommon* dxCommon)override;
 	void Update(DirectXCommon* dxCommon)override;
 	void Draw(DirectXCommon* dxcomn)override;
@@ -142,15 +217,18 @@ public:
 	void Finalize()override;
 
 public:
-	XMFLOAT3 efkposition = {-50,-10,90};
-	//ÉGÉtÉFÉNÉgóp(ÇΩÇæÉvÉçÉOÉâÉÄÇ≈Ç¬Ç≠ÇÍÇÈÇ‡ÇÃÇÕÉvÉçÉOÉâÉÄÇ≈çÏÇÈï˚Ç™Ç¢Ç¢Å@ëΩópÇÕÇ¢Ç≠Ç»Ç¢)
-	
+	XMFLOAT3 efkposition = { -50,-10,90 };
+	//„Ç®„Éï„Çß„ÇØ„ÉàÁî®(„Åü„Å†„Éó„É≠„Ç∞„É©„É†„Åß„Å§„Åè„Çå„Çã„ÇÇ„ÅÆ„ÅØ„Éó„É≠„Ç∞„É©„É†„Åß‰Ωú„ÇãÊñπ„Åå„ÅÑ„ÅÑ„ÄÄÂ§öÁî®„ÅØ„ÅÑ„Åè„Å™„ÅÑ)
+
 	f_Model* fbxmodel = nullptr;
 	f_Object3d* object1 = nullptr;
-	
+
 	int c_postEffect;
+
+
 private:
-	enum{
+	int co = 0;
+	enum {
 		Blur,
 		Default,
 	};

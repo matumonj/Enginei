@@ -9,6 +9,10 @@ BossEnemy::~BossEnemy()
 	delete BossObject, BossModel;
 }
 
+void BossEnemy::EnemySearchPlayer(Player* player)
+{
+
+}
 //初期化処理
 void BossEnemy::Initialize()
 {
@@ -26,7 +30,7 @@ void BossEnemy::Initialize()
 }
 
 //更新処理
-void BossEnemy::Update()
+void BossEnemy::Update(XMFLOAT3 position)
 {
 	//パラメータのセット
 	//モブ
@@ -48,4 +52,8 @@ void BossEnemy::Draw()
 void BossEnemy::Finalize()
 {
 	delete BossObject, BossModel;
+}
+void BossEnemy::ColMap(int map[15][100], float mapx[15][100], float mapy[15][100], const int X, const int Y)
+{
+	
 }

@@ -6,12 +6,13 @@
 #include <d3dx12.h>
 #include <DirectXMath.h>
 #include <string>
-
 #include"Input.h"
+
 /// <summary>
 /// 敵キャラの基底クラス
 /// </summary>
 /// 
+class Player;
 class Enemy
 {
 public:
@@ -39,25 +40,60 @@ protected:
 	XMFLOAT3 Rotation;
 	XMFLOAT3 Scale;
 
+	enum class State {
+		ALIVE,
+		DEAD,
+	};
+	State enemyState = State::ALIVE;
+	int HP = 10;
 public:
+
+	inline bool GetState_DEAD() {
+		if (enemyState == State::DEAD) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	inline bool GetState_ALIVE() {
+		if (enemyState == State::ALIVE) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	void SetDead(bool f) { if (f) { enemyState = State::DEAD; } }
+	void SetHP(int HP) { this->HP = HP; }
+
+	virtual void EnemySearchPlayer(Player* player) = 0;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	virtual void Initialize();
-	
+
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	virtual void Update();
+	virtual void Update(XMFLOAT3 position);
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	virtual void Draw();
 
+	virtual void Motion(int timer)=0;
+	//virtual float Distance(Player* player);
+	virtual void Attack(Player*player)=0;
 	/// <summary>
 	/// 解放処理
 	/// </summary>
 	virtual void Finalize();
+	void Setposition(XMFLOAT3 position) { Position = position; }
+	void SetScale(XMFLOAT3 scale) { Scale = scale; }
+	void SetRotation(XMFLOAT3 rot) { Rotation = rot; }
+	XMFLOAT3 GetPosition() { return Position; }
+	virtual void ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y) =0;
 };
 

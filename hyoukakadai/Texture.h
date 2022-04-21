@@ -156,7 +156,8 @@ private:// 静的メンバ関数
 	static bool InitializeGraphicsPipeline();
 
 public: // メンバ関数
-	void CreateTexture();
+	void CreateLineTexture(float px, float px2,float py,float py2);
+	void CreateNormalTexture();
 
 	bool Initialize();
 	/// <summary>
@@ -196,6 +197,7 @@ private: // メンバ変数
 	XMFLOAT3 position = { 0,0,0 };
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
+	float px, px2;
 	// 親オブジェクト
 	//SoulpEffect* parent = nullptr;
 private:
@@ -204,7 +206,7 @@ private:
 public:
 	//コンストラクタ
 	Texture(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
-
+	Texture(){}
 	static bool LoadTexture(UINT texnumber, const wchar_t* filename);
 	static Texture* Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
 	void TransferVertices();

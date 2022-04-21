@@ -14,7 +14,7 @@ void Enemy::Initialize()
 }
 
 //XVˆ—
-void Enemy::Update()
+void Enemy::Update(XMFLOAT3 position)
 {
 }
 

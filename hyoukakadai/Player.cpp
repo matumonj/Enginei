@@ -2,7 +2,7 @@
 #include"Input.h"
 #include"DebugTxt.h"
 #include"SphereCollider.h"
-
+#include"Collision.h"
 using namespace DirectX;
 
 Player* Player::Create(Model* model)
@@ -41,27 +41,13 @@ void Player::Update(XMFLOAT4 color)
 {
 	Input* input = Input::GetInstance();
 
-	if (input->Pushkey(DIK_A)) {
-		rotation.y -= 2.0f;
-	} else if (input->Pushkey(DIK_D)) {
-		rotation.y += 2.0f;
-	}
 
 	//移動ベクトルをy軸周りの角度で回転
 	XMVECTOR move = { 0,0,0.1f,0 };
 	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	move = XMVector3TransformNormal(move, matRot);
 
-	//向いてる方向に移動
-	if (input->Pushkey(DIK_S)) {
-		position.x -= move.m128_f32[0];
-		position.y -= move.m128_f32[1];
-		position.z -= move.m128_f32[2];
-	} else if (input->Pushkey(DIK_W)) {
-		position.x += move.m128_f32[0];
-		position.y += move.m128_f32[1];
-		position.z += move.m128_f32[2];
-	}
+
 	//行列の更新とか
 	Object3d::Update({ 1,1,1,1 });
 }
@@ -72,4 +58,65 @@ void Player::OnCollision(const CollisionInfo& info)
 	//}
 	//テキストと表示
 	//DebugTxt::GetInstance()->Print("Hit",950,20,3);
+}
+
+void Player::Attack(XMFLOAT3 playerpos)
+{
+	//向いてる方向に移動
+	if (Input::GetInstance()->TriggerKey(DIK_RIGHT)) {
+		playerRot = State::Right;
+	} else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
+		playerRot = State::Left;
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+		action = Action::Attack;
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_N)) {
+		action = Action::None;
+	}
+
+
+	if (action == Action::Attack) {
+
+		timer++;
+		switch (playerRot)
+		{
+		case State::Left:
+			Area_X_s = 4;
+			Area_X_e = position.x+10;
+			break;
+
+		case State::Right:
+			Area_X_e = 4;
+			Area_X_s = position.x;
+			break;
+		}
+		
+		if (timer >= 2) {
+			action = Action::None;
+			timer = 0;
+		}
+	} 
+	HP = max(HP, 0);
+	HP = min(HP, 10);
+}
+
+void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
+{
+	damageArea.Area_s = { position.x- Area_X_s,position.y - 8 };
+	damageArea.Area_e = { position.x + Area_X_e ,position.y + 5 };
+
+	//当たり判定
+
+	if (action == Action::Attack) {
+	for (int i = 0; i < 4; i++)
+	{
+		if (enemy[i] != nullptr) {
+			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy[i]->GetPosition().x - 1,enemy[i]->GetPosition().y - 1 }, { enemy[i]->GetPosition().x + 1,enemy[i]->GetPosition().y + 1 }) == true) {
+				enemy[i]->SetDead(true);
+			}
+		}
+		}
+	}
 }
