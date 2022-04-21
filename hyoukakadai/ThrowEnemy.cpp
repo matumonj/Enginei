@@ -155,7 +155,7 @@ void ThrowEnemy::ProjectileMotion()
 	attackcount++;
 }
 
-void ThrowEnemy::ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y)
+void ThrowEnemy::ColMap(int map[15][100], float mapx[15][100], float mapy[15][100], const int X, const int Y)
 {
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {

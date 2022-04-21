@@ -36,7 +36,7 @@ void GameUI::UISpriteSet()
 	Sprite::LoadTexture(11, L"Resources/gomi.png");
 	//’ˆÓ
 	Sprite::LoadTexture(12, L"Resources/attention.png");
-	
+
 	LineLengthout = Sprite::Create(10, { 0.0f,-200.0f });
 	LineLength = Sprite::Create(11, { 0.0f,-200.0f });
 	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
@@ -165,8 +165,7 @@ void GameUI::TargetUIUpdate(XMMATRIX matview, XMMATRIX matprojection, bool flag)
 		}
 		Targetpos = Line::GetInstance()->getpos();
 		//TargetTexture->SetPosition();
-	}
-	else {
+	} else {
 		Targetscl = { 1,1,1 };
 		if (Targetalpha >= 0) {
 			Targetalpha -= 0.1f;
@@ -191,15 +190,15 @@ void GameUI::PlayerUISet()
 	//playerhp
 	Sprite::LoadTexture(13, L"Resources/bosshp.png");
 	PlayerHP = Sprite::Create(13, { 0.0f,-200.0f });
-	
+
 	playerHPScl = { 500,50 };
 	playerHPPos = { 40,300 };
 }
 
-void GameUI::PlayerUIUpdate(Player*player)
+void GameUI::PlayerUIUpdate(Player* player)
 {
-	
-	playerHPScl.x = player->getHp()*50;
+
+	playerHPScl.x = player->getHp() * 50;
 	PlayerHP->SetSize(playerHPScl);
 	PlayerHP->SetPosition(playerHPPos);
 	PlayerHP->setcolor({ 1,1,1,1 });
