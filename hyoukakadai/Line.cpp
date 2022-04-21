@@ -87,6 +87,29 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
 		needlerot.z += 5;
 	}
+
+	////コントローラー
+	//// 右上に傾けた
+	//if (Input::GetInstance()->GetCMove().lRx > u_r + 1000 && Input::GetInstance()->GetCMove().lRy < u_r - 1000)
+	//{
+	//	
+	//}
+	//// 左上に傾けた
+	//if (Input::GetInstance()->GetCMove().lRx < u_r - 1000 && Input::GetInstance()->GetCMove().lRy < u_r - 1000)
+	//{
+	//	
+	//}
+	//// 左下に傾けた
+	//if (Input::GetInstance()->GetCMove().lRx < u_r - 1000 && Input::GetInstance()->GetCMove().lRy > u_r + 1000)
+	//{
+	//	
+	//}
+	//// 右下に傾けた
+	//if (Input::GetInstance()->GetCMove().lRx > u_r + 1000 && Input::GetInstance()->GetCMove().lRy > u_r + 1000)
+	//{
+	//	
+	//}
+
 	if (!elf) {
 		linex2 = tempx + cosf((lineangle)*PI / 180) * subradius;
 		liney2 = tempy + sinf((lineangle)*PI / 180) * subradius;
@@ -96,6 +119,13 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && (!returnflag && !boundflag)) {
 		trigger = true;//線を伸ばすフラグね
 		elf = false;
+	}
+
+	if (Input::GetInstance()->TriggerButtonRB()) {
+		Line::GetInstance()->SetTrigger(true);
+		trigger = true;//線を伸ばすフラグね
+		elf = false;
+		//Line = 1;
 	}
 
 	if (trigger) {//trigger:線伸ばすフラグ

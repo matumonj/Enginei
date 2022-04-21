@@ -43,6 +43,12 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 		attack = true;
 	}
 	
+	//コントローラー
+	if (Input::GetInstance()->TriggerButtonA()) {
+		//攻撃処理
+		attack = true;
+	}
+
 	if (attack) {
 		attackefk->Load_Effect();
 		attack = false;

@@ -62,11 +62,24 @@ void Player::OnCollision(const CollisionInfo& info)
 
 void Player::Attack(XMFLOAT3 playerpos)
 {
+	LONG u_r = 32768;
+	LONG a = 30000;
 	//向いてる方向に移動
 	if (Input::GetInstance()->TriggerKey(DIK_RIGHT)) {
 		playerRot = State::Right;
 	} else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
 		playerRot = State::Left;
+	}
+
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+		// 左に傾けた
+		playerRot = State::Left;
+
+	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+		// 右に傾けた
+		playerRot = State::Right;
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_P)) {
@@ -76,6 +89,11 @@ void Player::Attack(XMFLOAT3 playerpos)
 		action = Action::None;
 	}
 
+	//コントローラー
+	if (Input::GetInstance()->TriggerButtonA()) {
+		//攻撃処理
+		action = Action::Attack;
+	}
 
 	if (action == Action::Attack) {
 

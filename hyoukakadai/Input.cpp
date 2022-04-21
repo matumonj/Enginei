@@ -36,12 +36,12 @@ void Input::Initialize(WinApp* winapp)
 	result = devMouse->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
 
-	////c
-	//// 入力データ形式のセット
-	//result = devC->SetDataFormat(&c_dfDIJoystick2); // 標準形式
+	//c
+	// 入力データ形式のセット
+	result = devC->SetDataFormat(&c_dfDIJoystick2); // 標準形式
 
-	//// 排他制御レベルのセット
-	//result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	// 排他制御レベルのセット
+	result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
 }
 void Input::update()
@@ -65,15 +65,15 @@ void Input::update()
 		// マウスの入力
 		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 	}
-	//{// c
-	//	result = devC->Acquire();	// マウス動作開始
+	{// c
+		result = devC->Acquire();	// マウス動作開始
 
-	//	// 前回の入力を保存
-	//	CStatePre = CState;
+		// 前回の入力を保存
+		CStatePre = CState;
 
-	//	// マウスの入力
-	//	result = devC->GetDeviceState(sizeof(CState), &CState);
-	//}
+		// マウスの入力
+		result = devC->GetDeviceState(sizeof(CState), &CState);
+	}
 }
 
 bool Input::Pushkey(BYTE keyNumber)
@@ -148,6 +148,17 @@ Input::MouseMove Input::GetMouseMove()
 	return tmp;
 }
 bool Input::TriggerButtonA()
+{
+	// 前回が0で、今回が0でなければトリガー
+	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
+		return true;
+	}
+
+	// トリガーでない
+	return false;
+}
+
+bool Input::PushButtonA()
 {
 	// 前回が0で、今回が0でなければトリガー
 	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
