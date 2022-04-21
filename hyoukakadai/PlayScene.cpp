@@ -196,8 +196,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 
 	enemy[3]->Setposition({ 80,-4.2,0 });
 	enemy[2]->Setposition({ 100,-4.2,0 });
-	enemy[1]->Setposition({ -40, 0, 0 });
-	enemy[0]->Setposition({ 20, 0, 0 });
+	enemy[1]->Setposition({ -40, -10, 0 });
+	enemy[0]->Setposition({ 20, -10, 0 });
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
 	enemy[2]->Initialize();
