@@ -65,7 +65,7 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 	}
 	if (boundflag) {
 		if (loutscl.x >= 0)
-			loutscl.x -= 10;//最大値を減らす
+		//	loutscl.x -= 10;//最大値を減らす
 		if (tempx - loutscl.x > movement * 4) {//最大値の減る量(減る前と減ったあとの最大値を計算)
 			boundflag = false;//!boundflag->colf
 		}

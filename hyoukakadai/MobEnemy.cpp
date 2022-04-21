@@ -30,7 +30,7 @@ void MobEnemy::Initialize()
 	Mob_Scl = { 2,2,2 };
 	Mob_Rot = { 0,180,0 };
 	Mob_Pos = { -10,-2,0 };
-	Position = { 20,0,0 };
+	Position = { 20,-4,0 };
 	HP = 10;
 
 }
@@ -84,7 +84,7 @@ void MobEnemy::Finalize()
 }
 void MobEnemy::EnemySearchPlayer(Player* player)
 {
-	Follow(player);
+	//Follow(player);
 }
 
 void MobEnemy::Follow(Player*player)
@@ -129,7 +129,7 @@ void MobEnemy::Attack(Player*player)
 {
 		//player->SetHp(player->getHp() - AttackDamage);
 }
-void MobEnemy::ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y)
+void MobEnemy::ColMap(int map[15][100], float mapx[15][100], float mapy[15][100], const int X, const int Y)
 {
 	
 }
