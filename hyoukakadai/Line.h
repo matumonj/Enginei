@@ -22,12 +22,15 @@ private:
 	static Texture* Twine;
 	static Model* NeedleModel;
 	static Object3d* NeedleObj;
+
+
 private:
 	static float FollowangleX, FollowangleZ, FollowangleR;
 	static float FollowSpeed ;
 	static bool trigger ;
 	static bool boundflag ;
 	static bool returnflag ;
+	static bool drawflag;
 	static 	float tempx, tempy;
 	static float linex, linex2, liney, liney2;
 	static float lineangle ;
@@ -46,17 +49,21 @@ private:
 	static int L_Cflag;
 	static XMFLOAT3 po;
 	static XMFLOAT3 needlepos;
+	static XMFLOAT3 needlerot;
 	static int f;
 	static bool elf;
 	static float oldlinex, oldliney;
+	static bool mapcol;// = false;
 public:
+
 	static Line* GetInstance();
 	static void Initialize();
-	static void Update(XMMATRIX matview, XMMATRIX matprojection,Player*player,XMFLOAT3&Player_Pos,bool& colf);
+	static void Update(XMMATRIX matview, XMMATRIX matprojection,Player*player,XMFLOAT3&Player_Pos,bool& colf,float& moveSpeed);
 	static void Draw(DirectXCommon* dxcomn);
 	static void CollisionBlock(int** map, float** mapxy[2],float maphalf[2], const int MapX, const int MapY);
 	static void CollisionEnemy(std::unique_ptr<Enemy> Position[]);
 public:
+	void Setmapcol(bool f) { mapcol = f; }
 	float GetLength() { return subradius; }
 	bool GetColf() { return colf; }
 	void Setpos(float lx,float ly) { linex2=lx;  liney2 = ly;

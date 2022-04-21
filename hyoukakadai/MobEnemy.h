@@ -30,7 +30,7 @@ private:
     XMFLOAT3 Mob_Rot;
     XMFLOAT3 Mob_Scl;
 public:
-    void EnemySearchPlayer(XMFLOAT3 player)override;
+    void EnemySearchPlayer(Player* player)override;
 
     /// <summary>
     /// 初期化
@@ -51,10 +51,12 @@ public:
     /// 解放処理
     /// </summary>
     void Finalize()override;
-    void Follow(XMFLOAT3 player);
+    void Follow(Player*player);
     void Motion(int time)override;
+    void Attack(Player*player)override;
     float angleXs, angleZs, angleRs;
     float centerSpeed = 0.1f;
+    const int AttackDamage = 2;
 public:
     /// <summary>
     /// アクセッサ
@@ -63,6 +65,7 @@ public:
     XMFLOAT3 GetPosition() { return Mob_Pos; }
     XMFLOAT3 GetRotation() { return Mob_Rot; }
     XMFLOAT3 GetScale() { return Mob_Scl; }
+    void ColMap(int map[15][100], float mapx[15][100], float mapy[15][100], const int X, const int Y);
 
 };
 

@@ -83,11 +83,13 @@ void Player::Attack(XMFLOAT3 playerpos)
 		switch (playerRot)
 		{
 		case State::Left:
-			Area_X = -3;
+			Area_X_s = 4;
+			Area_X_e = position.x+10;
 			break;
 
 		case State::Right:
-			Area_X = 3;
+			Area_X_e = 4;
+			Area_X_s = position.x;
 			break;
 		}
 		
@@ -96,18 +98,19 @@ void Player::Attack(XMFLOAT3 playerpos)
 			timer = 0;
 		}
 	} 
-
+	HP = max(HP, 0);
+	HP = min(HP, 10);
 }
 
 void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 {
-	damageArea.Area_s = { position.x ,position.y - 5 };
-	damageArea.Area_e = { position.x + Area_X ,position.y + 5 };
+	damageArea.Area_s = { position.x- Area_X_s,position.y - 8 };
+	damageArea.Area_e = { position.x + Area_X_e ,position.y + 5 };
 
 	//“–‚½‚è”»’è
 
 	if (action == Action::Attack) {
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		if (enemy[i] != nullptr) {
 			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy[i]->GetPosition().x - 1,enemy[i]->GetPosition().y - 1 }, { enemy[i]->GetPosition().x + 1,enemy[i]->GetPosition().y + 1 }) == true) {

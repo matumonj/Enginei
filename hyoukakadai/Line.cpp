@@ -27,10 +27,11 @@ float Line::MoveSpeed = 0;
 Object3d* Line::NeedleObj = nullptr;
 Model* Line::NeedleModel = nullptr;
 int Line::L_Cflag = 0;
-XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos;
+XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos,Line::needlerot;
 bool Line::elf = false;
 float Line::oldlinex, Line::oldliney;
 int Line::index = -1;
+bool Line::mapcol = false;
 Line* Line::GetInstance()
 {
 	static Line instance;
@@ -42,13 +43,13 @@ void Line::Initialize()
 	Texture::LoadTexture(13, L"Resources/gomi.png");
 	Twine = Texture::Create(13, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 
-	NeedleModel = Model::CreateFromOBJ("sphere");
+	NeedleModel = Model::CreateFromOBJ("hari");
 	NeedleObj = Object3d::Create();
 	NeedleObj->SetModel(NeedleModel);
 
 }
 
-void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLOAT3& Player_Pos, bool& mapcolf)
+void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLOAT3& Player_Pos, bool& mapcolf,float& moveSpeed)
 {
 	float sdistance;
 	sdistance = sqrtf(((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)) +
@@ -82,8 +83,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 			}*/
 
 	if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
-		lineangle += 13.0f;//移動方向の指定
+		lineangle += 5.0f;//移動方向の指定
 		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
+		needlerot.z += 5;
 	}
 	if (!elf) {
 		linex2 = tempx + cosf((lineangle)*PI / 180) * subradius;
@@ -120,7 +122,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 			((player->GetPosition().y - liney2) * (player->GetPosition().y - liney2))
 		);
 		//プレイヤーと紐の距離が一定以内に縮まったら
-		if (distance <= 1.0f) {
+		if (distance <= 1.5f) {
 			colf = true;//UIゲージ減らす処理gameui.cppの方
 			//elf = false;
 			boundflag = false;
@@ -139,9 +141,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 		FollowangleZ = (liney2 - player->GetPosition().y);//これZじゃなくてYです
 		FollowangleR = sqrtf((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)
 			+ (player->GetPosition().y - liney2) * (player->GetPosition().y - liney2));
-
-		Player_Pos.x += (FollowangleX / FollowangleR) * FollowSpeed;
-		Player_Pos.y += (FollowangleZ / FollowangleR) * FollowSpeed;
+		moveSpeed = 0.5f;
+		Player_Pos.x += (FollowangleX / FollowangleR) * moveSpeed;
+		Player_Pos.y += (FollowangleZ / FollowangleR) * moveSpeed;
 	} else {
 		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
 		/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
@@ -167,8 +169,10 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 
 
 	NeedleObj->SetPosition({ linex2,liney2,Player_Pos.z });
+	//needlerot = player->GetRotation();
 	needlepos = NeedleObj->GetPosition();
-	NeedleObj->SetScale({ 0.8,0.4,0.5 });
+	NeedleObj->SetScale({ 1.4,1.4,1.5 });
+	NeedleObj->SetRotation({ needlerot });
 	NeedleObj->Update({ 1,1,1,1 });
 }
 
@@ -179,16 +183,22 @@ void Line::Draw(DirectXCommon* dxcomn)
 	Texture::PostDraw();
 
 	Object3d::PreDraw();
-	//NeedleObj->Draw();
+	NeedleObj->Draw();
 	Object3d::PostDraw();
 }
 
 
 void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 {
+	if (elf) {
+		Twine->SetColor({ 1,0,0,1 });
+	}
+	else {
+		Twine->SetColor({ 1,1,1,1 });
+	}
 	//int in = -1;
-	float dis[2];
-	for (int i = 0; i < 2; i++) {
+	float dis[4];
+	for (int i = 0; i < 4; i++) {
 		if (position[i] != nullptr) {
 			dis[i] = sqrtf((position[i]->GetPosition().x - needlepos.x) * (position[i]->GetPosition().x - needlepos.x) +
 				(position[i]->GetPosition().y - needlepos.y) * (position[i]->GetPosition().y - needlepos.y));
@@ -200,18 +210,28 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 		}
 
 		//衝突時
-		if (elf) {
+		if (elf&&!mapcol) {
 			if (position[index] != nullptr) {
 				linex2 = position[index]->GetPosition().x;
 				liney2 = position[index]->GetPosition().y;
 			} else {
 				returnflag = true;
 			}
+
+		}
+	}
+	if (mapcol ) {
+		oldlinex = linex2;
+		oldliney = liney2;
+		if (elf) {
+			linex2 =oldlinex;
+			liney2 =oldliney;
 		}
 	}
 
 	if (returnflag || colf) {
 		elf = false;
+		mapcol = false;
 	}
 }
 //フラグ説明

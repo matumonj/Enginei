@@ -7,10 +7,12 @@
 #include <DirectXMath.h>
 #include <string>
 #include"Input.h"
+
 /// <summary>
 /// “GƒLƒƒƒ‰‚ÌŠî’êƒNƒ‰ƒX
 /// </summary>
 /// 
+class Player;
 class Enemy
 {
 public:
@@ -64,7 +66,7 @@ public:
 	void SetDead(bool f) { if (f) { enemyState = State::DEAD; } }
 	void SetHP(int HP) { this->HP = HP; }
 
-	virtual void EnemySearchPlayer(XMFLOAT3 player) = 0;
+	virtual void EnemySearchPlayer(Player* player) = 0;
 
 	/// <summary>
 	/// ‰Šú‰»
@@ -83,12 +85,15 @@ public:
 
 	virtual void Motion(int timer)=0;
 	//virtual float Distance(Player* player);
-
+	virtual void Attack(Player*player)=0;
 	/// <summary>
 	/// ‰ğ•úˆ—
 	/// </summary>
 	virtual void Finalize();
 	void Setposition(XMFLOAT3 position) { Position = position; }
+	void SetScale(XMFLOAT3 scale) { Scale = scale; }
+	void SetRotation(XMFLOAT3 rot) { Rotation = rot; }
 	XMFLOAT3 GetPosition() { return Position; }
+	virtual void ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y) =0;
 };
 
