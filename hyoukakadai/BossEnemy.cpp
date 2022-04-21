@@ -9,7 +9,7 @@ BossEnemy::~BossEnemy()
 	delete BossObject, BossModel;
 }
 
-void BossEnemy::EnemySearchPlayer(XMFLOAT3 player)
+void BossEnemy::EnemySearchPlayer(Player* player)
 {
 
 }
@@ -52,4 +52,8 @@ void BossEnemy::Draw()
 void BossEnemy::Finalize()
 {
 	delete BossObject, BossModel;
+}
+void BossEnemy::ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y)
+{
+	
 }

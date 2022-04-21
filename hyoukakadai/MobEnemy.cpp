@@ -82,25 +82,33 @@ void MobEnemy::Finalize()
 {
 	delete MobObject, MobModel;
 }
-void MobEnemy::EnemySearchPlayer(XMFLOAT3 player)
+void MobEnemy::EnemySearchPlayer(Player* player)
 {
 	Follow(player);
 }
 
-void MobEnemy::Follow(XMFLOAT3 player)
+void MobEnemy::Follow(Player*player)
 {
 	float angleX, angleZ, angleR;
 	float centerSpeed = 0.1f;
-	angleX = (player.x - Position.x);
-	angleZ = (player.y - Position.y);
-	angleR = sqrtf((Position.x - player.x) * (Position.x - player.x)
-		+ (Position.y - player.y) * (Position.y - player.y));
-	Position.x += (angleX / angleR) * centerSpeed;
-	Position.y += (angleZ / angleR) * centerSpeed;
+	angleX = (player->GetPosition().x - Position.x);
+	angleZ = (player->GetPosition().y - Position.y);
+	angleR = sqrtf((Position.x - player->GetPosition().x) * (Position.x - player->GetPosition().x)
+		+ (Position.y - player->GetPosition().y) * (Position.y - player->GetPosition().y));
+	if (angleR>5) {
+		Position.x += (angleX / angleR) * centerSpeed;
+		Position.y += (angleZ / angleR) * centerSpeed;
+	}
 	//Position.x =player.x;
 	//Position.y =player.y;
 	MobObject->SetPosition(Position);
 	//MobObject->SetPosition(Position);
+	float dis;
+	dis = sqrtf((player->GetPosition().x - Position.x) * (player->GetPosition().x - Position.x) +
+		(player->GetPosition().y - Position.y) * (player->GetPosition().y - Position.y));
+	if (dis <= 2) {
+		Attack(player);
+	}
 }
 
 void MobEnemy::Motion(int timer)
@@ -116,4 +124,12 @@ void MobEnemy::Motion(int timer)
 		break;
 	}
 
+}
+void MobEnemy::Attack(Player*player)
+{
+		//player->SetHp(player->getHp() - AttackDamage);
+}
+void MobEnemy::ColMap(int map[20][100], float mapx[20][100], float mapy[20][100], const int X, const int Y)
+{
+	
 }

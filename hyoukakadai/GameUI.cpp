@@ -8,6 +8,7 @@ using namespace DirectX;
 Sprite* GameUI::LineLength = nullptr;
 Sprite* GameUI::LineLengthout = nullptr;
 Sprite* GameUI::Attention[3] = { nullptr };
+Sprite* GameUI::PlayerHP = nullptr;
 nTexture* GameUI::AllowTexure = nullptr;
 nTexture* GameUI::TargetTexture = nullptr;
 
@@ -15,6 +16,8 @@ XMFLOAT2 GameUI::lpos, GameUI::loutpos;//座標
 XMFLOAT2 GameUI::lscl, GameUI::loutscl;//スケール
 XMFLOAT3 GameUI::Alowpos, GameUI::Alowrot, GameUI::Alowscl = { 1,0.5,10 };
 XMFLOAT3 GameUI::Targetpos, GameUI::Targetrot, GameUI::Targetscl = { 0.8,0.8,1 };
+XMFLOAT2 GameUI::playerHPPos, GameUI::playerHPScl; //座標
+
 float GameUI::alpha = 0.5, GameUI::walpha = 0, GameUI::Targetalpha = 0;
 float GameUI::tempx = 0;
 float GameUI::lsclMax;
@@ -33,6 +36,7 @@ void GameUI::UISpriteSet()
 	Sprite::LoadTexture(11, L"Resources/gomi.png");
 	//注意
 	Sprite::LoadTexture(12, L"Resources/attention.png");
+	
 	LineLengthout = Sprite::Create(10, { 0.0f,-200.0f });
 	LineLength = Sprite::Create(11, { 0.0f,-200.0f });
 	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
@@ -180,4 +184,30 @@ void GameUI::TargetUIDraw(DirectXCommon* dxcomn)
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	TargetTexture->Draw();
 	nTexture::PostDraw();
+}
+
+void GameUI::PlayerUISet()
+{
+	//playerhp
+	Sprite::LoadTexture(13, L"Resources/bosshp.png");
+	PlayerHP = Sprite::Create(13, { 0.0f,-200.0f });
+	
+	playerHPScl = { 500,50 };
+	playerHPPos = { 40,300 };
+}
+
+void GameUI::PlayerUIUpdate(Player*player)
+{
+	
+	playerHPScl.x = player->getHp()*50;
+	PlayerHP->SetSize(playerHPScl);
+	PlayerHP->SetPosition(playerHPPos);
+	PlayerHP->setcolor({ 1,1,1,1 });
+}
+
+void GameUI::PlayerUIDraw(DirectXCommon* dxcomn)
+{
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	PlayerHP->Draw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
 }
