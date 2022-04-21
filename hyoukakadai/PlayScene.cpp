@@ -119,26 +119,17 @@ void PlayScene::ModelCreate()
 void PlayScene::SetPrm()
 {
 
-	posX = player->GetPosition().x;
-	posY = player->GetPosition().y;
-	half_height = player->GetScale().y / 2;
-	half_Width = player->GetScale().x / 2;
-
-
-		player->SetPosition({ Player_Pos });
-		player->SetScale({ Player_Scl });
-		player->SetRotation({Player_Rot});
-
-
-	hari_Pos = Player_Pos;
+	
 
 	hari->SetPosition({ hari_Pos.x+2.0f,hari_Pos.y,hari_Pos.z });
 
-	posX = player->GetPosition().x;
-	posY = player->GetPosition().y;
 	half_height = player->GetScale().y;
 	half_Width = player->GetScale().x ;
 
+
+	player->SetPosition({ Player_Pos });
+	player->SetScale({ Player_Scl });
+	player->SetRotation({ Player_Rot });
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -336,16 +327,38 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	///
 
 
+	//FBXモデルの更新
+	object1->Updata(TRUE);
+	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+		Player_Pos.x += moveSpeed;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
+		Player_Pos.x -= moveSpeed;
 
+	}
 
+	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+		Player_Pos.y -= moveSpeed;
+	}
+	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
+		Player_Pos.y += moveSpeed;
+	}
+
+	///これより上に入力処理をかけ
 	////当たり判定
+<<<<<<< HEAD
 	float disl;
+=======
+	//入力処理より後に当たり判定を描け
+
+>>>>>>> b4ee82db3a6aaa410c8443ea749607da1ca38caa
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
 
 			if (map[j][i] == 1) {
 				mapx[j][i] = tst[j][i]->GetPosition().x;
 				mapy[j][i] = tst[j][i]->GetPosition().y;
+<<<<<<< HEAD
 				map_half_heigh = tst[j][i]->GetScale().y;
 				map_half_width = tst[j][i]->GetScale().x;
 
@@ -364,21 +377,47 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 				else if ((Player_Pos.x + (Player_Scl.x) > mapx[j][i] - (map_half_width ) && Player_Pos.x - (Player_Scl.x) < mapx[j][i] + (map_half_width )) && Old_Pos.y + Player_Scl.y<mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - map_half_heigh) {
 					Player_Pos.y = Player_Pos.y -  moveSpeed;
 					break;
+=======
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+
+
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width-moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width-moveSpeed) )) {
+					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						break;
+					}
+					else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+						break;
+					}
+>>>>>>> b4ee82db3a6aaa410c8443ea749607da1ca38caa
 				}
 				else {
+					moveSpeed = 0.2f;
 					grav = 0.03;
 				}
 
 				//プレイヤーの左辺
-				if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y)) && Player_Pos.x - Player_Scl.x < mapx[j][i] + map_half_width && mapx[j][i] < Old_Pos.x - Player_Scl.y) {
-					Player_Pos.x = map_half_width + mapx[j][i] + Player_Scl.x;
-					break;
-				}
-				//プレイヤーの右辺
-				else if ((Player_Pos.y - (Player_Scl.y) < mapy[j][i] + map_half_heigh && mapy[j][i] - map_half_heigh < Player_Pos.y + (Player_Scl.y))&&Player_Pos.x+Player_Scl.x > mapx[j][i]-map_half_width&&mapx[j][i]>Old_Pos.x+Player_Scl.x-0.5f) {
-					Player_Pos.x = Player_Pos.x - moveSpeed;
-					moveSpeed = 0;
-					break;
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						Player_Pos.y = Player_Pos.y + 0.001f;
+						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+						//grav = 0.0f;
+						//time = 0;
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
+						//grav = 0.0f;
+						//time = 0;
+						//moveSpeed = 0;
+						break;
+					}
 				}
 				else {
 					moveSpeed = 0.2f;
@@ -394,15 +433,18 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Line::GetInstance()->Getboundflag()==false ||Line::GetInstance()->Gettriggerflag()==false) {
 		//grav = 0.0f;
 	} else {
-		//grav = 0.03f;
+		grav = 0.03f;
 	}
 
-
-//	Player_Pos.y -= grav;
+	time += 0.04f;
+	Player_Pos.y -= grav*time*time;
 
 
 	//頂点座標の更新
 	mech->CreateLineTexture(linex, linex2, liney, liney2);
+
+	hari_Pos.x = Line::GetInstance()->getpos().x;
+	hari_Pos.y = Line::GetInstance()->getpos().y;
 
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
@@ -427,28 +469,13 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		object1->PlayAnimation();
 	}
 
-	//FBXモデルの更新
-	object1->Updata(TRUE);
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= moveSpeed;
-
-	}
-
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		Player_Pos.y -= moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-		Player_Pos.y += moveSpeed;
-	}
+	
 
 		//}
 		//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y+5 ,Player_Pos.z - 18 });
+	camera->SetEye({ Player_Pos.x,Player_Pos.y +1,Player_Pos.z - 23 });
 	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
 
 	camera->Update();
@@ -531,9 +558,9 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 
-	hari->PreDraw();
+	/*hari->PreDraw();
 	hari->Draw();
-	hari->PostDraw();
+	hari->PostDraw();*/
 
 }
 //sプライと以外の描画
@@ -630,6 +657,8 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderFloat("positionX", &linex, -100, 100);
 		ImGui::SliderFloat("positionY", &liney, -100, 100);
 		ImGui::SliderFloat("positionZ", &Player_Pos.z, -100, 100);
+		ImGui::SliderFloat("grav", &grav, -100, 100);
+		ImGui::SliderFloat("time", &time, -100, 100);
 		ImGui::TreePop();
 	}
 	float sx = player->GetArea_S().x;
@@ -650,6 +679,17 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -100, 100);
 		ImGui::TreePop();
 	}
+
+
+	/*if (ImGui::TreeNode("1")) {
+		ImGui::SliderFloat("+_width", &half_Width, -100, 100);
+		ImGui::SliderFloat("+_height", &half_height, -100, 100);
+		ImGui::SliderFloat("-_width", &half_Width, -100, 100);
+		ImGui::SliderFloat("-_height", &half_height, -100, 100);
+		ImGui::SliderFloat("map_1_width", &width, -100, 100);
+		ImGui::SliderFloat("map_1_height", &height, -100, 100);
+		ImGui::TreePop();
+	}*/
 
 
 	ImGui::End();

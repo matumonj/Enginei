@@ -27,7 +27,7 @@ float Line::MoveSpeed = 0;
 Object3d* Line::NeedleObj = nullptr;
 Model* Line::NeedleModel = nullptr;
 int Line::L_Cflag = 0;
-XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos;
+XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos,Line::needlerot;
 bool Line::elf = false;
 float Line::oldlinex, Line::oldliney;
 int Line::index = -1;
@@ -43,7 +43,7 @@ void Line::Initialize()
 	Texture::LoadTexture(13, L"Resources/gomi.png");
 	Twine = Texture::Create(13, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 
-	NeedleModel = Model::CreateFromOBJ("sphere");
+	NeedleModel = Model::CreateFromOBJ("hari");
 	NeedleObj = Object3d::Create();
 	NeedleObj->SetModel(NeedleModel);
 
@@ -85,6 +85,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 	if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
 		lineangle += 13.0f;//移動方向の指定
 		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
+		needlerot.z += 13;
 	}
 	if (!elf) {
 		linex2 = tempx + cosf((lineangle)*PI / 180) * subradius;
@@ -168,8 +169,10 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 
 
 	NeedleObj->SetPosition({ linex2,liney2,Player_Pos.z });
+	//needlerot = player->GetRotation();
 	needlepos = NeedleObj->GetPosition();
-	NeedleObj->SetScale({ 0.8,0.4,0.5 });
+	NeedleObj->SetScale({ 1.4,1.4,1.5 });
+	NeedleObj->SetRotation({ needlerot });
 	NeedleObj->Update({ 1,1,1,1 });
 }
 
@@ -180,7 +183,7 @@ void Line::Draw(DirectXCommon* dxcomn)
 	Texture::PostDraw();
 
 	Object3d::PreDraw();
-	//NeedleObj->Draw();
+	NeedleObj->Draw();
 	Object3d::PostDraw();
 }
 
