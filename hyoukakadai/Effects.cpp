@@ -39,7 +39,7 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 		attackefk->SetRotation(1, 90, 0);
 		//Effect_Rot = { 0,0,0 };
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+	if (Input::GetInstance()->TriggerKey(DIK_W)) {
 		attack = true;
 	}
 	
