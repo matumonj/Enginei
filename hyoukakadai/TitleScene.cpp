@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include"Input.h"
 #include"PlayScene.h"
+#include"Tutorial.h"
 #include"SceneManager.h"
 TitleScene::TitleScene(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
@@ -23,7 +24,7 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 {
 	//ENTERで次のシーンへ
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {//押されたら
-		BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 	titlesprite->SetSize({ WinApp::window_width,WinApp::window_height });

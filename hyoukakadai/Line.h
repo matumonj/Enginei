@@ -62,6 +62,7 @@ public:
 	static void Draw(DirectXCommon* dxcomn);
 	static void CollisionBlock(int** map, float** mapxy[2],float maphalf[2], const int MapX, const int MapY);
 	static void CollisionEnemy(std::unique_ptr<Enemy> Position[]);
+	static void CollisionEnemy(Enemy*Position);
 public:
 	void Setmapcol(bool f) { mapcol = f; }
 	float GetLength() { return subradius; }
