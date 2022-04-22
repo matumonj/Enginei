@@ -233,6 +233,50 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 		mapcol = false;
 	}
 }
+
+
+void Line::CollisionEnemy(Enemy*position)
+{
+	if (elf) {
+		Twine->SetColor({ 1,0,0,1 });
+	} else {
+		Twine->SetColor({ 1,1,1,1 });
+	}
+	//int in = -1;
+	float dis;
+		if (position!= nullptr) {
+			dis = sqrtf((position->GetPosition().x - needlepos.x) * (position->GetPosition().x - needlepos.x) +
+				(position->GetPosition().y - needlepos.y) * (position->GetPosition().y - needlepos.y));
+
+			if (dis <= 2 && trigger && !elf) {
+				elf = true;
+			//	index = i;//あたった敵の要素番号を割り当て
+			}
+		}
+
+		//衝突時
+		if (elf && !mapcol) {
+			if (position != nullptr) {
+				linex2 = position->GetPosition().x;
+				liney2 = position->GetPosition().y;
+			} else {
+				returnflag = true;
+			}
+	}
+	if (mapcol) {
+		oldlinex = linex2;
+		oldliney = liney2;
+		if (elf) {
+			linex2 = oldlinex;
+			liney2 = oldliney;
+		}
+	}
+
+	if (returnflag || colf) {
+		elf = false;
+		mapcol = false;
+	}
+}
 //フラグ説明
 /*
 boundflag:紐の終点へプレイヤーが吸い付くフラグ

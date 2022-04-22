@@ -224,6 +224,12 @@
     <ClCompile Include="Item.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Tutorial.cpp">
+      <Filter>ソース ファイル\gamescene\タイトルやプレイ中のシーン</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugCamera.h">
@@ -377,6 +383,12 @@
       <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial.h">
+      <Filter>ソース ファイル\gamescene\タイトルやプレイ中のシーン</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
