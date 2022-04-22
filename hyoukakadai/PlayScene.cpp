@@ -118,7 +118,7 @@ void PlayScene::ModelCreate()
 
 	attackeffects = std::make_unique<Effects>();;
 
-	Player_Pos = player->GetPosition();
+	//Player_Pos = player->GetPosition();
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
 }
@@ -287,7 +287,14 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos.x -= moveSpeed;
+	}
 
+	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+		jumpFlag = true;
+	}
+	if (jumpFlag == true) {
+		Player_Pos.y += 0.1f;
+		time += 0.02f;
 	}
 
 	/*if (Input::GetInstance()->Pushkey(DIK_UP)) {
@@ -325,6 +332,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 						//moveSpeed = 0;
 						grav = 0.0f;
 						time = 0;
+						jumpFlag = false;
 						break;
 					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
 						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
