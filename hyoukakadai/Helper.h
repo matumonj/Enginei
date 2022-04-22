@@ -17,9 +17,23 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
-	void feedIn(XMFLOAT4&color);
-	void feedOut(XMFLOAT4& color);
+	enum class FeedState {
+		Setting,
+		FeedIn,
+		FeedOut,
+		FeedInOut,
+		End,
+		None
+	};
+	static FeedState feedState;
+public:
+	static void Update(float& alpha);
+	static void feedIn(float& alpha);
+	static void feedOut(float& alpha);
+	static void feedInOut(float& alpha);
 	inline float easeIn();
 	inline float easeOut();
+
+	static bool GetFeedState_End() { if (feedState == FeedState::End)return true; }
 };
 

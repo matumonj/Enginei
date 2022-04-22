@@ -3,6 +3,8 @@
 #include"PlayScene.h"
 #include"Tutorial.h"
 #include"SceneManager.h"
+
+
 TitleScene::TitleScene(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
@@ -27,6 +29,19 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
+	if (Input::GetInstance()->TriggerKey(DIK_F))
+	{
+		feedflag = true;
+	}
+	if (feedflag) {
+		Helper::feedOut(alpha);
+		if (Helper::GetFeedState_End() == true) {
+			feedflag = false;
+		}
+	}
+	Helper::Update(alpha);
+	titlesprite->setcolor({ 1,1,1,alpha });
+	//titlesprite->SpriteUpdate()
 	titlesprite->SetSize({ WinApp::window_width,WinApp::window_height });
 }
 
