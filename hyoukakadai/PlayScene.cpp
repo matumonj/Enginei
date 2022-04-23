@@ -32,6 +32,7 @@ void PlayScene::SpriteCreate()
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
 	Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
 	mech = std::make_unique<Texture>();
 	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
@@ -40,6 +41,7 @@ void PlayScene::SpriteCreate()
 	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	background = Sprite::Create(1, { 0.0f,0.0f });
+	setumei = Sprite::Create(2, { 0.0f,0.0f });
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -56,6 +58,8 @@ void PlayScene::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("box1");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
+	goalmodel = Model::CreateFromOBJ("box2");
+
 
 	item = new Item();
 	item->Initialize();
@@ -84,6 +88,10 @@ void PlayScene::ModelCreate()
 	hari->Initialize();
 	hari->SetModel(harimodel);
 
+	goal = std::make_unique<Object3d>();
+	goal->Initialize();
+	goal->SetModel(goalmodel);
+
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -106,7 +114,7 @@ void PlayScene::ModelCreate()
 
 	attackeffects = std::make_unique<Effects>();;
 
-	Player_Pos = player->GetPosition();
+	//Player_Pos = player->GetPosition();
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
 }
@@ -115,6 +123,11 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
+
+
+	setumei->SetPosition({ 0, 400 });
+	setumei->SetSize({ 500,300 });
+	setumei->setcolor({ 1,1,1,1 });
 
 
 
@@ -134,9 +147,11 @@ void PlayScene::SetPrm()
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
 
+			
+
 		}
 	}
-
+	goal->SetPosition({ goal_pos.x + 185.0f,goal_pos.y-5 ,goal_pos.z });
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
 
@@ -148,6 +163,8 @@ void PlayScene::SetPrm()
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
+
+	
 
 }
 #pragma endregion
@@ -176,6 +193,7 @@ void PlayScene::objUpdate()
 	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
 
+	goal->Update({ 1,1,1,1 });
 
 }
 #pragma endregion
@@ -265,7 +283,14 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos.x -= moveSpeed;
+	}
 
+	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+		jumpFlag = true;
+	}
+	if (jumpFlag == true) {
+		Player_Pos.y += 0.1f;
+		time += 0.02f;
 	}
 
 	/*if (Input::GetInstance()->Pushkey(DIK_UP)) {
@@ -303,6 +328,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 						//moveSpeed = 0;
 						grav = 0.0f;
 						time = 0;
+						jumpFlag = false;
 						break;
 					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
 						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
@@ -338,6 +364,13 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 
+
+	
+
+	if (Line::GetInstance()->Getboundflag()==true) {
+		grav = 0;
+		time = 0;
+	}
 
 #pragma region 線の処理
 
@@ -431,7 +464,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
+	if (Input::GetInstance()->TriggerKey(DIK_R)||(Player_Pos.y<=-50)) {//押されたら
 		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
@@ -470,6 +503,11 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
 			}
+			if (map[j][i] == 2) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
+			}
 		}
 	}
 
@@ -483,12 +521,14 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	background->Draw();
+	setumei->Draw();
 	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
 
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
+
 
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);

@@ -58,7 +58,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	//UI部分の外枠ゲージが０なったら紐出せなくなる
 	LimitGauge = GameUI::GetInstance()->Getsclx();
 	if (LimitGauge < 0) {
-		trigger = false;//紐出せないように
+		//trigger = false;//紐出せないように
 		subradius = 0;//伸ばせる紐の長さを０に強制
 		//boundflag = false;
 		//returnflag = false;
@@ -111,9 +111,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		}
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
-		if (Input::GetInstance()->TriggerKey(DIK_F) && elf) {//線が伸び切って何もあたっていないとき
+		if (Input::GetInstance()->TriggerKey(DIK_A) && elf) {//線が伸び切って何もあたっていないとき
 			boundflag = true;//線の終点へ吸い付くフラグ
-		} else if (Input::GetInstance()->TriggerKey(DIK_G)) {
+		} else if (Input::GetInstance()->TriggerKey(DIK_D)&&boundflag!=true) {
 			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ,紐の長さがmaxlen超えて針がブロックとあたっていなかったらこれtrueに
 		}
 		//線の終点とプレイヤーとの距離求める

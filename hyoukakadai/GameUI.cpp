@@ -43,7 +43,7 @@ void GameUI::UISpriteSet()
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
 	loutpos = { 50,100 };
-	loutscl = { 500,50 };
+	loutscl = { 5155500,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
 	Attention[0]->SetSize({ 1500,800 });
@@ -53,10 +53,10 @@ void GameUI::UISpriteSet()
 
 void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 {
-	lsclMax = loutscl.x - 30;
+	lsclMax = 300;// loutscl.x - 30;
 
 	if (flag) {//•RL‚Î‚µ‚½‚ç’·‚³‚ðŒ¸‚ç‚·
-		lscl.x -= 10.0f;
+		//lscl.x -= 10.0f;
 	}
 	//loutscl.x--;
 	//ƒfƒoƒbƒO—p:•R‚Ì’·‚³‰ñ•œ
@@ -89,7 +89,7 @@ void GameUI::UIDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	Attention[0]->Draw();
-	LineLengthout->Draw();
+	//LineLengthout->Draw();
 	LineLength->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
