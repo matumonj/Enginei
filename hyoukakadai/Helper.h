@@ -26,11 +26,14 @@ public:
 		None
 	};
 	static FeedState feedState;
+	static bool inoutflag;
 public:
-	static void Update(float& alpha);
-	static void feedIn(float& alpha);
-	static void feedOut(float& alpha);
-	static void feedInOut(float& alpha);
+	static void Update(float& alpha, const float Max);
+	static void feedIn(float& alpha, const float Max);
+	static void feedOut(float& alpha, const float Min);
+	static void feedInOut(float& alpha, const float Max, const float Min);
+	//feedoutのタイミング指定
+	static void feedInOut_f(float& alpha,const float Max, const float Min,bool &flag);
 	inline float easeIn();
 	inline float easeOut();
 

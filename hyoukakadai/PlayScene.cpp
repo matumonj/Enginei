@@ -8,12 +8,6 @@
 #include"ThrowEnemy.h"
 #include"Line.h"
 #include"Destroy.h"
-#define PI 3.14
-#define CLENGTH     (LENGTH * 2 * PI)   // 紐を伸ばして一周させた場合に出来る円の円周の長さ
-#define MASS        0.346               // ぶら下がっている物の質量
-#define G           0.05               // 重力加速度
-#define STX         320                 // 振り子の軸のx座標
-#define STY         100                 // 振り子の軸のy座標
 
 //コメントアウト
 
@@ -63,6 +57,8 @@ void PlayScene::ModelCreate()
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
 
+	item = new Item();
+	item->Initialize();
 	collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
@@ -396,7 +392,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	camera->Update();
 
-
 	player->SetPosition(Player_Pos);
 	player->SetRotation(Player_Rot);
 
@@ -429,6 +424,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 
+	item->Update(enemy);
+
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -452,6 +449,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->Draw();
 	player->PostDraw();
 
+
 	world->PreDraw();
 	//world->Draw();
 	world->PostDraw();
@@ -464,6 +462,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	block->Draw();
 	block->PostDraw();
 
+	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1) {

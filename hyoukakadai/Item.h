@@ -5,6 +5,7 @@
 #include"Object3d.h"
 #include"Model.h"
 #include"Enemy.h"
+#include<memory>
 class Item
 {
 public:
@@ -22,12 +23,13 @@ public:
 	void Update(std::unique_ptr<Enemy>enemy[]);
 	void Draw();
 	void Drop(std::unique_ptr<Enemy>enemy[]);
+	void HealEfficasy(Player*player);
 private:
-	static const int itemMax = 3;
+	static const int itemMax = 4;
 	Object3d* itemObj[itemMax] = { nullptr };
-	Model* itemModel=nullptr ;
+	Model* itemModel =  nullptr ;
 
-	XMFLOAT3 positione[itemMax];
+	//XMFLOAT3 positione[itemMax];
 	XMFLOAT3 position[itemMax];
 	XMFLOAT3 rotation[itemMax];
 	XMFLOAT3 scale[itemMax];

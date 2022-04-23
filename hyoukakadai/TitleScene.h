@@ -12,7 +12,7 @@
 #include"LightGroup.h"
 #include"DebugCamera.h"
 #include"DirectXCommon.h"
-#include"Helper.h"
+#include"Fader.h"
 class TitleScene:public BaseScene
 {
 private:
@@ -20,9 +20,12 @@ private:
 public:
 	TitleScene(SceneManager* sceneManager);
 private:
-	float alpha = 1;
+	Fader* feed;
+	float alpha = 0;
 	Sprite* titlesprite;
 	bool feedflag = false;
+	bool feedinflag = false;
+	bool feedd = false;
 	//DirectXCommon* dxcomn;
 public:
 	void Initialize(DirectXCommon* dxCommon)override;

@@ -21,6 +21,7 @@
 #include"Effects.h"
 #include"GameUI.h"
 #include"Player.h"
+#include"Item.h"
 #include<memory>
 class PlayScene :public BaseScene
 {
@@ -75,7 +76,7 @@ private:
 
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
-
+	Item* item=nullptr;
 	//Effects* effects;
 private:
 	//Plyer

@@ -111,7 +111,7 @@ protected:
 	public:
 		
 		void Setfeed(int set) { this->setf = set; }
-		void setcolor(XMFLOAT4 color) { this->color = color; }
+		void setcolor(XMFLOAT4 color);
 
 		void TransferVertices();
 		float GetSize_x() { return size.x; }

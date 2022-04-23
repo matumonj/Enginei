@@ -3,8 +3,8 @@
 #include"PlayScene.h"
 #include"Tutorial.h"
 #include"SceneManager.h"
-
-
+#include"imgui.h"
+#include"Helper.h"
 TitleScene::TitleScene(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
@@ -33,13 +33,32 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 	{
 		feedflag = true;
 	}
+	if (Input::GetInstance()->TriggerKey(DIK_I))
+	{
+		feedinflag = true;
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_T))
+	{
+		feedd = true;
+	}
+
+	if (feedinflag) {
+		Helper::feedIn(alpha,1);
+		if (alpha >= 1.0f) {
+			feedinflag = false;
+		}
+	}
 	if (feedflag) {
-		Helper::feedOut(alpha);
-		if (Helper::GetFeedState_End() == true) {
+		Helper::feedInOut_f(alpha,1,0,feedd);
+		if (alpha <=0.0f) {
 			feedflag = false;
 		}
 	}
-	Helper::Update(alpha);
+	
+	//Helper::Update(alpha);
+	alpha = min(alpha, 1.1f);
+	alpha = max(alpha, 0.0f);
+
 	titlesprite->setcolor({ 1,1,1,alpha });
 	//titlesprite->SpriteUpdate()
 	titlesprite->SetSize({ WinApp::window_width,WinApp::window_height });
@@ -65,6 +84,15 @@ void TitleScene::Draw(DirectXCommon* dxcomn)
 	//ポストエフェクトの描画
 	dxcomn->BeginDraw();//描画コマンドの上らへんに
 	SpriteDraw(dxcomn->GetCmdList());
+
+	ImGui::Begin("Obj1");
+	ImGui::SetWindowPos(ImVec2(0, 0));
+	ImGui::SetWindowSize(ImVec2(500, 300));
+	if (ImGui::TreeNode("cameraposition")) {
+		ImGui::SliderFloat("cy", &alpha, 100, -100);
+		ImGui::TreePop();
+	}
+	ImGui::End();
 	dxcomn->EndDraw();
 
 }

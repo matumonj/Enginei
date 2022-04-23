@@ -45,6 +45,7 @@ private:
 	const int MAX_X = 100;
 	const int MAX_Y =15;
 private:
+	
 	Enemy* enemy = nullptr;
 	Collision* collision = nullptr;
 

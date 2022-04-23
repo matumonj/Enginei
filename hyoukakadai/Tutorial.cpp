@@ -8,6 +8,7 @@
 #include"ThrowEnemy.h"
 #include"Line.h"
 #include"Destroy.h"
+#include"Fader.h"
 //コメントアウト
 //シーンのコンストラクタ
 Tutorial::Tutorial(SceneManager* sceneManager)
@@ -30,6 +31,7 @@ void Tutorial::SpriteCreate()
 #pragma region 
 void Tutorial::ModelCreate()
 {
+	//feed = new Fader();
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
@@ -162,6 +164,8 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
 
+
+
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
@@ -181,7 +185,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 				mapy[j][i] = tst[j][i]->GetPosition().y;
 				height =2.5;
 				width = 1;
-				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
+				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
 					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
 						Line::GetInstance()->Setmapcol(true);
 						Line::GetInstance()->Setelf(true);
@@ -195,7 +199,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 						grav = 0.0f;
 						time = 0;
 						break;
-					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i]) {
 						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
 						break;
 					}
@@ -206,7 +210,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 				}
 
 				//プレイヤーの左辺
-				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i]  < Player_Pos.y + Player_Scl.y)) {
 					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
 						Player_Pos.y = Player_Pos.y + 0.001f;
 						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
