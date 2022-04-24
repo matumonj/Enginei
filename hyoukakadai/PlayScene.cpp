@@ -8,7 +8,7 @@
 #include"ThrowEnemy.h"
 #include"Line.h"
 #include"Destroy.h"
-
+#include"Fader.h"
 //コメントアウト
 
 
@@ -117,6 +117,7 @@ void PlayScene::ModelCreate()
 	//Player_Pos = player->GetPosition();
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
+	//Fader::SetFeedSprite();
 }
 #pragma endregion
 
@@ -453,12 +454,13 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			//もし敵が死んだら破棄
 			if (enemy[i]->GetState_DEAD() == true) {
 				Destroy_unique(enemy[i]);
+			
 			}
 		}
 	}
-
+	
 	item->Update(enemy);
-
+	//Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -519,6 +521,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 //sプライと以外の描画
 void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 {
+
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	background->Draw();
 	setumei->Draw();
@@ -543,6 +546,7 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 	effects->Draw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
+
 }
 #pragma endregion
 //↓に入る

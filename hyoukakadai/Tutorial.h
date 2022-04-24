@@ -21,6 +21,7 @@
 #include"Effects.h"
 #include"GameUI.h"
 #include"Player.h"
+#include"TyutorialSprite.h"
 #include<memory>
 class Tutorial :public BaseScene
 {
@@ -60,6 +61,7 @@ private:
 	Model* tstmodel = nullptr;
 	Model* harimodel = nullptr;
 	DebugCamera* camera;
+	TyutorialSprite* tyutorial;
 private:
 	
 	XMFLOAT3 Player_Pos = { 20,0,0 };// = player->GetPosition();
@@ -98,7 +100,7 @@ private:
 	float posY = 0;
 	float half_Width;
 	float half_height = 0;
-
+	bool feed;
 
 	float mapx[15][100];
 	float mapy[15][100];

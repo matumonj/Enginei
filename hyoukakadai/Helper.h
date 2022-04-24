@@ -7,6 +7,7 @@
 #include"Texture.h"
 #include"Object3d.h"
 #include"Model.h"
+#include"Sprite.h"
 class Helper
 {
 private:
@@ -17,26 +18,7 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
-	enum class FeedState {
-		Setting,
-		FeedIn,
-		FeedOut,
-		FeedInOut,
-		End,
-		None
-	};
-	static FeedState feedState;
-	static bool inoutflag;
-public:
-	static void Update(float& alpha, const float Max);
-	static void feedIn(float& alpha, const float Max);
-	static void feedOut(float& alpha, const float Min);
-	static void feedInOut(float& alpha, const float Max, const float Min);
-	//feedoutのタイミング指定
-	static void feedInOut_f(float& alpha,const float Max, const float Min,bool &flag);
 	inline float easeIn();
 	inline float easeOut();
-
-	static bool GetFeedState_End() { if (feedState == FeedState::End)return true; }
 };
 
