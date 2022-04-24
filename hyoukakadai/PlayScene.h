@@ -78,7 +78,6 @@ private:
 	Model* worldmodel = nullptr;
 	Model* harimodel = nullptr;
 	Model* goalmodel = nullptr;
-
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
 	Item* item=nullptr;

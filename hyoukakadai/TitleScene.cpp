@@ -29,32 +29,32 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_F))
-	{
-		feedflag = true;
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_I))
-	{
-		feedinflag = true;
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_T))
-	{
-		feedd = true;
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_F))
+	//{
+	//	feedflag = true;
+	//}
+	//if (Input::GetInstance()->TriggerKey(DIK_I))
+	//{
+	//	feedinflag = true;
+	//}
+	//if (Input::GetInstance()->TriggerKey(DIK_T))
+	//{
+	//	feedd = true;
+	//}
 
-	if (feedinflag) {
-		Helper::feedIn(alpha,1);
-		if (alpha >= 1.0f) {
-			feedinflag = false;
-		}
-	}
-	if (feedflag) {
-		Helper::feedInOut_f(alpha,1,0,feedd);
-		if (alpha <=0.0f) {
-			feedflag = false;
-		}
-	}
-	
+	//if (feedinflag) {
+	//	Helper::feedIn(alpha,1);
+	//	if (alpha >= 1.0f) {
+	//		feedinflag = false;
+	//	}
+	//}
+	//if (feedflag) {
+	//	Helper::feedInOut_f(alpha,1,0,feedd);
+	//	if (alpha <=0.0f) {
+	//		feedflag = false;
+	//	}
+	//}
+	//
 	//Helper::Update(alpha);
 	alpha = min(alpha, 1.1f);
 	alpha = max(alpha, 0.0f);

@@ -114,7 +114,8 @@ void Tutorial::objUpdate()
 void Tutorial::Initialize(DirectXCommon* dxCommon)
 {
 	//
-
+	tyutorial = new TyutorialSprite();
+	tyutorial->Initialize();
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
@@ -152,7 +153,7 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 	/*audio = new Audio();
 	audio->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
-
+	Fader::SetFeedSprite();
 }
 #pragma endregion
 
@@ -164,7 +165,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
 
-
+	tyutorial->Update();
 
 	//FBXモデルの更新
 	object1->Updata(TRUE);
@@ -248,7 +249,8 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	//重力の影響で少しぐらつき
 	hari_Pos.x = Line::GetInstance()->getpos().x;
 	hari_Pos.y = Line::GetInstance()->getpos().y;
-
+	
+	Fader::FeedSpriteUpdate();
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -353,6 +355,10 @@ void Tutorial::MyGameDraw(DirectXCommon* dxcomn)
 	GameUI::PlayerUIDraw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	Fader::FeedSpriteDraw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+	tyutorial->Draw(dxcomn);
 }
 #pragma endregion
 //↓に入る
