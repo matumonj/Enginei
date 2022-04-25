@@ -315,7 +315,7 @@ void Sprite::PostDraw(ID3D12GraphicsCommandList* cmdList)
 Sprite* Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOAT2 anchorpoint)
 {
 	// 仮サイズ
-	XMFLOAT2 size = { 100.0f, 100.0f };
+	XMFLOAT2 size = { 200.0f, 200.0f };
 
 	if (texBuff[texNumber])
 	{
@@ -558,11 +558,4 @@ void Sprite::TransferVertices()
 
 void Sprite::setcolor(XMFLOAT4 color) {
 	this->color = color;
-	// 定数バッファにデータ転送
-	ConstBufferData* constMap = nullptr;
-	HRESULT result = this->constBuff->Map(0, nullptr, (void**)&constMap);
-	if (SUCCEEDED(result)) {
-		constMap->color = this->color;
-		this->constBuff->Unmap(0, nullptr);
-	}
 }

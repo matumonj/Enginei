@@ -15,7 +15,7 @@ TitleScene::TitleScene(SceneManager* sceneManager)
 /// </summary>
 void TitleScene::Initialize(DirectXCommon* dxCommon)
 {
-	Sprite::LoadTexture(3, L"Resources/background.png");
+	titlesprite->LoadTexture(3, L"Resources/background.png");
 	titlesprite = Sprite::Create(3, { 0.0f,0.0f });
 }
 
@@ -89,7 +89,7 @@ void TitleScene::Draw(DirectXCommon* dxcomn)
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("cameraposition")) {
-		ImGui::SliderFloat("cy", &alpha, 100, -100);
+		ImGui::SliderFloat("cy", &alpha, 200, -200);
 		ImGui::TreePop();
 	}
 	ImGui::End();

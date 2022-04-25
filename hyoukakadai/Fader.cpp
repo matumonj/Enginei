@@ -11,7 +11,7 @@ bool Fader::SetFeedSprite()
 {
 	Sprite::LoadTexture(10, L"Resources/feed.png");
 	sprite = Sprite::Create(10, { 0,0 });
-
+	alpha = 0.0f;
 	return true;
 }
 
@@ -55,6 +55,19 @@ void Fader::feedInOut(const float Max, const float Min)
 	}
 }
 void Fader::feedInOut_f(const float Max, const float Min, bool& flag)
+{
+	if (alpha < 1.0f && !flag) {
+		feedIn(Max);
+	}
+	if (flag) {
+		feedOut(Min);
+		if (alpha <= Min) {
+			//flag = false;
+		}
+	}
+}
+
+void Fader::feedInOutf_f_a(float& alpha, const float Max, const float Min, bool flag)
 {
 	if (alpha < 1.0f && !flag) {
 		feedIn(Max);

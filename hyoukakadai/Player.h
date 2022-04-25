@@ -40,7 +40,7 @@ public:
 	void SetHp(int Hp) { HP = Hp; }
 	bool GetRot_Left() { if (playerRot==State::Left) return true; }
 	bool GetRot_Right() { if (playerRot == State::Right) return true; }
-
+	void Finalize();
 private:
 	int HP = 10;
 	int AttackCoolTime = 10;

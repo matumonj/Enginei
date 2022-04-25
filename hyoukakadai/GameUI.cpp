@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include"Input.h"
 #include"DebugCamera.h"
+#include"Destroy.h"
 #include"Line.h"
 //Ž…‚É‚©‚©‚í‚éUI
 using namespace DirectX;
@@ -42,7 +43,7 @@ void GameUI::UISpriteSet()
 	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
-	loutpos = { 50,100 };
+	loutpos = { 50,200 };
 	loutscl = { 5155500,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
@@ -209,4 +210,19 @@ void GameUI::PlayerUIDraw(DirectXCommon* dxcomn)
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	PlayerHP->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
+}
+
+void GameUI::Finalize()
+{
+	//delete LineLength,LineLengthout;
+	Destroy(LineLength);
+	Destroy(LineLengthout);
+	Destroy(PlayerHP);
+	Destroy(Attention[0]);
+	Destroy(Attention[1]);
+	Destroy(Attention[2]);
+	Destroy(AllowTexure);
+	//delete AllowTexure;
+	delete TargetTexture;
+	//delete EnemySearchTexure;
 }

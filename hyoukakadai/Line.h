@@ -31,6 +31,8 @@ private:
 	static bool boundflag ;
 	static bool returnflag ;
 	static bool drawflag;
+	static bool stopflag;
+	static bool notdoubletuch;
 	static 	float tempx, tempy;
 	static float linex, linex2, liney, liney2;
 	static float lineangle ;
@@ -55,7 +57,7 @@ private:
 	static float oldlinex, oldliney;
 	static bool mapcol;// = false;
 public:
-
+	static void Finalize();
 	static Line* GetInstance();
 	static void Initialize();
 	static void Update(XMMATRIX matview, XMMATRIX matprojection,Player*player,XMFLOAT3&Player_Pos,bool& colf,float& moveSpeed);

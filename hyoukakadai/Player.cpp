@@ -3,6 +3,7 @@
 #include"DebugTxt.h"
 #include"SphereCollider.h"
 #include"Collision.h"
+#include"Destroy.h"
 using namespace DirectX;
 
 Player* Player::Create(Model* model)
@@ -140,4 +141,10 @@ void Player::CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos)
 			}
 		}
 	}
+}
+
+void Player::Finalize()
+{
+	Destroy(playerobj);
+	Destroy(playermodel);
 }

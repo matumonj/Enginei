@@ -19,6 +19,8 @@ public:
 	static void feedInOut(const float Max, const float Min);
 	//feedoutのタイミング指定
 	static void feedInOut_f(const float Max, const float Min, bool& flag);
+	//任意のアルファ値をいじくり回す
+	static void  feedInOutf_f_a(float& alpha, const float Max, const float Min, bool flag);
 
 	float GetAlpha() { return alpha; }
 };
