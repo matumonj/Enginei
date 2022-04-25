@@ -380,8 +380,8 @@ void Tutorial::ImGuiDraw()
 	if (ImGui::TreeNode("cameraposition")) {
 		float cx = camera->GetEye().x;
 		float cy = camera->GetEye().y;
-		ImGui::SliderFloat("cx", &cx, 100, -100);
-		ImGui::SliderFloat("cy", &cy, 100, -100);
+		ImGui::SliderFloat("cx", &cx, 200, -200);
+		ImGui::SliderFloat("cy", &cy, 200, -200);
 		ImGui::TreePop();
 	}
 	ImGui::End();

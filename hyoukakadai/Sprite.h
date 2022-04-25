@@ -97,7 +97,7 @@ protected:
 	// 座標
 	XMFLOAT2 position{};
 	// スプライト幅、高さ
-	XMFLOAT2 size = { 100.0f, 100.0f };
+	XMFLOAT2 size = { 200.0f, 200.0f };
 	// アンカーポイント
 	XMFLOAT2 anchorpoint = { 0, 0 };
 	// ワールド行列
@@ -107,7 +107,7 @@ protected:
 	// テクスチャ始点
 	XMFLOAT2 texBase = { 0, 0 };
 	// テクスチャ幅、高さ
-	XMFLOAT2 texSize = { 100.0f, 100.0f };
+	XMFLOAT2 texSize = { 200.0f, 200.0f };
 	public:
 		
 		void Setfeed(int set) { this->setf = set; }

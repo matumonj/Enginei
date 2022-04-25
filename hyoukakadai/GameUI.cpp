@@ -42,7 +42,7 @@ void GameUI::UISpriteSet()
 	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
-	loutpos = { 50,100 };
+	loutpos = { 50,200 };
 	loutscl = { 5155500,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
