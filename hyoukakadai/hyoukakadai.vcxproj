@@ -173,12 +173,15 @@
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="Effects.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Fader.cpp" />
     <ClCompile Include="FbxLoader.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="f_Model.cpp" />
     <ClCompile Include="f_Object3d.cpp" />
     <ClCompile Include="GameUI.cpp" />
+    <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -203,6 +206,8 @@
     <ClCompile Include="ThrowEnemy.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TouchableObject.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
+    <ClCompile Include="TyutorialSprite.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -222,12 +227,15 @@
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="Effects.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Fader.h" />
     <ClInclude Include="FbxLoader.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="f_Model.h" />
     <ClInclude Include="f_Object3d.h" />
     <ClInclude Include="GameUI.h" />
+    <ClInclude Include="Helper.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
@@ -255,6 +263,8 @@
     <ClInclude Include="ThrowEnemy.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TouchableObject.h" />
+    <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="TyutorialSprite.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
   <ItemGroup>

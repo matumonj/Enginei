@@ -30,6 +30,7 @@ public:
 	void OnCollision(const CollisionInfo& info)override;
 	void Attack(XMFLOAT3 playerpos);
 	void CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos);
+	void CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos);
 	//DebugTxt* debugtxt = nullptr;
 	int DebugTexnum = 4;
 	XMFLOAT2 GetArea_S() { return damageArea.Area_s; }

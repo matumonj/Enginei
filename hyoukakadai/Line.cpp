@@ -27,7 +27,7 @@ float Line::MoveSpeed = 0;
 Object3d* Line::NeedleObj = nullptr;
 Model* Line::NeedleModel = nullptr;
 int Line::L_Cflag = 0;
-XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos,Line::needlerot;
+XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos, Line::needlerot;
 bool Line::elf = false;
 float Line::oldlinex, Line::oldliney;
 int Line::index = -1;
@@ -49,7 +49,7 @@ void Line::Initialize()
 
 }
 
-void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLOAT3& Player_Pos, bool& mapcolf,float& moveSpeed)
+void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFLOAT3& Player_Pos, bool& mapcolf, float& moveSpeed)
 {
 	float sdistance;
 	sdistance = sqrtf(((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)) +
@@ -58,7 +58,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 	//UI部分の外枠ゲージが０なったら紐出せなくなる
 	LimitGauge = GameUI::GetInstance()->Getsclx();
 	if (LimitGauge < 0) {
-		trigger = false;//紐出せないように
+		//trigger = false;//紐出せないように
 		subradius = 0;//伸ばせる紐の長さを０に強制
 		//boundflag = false;
 		//returnflag = false;
@@ -111,9 +111,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player*player, XMFLO
 		}
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
-		if (Input::GetInstance()->TriggerKey(DIK_F) && elf) {//線が伸び切って何もあたっていないとき
+		if (Input::GetInstance()->TriggerKey(DIK_A) && elf) {//線が伸び切って何もあたっていないとき
 			boundflag = true;//線の終点へ吸い付くフラグ
-		} else if (Input::GetInstance()->TriggerKey(DIK_G)) {
+		} else if (Input::GetInstance()->TriggerKey(DIK_D)&&boundflag!=true) {
 			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ,紐の長さがmaxlen超えて針がブロックとあたっていなかったらこれtrueに
 		}
 		//線の終点とプレイヤーとの距離求める
@@ -192,8 +192,7 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 {
 	if (elf) {
 		Twine->SetColor({ 1,0,0,1 });
-	}
-	else {
+	} else {
 		Twine->SetColor({ 1,1,1,1 });
 	}
 	//int in = -1;
@@ -210,7 +209,7 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 		}
 
 		//衝突時
-		if (elf&&!mapcol) {
+		if (elf && !mapcol) {
 			if (position[index] != nullptr) {
 				linex2 = position[index]->GetPosition().x;
 				liney2 = position[index]->GetPosition().y;
@@ -220,12 +219,56 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 
 		}
 	}
-	if (mapcol ) {
+	if (mapcol) {
 		oldlinex = linex2;
 		oldliney = liney2;
 		if (elf) {
-			linex2 =oldlinex;
-			liney2 =oldliney;
+			linex2 = oldlinex;
+			liney2 = oldliney;
+		}
+	}
+
+	if (returnflag || colf) {
+		elf = false;
+		mapcol = false;
+	}
+}
+
+
+void Line::CollisionEnemy(Enemy*position)
+{
+	if (elf) {
+		Twine->SetColor({ 1,0,0,1 });
+	} else {
+		Twine->SetColor({ 1,1,1,1 });
+	}
+	//int in = -1;
+	float dis;
+		if (position!= nullptr) {
+			dis = sqrtf((position->GetPosition().x - needlepos.x) * (position->GetPosition().x - needlepos.x) +
+				(position->GetPosition().y - needlepos.y) * (position->GetPosition().y - needlepos.y));
+
+			if (dis <= 2 && trigger && !elf) {
+				elf = true;
+			//	index = i;//あたった敵の要素番号を割り当て
+			}
+		}
+
+		//衝突時
+		if (elf && !mapcol) {
+			if (position != nullptr) {
+				linex2 = position->GetPosition().x;
+				liney2 = position->GetPosition().y;
+			} else {
+				returnflag = true;
+			}
+	}
+	if (mapcol) {
+		oldlinex = linex2;
+		oldliney = liney2;
+		if (elf) {
+			linex2 = oldlinex;
+			liney2 = oldliney;
 		}
 	}
 

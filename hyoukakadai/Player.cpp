@@ -69,10 +69,10 @@ void Player::Attack(XMFLOAT3 playerpos)
 		playerRot = State::Left;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+	if (Input::GetInstance()->TriggerKey(DIK_W)) {
 		action = Action::Attack;
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_N)) {
+	if (Input::GetInstance()->TriggerKey(DIK_S)) {
 		action = Action::None;
 	}
 
@@ -117,6 +117,27 @@ void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 				enemy[i]->SetDead(true);
 			}
 		}
+		}
+	}
+}
+
+
+
+void Player::CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos)
+{
+	damageArea.Area_s = { position.x - Area_X_s,position.y - 8 };
+	damageArea.Area_e = { position.x + Area_X_e ,position.y + 5 };
+
+	//“–‚½‚è”»’è
+
+	if (action == Action::Attack) {
+		for (int i = 0; i < 4; i++)
+		{
+			if (enemy != nullptr) {
+				if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy->GetPosition().x - 1,enemy->GetPosition().y - 1 }, { enemy->GetPosition().x + 1,enemy->GetPosition().y + 1 }) == true) {
+					enemy->SetDead(true);
+				}
+			}
 		}
 	}
 }

@@ -1,6 +1,6 @@
 cbuffer cbuff0:register(b0)
 {
-	float color;
+	float4 color;
 	matrix mat;
 };
 

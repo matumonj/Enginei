@@ -36,14 +36,14 @@ void GameUI::UISpriteSet()
 	Sprite::LoadTexture(11, L"Resources/gomi.png");
 	//注意
 	Sprite::LoadTexture(12, L"Resources/attention.png");
-	
+
 	LineLengthout = Sprite::Create(10, { 0.0f,-200.0f });
 	LineLength = Sprite::Create(11, { 0.0f,-200.0f });
 	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
 	loutpos = { 50,100 };
-	loutscl = { 500,50 };
+	loutscl = { 5155500,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
 	Attention[0]->SetSize({ 1500,800 });
@@ -53,10 +53,10 @@ void GameUI::UISpriteSet()
 
 void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 {
-	lsclMax = loutscl.x - 30;
+	lsclMax = 300;// loutscl.x - 30;
 
 	if (flag) {//紐伸ばしたら長さを減らす
-		lscl.x -= 10.0f;
+		//lscl.x -= 10.0f;
 	}
 	//loutscl.x--;
 	//デバッグ用:紐の長さ回復
@@ -65,7 +65,7 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 	}
 	if (boundflag) {
 		if (loutscl.x >= 0)
-		//	loutscl.x -= 10;//最大値を減らす
+			loutscl.x -= 10;//最大値を減らす
 		if (tempx - loutscl.x > movement * 4) {//最大値の減る量(減る前と減ったあとの最大値を計算)
 			boundflag = false;//!boundflag->colf
 		}
@@ -89,7 +89,7 @@ void GameUI::UIDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	Attention[0]->Draw();
-	LineLengthout->Draw();
+	//LineLengthout->Draw();
 	LineLength->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
@@ -165,8 +165,7 @@ void GameUI::TargetUIUpdate(XMMATRIX matview, XMMATRIX matprojection, bool flag)
 		}
 		Targetpos = Line::GetInstance()->getpos();
 		//TargetTexture->SetPosition();
-	}
-	else {
+	} else {
 		Targetscl = { 1,1,1 };
 		if (Targetalpha >= 0) {
 			Targetalpha -= 0.1f;
@@ -191,15 +190,15 @@ void GameUI::PlayerUISet()
 	//playerhp
 	Sprite::LoadTexture(13, L"Resources/bosshp.png");
 	PlayerHP = Sprite::Create(13, { 0.0f,-200.0f });
-	
+
 	playerHPScl = { 500,50 };
 	playerHPPos = { 40,300 };
 }
 
-void GameUI::PlayerUIUpdate(Player*player)
+void GameUI::PlayerUIUpdate(Player* player)
 {
-	
-	playerHPScl.x = player->getHp()*50;
+
+	playerHPScl.x = player->getHp() * 50;
 	PlayerHP->SetSize(playerHPScl);
 	PlayerHP->SetPosition(playerHPPos);
 	PlayerHP->setcolor({ 1,1,1,1 });
