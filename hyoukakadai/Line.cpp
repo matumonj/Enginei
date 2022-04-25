@@ -10,6 +10,8 @@ bool Line::trigger = false;
 int Line::f;
 bool Line::boundflag = false;
 bool Line::returnflag = false;
+bool Line::stopflag = true;
+bool Line::notdoubletuch = true;
 float Line::tempx, Line::tempy;
 float Line::linex, Line::linex2, Line::liney, Line::liney2;
 float Line::lineangle = 0;
@@ -81,33 +83,38 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 
 		}
 			}*/
-
-	if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
-		lineangle += 5.0f;//移動方向の指定
-		subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
-		needlerot.z += 5;
+	if (stopflag == true) {
+		if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
+			lineangle += 5.0f;//移動方向の指定
+			subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
+			needlerot.z += 5;
+		}
 	}
 	if (!elf) {
-		linex2 = tempx + cosf((lineangle)*PI / 180) * subradius;
-		liney2 = tempy + sinf((lineangle)*PI / 180) * subradius;
+		linex2 = tempx + cosf((lineangle)*PI / 180.0f) * subradius;
+		liney2 = tempy + sinf((lineangle)*PI / 180.0f) * subradius+0.5f;
 	}
 	//////////中心点//////飛ばす角度///////////////////半径(距離)
-
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && (!returnflag && !boundflag)) {
-		trigger = true;//線を伸ばすフラグね
-		elf = false;
+	if (notdoubletuch == true) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) && (!returnflag && !boundflag)) {
+			trigger = true;//線を伸ばすフラグね
+			elf = false;
+			stopflag = false;
+			notdoubletuch = false;
+		}
 	}
-
 	if (trigger) {//trigger:線伸ばすフラグ
 		subradius += LengThenSpeed;//線を伸ばす
 		if (subradius > MaxLen || elf) {//一定以上行ったら+ブロックに針あたったら
 			trigger = false;
 			lengthserchf = true;
+
 		}
 		if (subradius > MaxLen && !elf) {//一定以上行って何も当たらなかったら
 			trigger = false;
 			lengthserchf = true;
 			returnflag = true;
+
 		}
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
@@ -127,6 +134,8 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			//elf = false;
 			boundflag = false;
 			subradius = 0;//線の長さを0に
+			stopflag = true;
+			notdoubletuch = true;
 		}
 	}
 	//先の長さが最大超えた、またはブロックあたったらその時点のプレイヤーと線の距離を求める（その距離分ゲージ減らす）
@@ -144,6 +153,8 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		moveSpeed = 0.5f;
 		Player_Pos.x += (FollowangleX / FollowangleR) * moveSpeed;
 		Player_Pos.y += (FollowangleZ / FollowangleR) * moveSpeed;
+		stopflag = true;
+		notdoubletuch = true;
 	} else {
 		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
 		/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
@@ -154,10 +165,12 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	//線が戻ってくる処理
 	if (returnflag) {
 		subradius -= 1.5f;
+		
 		if (subradius <= 0) {//先の長さが０なったら切る
 			returnflag = false;
 			//mapcolf = false;
 			colf = true;
+			
 		}
 	}
 
@@ -171,7 +184,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	NeedleObj->SetPosition({ linex2,liney2,Player_Pos.z });
 	//needlerot = player->GetRotation();
 	needlepos = NeedleObj->GetPosition();
-	NeedleObj->SetScale({ 1.4,1.4,1.5 });
+	NeedleObj->SetScale({ 1.4f,1.4f,1.5f });
 	NeedleObj->SetRotation({ needlerot });
 	NeedleObj->Update({ 1,1,1,1 });
 }
