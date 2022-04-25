@@ -31,20 +31,24 @@ private:
 	bool OK_flag = false;
 	enum class Phase {
 		None,
-		Start,
-		Move,
-		LineShot,
-		LineOperation,
-		Attack,
-		End,
+		Start,//開始
+		Move,//移動
+		LineShot,//糸出し
+		LineLimit,//糸の上限
+		LineOperation,//糸を使った移動
+		Attack,//攻撃アクション
+		PlayerHP,//体力ゲージ
+		End,//
 	};
 	enum class Clear {
-		None,
-		Move,
-		LineShot,
-		LineBond,
-		LineCol,
-		Attack,
+		None,//
+		Move,//
+		LineShot,//
+		LineLimit,//
+		LineBond,//
+		LineCol,//
+		Attack,//
+		PlayerHP,//
 	};
 	Clear task = Clear::None;
 	Phase phase=Phase::Start;
