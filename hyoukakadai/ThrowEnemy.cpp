@@ -113,8 +113,8 @@ void ThrowEnemy::Draw()
 	}
 
 	ImGui::Begin("the");
-	if (ImGui::SliderFloat("x", &Position.x, 100, -100));
-	if (ImGui::SliderFloat("y", &Position.y, 100, -100));
+	if (ImGui::SliderFloat("x", &Position.x, 200, -200));
+	if (ImGui::SliderFloat("y", &Position.y, 200, -200));
 	ImGui::End();
 }
 void ThrowEnemy::Motion(int time)
@@ -155,7 +155,7 @@ void ThrowEnemy::ProjectileMotion()
 	attackcount++;
 }
 
-void ThrowEnemy::ColMap(int map[15][100], float mapx[15][100], float mapy[15][100], const int X, const int Y)
+void ThrowEnemy::ColMap(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y)
 {
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {

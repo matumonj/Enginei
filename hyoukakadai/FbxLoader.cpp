@@ -414,7 +414,7 @@ void FbxLoader::ParseSkin(f_Model* model, FbxMesh* fbxMesh)
                         for (int j = 1; j < f_Model::MAX_BONE_INDICES; j++) {
                             weight += vertices[i].boneWeight[j];
                         }
-                        //合計で1.0f（100%）になるように調整
+                        //合計で1.0f（200%）になるように調整
                         vertices[i].boneWeight[0] = 1.0f - weight;
                         break;
                     }

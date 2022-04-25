@@ -315,7 +315,7 @@ void Sprite::PostDraw(ID3D12GraphicsCommandList* cmdList)
 Sprite* Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOAT2 anchorpoint)
 {
 	// âºÉTÉCÉY
-	XMFLOAT2 size = { 100.0f, 100.0f };
+	XMFLOAT2 size = { 200.0f, 200.0f };
 
 	if (texBuff[texNumber])
 	{

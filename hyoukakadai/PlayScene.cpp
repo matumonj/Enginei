@@ -147,9 +147,6 @@ void PlayScene::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
-
-			
-
 		}
 	}
 	goal->SetPosition({ goal_pos.x + 185.0f,goal_pos.y-5 ,goal_pos.z });
@@ -214,7 +211,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	//enemy[0] = new MobEnemy();
 
 	enemy[3]->Setposition({ 80,-4.2,0 });
-	enemy[2]->Setposition({ 100,-4.2,0 });
+	enemy[2]->Setposition({ 200,-4.2,0 });
 	enemy[1]->Setposition({ -40, -10, 0 });
 	enemy[0]->Setposition({ 20, -10, 0 });
 	enemy[0]->Initialize();
@@ -421,7 +418,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y + 1,Player_Pos.z - 23 });
+	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
 	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
 
 	camera->Update();
@@ -587,9 +584,9 @@ void PlayScene::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("light_position")) {
-		//ImGui::SliderFloat("positionX", &needlepos.x, -100, 100);
-		///ImGui::SliderFloat("positionY", &needlepos.y, -100, 100);
-		///ImGui::SliderFloat("positionZ", &needlepos.z, -100, 100);
+		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
+		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
+		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
 		if (ImGui::Button("spotlight ON")) {
 			lightGroup->SetSpotLightActive(0, true);
 		}
@@ -601,9 +598,9 @@ void PlayScene::ImGuiDraw()
 	}
 
 	if (ImGui::TreeNode("Effect_position")) {
-		//ImGui::SliderInt("positionX", &L_Cflag, -100, 100);
-		//ImGui::SliderFloat("positionY", &debuga, -100, 100);
-		//ImGui::SliderInt("positionZ", &elf, -100, 100);
+		//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
+		//ImGui::SliderFloat("positionY", &debuga, -200, 200);
+		//ImGui::SliderInt("positionZ", &elf, -200, 200);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("enemy_position")) {
@@ -611,20 +608,20 @@ void PlayScene::ImGuiDraw()
 		float rf2 = enemy[0]->GetPosition().y;
 		float rrr = player->getdis();
 		//float rf3 = enemy->GetPosition().z;
-		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &rf2, -100, 100);
-		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
+		ImGui::SliderInt("positionX", &co, -200, 200);
+		ImGui::SliderFloat("positionY", &rf2, -200, 200);
+		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
 		ImGui::TreePop();
 	}
 	float linex = Line::GetInstance()->getpos().x;
 	float liney = Line::GetInstance()->getpos().y;
 	float rr = player->GetPosition().x;
 	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -100, 100);
-		ImGui::SliderFloat("positionY", &liney, -100, 100);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -100, 100);
-		ImGui::SliderFloat("grav", &grav, -100, 100);
-		ImGui::SliderFloat("time", &time, -100, 100);
+		ImGui::SliderFloat("positionX", &linex, -200, 200);
+		ImGui::SliderFloat("positionY", &liney, -200, 200);
+		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+		ImGui::SliderFloat("grav", &grav, -200, 200);
+		ImGui::SliderFloat("time", &time, -200, 200);
 		ImGui::TreePop();
 	}
 	float sx = player->GetArea_S().x;
@@ -634,26 +631,26 @@ void PlayScene::ImGuiDraw()
 	float ey = player->GetArea_e().y;
 
 	if (ImGui::TreeNode("half")) {
-		ImGui::SliderFloat("sx", &sx, -100, 100);
-		ImGui::SliderFloat("sy", &sy, -100, 100);
-		ImGui::SliderFloat("ex", &ex, -100, 100);
-		ImGui::SliderFloat("ey", &ey, -100, 100);
+		ImGui::SliderFloat("sx", &sx, -200, 200);
+		ImGui::SliderFloat("sy", &sy, -200, 200);
+		ImGui::SliderFloat("ex", &ex, -200, 200);
+		ImGui::SliderFloat("ey", &ey, -200, 200);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -100, 100);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -100, 100);
+		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
 		ImGui::TreePop();
 	}
 
 
 	/*if (ImGui::TreeNode("1")) {
-		ImGui::SliderFloat("+_width", &half_Width, -100, 100);
-		ImGui::SliderFloat("+_height", &half_height, -100, 100);
-		ImGui::SliderFloat("-_width", &half_Width, -100, 100);
-		ImGui::SliderFloat("-_height", &half_height, -100, 100);
-		ImGui::SliderFloat("map_1_width", &width, -100, 100);
-		ImGui::SliderFloat("map_1_height", &height, -100, 100);
+		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
+		ImGui::SliderFloat("+_height", &half_height, -200, 200);
+		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
+		ImGui::SliderFloat("-_height", &half_height, -200, 200);
+		ImGui::SliderFloat("map_1_width", &width, -200, 200);
+		ImGui::SliderFloat("map_1_height", &height, -200, 200);
 		ImGui::TreePop();
 	}*/
 

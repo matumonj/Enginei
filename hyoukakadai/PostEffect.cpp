@@ -8,7 +8,7 @@ using namespace DirectX;
 const float PostEffect::clearColor[4] = { 0.3f,0.3f,0.3f,0.0f };
 
 PostEffect::PostEffect()
-	:Sprite(100, { 0,0 }, { 500,500 }, { 1,1,1,1 }, { 0,0 })
+	:Sprite(200, { 0,0 }, { 500,500 }, { 1,1,1,1 }, { 0,0 })
 {
 
 }

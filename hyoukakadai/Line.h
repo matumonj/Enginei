@@ -31,6 +31,8 @@ private:
 	static bool boundflag ;
 	static bool returnflag ;
 	static bool drawflag;
+	static bool stopflag;
+	static bool notdoubletuch;
 	static 	float tempx, tempy;
 	static float linex, linex2, liney, liney2;
 	static float lineangle ;
