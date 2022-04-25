@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-
+#include"Destroy.h"
 /// <summary>
 /// 更新
 /// </summary>
@@ -8,7 +8,7 @@ void SceneManager::Update(DirectXCommon* dxCommon)
 	if (nextScene) {
 		if (Scene) {//前のシーンを破棄
 			Scene->Finalize();
-			delete Scene;
+			Destroy(Scene);
 		}
 		//次のシーンへ移行
 		Scene = nextScene;

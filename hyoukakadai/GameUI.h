@@ -34,7 +34,7 @@ private:
 	static XMFLOAT3 Alowpos, Alowscl,Alowrot;//座標
 	static nTexture* TargetTexture;
 	static XMFLOAT3 Targetpos, Targetscl, Targetrot;//座標
-	static nTexture* EnemySearchTexure;
+	//static nTexture* EnemySearchTexure;
 	static XMFLOAT3 Espos, Esscl, Esrot;//座標
 	static XMFLOAT2 playerHPPos, playerHPScl;//座標 
 	static float Targetalpha;
@@ -48,7 +48,7 @@ public:
 	static void AllowUISet();
 	static void AllowUIUpdate(XMMATRIX matview, XMMATRIX matprojection,XMFLOAT3 position, float rotangle, bool flag);
 	static void AllowUIDraw(DirectXCommon*dxcomn);
-
+	static void Finalize();
 	static void PlayerUISet();
 	static void PlayerUIUpdate(Player* player);
 	static void PlayerUIDraw(DirectXCommon* dxcomn);

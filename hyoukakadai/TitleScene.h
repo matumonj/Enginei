@@ -21,7 +21,7 @@ public:
 	TitleScene(SceneManager* sceneManager);
 private:
 	Fader* feed;
-	float alpha = 0;
+	float alpha = 1;
 	Sprite* titlesprite;
 	bool feedflag = false;
 	bool feedinflag = false;

@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include"Input.h"
 #include"DebugCamera.h"
+#include"Destroy.h"
 #include"Line.h"
 //Ž…‚É‚©‚©‚í‚éUI
 using namespace DirectX;
@@ -209,4 +210,19 @@ void GameUI::PlayerUIDraw(DirectXCommon* dxcomn)
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	PlayerHP->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
+}
+
+void GameUI::Finalize()
+{
+	//delete LineLength,LineLengthout;
+	Destroy(LineLength);
+	Destroy(LineLengthout);
+	Destroy(PlayerHP);
+	Destroy(Attention[0]);
+	Destroy(Attention[1]);
+	Destroy(Attention[2]);
+	Destroy(AllowTexure);
+	//delete AllowTexure;
+	delete TargetTexture;
+	//delete EnemySearchTexure;
 }

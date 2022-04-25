@@ -55,7 +55,7 @@ private:
 	static float oldlinex, oldliney;
 	static bool mapcol;// = false;
 public:
-
+	static void Finalize();
 	static Line* GetInstance();
 	static void Initialize();
 	static void Update(XMMATRIX matview, XMMATRIX matprojection,Player*player,XMFLOAT3&Player_Pos,bool& colf,float& moveSpeed);

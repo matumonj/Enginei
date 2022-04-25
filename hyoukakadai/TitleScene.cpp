@@ -15,7 +15,7 @@ TitleScene::TitleScene(SceneManager* sceneManager)
 /// </summary>
 void TitleScene::Initialize(DirectXCommon* dxCommon)
 {
-	Sprite::LoadTexture(3, L"Resources/background.png");
+	titlesprite->LoadTexture(3, L"Resources/background.png");
 	titlesprite = Sprite::Create(3, { 0.0f,0.0f });
 }
 

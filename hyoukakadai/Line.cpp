@@ -285,3 +285,10 @@ colf:紐の残量が減るフラグ
 elf:紐とマップブロック&&敵の当たり判定
 lenserchf:紐ゲージの減る量を決めるフラグ
 */
+void Line::Finalize()
+{
+	delete Twine;
+delete  NeedleModel;
+	delete NeedleObj;
+
+}
