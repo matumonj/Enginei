@@ -157,7 +157,6 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			notdoubletuch = false;
 		}
 	}
- 繧�∪縺励◆
 
 	if (Input::GetInstance()->TriggerButtonRB()) {
 		Line::GetInstance()->SetTrigger(true);
@@ -185,7 +184,6 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
 		if (Input::GetInstance()->TriggerKey(DIK_A) && elf) {//線が伸び切って何もあたっていないとき
 			boundflag = true;//線の終点へ吸い付くフラグ
- 繧�∪縺励◆
 
 		}
 		

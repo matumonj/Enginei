@@ -35,7 +35,8 @@ public:
 		LONG    lY;
 		LONG    lZ;
 	};
-	/*struct CMove {
+
+	struct CMove {
 		LONG    lX;
 		LONG    lY;
 		LONG    lZ;
@@ -43,7 +44,7 @@ public:
 		LONG    lRy;
 		LONG    lRz;
 		BYTE    rgbButtons[32];
-	};*/
+	};
 	//初期化
 	void Initialize(WinApp*winapp);
 	//更新
@@ -82,9 +83,9 @@ public:
 	/// マウス移動量を取得
 	/// </summary>
 	/// <returns>マウス移動量</returns>
-	//MouseMove GetMouseMove();
+	MouseMove GetMouseMove();
 
- 繧�∪縺励◆
+
 	bool TriggerButtonA();
 	bool TriggerButtonB();
 	bool TriggerButtonRB();

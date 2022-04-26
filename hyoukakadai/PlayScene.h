@@ -83,9 +83,6 @@ private:
 	//Effects* effects;
 private:
 	//Plyer
-
-
-	XMFLOAT3 Player_Pos = { 0,0,0 };// = player->GetPosition();
 	XMFLOAT3 Player_Pos = { 10,0,0 };// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };

@@ -68,23 +68,24 @@ void Player::Attack(XMFLOAT3 playerpos)
 	//向いてる方向に移動
 	if (Input::GetInstance()->TriggerKey(DIK_RIGHT)) {
 		playerRot = State::Right;
-	} else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
+	}
+	else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
 		playerRot = State::Left;
 	}
 
- 繧�∪縺励◆
 	if (Input::GetInstance()->GetCMove().lX < u_r - a)
 	{
 		// 左に傾けた
 		playerRot = State::Left;
 
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	 }
+	else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	{
 		// 右に傾けた
 		playerRot = State::Right;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
 		action = Action::Attack;
 	}
@@ -105,7 +106,7 @@ void Player::Attack(XMFLOAT3 playerpos)
 		{
 		case State::Left:
 			Area_X_s = 5;
-			Area_X_e =0;
+			Area_X_e = 0;
 			break;
 
 		case State::Right:
@@ -113,16 +114,16 @@ void Player::Attack(XMFLOAT3 playerpos)
 			Area_X_s = 0;
 			break;
 		}
-		
+
 		if (timer >= 2) {
 			action = Action::None;
 			timer = 0;
 		}
-	} 
+	}
 	HP = max(HP, 0);
 	HP = min(HP, 10);
-}
 
+}
 void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 {
 	damageArea.Area_s = { position.x- Area_X_s,position.y - 8 };

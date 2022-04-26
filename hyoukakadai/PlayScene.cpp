@@ -232,7 +232,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	collision = new Collision();
 	SpriteCreate();//
 	ModelCreate();//
-
+	
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
 	// 3Dオブジェクトにカメラをセット
