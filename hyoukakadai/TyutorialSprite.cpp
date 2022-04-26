@@ -19,14 +19,14 @@ TyutorialSprite::~TyutorialSprite()
 void TyutorialSprite::Initialize()
 {
 	Sprite::LoadTexture(30, L"Resources/lineshot.png");
-	Sprite::LoadTexture(31, L"Resources/lineshot.png");
+	Sprite::LoadTexture(31, L"Resources/titletu.png");
 	Sprite::LoadTexture(32, L"Resources/lineshot.png");
-	Sprite::LoadTexture(33, L"Resources/lineshot.png");
-	Sprite::LoadTexture(34, L"Resources/lineshot.png");
+	Sprite::LoadTexture(33, L"Resources/lineope.png");
+	Sprite::LoadTexture(34, L"Resources/attack.png");
 	//Sprite::LoadTexture(35, L"Resources/lineshot.png");
 	//2
 	//Sprite::LoadTexture(36, L"Resources/lineshot.png");//糸出し+糸の上限
-	Sprite::LoadTexture(35, L"Resources/lineshot.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(35, L"Resources/lineshot.png");//糸出し+糸の上限
 	Sprite::LoadTexture(36, L"Resources/taskclear5.png");//攻撃+プレイヤーの体力
 	//clear
 
@@ -58,7 +58,7 @@ void TyutorialSprite::Initialize()
 	for (int i = 9; i < 15; i++) {
 		alpha[i] = 1;
 	}
-	
+
 }
 
 void TyutorialSprite::Update(Enemy* enemy)
@@ -141,9 +141,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 			if (nextphaseflag_bond) {
 				task = Clear::LineBond;
 			}
-			else if (nextphaseflag_return) {
-				task = Clear::LineCol;
-			}
+
 			if (nextphaseflag_bond && nextphaseflag_return) {
 				phase = Phase::Attack;
 				OK_flag = false;
@@ -194,7 +192,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 			sprite[i]->setcolor({ 1,1,1,1 });
 		}
 	}
-	}
+}
 
 void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 {
@@ -238,6 +236,9 @@ void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 		break;
 	case TyutorialSprite::Clear::LineBond:
 		sprite[12]->Draw();
+		if (nextphaseflag_return) {
+			task = Clear::LineCol;
+		}
 		Destroy(sprite[11]);
 		break;
 	case TyutorialSprite::Clear::LineCol:
@@ -251,7 +252,7 @@ void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 	default:
 		break;
 	}
-	
+
 	Sprite::PostDraw(dxcomn->GetCmdList());
 	//}
 }

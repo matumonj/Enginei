@@ -10,85 +10,85 @@ Input* Input::GetInstance()
 void Input::Initialize(WinApp* winapp)
 {
 	HRESULT result;
-	//winapp‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ‹L˜^
+	//winappã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¨˜éŒ²
 	this->winapp = winapp;
-	//DirectInput‚ÌƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+	//DirectInputã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
 	ComPtr<IDirectInput8>dinput = nullptr;
 	result = DirectInput8Create(winapp->GetInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput, nullptr);
-	//ƒL[ƒ{[ƒhƒfƒoƒC¶¬
+	//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ‡ãƒã‚¤æ°ç”Ÿæˆ
 	//ComPtr<IDirectInputDevice8>devkeyboard;
 	result = dinput->CreateDevice(GUID_SysKeyboard, &devkeyboard, NULL);
 
-	// ƒ}ƒEƒXƒfƒoƒCƒX‚Ì¶¬	
+	// ãƒã‚¦ã‚¹ãƒ‡ãƒã‚¤ã‚¹ã®ç”Ÿæˆ	
 	result = dinput->CreateDevice(GUID_SysMouse, &devMouse, NULL);
 
 	//
 	result = dinput->CreateDevice(GUID_Joystick , &devC, NULL);
-	//“ü—Íƒf[ƒ^Œ`®‚ÌƒZƒbƒg
+	//å…¥åŠ›ãƒ‡ãƒ¼ã‚¿å½¢å¼ã®ã‚»ãƒƒãƒˆ
 	result = devkeyboard->SetDataFormat(&c_dfDIKeyboard);
-	//”r‘¼§ŒäƒŒƒxƒ‹‚ÌƒZƒbƒg
+	//æ’ä»–åˆ¶å¾¡ãƒ¬ãƒ™ãƒ«ã®ã‚»ãƒƒãƒˆ
 	result = devkeyboard->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	//mouse
-	// “ü—Íƒf[ƒ^Œ`®‚ÌƒZƒbƒg
-	result = devMouse->SetDataFormat(&c_dfDIMouse2); // •W€Œ`®
+	// å…¥åŠ›ãƒ‡ãƒ¼ã‚¿å½¢å¼ã®ã‚»ãƒƒãƒˆ
+	result = devMouse->SetDataFormat(&c_dfDIMouse2); // æ¨™æº–å½¢å¼
 	
-	// ”r‘¼§ŒäƒŒƒxƒ‹‚ÌƒZƒbƒg
+	// æ’ä»–åˆ¶å¾¡ãƒ¬ãƒ™ãƒ«ã®ã‚»ãƒƒãƒˆ
 	result = devMouse->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
 
-	////c
-	//// “ü—Íƒf[ƒ^Œ`®‚ÌƒZƒbƒg
-	//result = devC->SetDataFormat(&c_dfDIJoystick2); // •W€Œ`®
+	//c
+	// å…¥åŠ›ãƒ‡ãƒ¼ã‚¿å½¢å¼ã®ã‚»ãƒƒãƒˆ
+	result = devC->SetDataFormat(&c_dfDIJoystick2); // æ¨™æº–å½¢å¼
 
-	//// ”r‘¼§ŒäƒŒƒxƒ‹‚ÌƒZƒbƒg
-	//result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	// æ’ä»–åˆ¶å¾¡ãƒ¬ãƒ™ãƒ«ã®ã‚»ãƒƒãƒˆ
+	result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
 }
 void Input::update()
 {
 	HRESULT result;
 	{
-		//‘O‰ñ‚ÌƒL[î•ñ‚ğ•Û‘¶
+		//å‰å›ã®ã‚­ãƒ¼æƒ…å ±ã‚’ä¿å­˜
 		memcpy(keypre, key, sizeof(key));
-		//ƒL[ƒ{[ƒhî•ñ‚Ìæ“¾ŠJn
+		//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰æƒ…å ±ã®å–å¾—é–‹å§‹
 		result = devkeyboard->Acquire();
-		//‘SƒL[‚Ì“ü—Íî•ñæ“¾
+		//å…¨ã‚­ãƒ¼ã®å…¥åŠ›æƒ…å ±å–å¾—
 		//BYTE key[256] = {};
 		result = devkeyboard->GetDeviceState(sizeof(key), key);
 	}
-	{// ƒ}ƒEƒX
-		result = devMouse->Acquire();	// ƒ}ƒEƒX“®ìŠJn
+	{// ãƒã‚¦ã‚¹
+		result = devMouse->Acquire();	// ãƒã‚¦ã‚¹å‹•ä½œé–‹å§‹
 
-		// ‘O‰ñ‚Ì“ü—Í‚ğ•Û‘¶
+		// å‰å›ã®å…¥åŠ›ã‚’ä¿å­˜
 		mouseStatePre = mouseState;
 
-		// ƒ}ƒEƒX‚Ì“ü—Í
+		// ãƒã‚¦ã‚¹ã®å…¥åŠ›
 		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 	}
-	//{// c
-	//	result = devC->Acquire();	// ƒ}ƒEƒX“®ìŠJn
+	{// c
+		result = devC->Acquire();	// ãƒã‚¦ã‚¹å‹•ä½œé–‹å§‹
 
-	//	// ‘O‰ñ‚Ì“ü—Í‚ğ•Û‘¶
-	//	CStatePre = CState;
+		// å‰å›ã®å…¥åŠ›ã‚’ä¿å­˜
+		CStatePre = CState;
 
-	//	// ƒ}ƒEƒX‚Ì“ü—Í
-	//	result = devC->GetDeviceState(sizeof(CState), &CState);
-	//}
+		// ãƒã‚¦ã‚¹ã®å…¥åŠ›
+		result = devC->GetDeviceState(sizeof(CState), &CState);
+	}
 }
 
 bool Input::Pushkey(BYTE keyNumber)
 {
-	//w’èƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚ê‚Îtrue‚ğ•Ô‚·
+	//æŒ‡å®šã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ã„ã‚Œã°trueã‚’è¿”ã™
 	if (key[keyNumber]) {
 		return true;
 	}
 	return false;
 }
 
-//ƒgƒŠƒK[
+//ãƒˆãƒªã‚¬ãƒ¼
 bool Input::TriggerKey(BYTE keyNumber)
 {
-	//‘O‰ñ‚ÌŒ‹‰Ê‚ª‚O‚Å¡‰ñ‚Ì‰ï˜b‚ª‚P‚Ì‚Æ‚«
+	//å‰å›ã®çµæœãŒï¼ã§ä»Šå›ã®ä¼šè©±ãŒï¼‘ã®ã¨ã
 	if (!keypre[keyNumber]&&key[keyNumber]) {
 		return true;
 	}
@@ -97,45 +97,121 @@ bool Input::TriggerKey(BYTE keyNumber)
 
 bool Input::PushMouseLeft()
 {
-	// 0‚Å‚È‚¯‚ê‚Î‰Ÿ‚µ‚Ä‚¢‚é
+	// 0ã§ãªã‘ã‚Œã°æŠ¼ã—ã¦ã„ã‚‹
 	if (mouseState.rgbButtons[0]) {
 		return true;
 	}
 
-	// ‰Ÿ‚µ‚Ä‚¢‚È‚¢
+	// æŠ¼ã—ã¦ã„ãªã„
 	return false;
 }
 
 bool Input::PushMouseMiddle()
 {
-	// 0‚Å‚È‚¯‚ê‚Î‰Ÿ‚µ‚Ä‚¢‚é
+	// 0ã§ãªã‘ã‚Œã°æŠ¼ã—ã¦ã„ã‚‹
 	if (mouseState.rgbButtons[2]) {
 		return true;
 	}
 
-	// ‰Ÿ‚µ‚Ä‚¢‚È‚¢
+	// æŠ¼ã—ã¦ã„ãªã„
 	return false;
 }
 
 bool Input::TriggerMouseLeft()
 {
-	// ‘O‰ñ‚ª0‚ÅA¡‰ñ‚ª0‚Å‚È‚¯‚ê‚ÎƒgƒŠƒK[
+	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
 	if (!mouseStatePre.rgbButtons[0] && mouseState.rgbButtons[0]) {
 		return true;
 	}
 
-	// ƒgƒŠƒK[‚Å‚È‚¢
+	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
 	return false;
+}
+
+
+bool Input::TriggerMouseMiddle()
+{
+	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
+	if (!mouseStatePre.rgbButtons[2] && mouseState.rgbButtons[2]) {
+		return true;
+	}
+
+	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
+	return false;
+}
+
+Input::MouseMove Input::GetMouseMove()
+{
+	MouseMove tmp;
+	tmp.lX = mouseState.lX;
+	tmp.lY = mouseState.lY;
+	tmp.lZ = mouseState.lZ;
+	return tmp;
+}
+bool Input::TriggerButtonA()
+{
+	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
+	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
+		return true;
+	}
+
+	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
+	return false;
+}
+
+bool Input::PushButtonA()
+{
+	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
+	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
+		return true;
+	}
+
+	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
+	return false;
+}
+
+bool Input::TriggerButtonRB()
+{
+	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
+	if (!CStatePre.rgbButtons[5] && CState.rgbButtons[5]) {
+		return true;
+	}
+
+	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
+	return false;
+}
+
+bool Input::TriggerButtonB()
+{
+	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
+	if (!CStatePre.rgbButtons[1] && CState.rgbButtons[1]) {
+		return true;
+	}
+
+	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
+	return false;
+}
+
+Input::CMove Input::GetCMove()
+{
+	CMove tmp;
+	tmp.lX = CState.lX;
+	tmp.lY = CState.lY;
+	tmp.lZ = CState.lZ;
+	tmp.lRx = CState.lRx;
+	tmp.lRy = CState.lRy;
+	tmp.lRz = CState.lRz;
+	return tmp;
 }
 //
 //bool Input::TriggerMouseMiddle()
 //{
-//	// ‘O‰ñ‚ª0‚ÅA¡‰ñ‚ª0‚Å‚È‚¯‚ê‚ÎƒgƒŠƒK[
+//	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
 //	if (!mouseStatePre.rgbButtons[2] && mouseState.rgbButtons[2]) {
 //		return true;
 //	}
 //
-//	// ƒgƒŠƒK[‚Å‚È‚¢
+//	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
 //	return false;
 //}
 //
@@ -149,23 +225,23 @@ bool Input::TriggerMouseLeft()
 //}
 //bool Input::TriggerButtonA()
 //{
-//	// ‘O‰ñ‚ª0‚ÅA¡‰ñ‚ª0‚Å‚È‚¯‚ê‚ÎƒgƒŠƒK[
+//	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
 //	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
 //		return true;
 //	}
 //
-//	// ƒgƒŠƒK[‚Å‚È‚¢
+//	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
 //	return false;
 //}
 //
 //bool Input::TriggerButtonRB()
 //{
-//	// ‘O‰ñ‚ª0‚ÅA¡‰ñ‚ª0‚Å‚È‚¯‚ê‚ÎƒgƒŠƒK[
+//	// å‰å›ãŒ0ã§ã€ä»Šå›ãŒ0ã§ãªã‘ã‚Œã°ãƒˆãƒªã‚¬ãƒ¼
 //	if (!CStatePre.rgbButtons[5] && CState.rgbButtons[5]) {
 //		return true;
 //	}
 //
-//	// ƒgƒŠƒK[‚Å‚È‚¢
+//	// ãƒˆãƒªã‚¬ãƒ¼ã§ãªã„
 //	return false;
 //}
 //
@@ -180,3 +256,4 @@ bool Input::TriggerMouseLeft()
 //	tmp.lRz = CState.lRz;
 //	return tmp;
 //}
+
