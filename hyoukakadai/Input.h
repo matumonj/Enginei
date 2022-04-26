@@ -85,6 +85,7 @@ public:
 	MouseMove GetMouseMove();
 
 	bool TriggerButtonA();
+	bool TriggerButtonB();
 	bool TriggerButtonRB();
 	bool PushButtonA();
 	CMove GetCMove();
