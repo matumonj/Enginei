@@ -158,12 +158,12 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		}
 	}
 
-	if (Input::GetInstance()->TriggerButtonRB()) {
-		Line::GetInstance()->SetTrigger(true);
-		trigger = true;//線を伸ばすフラグね
-		elf = false;
+	//if (Input::GetInstance()->TriggerButtonRB()) {
+		//Line::GetInstance()->SetTrigger(true);
+		//trigger = true;//線を伸ばすフラグね
+		//elf = false;
 		//Line = 1;
-	}
+	//}
 
 
 

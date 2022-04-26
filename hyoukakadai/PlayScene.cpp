@@ -285,16 +285,16 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	//左
 	// 方向だけを調べる方法
-	if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	{
-		// 左に傾けた
-		Player_Pos.x -= moveSpeed;
+	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	//{
+	//	// 左に傾けた
+	//	Player_Pos.x -= moveSpeed;
 
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	{
-		// 右に傾けた
-		Player_Pos.x += moveSpeed;
-	}
+	//} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	//{
+	//	// 右に傾けた
+	//	Player_Pos.x += moveSpeed;
+	//}
 
 	/*if (Input::GetInstance()->GetCMove().lY < u_r - a)
 	{
@@ -322,12 +322,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		time += 0.02f;
 	}
 
-	/*if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		Player_Pos.y -= moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-		Player_Pos.y += moveSpeed;
-	}*/
 
 	///これより上に入力処理をかけ
 	////当たり判定
