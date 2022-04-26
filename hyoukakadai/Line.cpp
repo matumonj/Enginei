@@ -57,97 +57,172 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	sdistance = sqrtf(((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)) +
 		((player->GetPosition().y - liney2) * (player->GetPosition().y - liney2))
 	);
-	//UI•”•ª‚ÌŠO˜gƒQ[ƒW‚ª‚O‚È‚Á‚½‚ç•Ro‚¹‚È‚­‚È‚é
+	//UIéƒ¨åˆ†ã®å¤–æ ã‚²ãƒ¼ã‚¸ãŒï¼ãªã£ãŸã‚‰ç´å‡ºã›ãªããªã‚‹
 	LimitGauge = GameUI::GetInstance()->Getsclx();
 	if (LimitGauge < 0) {
-		//trigger = false;//•Ro‚¹‚È‚¢‚æ‚¤‚É
-		subradius = 0;//L‚Î‚¹‚é•R‚Ì’·‚³‚ğ‚O‚É‹­§
+		//trigger = false;//ç´å‡ºã›ãªã„ã‚ˆã†ã«
+		subradius = 0;//ä¼¸ã°ã›ã‚‹ç´ã®é•·ã•ã‚’ï¼ã«å¼·åˆ¶
 		//boundflag = false;
 		//returnflag = false;
 	}
 
-	//‚â‚¯‚­‚»ƒR[ƒh,‰˜‚¢‚æ
-	linex = player->GetPosition().x;//ü‚Ìn“_‚ğƒvƒŒƒCƒ„[ˆÊ’u‚É
+	//ã‚„ã‘ããã‚³ãƒ¼ãƒ‰,æ±šã„ã‚ˆ
+	linex = player->GetPosition().x;//ç·šã®å§‹ç‚¹ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä½ç½®ã«
 	liney = player->GetPosition().y;
 
 	/*
 	if ((!returnflag && !boundflag)) {
 		if (Input::GetInstance()->GetCMove().lRx < u_r - a|| Input::GetInstance()->GetCMove().lRy < u_r - a) {
-			lineangle += 13.0f;//ˆÚ“®•ûŒü‚Ìw’è
-			subradius = Startsubradius;//”ò‚Ô•ûŒü‚Ì–îˆó‚İ‚½‚¢‚È‚Ì’·‚³‚Ì‰Šú’lİ’è(Œã‚Å’u‚«Š·‚¦.‚Ç‚¤‚¹•Ê‚ÌƒIƒuƒWƒF‚·‚é‚Å‚µ‚å)
+			lineangle += 13.0f;//ç§»å‹•æ–¹å‘ã®æŒ‡å®š
+			subradius = Startsubradius;//é£›ã¶æ–¹å‘ã®çŸ¢å°ã¿ãŸã„ãªã®é•·ã•ã®åˆæœŸå€¤è¨­å®š(å¾Œã§ç½®ãæ›ãˆ.ã©ã†ã›åˆ¥ã®ã‚ªãƒ–ã‚¸ã‚§ã™ã‚‹ã§ã—ã‚‡)
 
 		}
 		else if (Input::GetInstance()->GetCMove().lRx > u_r + a|| Input::GetInstance()->GetCMove().lRy > u_r + a) {
-			lineangle -= 13.0f;//ˆÚ“®•ûŒü‚Ìw’è
-			subradius = Startsubradius;//”ò‚Ô•ûŒü‚Ì–îˆó‚İ‚½‚¢‚È‚Ì’·‚³‚Ì‰Šú’lİ’è(Œã‚Å’u‚«Š·‚¦.‚Ç‚¤‚¹•Ê‚ÌƒIƒuƒWƒF‚·‚é‚Å‚µ‚å)
+			lineangle -= 13.0f;//ç§»å‹•æ–¹å‘ã®æŒ‡å®š
+			subradius = Startsubradius;//é£›ã¶æ–¹å‘ã®çŸ¢å°ã¿ãŸã„ãªã®é•·ã•ã®åˆæœŸå€¤è¨­å®š(å¾Œã§ç½®ãæ›ãˆ.ã©ã†ã›åˆ¥ã®ã‚ªãƒ–ã‚¸ã‚§ã™ã‚‹ã§ã—ã‚‡)
 
 		}
 			}*/
 	if (stopflag == true) {
 		if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
-			lineangle += 5.0f;//ˆÚ“®•ûŒü‚Ìw’è
-			subradius = Startsubradius;//”ò‚Ô•ûŒü‚Ì–îˆó‚İ‚½‚¢‚È‚Ì’·‚³‚Ì‰Šú’lİ’è(Œã‚Å’u‚«Š·‚¦.‚Ç‚¤‚¹•Ê‚ÌƒIƒuƒWƒF‚·‚é‚Å‚µ‚å)
+			lineangle += 5.0f;//ç§»å‹•æ–¹å‘ã®æŒ‡å®š
+			subradius = Startsubradius;//é£›ã¶æ–¹å‘ã®çŸ¢å°ã¿ãŸã„ãªã®é•·ã•ã®åˆæœŸå€¤è¨­å®š(å¾Œã§ç½®ãæ›ãˆ.ã©ã†ã›åˆ¥ã®ã‚ªãƒ–ã‚¸ã‚§ã™ã‚‹ã§ã—ã‚‡)
 			needlerot.z += 5;
 		}
 	}
+
+	//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
+	LONG u_r = 32768;
+	LONG a = 30000;
+
+	if (Input::GetInstance()->GetCMove().lRx < u_r - a)
+	{
+		// å·¦ã«å‚¾ã‘ãŸ
+		lineangle = +180;
+		needlerot.z = +180;
+	} else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
+	{
+		// å³ã«å‚¾ã‘ãŸ
+		lineangle = 0;
+		needlerot.z = 0;
+	}
+	if (Input::GetInstance()->GetCMove().lRy < u_r - a)
+	{
+		// å‚¾ã‘ãŸ
+		lineangle = +90;
+		needlerot.z = +90;
+
+	} else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
+	{
+		// å‚¾ã‘ãŸ
+		lineangle = +270;
+		needlerot.z = +270;
+	}
+
+	// å³ä¸Šã«å‚¾ã‘ãŸ
+	if (Input::GetInstance()->GetCMove().lRx > u_r + 1000 && Input::GetInstance()->GetCMove().lRy < u_r - 1000)
+	{
+		lineangle = +45;
+		needlerot.z = +45;
+	}
+	// å·¦ä¸Šã«å‚¾ã‘ãŸ
+	if (Input::GetInstance()->GetCMove().lRx < u_r - 1000 && Input::GetInstance()->GetCMove().lRy < u_r - 1000)
+	{
+		lineangle = +135;
+		needlerot.z = +135;
+	}
+	// å·¦ä¸‹ã«å‚¾ã‘ãŸ
+	if (Input::GetInstance()->GetCMove().lRx < u_r - 1000 && Input::GetInstance()->GetCMove().lRy > u_r + 1000)
+	{
+		lineangle = +225;
+		needlerot.z = +225;
+	}
+	// å³ä¸‹ã«å‚¾ã‘ãŸ
+	if (Input::GetInstance()->GetCMove().lRx > u_r + 1000 && Input::GetInstance()->GetCMove().lRy > u_r + 1000)
+	{
+		lineangle = +315;
+		needlerot.z = +315;
+	}
+
 	if (!elf) {
 		linex2 = tempx + cosf((lineangle)*PI / 180.0f) * subradius;
 		liney2 = tempy + sinf((lineangle)*PI / 180.0f) * subradius+0.5f;
 	}
-	//////////’†S“_//////”ò‚Î‚·Šp“x///////////////////”¼Œa(‹——£)
+	//////////ä¸­å¿ƒç‚¹//////é£›ã°ã™è§’åº¦///////////////////åŠå¾„(è·é›¢)
 	if (notdoubletuch == true) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE) && (!returnflag && !boundflag)) {
-			trigger = true;//ü‚ğL‚Î‚·ƒtƒ‰ƒO‚Ë
+			trigger = true;//ç·šã‚’ä¼¸ã°ã™ãƒ•ãƒ©ã‚°ã­
 			elf = false;
 			stopflag = false;
 			notdoubletuch = false;
 		}
 	}
-	if (trigger) {//trigger:üL‚Î‚·ƒtƒ‰ƒO
-		subradius += LengThenSpeed;//ü‚ğL‚Î‚·
-		if (subradius > MaxLen || elf) {//ˆê’èˆÈãs‚Á‚½‚ç+ƒuƒƒbƒN‚Éj‚ ‚½‚Á‚½‚ç
+ ç¹§ï¿½âˆªç¸ºåŠ±â—†
+
+	if (Input::GetInstance()->TriggerButtonRB()) {
+		Line::GetInstance()->SetTrigger(true);
+		trigger = true;//ç·šã‚’ä¼¸ã°ã™ãƒ•ãƒ©ã‚°ã­
+		elf = false;
+		//Line = 1;
+	}
+
+
+
+	if (trigger) {//trigger:ç·šä¼¸ã°ã™ãƒ•ãƒ©ã‚°
+		subradius += LengThenSpeed;//ç·šã‚’ä¼¸ã°ã™
+		if (subradius > MaxLen || elf) {//ä¸€å®šä»¥ä¸Šè¡Œã£ãŸã‚‰+ãƒ–ãƒ­ãƒƒã‚¯ã«é‡ã‚ãŸã£ãŸã‚‰
 			trigger = false;
 			lengthserchf = true;
 
 		}
-		if (subradius > MaxLen && !elf) {//ˆê’èˆÈãs‚Á‚Ä‰½‚à“–‚½‚ç‚È‚©‚Á‚½‚ç
+		if (subradius > MaxLen && !elf) {//ä¸€å®šä»¥ä¸Šè¡Œã£ã¦ä½•ã‚‚å½“ãŸã‚‰ãªã‹ã£ãŸã‚‰
 			trigger = false;
 			lengthserchf = true;
 			returnflag = true;
 
 		}
 
-	} else if (!trigger && subradius > 0) {//ƒtƒ‰ƒOØ‚ç‚ê‚Äü‚Ì’·‚³‚ª‚Ü‚¾‚ ‚é
-		if (Input::GetInstance()->TriggerKey(DIK_A) && elf) {//ü‚ªL‚ÑØ‚Á‚Ä‰½‚à‚ ‚½‚Á‚Ä‚¢‚È‚¢‚Æ‚«
-			boundflag = true;//ü‚ÌI“_‚Ö‹z‚¢•t‚­ƒtƒ‰ƒO
-		} else if (Input::GetInstance()->TriggerKey(DIK_D)&&boundflag!=true) {
-			returnflag = true;//ü‚ªƒvƒŒƒCƒ„[‚Ì•û‚Ö–ß‚Á‚Ä‚­‚éƒtƒ‰ƒO,•R‚Ì’·‚³‚ªmaxlen’´‚¦‚Äj‚ªƒuƒƒbƒN‚Æ‚ ‚½‚Á‚Ä‚¢‚È‚©‚Á‚½‚ç‚±‚êtrue‚É
+	} else if (!trigger && subradius > 0) {//ãƒ•ãƒ©ã‚°åˆ‡ã‚‰ã‚Œã¦ç·šã®é•·ã•ãŒã¾ã ã‚ã‚‹æ™‚
+		if (Input::GetInstance()->TriggerKey(DIK_A) && elf) {//ç·šãŒä¼¸ã³åˆ‡ã£ã¦ä½•ã‚‚ã‚ãŸã£ã¦ã„ãªã„ã¨ã
+			boundflag = true;//ç·šã®çµ‚ç‚¹ã¸å¸ã„ä»˜ããƒ•ãƒ©ã‚°
+ ç¹§ï¿½âˆªç¸ºåŠ±â—†
+
 		}
-		//ü‚ÌI“_‚ÆƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‹‚ß‚é
+		
+		if (Input::GetInstance()->TriggerButtonRB() && elf) {
+			boundflag = true;//ç·šã®çµ‚ç‚¹ã¸å¸ã„ä»˜ããƒ•ãƒ©ã‚°
+		}
+
+		else if (Input::GetInstance()->TriggerKey(DIK_G)) {
+
+		} else if (Input::GetInstance()->TriggerKey(DIK_D)&&boundflag!=true) {
+			returnflag = true;//ç·šãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹ã¸æˆ»ã£ã¦ãã‚‹ãƒ•ãƒ©ã‚°,ç´ã®é•·ã•ãŒmaxlenè¶…ãˆã¦é‡ãŒãƒ–ãƒ­ãƒƒã‚¯ã¨ã‚ãŸã£ã¦ã„ãªã‹ã£ãŸã‚‰ã“ã‚Œtrueã«
+		}
+		//ç·šã®çµ‚ç‚¹ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢æ±‚ã‚ã‚‹
 		float distance;
 		distance = sqrtf(((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)) +
 			((player->GetPosition().y - liney2) * (player->GetPosition().y - liney2))
 		);
-		//ƒvƒŒƒCƒ„[‚Æ•R‚Ì‹——£‚ªˆê’èˆÈ“à‚Ék‚Ü‚Á‚½‚ç
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ç´ã®è·é›¢ãŒä¸€å®šä»¥å†…ã«ç¸®ã¾ã£ãŸã‚‰
 		if (distance <= 1.5f) {
-			colf = true;//UIƒQ[ƒWŒ¸‚ç‚·ˆ—gameui.cpp‚Ì•û
+			colf = true;//UIã‚²ãƒ¼ã‚¸æ¸›ã‚‰ã™å‡¦ç†gameui.cppã®æ–¹
 			//elf = false;
 			boundflag = false;
-			subradius = 0;//ü‚Ì’·‚³‚ğ0‚É
+			subradius = 0;//ç·šã®é•·ã•ã‚’0ã«
 			stopflag = true;
 			notdoubletuch = true;
 		}
 	}
-	//æ‚Ì’·‚³‚ªÅ‘å’´‚¦‚½A‚Ü‚½‚ÍƒuƒƒbƒN‚ ‚½‚Á‚½‚ç‚»‚Ì“_‚ÌƒvƒŒƒCƒ„[‚Æü‚Ì‹——£‚ğ‹‚ß‚éi‚»‚Ì‹——£•ªƒQ[ƒWŒ¸‚ç‚·j
+	//å…ˆã®é•·ã•ãŒæœ€å¤§è¶…ãˆãŸã€ã¾ãŸã¯ãƒ–ãƒ­ãƒƒã‚¯ã‚ãŸã£ãŸã‚‰ãã®æ™‚ç‚¹ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ç·šã®è·é›¢ã‚’æ±‚ã‚ã‚‹ï¼ˆãã®è·é›¢åˆ†ã‚²ãƒ¼ã‚¸æ¸›ã‚‰ã™ï¼‰
 	if (lengthserchf) {
 		olddistance = sdistance;//ui.scaleX-sdistance*4
 		lengthserchf = false;
 	}
 
-	//‹z‚¢•t‚­ˆ—
+	//å¸ã„ä»˜ãå‡¦ç†
 	if (boundflag) {
 		FollowangleX = (linex2 - player->GetPosition().x);
-		FollowangleZ = (liney2 - player->GetPosition().y);//‚±‚êZ‚¶‚á‚È‚­‚ÄY‚Å‚·
+		FollowangleZ = (liney2 - player->GetPosition().y);//ã“ã‚ŒZã˜ã‚ƒãªãã¦Yã§ã™
 		FollowangleR = sqrtf((player->GetPosition().x - linex2) * (player->GetPosition().x - linex2)
 			+ (player->GetPosition().y - liney2) * (player->GetPosition().y - liney2));
 		moveSpeed = 0.5f;
@@ -156,17 +231,17 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		stopflag = true;
 		notdoubletuch = true;
 	} else {
-		//‹z‚¢•t‚­ƒtƒ‰ƒO‚ªFALSE‚ñ‚Æ‚«‚¾‚¯’†S“_‚ğƒvƒŒƒCƒ„[‚Ì•û‚É
-		/*ƒƒ‚:‚¸‚Á‚Æ’†S“_‚ğŒ»“_‚ÌƒvƒŒƒCƒ„[‚ÌÀ•W‚Éİ’è‚µ‚Ä‚é‚ÆƒvƒŒƒCƒ„[‚ª“®‚¢‚½•ª‚¾‚¯
-@@@@@ü‚ÌI“_‚à“®‚¢‚Ä‚µ‚Ü‚¤‚©‚ç(subradius‚Ì•”•ª‚ª’†S“_ˆË‘¶)*/
+		//å¸ã„ä»˜ããƒ•ãƒ©ã‚°ãŒFALSEã‚“ã¨ãã ã‘ä¸­å¿ƒç‚¹ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹ã«
+		/*ãƒ¡ãƒ¢:ãšã£ã¨ä¸­å¿ƒç‚¹ã‚’ç¾æ™‚ç‚¹ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã«è¨­å®šã—ã¦ã‚‹ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå‹•ã„ãŸåˆ†ã ã‘
+ã€€ã€€ã€€ã€€ã€€ç·šã®çµ‚ç‚¹ã‚‚å‹•ã„ã¦ã—ã¾ã†ã‹ã‚‰(subradiusã®éƒ¨åˆ†ãŒä¸­å¿ƒç‚¹ä¾å­˜)*/
 		tempx = Player_Pos.x;
 		tempy = Player_Pos.y;
 	}
-	//ü‚ª–ß‚Á‚Ä‚­‚éˆ—
+	//ç·šãŒæˆ»ã£ã¦ãã‚‹å‡¦ç†
 	if (returnflag) {
 		subradius -= 1.5f;
 		
-		if (subradius <= 0) {//æ‚Ì’·‚³‚ª‚O‚È‚Á‚½‚çØ‚é
+		if (subradius <= 0) {//å…ˆã®é•·ã•ãŒï¼ãªã£ãŸã‚‰åˆ‡ã‚‹
 			returnflag = false;
 			//mapcolf = false;
 			colf = true;
@@ -217,11 +292,11 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 
 			if (dis[i] <= 2 && trigger && !elf) {
 				elf = true;
-				index = i;//‚ ‚½‚Á‚½“G‚Ì—v‘f”Ô†‚ğŠ„‚è“–‚Ä
+				index = i;//ã‚ãŸã£ãŸæ•µã®è¦ç´ ç•ªå·ã‚’å‰²ã‚Šå½“ã¦
 			}
 		}
 
-		//Õ“Ë
+		//è¡çªæ™‚
 		if (elf && !mapcol) {
 			if (position[index] != nullptr) {
 				linex2 = position[index]->GetPosition().x;
@@ -263,11 +338,11 @@ void Line::CollisionEnemy(Enemy*position)
 
 			if (dis <= 2 && trigger && !elf) {
 				elf = true;
-			//	index = i;//‚ ‚½‚Á‚½“G‚Ì—v‘f”Ô†‚ğŠ„‚è“–‚Ä
+			//	index = i;//ã‚ãŸã£ãŸæ•µã®è¦ç´ ç•ªå·ã‚’å‰²ã‚Šå½“ã¦
 			}
 		}
 
-		//Õ“Ë
+		//è¡çªæ™‚
 		if (elf && !mapcol) {
 			if (position != nullptr) {
 				linex2 = position->GetPosition().x;
@@ -290,13 +365,13 @@ void Line::CollisionEnemy(Enemy*position)
 		mapcol = false;
 	}
 }
-//ƒtƒ‰ƒOà–¾
+//ãƒ•ãƒ©ã‚°èª¬æ˜
 /*
-boundflag:•R‚ÌI“_‚ÖƒvƒŒƒCƒ„[‚ª‹z‚¢•t‚­ƒtƒ‰ƒO
-returnflag:•R‚ÌI“_(subradius)‚ªƒvƒŒƒCƒ„[‚Ì•û‚Ö
-colf:•R‚Ìc—Ê‚ªŒ¸‚éƒtƒ‰ƒO
-elf:•R‚Æƒ}ƒbƒvƒuƒƒbƒN&&“G‚Ì“–‚½‚è”»’è
-lenserchf:•RƒQ[ƒW‚ÌŒ¸‚é—Ê‚ğŒˆ‚ß‚éƒtƒ‰ƒO
+boundflag:ç´ã®çµ‚ç‚¹ã¸ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå¸ã„ä»˜ããƒ•ãƒ©ã‚°
+returnflag:ç´ã®çµ‚ç‚¹(subradius)ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹ã¸
+colf:ç´ã®æ®‹é‡ãŒæ¸›ã‚‹ãƒ•ãƒ©ã‚°
+elf:ç´ã¨ãƒãƒƒãƒ—ãƒ–ãƒ­ãƒƒã‚¯&&æ•µã®å½“ãŸã‚Šåˆ¤å®š
+lenserchf:ç´ã‚²ãƒ¼ã‚¸ã®æ¸›ã‚‹é‡ã‚’æ±ºã‚ã‚‹ãƒ•ãƒ©ã‚°
 */
 void Line::Finalize()
 {

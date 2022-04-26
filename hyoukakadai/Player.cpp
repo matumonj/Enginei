@@ -8,13 +8,13 @@ using namespace DirectX;
 
 Player* Player::Create(Model* model)
 {
-	//ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
 	Player* instance = new Player();
 	if (instance == nullptr) {
 		return nullptr;
 	}
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	instance->Initialize();//	delete instance;
 	//	assert(0);
 
@@ -31,7 +31,7 @@ bool Player::Initialize()
 		return false;
 	}
 	//aaaaaaa
-	// ƒRƒ‰ƒCƒ_[‚Ì’Ç‰Á
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®è¿½åŠ 
 	float radius = 0.6f;
 	SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	//collider->SetAttribute(COLLISION_ATTR_ALLIES);
@@ -43,13 +43,13 @@ void Player::Update(XMFLOAT4 color)
 	Input* input = Input::GetInstance();
 
 
-	//ˆÚ“®ƒxƒNƒgƒ‹‚ğy²ü‚è‚ÌŠp“x‚Å‰ñ“]
+	//ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’yè»¸å‘¨ã‚Šã®è§’åº¦ã§å›è»¢
 	XMVECTOR move = { 0,0,0.1f,0 };
 	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	move = XMVector3TransformNormal(move, matRot);
 
 
-	//s—ñ‚ÌXV‚Æ‚©
+	//è¡Œåˆ—ã®æ›´æ–°ã¨ã‹
 	Object3d::Update({ 1,1,1,1 });
 }
 
@@ -57,19 +57,34 @@ void Player::OnCollision(const CollisionInfo& info)
 {
 	//debugText->Print("Hit", 950, 20, 3.0f);
 	//}
-	//ƒeƒLƒXƒg‚Æ•\¦
+	//ãƒ†ã‚­ã‚¹ãƒˆã¨è¡¨ç¤º
 	//DebugTxt::GetInstance()->Print("Hit",950,20,3);
 }
 
 void Player::Attack(XMFLOAT3 playerpos)
 {
-	//Œü‚¢‚Ä‚é•ûŒü‚ÉˆÚ“®
+	LONG u_r = 32768;
+	LONG a = 30000;
+	//å‘ã„ã¦ã‚‹æ–¹å‘ã«ç§»å‹•
 	if (Input::GetInstance()->TriggerKey(DIK_RIGHT)) {
 		playerRot = State::Right;
 	} else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
 		playerRot = State::Left;
 	}
 
+ ç¹§ï¿½âˆªç¸ºåŠ±â—†
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+		// å·¦ã«å‚¾ã‘ãŸ
+		playerRot = State::Left;
+
+	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+		// å³ã«å‚¾ã‘ãŸ
+		playerRot = State::Right;
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_P)) {
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
 		action = Action::Attack;
 	}
@@ -77,6 +92,11 @@ void Player::Attack(XMFLOAT3 playerpos)
 		action = Action::None;
 	}
 
+	//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
+	if (Input::GetInstance()->TriggerButtonA()) {
+		//æ”»æ’ƒå‡¦ç†
+		action = Action::Attack;
+	}
 
 	if (action == Action::Attack) {
 
@@ -108,7 +128,7 @@ void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 	damageArea.Area_s = { position.x- Area_X_s,position.y - 8 };
 	damageArea.Area_e = { position.x + Area_X_e ,position.y + 5 };
 
-	//“–‚½‚è”»’è
+	//å½“ãŸã‚Šåˆ¤å®š
 
 	if (action == Action::Attack) {
 	for (int i = 0; i < 4; i++)
@@ -129,7 +149,7 @@ void Player::CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos)
 	damageArea.Area_s = { position.x - Area_X_s,position.y - 8 };
 	damageArea.Area_e = { position.x + Area_X_e ,position.y + 5 };
 
-	//“–‚½‚è”»’è
+	//å½“ãŸã‚Šåˆ¤å®š
 
 	if (action == Action::Attack) {
 		for (int i = 0; i < 4; i++)

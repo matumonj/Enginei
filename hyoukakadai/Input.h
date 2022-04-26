@@ -27,7 +27,7 @@ private:
 	WinApp* winapp = nullptr;
 public:
 	static Input* GetInstance();
-	//namespaceÈ—ª
+	//namespaceçœç•¥
 	template<class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public:
 	struct MouseMove {
@@ -44,49 +44,57 @@ public:
 		LONG    lRz;
 		BYTE    rgbButtons[32];
 	};*/
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize(WinApp*winapp);
-	//XV
+	//æ›´æ–°
 	void update();
-	//ƒL[‚Ì‰Ÿ‰º‚ğƒ`ƒFƒbƒN
+	//ã‚­ãƒ¼ã®æŠ¼ä¸‹ã‚’ãƒã‚§ãƒƒã‚¯
 	bool Pushkey(BYTE keyNumber);
-	//ƒL[‚ÌƒgƒŠƒK[”»’è
+	//ã‚­ãƒ¼ã®ãƒˆãƒªã‚¬ãƒ¼åˆ¤å®š
 	bool TriggerKey(BYTE keyNumber);
 
 
 	/// <summary>
-	/// ƒL[‚Ì¶ƒ{ƒ^ƒ“‰Ÿ‰º‚ğƒ`ƒFƒbƒN
+	/// ã‚­ãƒ¼ã®å·¦ãƒœã‚¿ãƒ³æŠ¼ä¸‹ã‚’ãƒã‚§ãƒƒã‚¯
 	/// </summary>
-	/// <returns>‰Ÿ‚³‚ê‚Ä‚¢‚é‚©</returns>
+	/// <returns>æŠ¼ã•ã‚Œã¦ã„ã‚‹ã‹</returns>
 	bool PushMouseLeft();
 
 	/// <summary>
-	/// ƒL[‚Ì’†ƒ{ƒ^ƒ“‰Ÿ‰º‚ğƒ`ƒFƒbƒN
+	/// ã‚­ãƒ¼ã®ä¸­ãƒœã‚¿ãƒ³æŠ¼ä¸‹ã‚’ãƒã‚§ãƒƒã‚¯
 	/// </summary>
-	/// <returns>‰Ÿ‚³‚ê‚Ä‚¢‚é‚©</returns>
+	/// <returns>æŠ¼ã•ã‚Œã¦ã„ã‚‹ã‹</returns>
 	bool PushMouseMiddle();
 
 	/// <summary>
-	/// ƒL[‚Ì¶ƒ{ƒ^ƒ“ƒgƒŠƒK[‚ğƒ`ƒFƒbƒN
+	/// ã‚­ãƒ¼ã®å·¦ãƒœã‚¿ãƒ³ãƒˆãƒªã‚¬ãƒ¼ã‚’ãƒã‚§ãƒƒã‚¯
 	/// </summary>
-	/// <returns>ƒgƒŠƒK[‚©</returns>
+	/// <returns>ãƒˆãƒªã‚¬ãƒ¼ã‹</returns>
 	bool TriggerMouseLeft();
 
 	/// <summary>
-	/// ƒL[‚Ì’†ƒ{ƒ^ƒ“ƒgƒŠƒK[‚ğƒ`ƒFƒbƒN
+	/// ã‚­ãƒ¼ã®ä¸­ãƒœã‚¿ãƒ³ãƒˆãƒªã‚¬ãƒ¼ã‚’ãƒã‚§ãƒƒã‚¯
 	/// </summary>
-	/// <returns>ƒgƒŠƒK[‚©</returns>
+	/// <returns>ãƒˆãƒªã‚¬ãƒ¼ã‹</returns>
 	bool TriggerMouseMiddle();
 
 	/// <summary>
-	/// ƒ}ƒEƒXˆÚ“®—Ê‚ğæ“¾
+	/// ãƒã‚¦ã‚¹ç§»å‹•é‡ã‚’å–å¾—
 	/// </summary>
-	/// <returns>ƒ}ƒEƒXˆÚ“®—Ê</returns>
+	/// <returns>ãƒã‚¦ã‚¹ç§»å‹•é‡</returns>
 	//MouseMove GetMouseMove();
+
+ ç¹§ï¿½âˆªç¸ºåŠ±â—†
+	bool TriggerButtonA();
+	bool TriggerButtonB();
+	bool TriggerButtonRB();
+	bool PushButtonA();
+	CMove GetCMove();
 
 	//bool TriggerButtonA();
 	//bool TriggerButtonRB();
 	//bool PushButtonA();
 	//CMove GetCMove();
+
 };
 

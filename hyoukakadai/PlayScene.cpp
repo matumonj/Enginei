@@ -126,9 +126,12 @@ void PlayScene::SetPrm()
 {
 
 
+
+
 	setumei->SetPosition({ 0, 400 });
 	setumei->SetSize({ 500,300 });
 	setumei->setcolor({ 1,1,1,1 });
+
 
 
 
@@ -157,6 +160,10 @@ void PlayScene::SetPrm()
 	world->SetScale({ 1,1,1 });
 
 	sentan->SetPosition({ sentan_Pos });
+
+
+
+
 
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
@@ -265,7 +272,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
+
+
 	
+
 
 	///////// コントローラー //////////
 	// スティックの方向判定
@@ -273,7 +283,28 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	LONG u_r = 32768;
 	LONG a = 30000;
 
-	
+	//左
+	// 方向だけを調べる方法
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+		// 左に傾けた
+		Player_Pos.x -= moveSpeed;
+
+	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+		// 右に傾けた
+		Player_Pos.x += moveSpeed;
+	}
+
+	/*if (Input::GetInstance()->GetCMove().lY < u_r - a)
+	{
+		Player_Pos.y -= moveSpeed;
+
+	} else if (Input::GetInstance()->GetCMove().lY > u_r + a)
+	{
+		Player_Pos.y += moveSpeed;
+	}*/
+
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
@@ -418,6 +449,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
+	camera->SetEye({ Player_Pos.x,Player_Pos.y + 1,Player_Pos.z - 23 });
 	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
 	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
 
@@ -608,6 +640,9 @@ void PlayScene::ImGuiDraw()
 		float rf2 = enemy[0]->GetPosition().y;
 		float rrr = player->getdis();
 		//float rf3 = enemy->GetPosition().z;
+		ImGui::SliderInt("positionX", &co, -100, 100);
+		ImGui::SliderFloat("positionY", &rf2, -100, 100);
+		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
 		ImGui::SliderInt("positionX", &co, -200, 200);
 		ImGui::SliderFloat("positionY", &rf2, -200, 200);
 		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
