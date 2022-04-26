@@ -161,6 +161,10 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void Tutorial::Update(DirectXCommon* dxCommon)
 {
+	LONG u_r = 32768;
+	LONG a = 30000;
+	//向いてる方向に移動
+
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
@@ -171,11 +175,25 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//このやり方後で直す
-		if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+		/*if (Input::GetInstance()->(DIK_RIGHT)) {
 			Player_Pos.x += moveSpeed;
 		}
 		if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 			Player_Pos.x -= moveSpeed;
+
+		}*/
+
+		if (Input::GetInstance()->GetCMove().lX < u_r - a)
+		{
+			// 右に傾けた
+			Player_Pos.x -= moveSpeed;
+
+		}
+		else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+		{
+			
+			// 左に傾けた
+			Player_Pos.x += moveSpeed;
 
 		}
 
