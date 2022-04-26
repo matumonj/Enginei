@@ -31,6 +31,8 @@ private:
 	static bool boundflag ;
 	static bool returnflag ;
 	static bool drawflag;
+	static bool stopflag;
+	static bool notdoubletuch;
 	static 	float tempx, tempy;
 	static float linex, linex2, liney, liney2;
 	static float lineangle ;
@@ -55,13 +57,14 @@ private:
 	static float oldlinex, oldliney;
 	static bool mapcol;// = false;
 public:
-
+	static void Finalize();
 	static Line* GetInstance();
 	static void Initialize();
 	static void Update(XMMATRIX matview, XMMATRIX matprojection,Player*player,XMFLOAT3&Player_Pos,bool& colf,float& moveSpeed);
 	static void Draw(DirectXCommon* dxcomn);
 	static void CollisionBlock(int** map, float** mapxy[2],float maphalf[2], const int MapX, const int MapY);
 	static void CollisionEnemy(std::unique_ptr<Enemy> Position[]);
+	static void CollisionEnemy(Enemy*Position);
 public:
 	void Setmapcol(bool f) { mapcol = f; }
 	float GetLength() { return subradius; }

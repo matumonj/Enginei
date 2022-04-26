@@ -8,13 +8,7 @@
 #include"ThrowEnemy.h"
 #include"Line.h"
 #include"Destroy.h"
-#define PI 3.14
-#define CLENGTH     (LENGTH * 2 * PI)   // 紐を伸ばして一周させた場合に出来る円の円周の長さ
-#define MASS        0.346               // ぶら下がっている物の質量
-#define G           0.05               // 重力加速度
-#define STX         320                 // 振り子の軸のx座標
-#define STY         100                 // 振り子の軸のy座標
-
+#include"Fader.h"
 //コメントアウト
 
 
@@ -37,6 +31,8 @@ void PlayScene::SpriteCreate()
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
+	Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
 	mech = std::make_unique<Texture>();
 	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
@@ -44,7 +40,8 @@ void PlayScene::SpriteCreate()
 	zukki = std::make_unique<Texture>();
 	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
-	background = Sprite::Create(1, { 0.0f,-200.0f });
+	background = Sprite::Create(1, { 0.0f,0.0f });
+	setumei = Sprite::Create(2, { 0.0f,0.0f });
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -61,7 +58,11 @@ void PlayScene::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("box1");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
+	goalmodel = Model::CreateFromOBJ("box2");
 
+
+	item = new Item();
+	item->Initialize();
 	collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
@@ -87,6 +88,10 @@ void PlayScene::ModelCreate()
 	hari->Initialize();
 	hari->SetModel(harimodel);
 
+	goal = std::make_unique<Object3d>();
+	goal->Initialize();
+	goal->SetModel(goalmodel);
+
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -109,15 +114,24 @@ void PlayScene::ModelCreate()
 
 	attackeffects = std::make_unique<Effects>();;
 
-	Player_Pos = player->GetPosition();
+	//Player_Pos = player->GetPosition();
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
+	//Fader::SetFeedSprite();
 }
 #pragma endregion
 
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
+
+
+
+
+	setumei->SetPosition({ 0, 400 });
+	setumei->SetSize({ 500,300 });
+	setumei->setcolor({ 1,1,1,1 });
+
 
 
 
@@ -136,10 +150,9 @@ void PlayScene::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
-
 		}
 	}
-
+	goal->SetPosition({ goal_pos.x + 185.0f,goal_pos.y-5 ,goal_pos.z });
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
 
@@ -150,6 +163,13 @@ void PlayScene::SetPrm()
 
 
 
+
+
+	background->SetPosition({ 0, 0 });
+	background->SetSize({ WinApp::window_width,WinApp::window_height });
+	background->setcolor({ 1,1,1,1 });
+
+	
 
 }
 #pragma endregion
@@ -177,6 +197,9 @@ void PlayScene::objUpdate()
 	world->Update({ 1,1,1,1 });
 	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
+
+	goal->Update({ 1,1,1,1 });
+
 }
 #pragma endregion
 
@@ -195,7 +218,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	//enemy[0] = new MobEnemy();
 
 	enemy[3]->Setposition({ 80,-4.2,0 });
-	enemy[2]->Setposition({ 100,-4.2,0 });
+	enemy[2]->Setposition({ 200,-4.2,0 });
 	enemy[1]->Setposition({ -40, -10, 0 });
 	enemy[0]->Setposition({ 20, -10, 0 });
 	enemy[0]->Initialize();
@@ -245,18 +268,14 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void PlayScene::Update(DirectXCommon* dxCommon)
 {
-	Input::MouseMove mouseMove = Input::GetInstance()->GetMouseMove();
-	//マウスの入力状態取得
-	if (Input::GetInstance()->PushMouseLeft()) {
-		dy = (float)mouseMove.lX;
-		dx = (float)mouseMove.lY;
-		dz = (float)mouseMove.lZ;
-	}
-
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
+
+
+	
+
 
 	///////// コントローラー //////////
 	// スティックの方向判定
@@ -293,15 +312,22 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 		Player_Pos.x -= moveSpeed;
-
 	}
 
 	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+		jumpFlag = true;
+	}
+	if (jumpFlag == true) {
+		Player_Pos.y += 0.1f;
+		time += 0.02f;
+	}
+
+	/*if (Input::GetInstance()->Pushkey(DIK_UP)) {
 		Player_Pos.y -= moveSpeed;
 	}
 	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
 		Player_Pos.y += moveSpeed;
-	}
+	}*/
 
 	///これより上に入力処理をかけ
 	////当たり判定
@@ -331,6 +357,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 						//moveSpeed = 0;
 						grav = 0.0f;
 						time = 0;
+						jumpFlag = false;
 						break;
 					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
 						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
@@ -366,6 +393,13 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 
+
+	
+
+	if (Line::GetInstance()->Getboundflag()==true) {
+		grav = 0;
+		time = 0;
+	}
 
 #pragma region 線の処理
 
@@ -416,10 +450,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
 	camera->SetEye({ Player_Pos.x,Player_Pos.y + 1,Player_Pos.z - 23 });
+	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
 	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
 
 	camera->Update();
-
 
 	player->SetPosition(Player_Pos);
 	player->SetRotation(Player_Rot);
@@ -449,16 +483,19 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			//もし敵が死んだら破棄
 			if (enemy[i]->GetState_DEAD() == true) {
 				Destroy_unique(enemy[i]);
+			
 			}
 		}
 	}
-
+	
+	item->Update(enemy);
+	//Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
+	if (Input::GetInstance()->TriggerKey(DIK_R)||(Player_Pos.y<=-50)) {//押されたら
 		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
@@ -470,9 +507,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
+
+
 	player->PreDraw();
 	player->Draw();
 	player->PostDraw();
+
 
 	world->PreDraw();
 	//world->Draw();
@@ -486,12 +526,18 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	block->Draw();
 	block->PostDraw();
 
+	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
+			}
+			if (map[j][i] == 2) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
 			}
 		}
 	}
@@ -504,8 +550,17 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 //sプライと以外の描画
 void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 {
+
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	background->Draw();
+	setumei->Draw();
+	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
+
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
+
 
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
@@ -515,10 +570,12 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 	GameUI::TargetUIDraw(dxcomn);
 	GameUI::UIDraw(dxcomn);
 	GameUI::PlayerUIDraw(dxcomn);
+
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
+
 }
 #pragma endregion
 //↓に入る
@@ -559,9 +616,9 @@ void PlayScene::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("light_position")) {
-		//ImGui::SliderFloat("positionX", &needlepos.x, -100, 100);
-		///ImGui::SliderFloat("positionY", &needlepos.y, -100, 100);
-		///ImGui::SliderFloat("positionZ", &needlepos.z, -100, 100);
+		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
+		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
+		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
 		if (ImGui::Button("spotlight ON")) {
 			lightGroup->SetSpotLightActive(0, true);
 		}
@@ -573,9 +630,9 @@ void PlayScene::ImGuiDraw()
 	}
 
 	if (ImGui::TreeNode("Effect_position")) {
-		//ImGui::SliderInt("positionX", &L_Cflag, -100, 100);
-		//ImGui::SliderFloat("positionY", &debuga, -100, 100);
-		//ImGui::SliderInt("positionZ", &elf, -100, 100);
+		//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
+		//ImGui::SliderFloat("positionY", &debuga, -200, 200);
+		//ImGui::SliderInt("positionZ", &elf, -200, 200);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("enemy_position")) {
@@ -586,17 +643,20 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderInt("positionX", &co, -100, 100);
 		ImGui::SliderFloat("positionY", &rf2, -100, 100);
 		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
+		ImGui::SliderInt("positionX", &co, -200, 200);
+		ImGui::SliderFloat("positionY", &rf2, -200, 200);
+		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
 		ImGui::TreePop();
 	}
 	float linex = Line::GetInstance()->getpos().x;
 	float liney = Line::GetInstance()->getpos().y;
 	float rr = player->GetPosition().x;
 	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -100, 100);
-		ImGui::SliderFloat("positionY", &liney, -100, 100);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -100, 100);
-		ImGui::SliderFloat("grav", &grav, -100, 100);
-		ImGui::SliderFloat("time", &time, -100, 100);
+		ImGui::SliderFloat("positionX", &linex, -200, 200);
+		ImGui::SliderFloat("positionY", &liney, -200, 200);
+		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+		ImGui::SliderFloat("grav", &grav, -200, 200);
+		ImGui::SliderFloat("time", &time, -200, 200);
 		ImGui::TreePop();
 	}
 	float sx = player->GetArea_S().x;
@@ -606,26 +666,26 @@ void PlayScene::ImGuiDraw()
 	float ey = player->GetArea_e().y;
 
 	if (ImGui::TreeNode("half")) {
-		ImGui::SliderFloat("sx", &sx, -100, 100);
-		ImGui::SliderFloat("sy", &sy, -100, 100);
-		ImGui::SliderFloat("ex", &ex, -100, 100);
-		ImGui::SliderFloat("ey", &ey, -100, 100);
+		ImGui::SliderFloat("sx", &sx, -200, 200);
+		ImGui::SliderFloat("sy", &sy, -200, 200);
+		ImGui::SliderFloat("ex", &ex, -200, 200);
+		ImGui::SliderFloat("ey", &ey, -200, 200);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -100, 100);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -100, 100);
+		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
 		ImGui::TreePop();
 	}
 
 
 	/*if (ImGui::TreeNode("1")) {
-		ImGui::SliderFloat("+_width", &half_Width, -100, 100);
-		ImGui::SliderFloat("+_height", &half_height, -100, 100);
-		ImGui::SliderFloat("-_width", &half_Width, -100, 100);
-		ImGui::SliderFloat("-_height", &half_height, -100, 100);
-		ImGui::SliderFloat("map_1_width", &width, -100, 100);
-		ImGui::SliderFloat("map_1_height", &height, -100, 100);
+		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
+		ImGui::SliderFloat("+_height", &half_height, -200, 200);
+		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
+		ImGui::SliderFloat("-_height", &half_height, -200, 200);
+		ImGui::SliderFloat("map_1_width", &width, -200, 200);
+		ImGui::SliderFloat("map_1_height", &height, -200, 200);
 		ImGui::TreePop();
 	}*/
 

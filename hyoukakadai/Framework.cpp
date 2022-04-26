@@ -9,6 +9,7 @@ void Framework::Run()
 		Update(dxcomn);
 		Draw(dxcomn);
 	}
+	Finalize();
 }
 /// <summary>
 /// ‰Šú‰»

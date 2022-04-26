@@ -129,7 +129,7 @@ void MobEnemy::Attack(Player*player)
 {
 		//player->SetHp(player->getHp() - AttackDamage);
 }
-void MobEnemy::ColMap(int map[15][100], float mapx[15][100], float mapy[15][100], const int X, const int Y)
+void MobEnemy::ColMap(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y)
 {
 	
 }
