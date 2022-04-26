@@ -449,7 +449,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y + 1,Player_Pos.z - 23 });
 	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
 	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
 

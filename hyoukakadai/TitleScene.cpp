@@ -26,7 +26,7 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 {
 	//ENTERで次のシーンへ
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {//押されたら
-		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 	//if (Input::GetInstance()->TriggerKey(DIK_F))
