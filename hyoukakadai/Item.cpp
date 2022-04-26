@@ -1,6 +1,7 @@
 #include "Item.h"
-
-
+#include"Destroy.h"
+#include"Collision.h"
+#include"GameUI.h"
 Item::Item()
 {
 
@@ -28,19 +29,23 @@ void Item::Update(std::unique_ptr<Enemy>enemy[])
 {
 
 		Drop(enemy);
-		for (int i = 0; i<itemMax; i++) {
-		itemObj[i]->SetPosition(position[i]);
-		itemObj[i]->SetScale({ 1,1,1 });
-		itemObj[i]->Update({1,1,1,1});
-	}
+		for (int i = 0; i < itemMax; i++) {
+			if (itemObj[i] != nullptr) {
+				itemObj[i]->SetPosition(position[i]);
+				itemObj[i]->SetScale({ 1,1,1 });
+				itemObj[i]->Update({ 1,1,1,1 });
+			}
+		}
 }
 
 void Item::Draw()
 {
 	for (int i = 0; i<itemMax; i++) {
-		itemObj[i]->PreDraw();
-		itemObj[i]->Draw();
-		itemObj[i]->PostDraw();
+		if (itemObj[i] != nullptr) {
+			itemObj[i]->PreDraw();
+			itemObj[i]->Draw();
+			itemObj[i]->PostDraw();
+		}
 	}
 }
 void Item::Drop(std::unique_ptr<Enemy>enemy[])
@@ -49,11 +54,33 @@ void Item::Drop(std::unique_ptr<Enemy>enemy[])
 		if (enemy[i] != nullptr) {
 			position[i] = enemy[i]->GetPosition();
 		}
+		else {
+			GetPossible[i] = true;
+		}
 	
 	}
 }
 
 void Item::HealEfficasy(Player*player)
 {
+	float dis[itemMax];
+	for (int i = 0; i < itemMax; i++) {
+		if(itemObj[i]!=nullptr){
+		dis[i] = sqrtf((position[i].x - player->GetPosition().x) * (position[i].x - player->GetPosition().x) +
+			(position[i].y - player->GetPosition().y) * (position[i].y - player->GetPosition().y));
+		if (GetPossible[i] == true) {
+			if (dis[i] <= 1) {
+				GetItem(player);
+				Destroy(itemObj[i]);
+			}
+		}
+		}
+	}
+}
+
+void Item::GetItem(Player* plauer)
+{
 	
+	GameUI::GetInstance()->SetlineOutScl(GameUI::GetInstance()->GetOutX()+20);
+
 }

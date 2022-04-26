@@ -455,7 +455,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
-	
+	item->HealEfficasy(player);
 	item->Update(enemy);
 	//Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),

@@ -19,7 +19,7 @@ TyutorialSprite::~TyutorialSprite()
 void TyutorialSprite::Initialize()
 {
 	Sprite::LoadTexture(30, L"Resources/lineshot.png");
-	Sprite::LoadTexture(31, L"Resources/titletu.png");
+	Sprite::LoadTexture(31, L"Resources/move.png");
 	Sprite::LoadTexture(32, L"Resources/lineshot.png");
 	Sprite::LoadTexture(33, L"Resources/lineope.png");
 	Sprite::LoadTexture(34, L"Resources/attack.png");
@@ -27,15 +27,15 @@ void TyutorialSprite::Initialize()
 	//2
 	//Sprite::LoadTexture(36, L"Resources/lineshot.png");//糸出し+糸の上限
 	Sprite::LoadTexture(35, L"Resources/lineshot.png");//糸出し+糸の上限
-	Sprite::LoadTexture(36, L"Resources/taskclear5.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(36, L"Resources/task.png");//攻撃+プレイヤーの体力
 	//clear
 
-	Sprite::LoadTexture(37, L"Resources/tu.png");//移動
-	Sprite::LoadTexture(38, L"Resources/taskclear.png");//攻撃+プレイヤーの体力
-	Sprite::LoadTexture(39, L"Resources/taskclear2.png");//攻撃+プレイヤーの体力
-	Sprite::LoadTexture(40, L"Resources/taskclear3.png");//糸出し+糸の上限
-	Sprite::LoadTexture(41, L"Resources/taskclear4.png");//攻撃+プレイヤーの体力
-	Sprite::LoadTexture(42, L"Resources/taskclear5.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(37, L"Resources/tut.png");//移動
+	Sprite::LoadTexture(38, L"Resources/task.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(39, L"Resources/task.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(40, L"Resources/task.png");//糸出し+糸の上限
+	Sprite::LoadTexture(41, L"Resources/task.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(42, L"Resources/task.png");//攻撃+プレイヤーの体力
 
 	//全てクリア
 	Sprite::LoadTexture(43, L"Resources/cleartutorial.png");//攻撃+プレイヤーの体力
@@ -55,6 +55,7 @@ void TyutorialSprite::Initialize()
 	sprite[12] = Sprite::Create(40, { 1450,250 });//終了
 	sprite[13] = Sprite::Create(41, { 1450,250 });//終了
 	sprite[14] = Sprite::Create(42, { 1450,250 });//終了
+	sprite[15] = Sprite::Create(43, { 1450,250 });//終了
 	for (int i = 9; i < 15; i++) {
 		alpha[i] = 1;
 	}
@@ -140,6 +141,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 			}
 			if (nextphaseflag_bond) {
 				task = Clear::LineBond;
+				//Line::GetInstance()->SetReturnflag(false);
 			}
 
 			if (nextphaseflag_bond && nextphaseflag_return) {
@@ -173,6 +175,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		break;
 	case TyutorialSprite::Phase::End:
 		Fader::feedIn(0.7f);
+		alpha[15] = 1.0f;
 		Destroy(sprite[5]);
 		break;
 	default:
@@ -215,6 +218,7 @@ void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 		sprite[4]->Draw();
 		break;
 	case Phase::End:
+		sprite[15]->Draw();
 		break;
 
 	default:

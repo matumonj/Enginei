@@ -45,6 +45,8 @@ public:
 	static void UIDraw(DirectXCommon*dxcomn);
 	static void AttentionUI();
 	static GameUI* GetInstance();
+	void SetlineOutScl(float x) { loutscl.x = x; }
+	float GetOutX() { return loutscl.x; }
 	static void AllowUISet();
 	static void AllowUIUpdate(XMMATRIX matview, XMMATRIX matprojection,XMFLOAT3 position, float rotangle, bool flag);
 	static void AllowUIDraw(DirectXCommon*dxcomn);

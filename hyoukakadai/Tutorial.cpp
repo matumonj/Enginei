@@ -312,7 +312,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
-		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
