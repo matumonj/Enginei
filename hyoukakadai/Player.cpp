@@ -61,6 +61,7 @@ void Player::OnCollision(const CollisionInfo& info)
 	//DebugTxt::GetInstance()->Print("Hit",950,20,3);
 }
 
+
 void Player::Attack(XMFLOAT3 playerpos)
 {
 	LONG u_r = 32768;
