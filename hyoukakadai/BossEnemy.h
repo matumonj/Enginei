@@ -63,5 +63,6 @@ public:
     //ÉXÉPÅ[Éã
     XMFLOAT3 GetScale() { return Boss_Scl; }
     void ColMap(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);
+    void enemyappearance(TyutorialSprite* sprite)override {};
 };
 

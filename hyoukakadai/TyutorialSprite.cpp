@@ -18,7 +18,7 @@ TyutorialSprite::~TyutorialSprite()
 
 void TyutorialSprite::Initialize()
 {
-	Sprite::LoadTexture(30, L"Resources/lineshot.png");
+	Sprite::LoadTexture(30, L"Resources/tutorial.png");
 	Sprite::LoadTexture(31, L"Resources/move.png");
 	Sprite::LoadTexture(32, L"Resources/lineshot.png");
 	Sprite::LoadTexture(33, L"Resources/lineope.png");
@@ -39,12 +39,12 @@ void TyutorialSprite::Initialize()
 
 	//全てクリア
 	Sprite::LoadTexture(43, L"Resources/cleartutorial.png");//攻撃+プレイヤーの体力
-	sprite[0] = Sprite::Create(30, { 500,50 });//開始
+	sprite[0] = Sprite::Create(30, { 200,50 });//開始
 	sprite[1] = Sprite::Create(31, { 500,50 });//移動
 	sprite[2] = Sprite::Create(32, { 500,50 });//糸出し
 	sprite[3] = Sprite::Create(33, { 500,50 });//回収とひっつき
 	sprite[4] = Sprite::Create(34, { 500,50 });//攻撃
-	sprite[5] = Sprite::Create(35, { 500,50 });//終了
+	sprite[5] = Sprite::Create(43, { 500,50 });//終了
 	sprite[6] = Sprite::Create(36, { 500,50 });//終了
 	sprite[7] = Sprite::Create(37, { 500,50 });//終了
 	sprite[8] = Sprite::Create(38, { 500,50 });//終了
@@ -55,7 +55,7 @@ void TyutorialSprite::Initialize()
 	sprite[12] = Sprite::Create(40, { 1450,250 });//終了
 	sprite[13] = Sprite::Create(41, { 1450,250 });//終了
 	sprite[14] = Sprite::Create(42, { 1450,250 });//終了
-	sprite[15] = Sprite::Create(43, { 1450,250 });//終了
+	sprite[15] = Sprite::Create(43, { 0,0 });//終了
 	for (int i = 9; i < 15; i++) {
 		alpha[i] = 1;
 	}
@@ -71,10 +71,19 @@ void TyutorialSprite::Update(Enemy* enemy)
 		break;
 
 	case TyutorialSprite::Phase::Start:
+		
 		//	if (alpha[0] <= 0.0f) {
-		if (Input::GetInstance()->TriggerKey(DIK_O)) {
+		
+		Fader::feedInOutf_a(alpha[0], 1.8f,-0.1f,inoutspeed);
+		if (alpha[0]<0.0f) {
+			Fader::feedOut(-0.1f,NormalfeedSpeed);
+		}
+		else {
+			Fader::feedIn(0.8f, NormalfeedSpeed);
+		}
+		if (Fader::GetInstance()->GetAlpha() < 0.0f) {
 			phase = Phase::Move;
-			Destroy(sprite[0]);
+		///	Destroy(sprite[0]);
 		}
 		break;
 
@@ -87,7 +96,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		} else {
 			alpha[1] = 0.0f;
 		}
-		Fader::feedInOut_f(0.7f, 0.0f, OK_flag);
+		Fader::feedInOut_f(0.7f, 0.0f, OK_flag, NormalinoutSpeed);
 
 		if (OK_flag && alpha[1] <= 0.0f) {
 			if (Input::GetInstance()->Pushkey(DIK_LEFT) || Input::GetInstance()->Pushkey(DIK_RIGHT)) {
@@ -106,18 +115,26 @@ void TyutorialSprite::Update(Enemy* enemy)
 		if (Input::GetInstance()->TriggerKey(DIK_O) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
+		if (OK_flag&&Input::GetInstance()->TriggerKey(DIK_O) &&alpha[5]>=0.8f) {
+			OK_flag_2nd = true;
+		}
 		if (!OK_flag) {
 			alpha[2] = 0.9f;
 		} else {
 			alpha[2] = 0.0f;
+			Fader::feedIn_a(alpha[5], 0.9f, NormalfeedSpeed);
 		}
-		Fader::feedInOut_f(0.7f, 0.0f, OK_flag);
+		if (OK_flag_2nd) {
+			alpha[5]=0;
+		}
+		Fader::feedInOut_f(0.7f, 0.0f, OK_flag_2nd, NormalinoutSpeed);
 
-		if (OK_flag && alpha[2] <= 0.0f) {
+		if (OK_flag_2nd && alpha[5] <= 0.0f) {
 			if (Line::GetInstance()->Getelf() == true) {
 				phase = Phase::LineOperation;
 				OK_flag = false;
 				Destroy(sprite[2]);
+				Destroy(sprite[5]);
 				task = Clear::LineShot;
 			}
 		}
@@ -131,7 +148,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		} else {
 			alpha[3] = 0.0f;
 		}
-		Fader::feedInOut_f(0.7f, 0.0f, OK_flag);
+		Fader::feedInOut_f(0.7f, 0.0f, OK_flag, NormalinoutSpeed);
 		if (OK_flag && alpha[3] <= 0.0f) {
 			if (Line::GetInstance()->Getboundflag() == true) {
 				nextphaseflag_bond = true;
@@ -160,7 +177,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		} else {
 			alpha[4] = 0.0f;
 		}
-		Fader::feedInOut_f(0.7f, 0.0f, OK_flag);
+		Fader::feedInOut_f(0.7f, 0.0f, OK_flag, NormalinoutSpeed);
 		if (OK_flag && alpha[4] <= 0.0f) {
 			if (enemy == nullptr) {
 				nextphaseflag_attack = true;
@@ -174,16 +191,24 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::End:
-		Fader::feedIn(0.7f);
-		alpha[15] = 1.0f;
+		if (Input::GetInstance()->TriggerKey(DIK_O) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
+			OK_flag = true;
+		}
+		Fader::feedIn(0.7f, NormalfeedSpeed);
+		Fader::feedInOutf_f_a(alpha[15], 0.8f, 0.0f, OK_flag, NormalinoutSpeed);
+		//alpha[15] = 1.0f;
+		for (int i = 9; i < 15; i++) {
+			alpha[i] = 0;
+		}
 		Destroy(sprite[5]);
 		break;
 	default:
 		break;
 	}
 
-
-	for (int i = 0; i < 9; i++) {
+	sprite[0]->SetSize({ 1700,600 });
+	sprite[0]->setcolor({ 1,1,1,alpha[0] });
+	for (int i = 1; i < 9; i++) {
 		if (sprite[i] != nullptr) {
 			sprite[i]->SetSize({ 700,600 });
 			sprite[i]->setcolor({ 1,1,1,alpha[i] });
@@ -192,9 +217,12 @@ void TyutorialSprite::Update(Enemy* enemy)
 	for (int i = 9; i < 15; i++) {
 		if (sprite[i] != nullptr) {
 			sprite[i]->SetSize({ 500,600 });
-			sprite[i]->setcolor({ 1,1,1,1 });
+			sprite[i]->setcolor({ 1,1,1,alpha[i] });
 		}
 	}
+	sprite[15]->SetSize({1920, 1080
+});
+	sprite[15]->setcolor({ 1,1,1,alpha[15] });
 }
 
 void TyutorialSprite::Draw(DirectXCommon* dxcomn)
@@ -204,12 +232,14 @@ void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 	switch (phase)
 	{
 	case Phase::Start:
+		sprite[0]->Draw();
 		break;
 	case Phase::Move:
 		sprite[1]->Draw();
 		break;
 	case Phase::LineShot:
 		sprite[2]->Draw();
+		sprite[5]->Draw();
 		break;
 	case Phase::LineOperation:
 		sprite[3]->Draw();
@@ -219,7 +249,6 @@ void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 		break;
 	case Phase::End:
 		sprite[15]->Draw();
-		break;
 
 	default:
 		break;

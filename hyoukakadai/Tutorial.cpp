@@ -182,7 +182,13 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 			Player_Pos.x -= moveSpeed;
 
 		}
+		if (Input::GetInstance()->Pushkey(DIK_UP)) {
+			Player_Pos.y += moveSpeed;
+		}
+		if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
+			Player_Pos.y -= moveSpeed;
 
+		}
 		//if (Input::GetInstance()->GetCMove().lX < u_r - a)
 		//{
 		//	// 右に傾けた
@@ -306,8 +312,8 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		objUpdate();//オブジェクトの更新処理
 
 		//enemyにnullptr代入するときは敵が死んだら
-		for (int i = 0; i < 4; i++) {
 			if (enemy != nullptr) {
+				enemy->enemyappearance(tyutorial);
 				//プレイヤーの検知
 				enemy->Attack(player);
 				enemy->ColMap(map, mapx, mapy, MAX_X, MAX_Y);
@@ -319,7 +325,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 					Destroy(enemy);
 				}
 			}
-		}
 
 		GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 			Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());

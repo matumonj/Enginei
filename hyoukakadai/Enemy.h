@@ -7,7 +7,7 @@
 #include <DirectXMath.h>
 #include <string>
 #include"Input.h"
-
+#include"TyutorialSprite.h"
 /// <summary>
 /// “GƒLƒƒƒ‰‚ÌŠî’êƒNƒ‰ƒX
 /// </summary>
@@ -67,7 +67,8 @@ public:
 	void SetHP(int HP) { this->HP = HP; }
 
 	virtual void EnemySearchPlayer(Player* player) = 0;
-
+	virtual void enemyappearance(TyutorialSprite* sprite) = 0;
+	
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
