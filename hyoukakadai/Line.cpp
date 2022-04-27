@@ -95,7 +95,28 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	//コントローラー
 	LONG u_r = 32768;
 	LONG a = 30000;
+	LONG b = 15000;
 
+	if (stopflag == true && notdoubletuch == true) {
+		if (Input::GetInstance()->GetCMove().lRx < u_r - a)
+		{
+			// 左に傾けた
+			lineangle = +180;
+			needlerot.z = +180;
+		}
+		else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
+		{
+			// 右に傾けた
+			lineangle = 0;
+			needlerot.z = 0;
+		}
+		if (Input::GetInstance()->GetCMove().lRy < u_r - a)
+		{
+			// 傾けた
+			lineangle = +90;
+			needlerot.z = +90;
+
+<<<<<<< HEAD
 	//if (Input::GetInstance()->GetCMove().lRx < u_r - a)
 	//{
 	//	// 左に傾けた
@@ -145,6 +166,41 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	//	needlerot.z = +315;
 	//}
 
+=======
+		}
+		else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
+		{
+			// 傾けた
+			lineangle = +270;
+			needlerot.z = +270;
+		}
+
+		// 右上に傾けた
+		if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy < u_r - b)
+		{
+			lineangle = +45;
+			needlerot.z = +45;
+		}
+		// 左上に傾けた
+		if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy < u_r - b)
+		{
+			lineangle = +135;
+			needlerot.z = +135;
+		}
+		// 左下に傾けた
+		if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy > u_r + b)
+		{
+			lineangle = +225;
+			needlerot.z = +225;
+		}
+		// 右下に傾けた
+		if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy > u_r + b)
+		{
+			lineangle = +315;
+			needlerot.z = +315;
+		}
+	}
+>>>>>>> 78cf8fd6faddffb044c3ed3f5122cc88b0dbb6e2
 	if (!elf) {
 		linex2 = tempx + cosf((lineangle)*PI / 180.0f) * subradius;
 		liney2 = tempy + sinf((lineangle)*PI / 180.0f) * subradius+0.5f;
@@ -159,12 +215,25 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		}
 	}
 
+<<<<<<< HEAD
 	//if (Input::GetInstance()->TriggerButtonRB()) {
 		//Line::GetInstance()->SetTrigger(true);
 		//trigger = true;//線を伸ばすフラグね
 		//elf = false;
 		//Line = 1;
 	//}
+=======
+	if (notdoubletuch == true) {
+		if (Input::GetInstance()->TriggerButtonRB()) {
+			Line::GetInstance()->SetTrigger(true);
+			trigger = true;//線を伸ばすフラグね
+			elf = false;
+			stopflag = false;
+			notdoubletuch = false;
+			//Line = 1;
+		}
+	}
+>>>>>>> 78cf8fd6faddffb044c3ed3f5122cc88b0dbb6e2
 
 
 
@@ -183,7 +252,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		}
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
-		if (Input::GetInstance()->TriggerKey(DIK_A) && elf) {//線が伸び切って何もあたっていないとき
+		if (Input::GetInstance()->TriggerButtonB()  && elf) {//線が伸び切って何もあたっていないとき
 			boundflag = true;//線の終点へ吸い付くフラグ
 
 		}
