@@ -83,7 +83,10 @@ private:
 	//Effects* effects;
 private:
 	//Plyer
-	XMFLOAT3 Player_Pos = { 10,-18,0 };// = player->GetPosition();
+	XMFLOAT3 Player_Pos = { 390,3,0 };// = player->GetPosition();
+						  //10, -18, 0
+
+
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;
@@ -102,7 +105,7 @@ private:
 	//hari
 	XMFLOAT3 hari_Pos;
 
-	XMFLOAT3 goal_pos = { 1,1,1 };
+	XMFLOAT3 goal_pos = { 390,3,0 };
 
 	XMFLOAT3 old_Scl = { 1,1,1 };
 
