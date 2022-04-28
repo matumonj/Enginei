@@ -264,9 +264,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	player->PlayerMoves(Player_Pos,moveSpeed);
 
 
-	
-
-
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲
@@ -380,6 +377,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 
+	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x-goal->GetScale().x&&Player_Pos.y<=goal_pos.y+goal->GetScale().y&&Player_Pos.y>=goal_pos.y-goal->GetScale().y) {
+		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+		sceneManager_->SetnextScene(scene);//シーンのセット
+	}
 
 	if (Line::GetInstance()->Getboundflag()==true) {
 		grav = 0;
