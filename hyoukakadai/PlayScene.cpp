@@ -204,9 +204,13 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	enemy[2] = std::make_unique<ThrowEnemy>();
 	enemy[3] = std::make_unique<ThrowEnemy>();
 	enemy[4] = std::make_unique<ThrowEnemy>();
+	enemy[5] = std::make_unique<ThrowEnemy>();
+	enemy[6] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
 
-	enemy[4]->Setposition({ 190,-4.2,0 });
+	enemy[6]->Setposition({ 270,-18.2,0 });
+	enemy[5]->Setposition({ 170,-18.2,0 });
+	enemy[4]->Setposition({ 320,-14.2,0 });
 	enemy[3]->Setposition({ 80,-4.2,0 });
 	enemy[2]->Setposition({ 250,-4.2,0 });
 	enemy[1]->Setposition({ 350, -18, 0 });
@@ -216,6 +220,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	enemy[2]->Initialize();
 	enemy[3]->Initialize();
 	enemy[4]->Initialize();
+	enemy[5]->Initialize();
+	enemy[6]->Initialize();
 
 	mapcol = new Collision();
 	c_postEffect = Default;
@@ -479,7 +485,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	effects->Update(dxCommon, camera, enemy, player);
 
 	//enemyにnullptr代入するときは敵が死んだら
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
 			enemy[i]->Attack(player);

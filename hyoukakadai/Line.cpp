@@ -272,7 +272,7 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 	}
 	//int in = -1;
 	float dis[4];
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 10; i++) {
 		if (position[i] != nullptr) {
 			dis[i] = sqrtf((position[i]->GetPosition().x - needlepos.x) * (position[i]->GetPosition().x - needlepos.x) +
 				(position[i]->GetPosition().y - needlepos.y) * (position[i]->GetPosition().y - needlepos.y));
