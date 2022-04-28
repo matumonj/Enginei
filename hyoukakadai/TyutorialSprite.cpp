@@ -49,12 +49,12 @@ void TyutorialSprite::Initialize()
 	sprite[7] = Sprite::Create(37, { 500,50 });//終了
 	sprite[8] = Sprite::Create(38, { 500,50 });//終了
 
-	sprite[9] = Sprite::Create(37, { 1450,250 });//終了
-	sprite[10] = Sprite::Create(38, { 1450,250 });//終了
-	sprite[11] = Sprite::Create(39, { 1450,250 });//終了
-	sprite[12] = Sprite::Create(40, { 1450,250 });//終了
-	sprite[13] = Sprite::Create(41, { 1450,250 });//終了
-	sprite[14] = Sprite::Create(42, { 1450,250 });//終了
+	sprite[9] = Sprite::Create(37, { startposition,250 });//終了
+	sprite[10] = Sprite::Create(38, { startposition,250 });//終了
+	sprite[11] = Sprite::Create(39, { startposition,250 });//終了
+	sprite[12] = Sprite::Create(40, { startposition,250 });//終了
+	sprite[13] = Sprite::Create(41, { startposition,250 });//終了
+	sprite[14] = Sprite::Create(42, { startposition,250 });//終了
 	sprite[15] = Sprite::Create(43, { 0,0 });//終了
 	for (int i = 9; i < 15; i++) {
 		alpha[i] = 1;
@@ -83,11 +83,15 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		if (Fader::GetInstance()->GetAlpha() < 0.0f) {
 			phase = Phase::Move;
+			
 		///	Destroy(sprite[0]);
 		}
 		break;
 
 	case TyutorialSprite::Phase::Move:
+		if (startposition > 1450) {
+			startposition -= 20;
+		}
 		if (Input::GetInstance()->TriggerKey(DIK_O) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
@@ -217,6 +221,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 	for (int i = 9; i < 15; i++) {
 		if (sprite[i] != nullptr) {
 			sprite[i]->SetSize({ 500,600 });
+			sprite[i]->SetPosition({ startposition,250 });
 			sprite[i]->setcolor({ 1,1,1,alpha[i] });
 		}
 	}

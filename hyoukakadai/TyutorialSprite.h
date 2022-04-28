@@ -57,6 +57,7 @@ private:
 	Clear task = Clear::None;
 	Phase phase=Phase::Start;
 	const wchar_t* spritename[20];
+	float startposition = 1900;
 public:
 	void Initialize();
 	void Update(Enemy*enemy);
