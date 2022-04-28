@@ -264,9 +264,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	player->PlayerMoves(Player_Pos,moveSpeed);
 
 
-	
-
-
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲
