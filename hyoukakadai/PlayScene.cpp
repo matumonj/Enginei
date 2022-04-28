@@ -261,6 +261,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	spotLightpos[2] = 0;
 
 
+	player->PlayerMoves(Player_Pos,moveSpeed);
+
+
 	
 
 
