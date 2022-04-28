@@ -4,7 +4,7 @@
 #include <d3dx12.h>
 #include <DirectXMath.h>
 #include"DirectXCommon.h"
-#include"Enemy.h"
+class Enemy;
 //‚±‚ê‚¾‚¯‚Í’·‚¢‚©‚çGameui‚Æ‚Í•ÊŒÂ‚Åì‚é
 class TyutorialSprite
 {
@@ -29,6 +29,7 @@ private:
 	bool nextphaseflag_return = false;
 	bool nextphaseflag_attack = false;
 	bool OK_flag = false;
+	bool OK_flag_2nd = false;
 	enum class Phase {
 		None,
 		Start,//ŠJŽn
@@ -50,6 +51,9 @@ private:
 		Attack,//
 		PlayerHP,//
 	};
+	float NormalfeedSpeed = 0.025f;
+	float NormalinoutSpeed[2]={0.025f,0.025f};
+	float inoutspeed[2] = { 0.02f,0.02f };
 	Clear task = Clear::None;
 	Phase phase=Phase::Start;
 	const wchar_t* spritename[20];
@@ -58,6 +62,8 @@ public:
 	void Update(Enemy*enemy);
 	void Draw(DirectXCommon*dxcomn);
 	void Finalize();
+
+	bool GetPhase_Attack() { if (phase == Phase::Attack) { return true; } }
 	//sprite->setcolor({ 1,1,1,alpha });
 	//sprite->SetSize({ 700,600 });
 };
