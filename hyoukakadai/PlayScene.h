@@ -83,7 +83,7 @@ private:
 	//Effects* effects;
 private:
 	//Plyer
-	XMFLOAT3 Player_Pos = { 390,3,0 };// = player->GetPosition();
+	XMFLOAT3 Player_Pos = { 10,-18,0 };// = player->GetPosition();
 						  //10, -18, 0
 
 
