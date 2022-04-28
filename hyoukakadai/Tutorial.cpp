@@ -123,7 +123,7 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 
 	//enemy[0] = new MobEnemy();
 	enemy = new MobEnemy();
-	enemy->Setposition({ 20, -10, 0 });
+	enemy->Setposition({ 24, 10, 0 });
 	enemy->Initialize();
 
 	mapcol = new Collision();

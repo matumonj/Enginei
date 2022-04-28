@@ -96,7 +96,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		if (startposition > 1450) {
 			startposition -= 20;
 		}
-		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonB()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
 		if (!OK_flag) {
@@ -123,10 +123,10 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::LineShot:
-		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonB()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
-		if (Input::GetInstance()->TriggerButtonA()&&alpha[5]>=0.8f) {
+		if (Input::GetInstance()->TriggerButtonB()&&alpha[5]>=0.8f) {
 			OK_flag_2nd = true;
 		}
 		if (!OK_flag) {
@@ -151,7 +151,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::LineOperation:
-		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonB()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
 		if (!OK_flag) {
@@ -180,7 +180,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::Attack:
-		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonB()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
 		if (!OK_flag) {
@@ -202,7 +202,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::End:
-		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonB()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
 		Fader::feedIn(0.7f, NormalfeedSpeed);
