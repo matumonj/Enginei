@@ -107,7 +107,7 @@ void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 	//当たり判定
 
 	if (action == Action::Attack) {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (enemy[i] != nullptr) {
 			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy[i]->GetPosition().x - 1,enemy[i]->GetPosition().y - 1 }, { enemy[i]->GetPosition().x + 1,enemy[i]->GetPosition().y + 1 }) == true) {
