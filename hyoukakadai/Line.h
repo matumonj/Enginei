@@ -81,5 +81,7 @@ public:
 	bool Getelf() { return elf; }
 	void Setelf(bool flag) { elf = flag; }
 	void SetTrigger(bool flag) { trigger = flag; }
+	void SetBondflag(bool f) { boundflag = f; }
+	void SetReturnflag(bool f ){returnflag = f; }
 };
 

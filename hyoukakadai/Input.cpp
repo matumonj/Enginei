@@ -23,7 +23,7 @@ void Input::Initialize(WinApp* winapp)
 	result = dinput->CreateDevice(GUID_SysMouse, &devMouse, NULL);
 
 	//
-	result = dinput->CreateDevice(GUID_Joystick , &devC, NULL);
+	//result = dinput->CreateDevice(GUID_Joystick , &devC, NULL);
 	//入力データ形式のセット
 	result = devkeyboard->SetDataFormat(&c_dfDIKeyboard);
 	//排他制御レベルのセット
@@ -38,10 +38,10 @@ void Input::Initialize(WinApp* winapp)
 
 	//c
 	// 入力データ形式のセット
-	result = devC->SetDataFormat(&c_dfDIJoystick2); // 標準形式
+	//result = devC->SetDataFormat(&c_dfDIJoystick2); // 標準形式
 
 	// 排他制御レベルのセット
-	result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	//result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
 }
 void Input::update()
@@ -66,13 +66,13 @@ void Input::update()
 		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 	}
 	{// c
-		result = devC->Acquire();	// マウス動作開始
+		//result = devC->Acquire();	// マウス動作開始
 
 		// 前回の入力を保存
-		CStatePre = CState;
+		//CStatePre = CState;
 
 		// マウスの入力
-		result = devC->GetDeviceState(sizeof(CState), &CState);
+		//result = devC->GetDeviceState(sizeof(CState), &CState);
 	}
 }
 
@@ -151,9 +151,9 @@ Input::MouseMove Input::GetMouseMove()
 bool Input::TriggerButtonA()
 {
 	// 前回が0で、今回が0でなければトリガー
-	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
-		return true;
-	}
+	//if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
+		//return true;
+	//}
 
 	// トリガーでない
 	return false;
@@ -162,9 +162,9 @@ bool Input::TriggerButtonA()
 bool Input::PushButtonA()
 {
 	// 前回が0で、今回が0でなければトリガー
-	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
-		return true;
-	}
+	//if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
+	//	return true;
+	//}
 
 	// トリガーでない
 	return false;
@@ -173,9 +173,9 @@ bool Input::PushButtonA()
 bool Input::TriggerButtonRB()
 {
 	// 前回が0で、今回が0でなければトリガー
-	if (!CStatePre.rgbButtons[5] && CState.rgbButtons[5]) {
-		return true;
-	}
+	//if (!CStatePre.rgbButtons[5] && CState.rgbButtons[5]) {
+		//return true;
+	//}
 
 	// トリガーでない
 	return false;
@@ -184,23 +184,33 @@ bool Input::TriggerButtonRB()
 bool Input::TriggerButtonB()
 {
 	// 前回が0で、今回が0でなければトリガー
-	if (!CStatePre.rgbButtons[1] && CState.rgbButtons[1]) {
+	//if (!CStatePre.rgbButtons[1] && CState.rgbButtons[1]) {
+		//return true;
+	//}
+
+	// トリガーでない
+	return false;
+}
+
+bool Input::TriggerButonX()
+{
+	// 前回が0で、今回が0でなければトリガー
+	if (!CStatePre.rgbButtons[2] && CState.rgbButtons[2]) {
 		return true;
 	}
 
-	// トリガーでない
 	return false;
 }
 
 Input::CMove Input::GetCMove()
 {
 	CMove tmp;
-	tmp.lX = CState.lX;
-	tmp.lY = CState.lY;
-	tmp.lZ = CState.lZ;
-	tmp.lRx = CState.lRx;
-	tmp.lRy = CState.lRy;
-	tmp.lRz = CState.lRz;
+	//tmp.lX = CState.lX;
+	//tmp.lY = CState.lY;
+	//tmp.lZ = CState.lZ;
+	//tmp.lRx = CState.lRx;
+	//tmp.lRy = CState.lRy;
+	//tmp.lRz = CState.lRz;
 	return tmp;
 }
 //

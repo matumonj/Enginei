@@ -30,7 +30,7 @@ void MobEnemy::Initialize()
 	Mob_Scl = { 2,2,2 };
 	Mob_Rot = { 0,180,0 };
 	Mob_Pos = { -10,-2,0 };
-	Position = { 20,-4,0 };
+	Position = { 24,10,0 };
 	HP = 10;
 
 }
@@ -132,4 +132,13 @@ void MobEnemy::Attack(Player*player)
 void MobEnemy::ColMap(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y)
 {
 	
+}
+
+void MobEnemy::enemyappearance(TyutorialSprite* sprite)
+{
+	if (sprite->GetPhase_Attack() == true) {
+		if (Position.y >= -2) {
+			Position.y -= 0.5f;
+		}
+	}
 }

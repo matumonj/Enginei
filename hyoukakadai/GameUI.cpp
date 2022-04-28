@@ -44,7 +44,7 @@ void GameUI::UISpriteSet()
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
 	loutpos = { 50,200 };
-	loutscl = { 5155500,50 };
+	loutscl = { 5000,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
 	Attention[0]->SetSize({ 1500,800 });
@@ -90,7 +90,7 @@ void GameUI::UIDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	Attention[0]->Draw();
-	//LineLengthout->Draw();
+	LineLengthout->Draw();
 	LineLength->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
