@@ -65,6 +65,7 @@ public:
 	void Finalize();
 
 	bool GetPhase_Attack() { if (phase == Phase::Attack) { return true; } }
+	bool getPhase_End() { if (phase == Phase::End) { return true; } }
 	//sprite->setcolor({ 1,1,1,alpha });
 	//sprite->SetSize({ 700,600 });
 };

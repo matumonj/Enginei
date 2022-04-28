@@ -147,6 +147,8 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 	//グラフィックパイプライン生成
 	f_Object3d::CreateGraphicsPipeline();
 
+	effect = new Effects();
+	effect->Initialize(dxCommon, camera);
 	//FBXモデルの生成
 	object1 = new f_Object3d();
 	object1->Initialize();
@@ -316,7 +318,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 					Destroy(enemy);
 				}
 			}
-
+			effect->Update(dxCommon, camera, enemy, player);
 		GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 			Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 		GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -325,7 +327,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
+	if (tyutorial->getPhase_End()==true&&Input::GetInstance()->TriggerButtonB()) {//押されたら
 		BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
@@ -366,6 +368,7 @@ void Tutorial::MyGameDraw(DirectXCommon* dxcomn)
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
 
+	effect->Draw(dxcomn);
 	//weffect->Draw(dxcomn);
 	GameUI::AllowUIDraw(dxcomn);
 	GameUI::TargetUIDraw(dxcomn);

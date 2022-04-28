@@ -23,6 +23,7 @@
 #include"Player.h"
 #include"TyutorialSprite.h"
 #include<memory>
+#include"Effects.h"
 class Tutorial :public BaseScene
 {
 public:
@@ -61,6 +62,7 @@ private:
 	Model* tstmodel = nullptr;
 	Model* harimodel = nullptr;
 	DebugCamera* camera;
+	Effects* effect;
 	TyutorialSprite* tyutorial;
 private:
 	

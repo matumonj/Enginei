@@ -42,6 +42,8 @@ public:
 public:
 	void Initialize(DirectXCommon* dxcomn, DebugCamera* camera);
 	void Update(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[],Player*player);
+	void Update(DirectXCommon* dxcomn, DebugCamera* camera, Enemy*enemy, Player* player);
+
 	void Draw(DirectXCommon*dxcomn);
 	void Finalize();
 };

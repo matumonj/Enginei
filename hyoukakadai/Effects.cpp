@@ -77,6 +77,65 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 
 }
 
+void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Player* player)
+{
+	//for (int i = 0; i < 4; i++) {
+		if (enemy != nullptr) {
+			if (enemy->GetState_DEAD() == true) {
+				df = true;
+			}
+			if (df == true) {
+				efk->SetPosition(enemy->GetPosition().x, enemy->GetPosition().y, enemy->GetPosition().z);
+				efk->Load_Effect();
+				df = false;
+			}
+		}
+	
+	if (player->GetRot_Left()==true) {
+		attackefk->SetPosition(player->GetPosition().x - 2, player->GetPosition().y, player->GetPosition().z);
+		attackefk->SetRotation(1, 180, 0);
+	} else if (player->GetRot_Right()==true) {
+		attackefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
+		attackefk->SetRotation(1, 90, 0);
+		//Effect_Rot = { 0,0,0 };
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_W)) {
+		attack = true;
+	}
+
+	//コントローラー
+	if (Input::GetInstance()->TriggerButtonA()) {
+		//攻撃処理
+		attack = true;
+	}
+
+	if (attack) {
+		attackefk->Load_Effect();
+		attack = false;
+	}
+	//エフェクトのパラメータセット
+	/*efk->SetPosition(Effect_Pos.x, Effect_Pos.y, Effect_Pos.z);
+	efk->SetRotation(0, 0, 0);
+	efk->SetScale(1, 1, 1);
+	efk1->SetPosition(-10, 0, 190);*/
+
+	//エフェクトの再生
+	//if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
+	//efk->Load_Effect();
+	////}
+	//efk1->Load_Effect();
+
+	//エフェクトのアニメーション止める
+	//if (Input::GetInstance()->Pushkey(DIK_C)) {
+	//	efk->Stop_Effect();
+	//}
+
+	//view,projection行列をエフェクトのテクスチャにかける
+	efk->EffekseerUpdate(dxcomn, camera);
+	attackefk->EffekseerUpdate(dxcomn, camera);
+	//efk1->EffekseerUpdate(dxcomn, camera);
+
+}
 void Effects::Draw(DirectXCommon*dxcomn)
 {
 	//エフェクトの画像

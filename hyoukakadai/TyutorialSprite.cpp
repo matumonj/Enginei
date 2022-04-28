@@ -26,16 +26,16 @@ void TyutorialSprite::Initialize()
 	//Sprite::LoadTexture(35, L"Resources/lineshot.png");
 	//2
 	//Sprite::LoadTexture(36, L"Resources/lineshot.png");//糸出し+糸の上限
-	Sprite::LoadTexture(35, L"Resources/lineshot.png");//糸出し+糸の上限
+	Sprite::LoadTexture(35, L"Resources/gaugelimit.png");//糸出し+糸の上限
 	Sprite::LoadTexture(36, L"Resources/task.png");//攻撃+プレイヤーの体力
 	//clear
 
-	Sprite::LoadTexture(37, L"Resources/tut.png");//移動
-	Sprite::LoadTexture(38, L"Resources/task.png");//攻撃+プレイヤーの体力
-	Sprite::LoadTexture(39, L"Resources/task.png");//攻撃+プレイヤーの体力
-	Sprite::LoadTexture(40, L"Resources/task.png");//糸出し+糸の上限
-	Sprite::LoadTexture(41, L"Resources/task.png");//攻撃+プレイヤーの体力
-	Sprite::LoadTexture(42, L"Resources/task.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(37, L"Resources/tuask.png");//移動
+	Sprite::LoadTexture(38, L"Resources/taskclear.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(39, L"Resources/taskclear2.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(40, L"Resources/taskclear3.png");//糸出し+糸の上限
+	Sprite::LoadTexture(41, L"Resources/taskclear4.png");//攻撃+プレイヤーの体力
+	Sprite::LoadTexture(42, L"Resources/taskclear5.png");//攻撃+プレイヤーの体力
 
 	//全てクリア
 	Sprite::LoadTexture(43, L"Resources/cleartutorial.png");//攻撃+プレイヤーの体力
@@ -44,7 +44,7 @@ void TyutorialSprite::Initialize()
 	sprite[2] = Sprite::Create(32, { 500,50 });//糸出し
 	sprite[3] = Sprite::Create(33, { 500,50 });//回収とひっつき
 	sprite[4] = Sprite::Create(34, { 500,50 });//攻撃
-	sprite[5] = Sprite::Create(43, { 500,50 });//終了
+	sprite[5] = Sprite::Create(35, { 500,70 });//終了
 	sprite[6] = Sprite::Create(36, { 500,50 });//終了
 	sprite[7] = Sprite::Create(37, { 500,50 });//終了
 	sprite[8] = Sprite::Create(38, { 500,50 });//終了
@@ -205,6 +205,9 @@ void TyutorialSprite::Update(Enemy* enemy)
 			alpha[i] = 0;
 		}
 		Destroy(sprite[5]);
+		for (int i = 9; i < 15; i++) {
+			Destroy(sprite[i]);
+		}
 		break;
 	default:
 		break;
@@ -218,6 +221,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 			sprite[i]->setcolor({ 1,1,1,alpha[i] });
 		}
 	}
+
 	for (int i = 9; i < 15; i++) {
 		if (sprite[i] != nullptr) {
 			sprite[i]->SetSize({ 500,600 });
@@ -258,39 +262,39 @@ void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 	default:
 		break;
 	}
-
-	switch (task)
-	{
-	case TyutorialSprite::Clear::None:
-		sprite[9]->Draw();
-		break;
-	case TyutorialSprite::Clear::Move:
-		sprite[10]->Draw();
-		Destroy(sprite[9]);
-		break;
-	case TyutorialSprite::Clear::LineShot:
-		sprite[11]->Draw();
-		Destroy(sprite[10]);
-		break;
-	case TyutorialSprite::Clear::LineBond:
-		sprite[12]->Draw();
-		if (nextphaseflag_return) {
-			task = Clear::LineCol;
+	if (phase != Phase::End) {
+		switch (task)
+		{
+		case TyutorialSprite::Clear::None:
+			sprite[9]->Draw();
+			break;
+		case TyutorialSprite::Clear::Move:
+			sprite[10]->Draw();
+			Destroy(sprite[9]);
+			break;
+		case TyutorialSprite::Clear::LineShot:
+			sprite[11]->Draw();
+			Destroy(sprite[10]);
+			break;
+		case TyutorialSprite::Clear::LineBond:
+			sprite[12]->Draw();
+			if (nextphaseflag_return) {
+				task = Clear::LineCol;
+			}
+			Destroy(sprite[11]);
+			break;
+		case TyutorialSprite::Clear::LineCol:
+			sprite[13]->Draw();
+			Destroy(sprite[12]);
+			break;
+		case TyutorialSprite::Clear::Attack:
+			sprite[14]->Draw();
+			Destroy(sprite[13]);
+			break;
+		default:
+			break;
 		}
-		Destroy(sprite[11]);
-		break;
-	case TyutorialSprite::Clear::LineCol:
-		sprite[13]->Draw();
-		Destroy(sprite[12]);
-		break;
-	case TyutorialSprite::Clear::Attack:
-		sprite[14]->Draw();
-		Destroy(sprite[13]);
-		break;
-	default:
-		break;
 	}
-
 	Sprite::PostDraw(dxcomn->GetCmdList());
 	//}
 }

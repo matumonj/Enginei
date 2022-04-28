@@ -151,11 +151,13 @@ void Player::PlayerMoves(XMFLOAT3& move,float moveSpeed) {
 	if (Input::GetInstance()->GetCMove().lX < u_r - a)
 	{
 		// 左に傾けた
+		playerRot = State::Left;
 		move.x -= moveSpeed;
 
 	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	{
 		// 右に傾けた
+		playerRot = State::Right;
 		move.x += moveSpeed;
 	}
 }
