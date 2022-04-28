@@ -174,17 +174,13 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			boundflag = true;//線の終点へ吸い付くフラグ
 		}
 
-<<<<<<< HEAD
 		else if (Input::GetInstance()->TriggerKey(DIK_G)) {
 
 		} else if (Input::GetInstance()->TriggerKey(DIK_D) && boundflag != true) {
 
-		} else if (Input::GetInstance()->TriggerButonX()&&boundflag!=true) {
-
-=======
+		} 
 		else if (Input::GetInstance()->TriggerButonX()&&boundflag!=true) {
-			
->>>>>>> fee08c7cec7ad6e7d6d91505a39d532005863e10
+	
 			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ,紐の長さがmaxlen超えて針がブロックとあたっていなかったらこれtrueに
 		}
 		//線の終点とプレイヤーとの距離求める

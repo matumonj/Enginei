@@ -4,6 +4,7 @@
 #include"SphereCollider.h"
 #include"Collision.h"
 #include"Destroy.h"
+#include"Fader.h"
 using namespace DirectX;
 
 Player* Player::Create(Model* model)
@@ -148,17 +149,21 @@ void Player::PlayerMoves(XMFLOAT3& move,float moveSpeed) {
 
 	//左
 	// 方向だけを調べる方法
+
 	if (Input::GetInstance()->GetCMove().lX < u_r - a)
 	{
-		// 左に傾けた
-		playerRot = State::Left;
-		move.x -= moveSpeed;
-
+		//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
+			// 左に傾けた
+			playerRot = State::Left;
+			//move.x -= moveSpeed;
+		//}
 	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	{
-		// 右に傾けた
-		playerRot = State::Right;
-		move.x += moveSpeed;
+	//	if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
+			// 右に傾けた
+			playerRot = State::Right;
+			//move.x += moveSpeed;
+		//}
 	}
 }
 

@@ -178,24 +178,21 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	object1->Updata(TRUE);
 
 	player->PlayerMoves(Player_Pos, moveSpeed);
-
-	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//‚±‚Ì‚â‚è•ûŒã‚Å’¼‚·
-		if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+		if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
+			// ¶‚ÉŒX‚¯‚½
+			Player_Pos.x -= moveSpeed;
+		}
+	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+		if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
 			Player_Pos.x += moveSpeed;
 		}
-		if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-			Player_Pos.x -= moveSpeed;
+	}
 
-		}
-		if (Input::GetInstance()->Pushkey(DIK_UP)) {
-			Player_Pos.y += moveSpeed;
-		}
-		if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-			Player_Pos.y -= moveSpeed;
-
-		}
-
-
+	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//‚±‚Ì‚â‚è•ûŒã‚Å’¼‚·
+		
 		float disl;
 		//“ü—Íˆ—‚æ‚èŒã‚É“–‚½‚è”»’è‚ð•`‚¯
 		for (int i = 0; i < MAX_X; i++) {

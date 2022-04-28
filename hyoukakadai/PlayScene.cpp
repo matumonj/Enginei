@@ -260,16 +260,31 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
 
-
-	player->PlayerMoves(Player_Pos,moveSpeed);
-
-
-	///////// コントローラー //////////
-	// スティックの方向判定
-	// 無反応範囲
 	LONG u_r = 32768;
 	LONG a = 30000;
 
+	//左
+	player->PlayerMoves(Player_Pos,moveSpeed);
+
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+		//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
+			// 左に傾けた
+		//playerRot = State::Left;
+		Player_Pos.x -= moveSpeed;
+	//}
+	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+		//	if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
+				// 右に傾けた
+		//playerRot = State::Right;
+		Player_Pos.x += moveSpeed;
+	//}
+	}
+	///////// コントローラー //////////
+	// スティックの方向判定
+	// 無反応範囲
+	
 	//左
 	// 方向だけを調べる方法
 	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
@@ -283,6 +298,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//	// 右に傾けた
 	//	Player_Pos.x += moveSpeed;
 	//}
+
+
+	player->PlayerMoves(Player_Pos, moveSpeed);
 
 
 

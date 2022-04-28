@@ -2,6 +2,7 @@
 #include"Fader.h"
 #include"Line.h"
 #include"Destroy.h"
+#include"Input.h"
 TyutorialSprite::~TyutorialSprite()
 {
 	Destroy(sprite[0]);
@@ -64,6 +65,9 @@ void TyutorialSprite::Initialize()
 
 void TyutorialSprite::Update(Enemy* enemy)
 {
+	LONG u_r = 32768;
+	LONG a = 30000;
+
 	switch (phase)
 	{
 	case TyutorialSprite::Phase::None:
@@ -92,7 +96,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		if (startposition > 1450) {
 			startposition -= 20;
 		}
-		if (Input::GetInstance()->TriggerKey(DIK_O) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
 		if (!OK_flag) {
@@ -103,7 +107,10 @@ void TyutorialSprite::Update(Enemy* enemy)
 		Fader::feedInOut_f(0.7f, 0.0f, OK_flag, NormalinoutSpeed);
 
 		if (OK_flag && alpha[1] <= 0.0f) {
-			if (Input::GetInstance()->Pushkey(DIK_LEFT) || Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+			
+			//左
+			// 方向だけを調べる方法
+			if (Input::GetInstance()->GetCMove().lX < u_r - a|| Input::GetInstance()->GetCMove().lX > u_r + a) {
 				nextphaseflag_move++;
 			}
 			if (nextphaseflag_move >= 100) {//一定距離歩いたら次のフェーズへ
@@ -116,10 +123,10 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::LineShot:
-		if (Input::GetInstance()->TriggerKey(DIK_O) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
-		if (OK_flag&&Input::GetInstance()->TriggerKey(DIK_O) &&alpha[5]>=0.8f) {
+		if (Input::GetInstance()->TriggerButtonA()&&alpha[5]>=0.8f) {
 			OK_flag_2nd = true;
 		}
 		if (!OK_flag) {
@@ -144,7 +151,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::LineOperation:
-		if (Input::GetInstance()->TriggerKey(DIK_O) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
 		if (!OK_flag) {
@@ -173,7 +180,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::Attack:
-		if (Input::GetInstance()->TriggerKey(DIK_O) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
 		if (!OK_flag) {
@@ -195,7 +202,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		}
 		break;
 	case TyutorialSprite::Phase::End:
-		if (Input::GetInstance()->TriggerKey(DIK_O) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
+		if (Input::GetInstance()->TriggerButtonA()&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
 		Fader::feedIn(0.7f, NormalfeedSpeed);
