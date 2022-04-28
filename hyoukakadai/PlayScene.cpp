@@ -58,7 +58,7 @@ void PlayScene::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("box1");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
-	goalmodel = Model::CreateFromOBJ("box2");
+	goalmodel = Model::CreateFromOBJ("goalmo");
 
 
 	item = new Item();
@@ -124,16 +124,9 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
-
-
-
-
 	setumei->SetPosition({ 0, 400 });
 	setumei->SetSize({ 500,300 });
 	setumei->setcolor({ 1,1,1,1 });
-
-
-
 
 	hari->SetPosition({ hari_Pos.x + 2.0f,hari_Pos.y,hari_Pos.z });
 
@@ -152,7 +145,8 @@ void PlayScene::SetPrm()
 			tst[j][i]->SetScale({ tst_Scl });
 		}
 	}
-	goal->SetPosition({ goal_pos.x + 185.0f,goal_pos.y-5 ,goal_pos.z });
+	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
+
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
 
@@ -161,16 +155,9 @@ void PlayScene::SetPrm()
 
 	sentan->SetPosition({ sentan_Pos });
 
-
-
-
-
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
-
-	
-
 }
 #pragma endregion
 
@@ -290,10 +277,31 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		// 左に傾けた
 		Player_Pos.x -= moveSpeed;
 
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	}
+	else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	{
 		// 右に傾けた
 		Player_Pos.x += moveSpeed;
+	}
+	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	//{
+	//	// 左に傾けた
+	//	Player_Pos.x -= moveSpeed;
+
+	//} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	//{
+	//	// 右に傾けた
+	//	Player_Pos.x += moveSpeed;
+	//}
+
+
+	if (Input::GetInstance()->GetCMove().lY < u_r - a)
+	{
+
+		jumpFlag = true;
+		// 左に傾けた
+		//Player_Pos.x -= moveSpeed;
+
 	}
 
 	/*if (Input::GetInstance()->GetCMove().lY < u_r - a)
@@ -314,20 +322,14 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= moveSpeed;
 	}
 
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+	/*if (Input::GetInstance()->Pushkey(DIK_UP)) {
 		jumpFlag = true;
-	}
+	}*/
 	if (jumpFlag == true) {
 		Player_Pos.y += 0.1f;
 		time += 0.02f;
 	}
 
-	/*if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		Player_Pos.y -= moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
-		Player_Pos.y += moveSpeed;
-	}*/
 
 	///これより上に入力処理をかけ
 	////当たり判定
@@ -393,8 +395,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 
-
-	
 
 	if (Line::GetInstance()->Getboundflag()==true) {
 		grav = 0;
@@ -486,7 +486,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
-	
+	item->HealEfficasy(player);
 	item->Update(enemy);
 	//Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
@@ -533,13 +533,12 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
 			}
-			if (map[j][i] == 2) {
-				goal->PreDraw();
-				goal->Draw();
-				goal->PostDraw();
-			}
 		}
 	}
+
+	goal->PreDraw();
+	goal->Draw();
+	goal->PostDraw();
 
 	/*hari->PreDraw();
 	hari->Draw();

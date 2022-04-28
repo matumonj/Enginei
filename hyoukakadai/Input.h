@@ -88,6 +88,7 @@ public:
 
 	bool TriggerButtonA();
 	bool TriggerButtonB();
+	bool TriggerButonX();
 	bool TriggerButtonRB();
 	bool PushButtonA();
 	CMove GetCMove();

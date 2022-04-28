@@ -175,27 +175,33 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//このやり方後で直す
-		/*if (Input::GetInstance()->(DIK_RIGHT)) {
+		if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 			Player_Pos.x += moveSpeed;
 		}
 		if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 			Player_Pos.x -= moveSpeed;
 
-		}*/
-
-		if (Input::GetInstance()->GetCMove().lX < u_r - a)
-		{
-			// 右に傾けた
-			Player_Pos.x -= moveSpeed;
+		}
+		if (Input::GetInstance()->Pushkey(DIK_UP)) {
+			Player_Pos.y += moveSpeed;
+		}
+		if (Input::GetInstance()->Pushkey(DIK_DOWN)) {
+			Player_Pos.y -= moveSpeed;
 
 		}
-		else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-		{
-			
-			// 左に傾けた
-			Player_Pos.x += moveSpeed;
+		//if (Input::GetInstance()->GetCMove().lX < u_r - a)
+		//{
+		//	// 右に傾けた
+		//	Player_Pos.x -= moveSpeed;
 
-		}
+		//}
+		//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+		//{
+		//	
+		//	// 左に傾けた
+		//	Player_Pos.x += moveSpeed;
+
+		//}
 
 		float disl;
 		//入力処理より後に当たり判定を描け
@@ -306,8 +312,8 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		objUpdate();//オブジェクトの更新処理
 
 		//enemyにnullptr代入するときは敵が死んだら
-		for (int i = 0; i < 4; i++) {
 			if (enemy != nullptr) {
+				enemy->enemyappearance(tyutorial);
 				//プレイヤーの検知
 				enemy->Attack(player);
 				enemy->ColMap(map, mapx, mapy, MAX_X, MAX_Y);
@@ -319,7 +325,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 					Destroy(enemy);
 				}
 			}
-		}
 
 		GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 			Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
@@ -330,7 +335,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
-		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
