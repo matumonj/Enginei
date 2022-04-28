@@ -165,6 +165,7 @@
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionPrimitive.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BossEnemy.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionInfo.h" />
     <ClInclude Include="CollisionManager.h" />
