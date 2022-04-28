@@ -29,8 +29,8 @@ void MobEnemy::Initialize()
 	//パラメータのセット
 	Mob_Scl = { 2,2,2 };
 	Mob_Rot = { 0,180,0 };
-	Mob_Pos = { -10,-2,0 };
-	Position = { 24,10,0 };
+	//Mob_Pos = { -10,-2,0 };
+	//Position = { 24,10,0 };
 	HP = 10;
 
 }

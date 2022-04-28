@@ -202,16 +202,19 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[2] = std::make_unique<ThrowEnemy>();
 	enemy[3] = std::make_unique<ThrowEnemy>();
+	enemy[4] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
 
+	enemy[4]->Setposition({ 190,-4.2,0 });
 	enemy[3]->Setposition({ 80,-4.2,0 });
-	enemy[2]->Setposition({ 200,-4.2,0 });
-	enemy[1]->Setposition({ -40, -10, 0 });
-	enemy[0]->Setposition({ 20, -10, 0 });
+	enemy[2]->Setposition({ 250,-4.2,0 });
+	enemy[1]->Setposition({ 350, -18, 0 });
+	enemy[0]->Setposition({ 200, -7, 0 });
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
 	enemy[2]->Initialize();
 	enemy[3]->Initialize();
+	enemy[4]->Initialize();
 
 	mapcol = new Collision();
 	c_postEffect = Default;
@@ -498,7 +501,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	world->PreDraw();
 	//world->Draw();
 	world->PostDraw();
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			enemy[i]->Draw();
 		}
