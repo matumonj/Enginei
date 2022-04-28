@@ -128,7 +128,7 @@ void ThrowEnemy::EnemySearchPlayer(Player* time)
 
 void ThrowEnemy::ProjectileMotion()
 {
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 10; i++) {
 		if (throwparam[i].flag == true) {
 			throwparam[i].time++;
 			throwparam[i].movex=(throwparam[i].initialvec_x* throwparam[i].time)/600/(i+1);
@@ -159,7 +159,7 @@ void ThrowEnemy::ColMap(int map[15][200], float mapx[15][200], float mapy[15][20
 {
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
-			for (int k = 0; k < 3; k++) {
+			for (int k = 0; k < 10; k++) {
 				if (map[j][i] == 1) {
 					if ((thposition[k].x + 0.5f > mapx[j][i] - 0.5f && thposition[k].x - 0.5f < mapx[j][i] + 0.5f) &&
 						thposition[k].y + 0.5f > mapy[j][i] && thposition[k].y - 0.5f < mapy[j][i] + 0.5f) {

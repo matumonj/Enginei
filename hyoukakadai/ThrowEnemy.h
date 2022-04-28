@@ -38,7 +38,7 @@ private:
         int time=0;
         bool flag = false;
     };
-    ThrowParam throwparam[3];
+    ThrowParam throwparam[10];
     int attackf[10] = { false };
     int attackcount = 0;
     State enemyState = State::None;
