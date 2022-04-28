@@ -277,10 +277,20 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		// 左に傾けた
 		Player_Pos.x -= moveSpeed;
 
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	}
+	else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	{
 		// 右に傾けた
 		Player_Pos.x += moveSpeed;
+	}
+
+	if (Input::GetInstance()->GetCMove().lY < u_r - a)
+	{
+
+		jumpFlag = true;
+		// 左に傾けた
+		//Player_Pos.x -= moveSpeed;
+
 	}
 
 	/*if (Input::GetInstance()->GetCMove().lY < u_r - a)
@@ -301,9 +311,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= moveSpeed;
 	}
 
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
+	/*if (Input::GetInstance()->Pushkey(DIK_UP)) {
 		jumpFlag = true;
-	}
+	}*/
 	if (jumpFlag == true) {
 		Player_Pos.y += 0.1f;
 		time += 0.02f;
