@@ -379,7 +379,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x-goal->GetScale().x&&Player_Pos.y<=goal_pos.y+goal->GetScale().y&&Player_Pos.y>=goal_pos.y-goal->GetScale().y) {
-		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
