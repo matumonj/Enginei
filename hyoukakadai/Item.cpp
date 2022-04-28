@@ -12,7 +12,7 @@ Item::~Item()
 }
 void Item::Initialize()
 {
-	itemModel = Model::CreateFromOBJ("bullet");
+	itemModel = Model::CreateFromOBJ("item");
 
 	//ƒ‚ƒfƒ‹‚Ì“Ç
 	for (int i = 0; i < itemMax; i++) {
