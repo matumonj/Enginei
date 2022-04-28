@@ -565,7 +565,7 @@ void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
 
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	background->Draw();
-	setumei->Draw();
+	//setumei->Draw();
 	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
