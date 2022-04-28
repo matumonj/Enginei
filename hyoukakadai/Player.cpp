@@ -67,32 +67,6 @@ void Player::Attack(XMFLOAT3 playerpos)
 	LONG u_r = 32768;
 	LONG a = 30000;
 	//向いてる方向に移動
-	if (Input::GetInstance()->TriggerKey(DIK_RIGHT)) {
-		playerRot = State::Right;
-	}
-	else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
-		playerRot = State::Left;
-	}
-
-	if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	{
-		// 左に傾けた
-		playerRot = State::Left;
-
-	 }
-	else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	{
-		// 右に傾けた
-		playerRot = State::Right;
-	}
-
-
-	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-		action = Action::Attack;
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_S)) {
-		action = Action::None;
-	}
 
 	//コントローラー
 	if (Input::GetInstance()->TriggerButtonA()) {
@@ -164,6 +138,28 @@ void Player::CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos)
 		}
 	}
 }
+
+void Player::PlayerMoves(XMFLOAT3& move,float moveSpeed) {
+	///////// コントローラー //////////
+	// スティックの方向判定
+	// 無反応範囲
+	LONG u_r = 32768;
+	LONG a = 30000;
+
+	//左
+	// 方向だけを調べる方法
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+		// 左に傾けた
+		move.x -= moveSpeed;
+
+	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+		// 右に傾けた
+		move.x += moveSpeed;
+	}
+}
+
 
 void Player::Finalize()
 {

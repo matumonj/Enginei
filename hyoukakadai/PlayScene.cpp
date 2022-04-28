@@ -261,6 +261,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	spotLightpos[2] = 0;
 
 
+	player->PlayerMoves(Player_Pos,moveSpeed);
+
+
 	
 
 
@@ -277,20 +280,24 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//	// 左に傾けた
 	//	Player_Pos.x -= moveSpeed;
 
-	//} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	//}
+	//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	//{
 	//	// 右に傾けた
 	//	Player_Pos.x += moveSpeed;
 	//}
 
-	/*if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-		Player_Pos.y -= moveSpeed;
 
-	} else if (Input::GetInstance()->GetCMove().lY > u_r + a)
+
+	if (Input::GetInstance()->GetCMove().lY < u_r - a)
 	{
-		Player_Pos.y += moveSpeed;
-	}*/
+
+		jumpFlag = true;
+		// 左に傾けた
+		//Player_Pos.x -= moveSpeed;
+
+	}
+
 
 	//FBXモデルの更新
 	object1->Updata(TRUE);
@@ -301,9 +308,8 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= moveSpeed;
 	}
 
-	if (Input::GetInstance()->Pushkey(DIK_UP)) {
-		jumpFlag = true;
-	}
+
+
 	if (jumpFlag == true) {
 		Player_Pos.y += 0.1f;
 		time += 0.02f;

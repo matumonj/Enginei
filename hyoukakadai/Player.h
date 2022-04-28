@@ -31,6 +31,7 @@ public:
 	void Attack(XMFLOAT3 playerpos);
 	void CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos);
 	void CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos);
+	void PlayerMoves(XMFLOAT3& move,float moveSpeed);
 	//DebugTxt* debugtxt = nullptr;
 	int DebugTexnum = 4;
 	XMFLOAT2 GetArea_S() { return damageArea.Area_s; }
