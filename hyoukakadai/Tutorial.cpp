@@ -174,6 +174,9 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	//FBXモデルの更新
 	object1->Updata(TRUE);
+
+	player->PlayerMoves(Player_Pos, moveSpeed);
+
 	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//このやり方後で直す
 		if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 			Player_Pos.x += moveSpeed;
@@ -189,19 +192,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 			Player_Pos.y -= moveSpeed;
 
 		}
-		//if (Input::GetInstance()->GetCMove().lX < u_r - a)
-		//{
-		//	// 右に傾けた
-		//	Player_Pos.x -= moveSpeed;
 
-		//}
-		//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-		//{
-		//	
-		//	// 左に傾けた
-		//	Player_Pos.x += moveSpeed;
-
-		//}
 
 		float disl;
 		//入力処理より後に当たり判定を描け
