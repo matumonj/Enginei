@@ -70,20 +70,19 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	linex = player->GetPosition().x;//線の始点をプレイヤー位置に
 	liney = player->GetPosition().y;
 
-	
+	/*
 	if ((!returnflag && !boundflag)) {
-		if (Input::GetInstance()->Pushkey(DIK_1)) {
-			//if (Input::GetInstance()->GetCMove().lRx < u_r - a|| Input::GetInstance()->GetCMove().lRy < u_r - a) {
+		if (Input::GetInstance()->GetCMove().lRx < u_r - a|| Input::GetInstance()->GetCMove().lRy < u_r - a) {
 			lineangle += 13.0f;//移動方向の指定
 			subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
-		}
-		}
-		//else if (Input::GetInstance()->GetCMove().lRx > u_r + a|| Input::GetInstance()->GetCMove().lRy > u_r + a) {
-		//	lineangle -= 13.0f;//移動方向の指定
-		//	subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
 
-		//}
-		//	}*/
+		}
+		else if (Input::GetInstance()->GetCMove().lRx > u_r + a|| Input::GetInstance()->GetCMove().lRy > u_r + a) {
+			lineangle -= 13.0f;//移動方向の指定
+			subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
+
+		}
+			}*/
 	if (stopflag == true) {
 		if (Input::GetInstance()->Pushkey(DIK_1) && (!returnflag && !boundflag)) {
 			lineangle += 5.0f;//移動方向の指定
@@ -95,112 +94,59 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	//コントローラー
 	LONG u_r = 32768;
 	LONG a = 30000;
-	LONG b = 15000;
 
-	if (stopflag == true && notdoubletuch == true) {
-		if (Input::GetInstance()->GetCMove().lRx < u_r - a)
-		{
-			// 左に傾けた
-			lineangle = +180;
-			needlerot.z = +180;
-		}
-		else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
-		{
-			// 右に傾けた
-			lineangle = 0;
-			needlerot.z = 0;
-		}
-		if (Input::GetInstance()->GetCMove().lRy < u_r - a)
-		{
-			// 傾けた
-			lineangle = +90;
-			needlerot.z = +90;
-
-	//if (Input::GetInstance()->GetCMove().lRx < u_r - a)
-	//{
-	//	// 左に傾けた
-	//	lineangle = +180;
-	//	needlerot.z = +180;
-	//} else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
-	//{
-	//	// 右に傾けた
-	//	lineangle = 0;
-	//	needlerot.z = 0;
-	//}
-	//if (Input::GetInstance()->GetCMove().lRy < u_r - a)
-	//{
-	//	// 傾けた
-	//	lineangle = +90;
-	//	needlerot.z = +90;
-
-	//} else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
-	//{
-	//	// 傾けた
-	//	lineangle = +270;
-	//	needlerot.z = +270;
-	//}
-
-	//// 右上に傾けた
-	//if (Input::GetInstance()->GetCMove().lRx > u_r + 1000 && Input::GetInstance()->GetCMove().lRy < u_r - 1000)
-	//{
-	//	lineangle = +45;
-	//	needlerot.z = +45;
-	//}
-	//// 左上に傾けた
-	//if (Input::GetInstance()->GetCMove().lRx < u_r - 1000 && Input::GetInstance()->GetCMove().lRy < u_r - 1000)
-	//{
-	//	lineangle = +135;
-	//	needlerot.z = +135;
-	//}
-	//// 左下に傾けた
-	//if (Input::GetInstance()->GetCMove().lRx < u_r - 1000 && Input::GetInstance()->GetCMove().lRy > u_r + 1000)
-	//{
-	//	lineangle = +225;
-	//	needlerot.z = +225;
-	//}
-	//// 右下に傾けた
-	//if (Input::GetInstance()->GetCMove().lRx > u_r + 1000 && Input::GetInstance()->GetCMove().lRy > u_r + 1000)
-	//{
-	//	lineangle = +315;
-	//	needlerot.z = +315;
-	//}
-
-		}
-		else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
-		{
-			// 傾けた
-			lineangle = +270;
-			needlerot.z = +270;
-		}
-
-		// 右上に傾けた
-		if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy < u_r - b)
-		{
-			lineangle = +45;
-			needlerot.z = +45;
-		}
-		// 左上に傾けた
-		if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy < u_r - b)
-		{
-			lineangle = +135;
-			needlerot.z = +135;
-		}
-		// 左下に傾けた
-		if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy > u_r + b)
-		{
-			lineangle = +225;
-			needlerot.z = +225;
-		}
-		// 右下に傾けた
-		if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy > u_r + b)
-		{
-			lineangle = +315;
-			needlerot.z = +315;
-		}
+	if (Input::GetInstance()->GetCMove().lRx < u_r - a)
+	{
+		// 左に傾けた
+		lineangle = +180;
+		needlerot.z = +180;
+	} else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
+	{
+		// 右に傾けた
+		lineangle = 0;
+		needlerot.z = 0;
 	}
+	if (Input::GetInstance()->GetCMove().lRy < u_r - a)
+	{
+		// 傾けた
+		lineangle = +90;
+		needlerot.z = +90;
+
+	} else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
+	{
+		// 傾けた
+		lineangle = +270;
+		needlerot.z = +270;
+	}
+
+	// 右上に傾けた
+	if (Input::GetInstance()->GetCMove().lRx > u_r + 1000 && Input::GetInstance()->GetCMove().lRy < u_r - 1000)
+	{
+		lineangle = +45;
+		needlerot.z = +45;
+	}
+	// 左上に傾けた
+	if (Input::GetInstance()->GetCMove().lRx < u_r - 1000 && Input::GetInstance()->GetCMove().lRy < u_r - 1000)
+	{
+		lineangle = +135;
+		needlerot.z = +135;
+	}
+	// 左下に傾けた
+	if (Input::GetInstance()->GetCMove().lRx < u_r - 1000 && Input::GetInstance()->GetCMove().lRy > u_r + 1000)
+	{
+		lineangle = +225;
+		needlerot.z = +225;
+	}
+	// 右下に傾けた
+	if (Input::GetInstance()->GetCMove().lRx > u_r + 1000 && Input::GetInstance()->GetCMove().lRy > u_r + 1000)
+	{
+		lineangle = +315;
+		needlerot.z = +315;
+	}
+
 	if (!elf) {
 		linex2 = tempx + cosf((lineangle)*PI / 180.0f) * subradius;
-		liney2 = tempy + sinf((lineangle)*PI / 180.0f) * subradius+0.5f;
+		liney2 = tempy + sinf((lineangle)*PI / 180.0f) * subradius + 0.5f;
 	}
 	//////////中心点//////飛ばす角度///////////////////半径(距離)
 	if (notdoubletuch == true) {
@@ -212,23 +158,13 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		}
 	}
 
-	//if (Input::GetInstance()->TriggerButtonRB()) {
-		//Line::GetInstance()->SetTrigger(true);
-		//trigger = true;//線を伸ばすフラグね
-		//elf = false;
+	if (Input::GetInstance()->TriggerButtonRB()) {
+		Line::GetInstance()->SetTrigger(true);
+		trigger = true;//線を伸ばすフラグね
+		elf = false;
 		//Line = 1;
-	//}
-
-	if (notdoubletuch == true) {
-		if (Input::GetInstance()->TriggerButtonRB()) {
-			Line::GetInstance()->SetTrigger(true);
-			trigger = true;//線を伸ばすフラグね
-			elf = false;
-			stopflag = false;
-			notdoubletuch = false;
-			//Line = 1;
-		}
 	}
+
 
 
 	if (trigger) {//trigger:線伸ばすフラグ
@@ -246,18 +182,22 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		}
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
-		if (Input::GetInstance()->TriggerButtonB()  && elf) {//線が伸び切って何もあたっていないとき
+		if (Input::GetInstance()->TriggerKey(DIK_A) && elf) {//線が伸び切って何もあたっていないとき
 			boundflag = true;//線の終点へ吸い付くフラグ
 
 		}
-		
+
 		if (Input::GetInstance()->TriggerButtonRB() && elf) {
-			//boundflag = true;//線の終点へ吸い付くフラグ
+			boundflag = true;//線の終点へ吸い付くフラグ
 		}
 
 		else if (Input::GetInstance()->TriggerKey(DIK_G)) {
 
+<<<<<<< HEAD
+		} else if (Input::GetInstance()->TriggerKey(DIK_D) && boundflag != true) {
+=======
 		} else if (Input::GetInstance()->TriggerButonX()&&boundflag!=true) {
+>>>>>>> 3395dd59451b6ba98557719cd5578e8e4bf326bc
 			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ,紐の長さがmaxlen超えて針がブロックとあたっていなかったらこれtrueに
 		}
 		//線の終点とプレイヤーとの距離求める
@@ -302,12 +242,12 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	//線が戻ってくる処理
 	if (returnflag) {
 		subradius -= 1.5f;
-		
+
 		if (subradius <= 0) {//先の長さが０なったら切る
 			returnflag = false;
 			//mapcolf = false;
 			colf = true;
-			
+
 		}
 	}
 
@@ -385,7 +325,7 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 }
 
 
-void Line::CollisionEnemy(Enemy*position)
+void Line::CollisionEnemy(Enemy* position)
 {
 	if (elf) {
 		Twine->SetColor({ 1,0,0,1 });
@@ -394,24 +334,24 @@ void Line::CollisionEnemy(Enemy*position)
 	}
 	//int in = -1;
 	float dis;
-		if (position!= nullptr) {
-			dis = sqrtf((position->GetPosition().x - needlepos.x) * (position->GetPosition().x - needlepos.x) +
-				(position->GetPosition().y - needlepos.y) * (position->GetPosition().y - needlepos.y));
+	if (position != nullptr) {
+		dis = sqrtf((position->GetPosition().x - needlepos.x) * (position->GetPosition().x - needlepos.x) +
+			(position->GetPosition().y - needlepos.y) * (position->GetPosition().y - needlepos.y));
 
-			if (dis <= 2 && trigger && !elf) {
-				elf = true;
+		if (dis <= 2 && trigger && !elf) {
+			elf = true;
 			//	index = i;//あたった敵の要素番号を割り当て
-			}
 		}
+	}
 
-		//衝突時
-		if (elf && !mapcol) {
-			if (position != nullptr) {
-				linex2 = position->GetPosition().x;
-				liney2 = position->GetPosition().y;
-			} else {
-				returnflag = true;
-			}
+	//衝突時
+	if (elf && !mapcol) {
+		if (position != nullptr) {
+			linex2 = position->GetPosition().x;
+			liney2 = position->GetPosition().y;
+		} else {
+			returnflag = true;
+		}
 	}
 	if (mapcol) {
 		oldlinex = linex2;
@@ -438,7 +378,7 @@ lenserchf:紐ゲージの減る量を決めるフラグ
 void Line::Finalize()
 {
 	delete Twine;
-delete  NeedleModel;
+	delete  NeedleModel;
 	delete NeedleObj;
 
 }
