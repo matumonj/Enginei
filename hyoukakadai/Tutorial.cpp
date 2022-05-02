@@ -276,10 +276,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 			
 					if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
 						if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-						//	Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-							//moveSpeed = 0;
-							//grav = 0.0f;
-							//time = 0;
+	
 							map[j][i] = 0;
 							break;
 						} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i]) {
@@ -296,10 +293,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 					//ÉvÉåÉCÉÑÅ[ÇÃç∂ï”
 					if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] < Player_Pos.y + Player_Scl.y)) {
 						if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-							//Player_Pos.y = Player_Pos.y + 0.001f;
-							//Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-							//grav = 0.0f;
-							//time = 0;
 							map[j][i] = 0;
 							break;
 						}
