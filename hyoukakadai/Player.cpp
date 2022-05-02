@@ -5,6 +5,7 @@
 #include"Collision.h"
 #include"Destroy.h"
 #include"Fader.h"
+#include"Line.h"
 using namespace DirectX;
 
 Player* Player::Create(Model* model)
@@ -172,4 +173,21 @@ void Player::Finalize()
 {
 	Destroy(playerobj);
 	Destroy(playermodel);
+}
+
+void Player::FlyingAttack(Enemy* enemy)
+{
+	float len;
+	
+	if (Line::GetInstance()->Getelf() == true && Line::GetInstance()->GetColf() == false) {
+		len = (position.x - enemy->GetPosition().x) * (position.x - enemy->GetPosition().x) +
+			(position.y - enemy->GetPosition().y) * (position.y - enemy->GetPosition().y);
+		if (len <= 1) {
+			flyattack_f = true;
+		}
+}
+	if (flyattack_f) {
+		enemy->SetDead(true);
+		flyattack_f = false;
+	}
 }

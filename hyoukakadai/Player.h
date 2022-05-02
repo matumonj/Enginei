@@ -2,6 +2,7 @@
 #include"Object3d.h"
 #include"Enemy.h"
 #include<memory>
+class Line;
 class Player :public Object3d
 {
 private: // エイリアス
@@ -23,8 +24,10 @@ public:
 	XMFLOAT3 Player_Rot;
 	XMFLOAT3 Player_Scl;
 
+	bool flyattack_f = false;
 
 public:
+	bool GetFlyAttack() { return flyattack_f; }
 	bool Initialize()override;
 	void Update(XMFLOAT4 color)override;
 	void OnCollision(const CollisionInfo& info)override;
@@ -32,6 +35,8 @@ public:
 	void CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos);
 	void CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos);
 	void PlayerMoves(XMFLOAT3& move,float moveSpeed);
+	void FlyingAttack(Enemy*enemy);
+	void FlyingAttack(std::unique_ptr<Enemy> enemy[]);
 	//DebugTxt* debugtxt = nullptr;
 	int DebugTexnum = 4;
 	XMFLOAT2 GetArea_S() { return damageArea.Area_s; }

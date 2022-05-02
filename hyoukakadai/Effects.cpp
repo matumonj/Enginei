@@ -104,7 +104,7 @@ void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Pla
 	}
 
 	//コントローラー
-	if (Input::GetInstance()->TriggerButtonA()) {
+	if (Input::GetInstance()->TriggerButtonA()||player->GetFlyAttack()==true) {
 		//攻撃処理
 		attack = true;
 	}

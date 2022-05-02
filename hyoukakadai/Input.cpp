@@ -23,7 +23,7 @@ void Input::Initialize(WinApp* winapp)
 	result = dinput->CreateDevice(GUID_SysMouse, &devMouse, NULL);
 
 	//
-	result = dinput->CreateDevice(GUID_Joystick , &devC, NULL);
+	result = dinput->CreateDevice(GUID_Joystick, &devC, NULL);
 	//入力データ形式のセット
 	result = devkeyboard->SetDataFormat(&c_dfDIKeyboard);
 	//排他制御レベルのセット
@@ -31,7 +31,7 @@ void Input::Initialize(WinApp* winapp)
 	//mouse
 	// 入力データ形式のセット
 	result = devMouse->SetDataFormat(&c_dfDIMouse2); // 標準形式
-	
+
 	// 排他制御レベルのセット
 	result = devMouse->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
@@ -89,7 +89,7 @@ bool Input::Pushkey(BYTE keyNumber)
 bool Input::TriggerKey(BYTE keyNumber)
 {
 	//前回の結果が０で今回の会話が１のとき
-	if (!keypre[keyNumber]&&key[keyNumber]) {
+	if (!keypre[keyNumber] && key[keyNumber]) {
 		return true;
 	}
 	return false;
