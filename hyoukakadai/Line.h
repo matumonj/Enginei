@@ -83,5 +83,13 @@ public:
 	void SetTrigger(bool flag) { trigger = flag; }
 	void SetBondflag(bool f) { boundflag = f; }
 	void SetReturnflag(bool f ){returnflag = f; }
+	bool getmapcol() {
+		if (!mapcol && !elf) { 
+			return true; 
+		}
+		else if (mapcol && elf) {
+			return false;
+		}
+	}
 };
 

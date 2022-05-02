@@ -55,7 +55,7 @@ private:
 	float NormalinoutSpeed[2]={0.025f,0.025f};
 	float inoutspeed[2] = { 0.02f,0.02f };
 	Clear task = Clear::None;
-	Phase phase=Phase::Start;
+	Phase phase=Phase::LineShot;
 	const wchar_t* spritename[20];
 	float startposition = 1900;
 public:

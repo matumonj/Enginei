@@ -276,21 +276,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	//左
 	player->PlayerMoves(Player_Pos,moveSpeed);
 
-	if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	{
-		//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-			// 左に傾けた
-		//playerRot = State::Left;
-		Player_Pos.x -= moveSpeed;
-	//}
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	{
-		//	if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-				// 右に傾けた
-		//playerRot = State::Right;
-		Player_Pos.x += moveSpeed;
-	//}
-	}
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲
@@ -388,6 +373,66 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
 						//grav = 0.0f;
 						//time = 0;
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
+						//grav = 0.0f;
+						//time = 0;
+						//moveSpeed = 0;
+						break;
+					}
+				} else {
+					moveSpeed = 0.2f;
+				}
+			}
+		}
+	}
+
+	//
+
+	for (int i = 0; i < MAX_X; i++) {
+		for (int j = 0; j < MAX_Y; j++) {
+			if (map[j][i] == 2) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
+					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
+						Line::GetInstance()->Setmapcol(true);
+						Line::GetInstance()->Setelf(true);
+					}
+				}
+
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
+					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						jumpFlag = false;
+						map[j][i] = 0;
+						break;
+					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+						break;
+					}
+
+				} else {
+					moveSpeed = 0.2f;
+					grav = 0.03;
+				}
+
+				//プレイヤーの左辺
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						Player_Pos.y = Player_Pos.y + 0.001f;
+						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+						//grav = 0.0f;
+						//time = 0;
+						map[j][i] = 0;
 						break;
 					}
 					//プレイヤーの右辺

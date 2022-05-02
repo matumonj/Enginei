@@ -178,13 +178,15 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	object1->Updata(TRUE);
 
 	player->PlayerMoves(Player_Pos, moveSpeed);
-	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	if (Input::GetInstance()->Pushkey(DIK_LEFT))
 	{
 		if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
 			// 左に傾けた
 			Player_Pos.x -= moveSpeed;
 		}
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	} //else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	else if(Input::GetInstance()->Pushkey(DIK_RIGHT))
 	{
 		if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
 			Player_Pos.x += moveSpeed;
@@ -192,22 +194,35 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//このやり方後で直す
-		
-		float disl;
-		//入力処理より後に当たり判定を描け
 		for (int i = 0; i < MAX_X; i++) {
 			for (int j = 0; j < MAX_Y; j++) {
-				if (map[j][i] == 1) {
-					mapx[j][i] = tst[j][i]->GetPosition().x;
-					mapy[j][i] = tst[j][i]->GetPosition().y;
-					height = 2.5;
-					width = 1;
+				if (map[j][i] == 1|| map[j][i] == 2) {
 					if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
 						if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
 							Line::GetInstance()->Setmapcol(true);
 							Line::GetInstance()->Setelf(true);
 						}
 					}
+				}
+			/*	else if (map[j][i] == 2) {
+					if ((Line::GetInstance()->getpos().x + 0.5f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 0.5f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 0.5f > mapy[j][i] && Line::GetInstance()->getpos().y - 0.5f < mapy[j][i] + height) {
+						if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
+							Line::GetInstance()->Setmapcol(true);
+							Line::GetInstance()->Setelf(true);
+						}
+					}
+				}*/
+			}
+		}
+		float disl;
+		//入力処理より後に当たり判定を描け
+		for (int i = 0; i < MAX_X; i++) {
+			for (int j = 0; j < MAX_Y; j++) {
+				if (map[j][i] == 1 || (map[j][i] == 2 && Line::GetInstance()->GetColf()==false&&Line::GetInstance()->Getboundflag() == false)) {
+					mapx[j][i] = tst[j][i]->GetPosition().x;
+					mapy[j][i] = tst[j][i]->GetPosition().y;
+					height = 2.5;
+					width = 1;
 
 					if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
 						if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
@@ -250,7 +265,59 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 			}
 		}
 
+		//
+		for (int i = 0; i < MAX_X; i++) {
+			for (int j = 0; j < MAX_Y; j++) {
+				if (map[j][i] == 2 && Line::GetInstance()->GetColf() == true&& Line::GetInstance()->Getboundflag()==true) {
+					mapx[j][i] = tst[j][i]->GetPosition().x;
+					mapy[j][i] = tst[j][i]->GetPosition().y;
+					height = 2.5;
+					width = 1.0;
+			
+					if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
+						if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+						//	Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+							//moveSpeed = 0;
+							//grav = 0.0f;
+							//time = 0;
+							map[j][i] = 0;
+							break;
+						} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i]) {
+							map[j][i] = 0;
+							//Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+							break;
+						}
 
+					} else {
+						moveSpeed = 0.2f;
+						grav = 0.03;
+					}
+
+					//プレイヤーの左辺
+					if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] < Player_Pos.y + Player_Scl.y)) {
+						if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+							//Player_Pos.y = Player_Pos.y + 0.001f;
+							//Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+							//grav = 0.0f;
+							//time = 0;
+							map[j][i] = 0;
+							break;
+						}
+						//プレイヤーの右辺
+						else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+							//Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
+							map[j][i] = 0;
+							//grav = 0.0f;
+							//time = 0;
+							//moveSpeed = 0;
+							break;
+						}
+					} else {
+						moveSpeed = 0.2f;
+					}
+				}
+			}
+		}
 #pragma region 線の処理
 
 
@@ -295,6 +362,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		player->SetScale(Player_Scl);
 
 		player->Attack(Player_Pos);
+		player->FlyingAttack(enemy);
 		player->CollisionAttack(enemy, Player_Pos);
 
 		SetPrm();//パラメータのセット
@@ -324,7 +392,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
-	if (tyutorial->getPhase_End()==true&&Input::GetInstance()->TriggerButtonB()) {//押されたら
+	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonB() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
 		BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
@@ -346,7 +414,7 @@ void Tutorial::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1) {
+			if (map[j][i] == 1|| map[j][i] == 2) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();

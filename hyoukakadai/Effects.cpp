@@ -39,7 +39,7 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 		attackefk->SetRotation(1, 90, 0);
 		//Effect_Rot = { 0,0,0 };
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_W)) {
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
 		attack = true;
 	}
 	
@@ -48,7 +48,9 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 		//UŒ‚ˆ—
 		attack = true;
 	}
-
+	if (player->GetFlyAttack()==true) {
+		attack = true;
+	}
 	if (attack) {
 		attackefk->Load_Effect();
 		attack = false;
@@ -99,16 +101,18 @@ void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Pla
 		attackefk->SetRotation(1, 90, 0);
 		//Effect_Rot = { 0,0,0 };
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_W)) {
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
 		attack = true;
 	}
 
 	//ƒRƒ“ƒgƒ[ƒ‰[
-	if (Input::GetInstance()->TriggerButtonA()||player->GetFlyAttack()==true) {
+	if ((Input::GetInstance()->TriggerButtonA()||Input::GetInstance()->TriggerKey(DIK_A))||player->GetFlyAttack()==true) {
 		//UŒ‚ˆ—
 		attack = true;
 	}
-
+	if (player->GetFlyAttack() == true) {
+		attack = true;
+	}
 	if (attack) {
 		attackefk->Load_Effect();
 		attack = false;

@@ -82,65 +82,65 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	LONG u_r = 32768;
 	LONG a = 30000;
 	LONG b = 15000;
-	if (stopflag == true) {
-		if (Input::GetInstance()->GetCMove().lRx < u_r - a)
-		{
-			// 左に傾けた
-			lineangle = +180;
-			needlerot.z = +180;
-		}
-		else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
-		{
-			// 右に傾けた
-			lineangle = 0;
-			needlerot.z = 0;
-		}
-		if (Input::GetInstance()->GetCMove().lRy < u_r - a)
-		{
-			// 傾けた
-			lineangle = +90;
-			needlerot.z = +90;
+	//if (stopflag == true) {
+	//	if (Input::GetInstance()->GetCMove().lRx < u_r - a)
+	//	{
+	//		// 左に傾けた
+	//		lineangle = +180;
+	//		needlerot.z = +180;
+	//	}
+	//	else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
+	//	{
+	//		// 右に傾けた
+	//		lineangle = 0;
+	//		needlerot.z = 0;
+	//	}
+	//	if (Input::GetInstance()->GetCMove().lRy < u_r - a)
+	//	{
+	//		// 傾けた
+	//		lineangle = +90;
+	//		needlerot.z = +90;
 
-		}
-		else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
-		{
-			// 傾けた
-			lineangle = +270;
-			needlerot.z = +270;
-		}
+	//	}
+	//	else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
+	//	{
+	//		// 傾けた
+	//		lineangle = +270;
+	//		needlerot.z = +270;
+	//	}
 
-		// 右上に傾けた
-		if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy < u_r - b)
-		{
-			lineangle = +45;
-			needlerot.z = +45;
-		}
-		// 左上に傾けた
-		if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy < u_r - b)
-		{
-			lineangle = +135;
-			needlerot.z = +135;
-		}
-		// 左下に傾けた
-		if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy > u_r + b)
-		{
-			lineangle = +225;
-			needlerot.z = +225;
-		}
-		// 右下に傾けた
-		if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy > u_r + b)
-		{
-			lineangle = +315;
-			needlerot.z = +315;
-		}
-	}
+		//// 右上に傾けた
+		//if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy < u_r - b)
+		//{
+		//	lineangle = +45;
+		//	needlerot.z = +45;
+		//}
+		//// 左上に傾けた
+		//if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy < u_r - b)
+		//{
+		//	lineangle = +135;
+		//	needlerot.z = +135;
+		//}
+		//// 左下に傾けた
+		//if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy > u_r + b)
+		//{
+		//	lineangle = +225;
+		//	needlerot.z = +225;
+		//}
+		//// 右下に傾けた
+		//if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy > u_r + b)
+		//{
+		//	lineangle = +315;
+		//	needlerot.z = +315;
+		//}
+	//}
 	if (!elf) {
 		linex2 = tempx + cosf((lineangle)*PI / 180.0f) * subradius;
 		liney2 = tempy + sinf((lineangle)*PI / 180.0f) * subradius + 0.5f;
 	}
 	//////////中心点//////飛ばす角度///////////////////半径(距離)
 	if (notdoubletuch == true) {
-		if (Input::GetInstance()->TriggerButtonRB()) {
+		if (Input::GetInstance()->TriggerButtonRB()||Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			Line::GetInstance()->SetTrigger(true);
 			trigger = true;//線を伸ばすフラグね
 			elf = false;
@@ -170,7 +170,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 
 		}
 
-		if (Input::GetInstance()->TriggerButtonB() && elf) {
+		if ((Input::GetInstance()->TriggerButtonB() || Input::GetInstance()->TriggerKey(DIK_D)) && elf) {
 			boundflag = true;//線の終点へ吸い付くフラグ
 		}
 
@@ -179,7 +179,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		} else if (Input::GetInstance()->TriggerKey(DIK_D) && boundflag != true) {
 
 		} 
-		else if (Input::GetInstance()->TriggerButonX()&&boundflag!=true) {
+		else if ((Input::GetInstance()->TriggerButonX() || Input::GetInstance()->TriggerKey(DIK_F)) &&boundflag!=true) {
 	
 			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ,紐の長さがmaxlen超えて針がブロックとあたっていなかったらこれtrueに
 		}
@@ -190,12 +190,15 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		);
 		//プレイヤーと紐の距離が一定以内に縮まったら
 		if (distance <= 1.5f) {
-			colf = true;//UIゲージ減らす処理gameui.cppの方
+			
 			//elf = false;
 			boundflag = false;
 			subradius = 0;//線の長さを0に
 			stopflag = true;
 			notdoubletuch = true;
+		}
+		else if (distance <= 2.0f) {
+			colf = true;//UIゲージ減らす処理gameui.cppの方
 		}
 	}
 	//先の長さが最大超えた、またはブロックあたったらその時点のプレイヤーと線の距離を求める（その距離分ゲージ減らす）
@@ -216,6 +219,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		stopflag = true;
 		notdoubletuch = true;
 	} else {
+		
 		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
 		/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
 　　　　　線の終点も動いてしまうから(subradiusの部分が中心点依存)*/

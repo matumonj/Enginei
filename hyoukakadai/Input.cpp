@@ -38,11 +38,12 @@ void Input::Initialize(WinApp* winapp)
 
 	//c
 	// 入力データ形式のセット
-	result = devC->SetDataFormat(&c_dfDIJoystick2); // 標準形式
+	if (devC != nullptr) {
+		result = devC->SetDataFormat(&c_dfDIJoystick); // 標準形式
 
-	// 排他制御レベルのセット
-	result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-
+		// 排他制御レベルのセット
+		result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	}
 }
 void Input::update()
 {
@@ -66,13 +67,15 @@ void Input::update()
 		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 	}
 	{// c
-		result = devC->Acquire();	// マウス動作開始
+		if (devC != nullptr) {
+			result = devC->Acquire();	// マウス動作開始
 
-		// 前回の入力を保存
-		CStatePre = CState;
+			// 前回の入力を保存
+			CStatePre = CState;
 
-		// マウスの入力
-		result = devC->GetDeviceState(sizeof(CState), &CState);
+			// マウスの入力
+			result = devC->GetDeviceState(sizeof(CState), &CState);
+		}
 	}
 }
 
@@ -152,7 +155,7 @@ bool Input::TriggerButtonA()
 {
 	// 前回が0で、今回が0でなければトリガー
 	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
-		return true;
+		return false;
 	}
 
 	// トリガーでない
@@ -163,7 +166,7 @@ bool Input::PushButtonA()
 {
 	// 前回が0で、今回が0でなければトリガー
 	if (!CStatePre.rgbButtons[0] && CState.rgbButtons[0]) {
-		return true;
+		return false;
 	}
 
 	// トリガーでない
@@ -174,7 +177,7 @@ bool Input::TriggerButtonRB()
 {
 	// 前回が0で、今回が0でなければトリガー
 	if (!CStatePre.rgbButtons[5] && CState.rgbButtons[5]) {
-		return true;
+		return false;
 	}
 
 	// トリガーでない
@@ -185,7 +188,7 @@ bool Input::TriggerButtonB()
 {
 	// 前回が0で、今回が0でなければトリガー
 	if (!CStatePre.rgbButtons[1] && CState.rgbButtons[1]) {
-		return true;
+		return false;
 	}
 
 	// トリガーでない
@@ -196,7 +199,7 @@ bool Input::TriggerButonX()
 {
 	// 前回が0で、今回が0でなければトリガー
 	if (!CStatePre.rgbButtons[2] && CState.rgbButtons[2]) {
-		return true;
+		return false;
 	}
 
 	return false;

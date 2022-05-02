@@ -71,7 +71,7 @@ void Player::Attack(XMFLOAT3 playerpos)
 	//向いてる方向に移動
 
 	//コントローラー
-	if (Input::GetInstance()->TriggerButtonA()) {
+	if (Input::GetInstance()->TriggerButtonA()||Input::GetInstance()->TriggerKey(DIK_A)) {
 		//攻撃処理
 		action = Action::Attack;
 	}
@@ -179,15 +179,20 @@ void Player::FlyingAttack(Enemy* enemy)
 {
 	float len;
 	
-	if (Line::GetInstance()->Getelf() == true && Line::GetInstance()->GetColf() == false) {
+	if (Line::GetInstance()->Getelf() == true ) {
 		len = (position.x - enemy->GetPosition().x) * (position.x - enemy->GetPosition().x) +
 			(position.y - enemy->GetPosition().y) * (position.y - enemy->GetPosition().y);
-		if (len <= 1) {
+		if (len <= 2) {
 			flyattack_f = true;
 		}
 }
 	if (flyattack_f) {
-		enemy->SetDead(true);
-		flyattack_f = false;
+		if (enemy != nullptr) {
+			enemy->SetDead(true);
+			//flyattack_f = false;
+		}
+		else {
+			flyattack_f = false;
+		}
 	}
 }
