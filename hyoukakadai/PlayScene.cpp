@@ -274,12 +274,12 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	LONG a = 30000;
 
 	//左
-	player->PlayerMoves(Player_Pos,moveSpeed);
+	player->PlayerMoves(Player_Pos, moveSpeed);
 
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲
-	
+
 	//左
 	// 方向だけを調べる方法
 	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
@@ -302,7 +302,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->GetCMove().lY < u_r - a)
 	{
 
-		jumpFlag = true;
+		//jumpFlag = true;
 		// 左に傾けた
 		//Player_Pos.x -= moveSpeed;
 
@@ -330,125 +330,22 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	////当たり判定
 
 	float disl;
-
+	for (int i = 0; i < MAX_X; i++) {
+		for (int j = 0; j < MAX_Y; j++) {
+			if (map[j][i] == 1 || map[j][i] == 2) {
+				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
+					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
+						Line::GetInstance()->Setmapcol(true);
+						Line::GetInstance()->Setelf(true);
+					}
+				}
+			}
+		}
+	}
 	//入力処理より後に当たり判定を描け
 	//aaaaaaa
-
-	for (int i = 0; i < MAX_X; i++) {
-		for (int j = 0; j < MAX_Y; j++) {
-			if (map[j][i] == 1) {
-				mapx[j][i] = tst[j][i]->GetPosition().x;
-				mapy[j][i] = tst[j][i]->GetPosition().y;
-				height = tst[j][i]->GetScale().y;
-				width = tst[j][i]->GetScale().x;
-				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
-						Line::GetInstance()->Setmapcol(true);
-						Line::GetInstance()->Setelf(true);
-					}
-				}
-
-				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						//moveSpeed = 0;
-						grav = 0.0f;
-						time = 0;
-						jumpFlag = false;
-						break;
-					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-						break;
-					}
-
-				} else {
-					moveSpeed = 0.2f;
-					grav = 0.03;
-				}
-
-				//プレイヤーの左辺
-				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-						Player_Pos.y = Player_Pos.y + 0.001f;
-						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-						//grav = 0.0f;
-						//time = 0;
-						break;
-					}
-					//プレイヤーの右辺
-					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-						//grav = 0.0f;
-						//time = 0;
-						//moveSpeed = 0;
-						break;
-					}
-				} else {
-					moveSpeed = 0.2f;
-				}
-			}
-		}
-	}
-
-	//
-
-	for (int i = 0; i < MAX_X; i++) {
-		for (int j = 0; j < MAX_Y; j++) {
-			if (map[j][i] == 2) {
-				mapx[j][i] = tst[j][i]->GetPosition().x;
-				mapy[j][i] = tst[j][i]->GetPosition().y;
-				height = tst[j][i]->GetScale().y;
-				width = tst[j][i]->GetScale().x;
-				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
-						Line::GetInstance()->Setmapcol(true);
-						Line::GetInstance()->Setelf(true);
-					}
-				}
-
-				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						//moveSpeed = 0;
-						grav = 0.0f;
-						time = 0;
-						jumpFlag = false;
-						map[j][i] = 0;
-						break;
-					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-						break;
-					}
-
-				} else {
-					moveSpeed = 0.2f;
-					grav = 0.03;
-				}
-
-				//プレイヤーの左辺
-				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-						Player_Pos.y = Player_Pos.y + 0.001f;
-						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-						//grav = 0.0f;
-						//time = 0;
-						map[j][i] = 0;
-						break;
-					}
-					//プレイヤーの右辺
-					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-						//grav = 0.0f;
-						//time = 0;
-						//moveSpeed = 0;
-						break;
-					}
-				} else {
-					moveSpeed = 0.2f;
-				}
-			}
-		}
-	}
+	float prm[3] = { grav,time,moveSpeed };
+	Collision::ColMap1(map, tst, mapx, mapy,200,20, grav,time,moveSpeed, jumpFlag, Player_Pos, Old_Pos);
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x-goal->GetScale().x&&Player_Pos.y<=goal_pos.y+goal->GetScale().y&&Player_Pos.y>=goal_pos.y-goal->GetScale().y) {
 		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
@@ -587,7 +484,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1) {
+			if (map[j][i] == 1|| map[j][i] ==2) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();

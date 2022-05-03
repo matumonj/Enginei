@@ -23,7 +23,7 @@ const float Line::MaxLen = 30.0f;
 const float Line::MinLen = 0.0f;
 float Line::LimitGauge;
 bool Line::lengthserchf = false;
-bool Line::colf = false;
+bool Line::colf = false,Line::colfsub=false;
 float Line::grav = 0.05f;
 float Line::MoveSpeed = 0;
 Object3d* Line::NeedleObj = nullptr;
@@ -146,6 +146,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			elf = false;
 			stopflag = false;
 			notdoubletuch = false;
+			
 			//Line = 1;
 		}
 	}
@@ -189,8 +190,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			((player->GetPosition().y - liney2) * (player->GetPosition().y - liney2))
 		);
 		//プレイヤーと紐の距離が一定以内に縮まったら
-		if (distance <= 1.5f) {
-			
+		if (distance <= 0.8f) {
+			colf = true;//UIゲージ減らす処理gameui.cppの方
+		
 			//elf = false;
 			boundflag = false;
 			subradius = 0;//線の長さを0に
@@ -198,8 +200,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			notdoubletuch = true;
 		}
 		else if (distance <= 2.0f) {
-			colf = true;//UIゲージ減らす処理gameui.cppの方
+			colfsub = true;//UIゲージ減らす処理gameui.cppの方
 		}
+
 	}
 	//先の長さが最大超えた、またはブロックあたったらその時点のプレイヤーと線の距離を求める（その距離分ゲージ減らす）
 	if (lengthserchf) {
@@ -292,6 +295,7 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 			if (position[index] != nullptr) {
 				linex2 = position[index]->GetPosition().x;
 				liney2 = position[index]->GetPosition().y;
+				
 			} else {
 				returnflag = true;
 			}

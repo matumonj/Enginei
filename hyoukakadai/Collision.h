@@ -15,6 +15,10 @@ public:
 		float Right;
 	};
 public:
+	static void ColMap1(int map[15][200], std::unique_ptr<Object3d> tst[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3 &Player_Pos, XMFLOAT3 &Old_Pos);
+	static bool ColMap2(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);
+	static bool ColMap3(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);
+
 	static bool Boxcol(XMFLOAT2 a1, XMFLOAT2 a2, XMFLOAT2 b1, XMFLOAT2 b2);
 
 	 float LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d** map[],Player*player, float radius);

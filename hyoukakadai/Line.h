@@ -56,6 +56,7 @@ private:
 	static bool elf;
 	static float oldlinex, oldliney;
 	static bool mapcol;// = false;
+	static bool colfsub;
 public:
 	static void Finalize();
 	static Line* GetInstance();
@@ -66,6 +67,9 @@ public:
 	static void CollisionEnemy(std::unique_ptr<Enemy> Position[]);
 	static void CollisionEnemy(Enemy*Position);
 public:
+	void SetSubradius(float len) { subradius = len; }
+	bool getcolfsub() { return colfsub; }
+	void setcolfsub(bool f) { colfsub = f; }
 	void Setmapcol(bool f) { mapcol = f; }
 	float GetLength() { return subradius; }
 	bool GetColf() { return colf; }
