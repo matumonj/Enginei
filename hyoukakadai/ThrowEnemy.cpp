@@ -97,6 +97,7 @@ void ThrowEnemy::Attack(Player* player)
 			}
 		}
 	}
+	//
 	Ray laserRay;
 	Sphere playersphere;
 	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
@@ -106,8 +107,7 @@ void ThrowEnemy::Attack(Player* player)
 
 	if (Collision::CheckRay2Sphere(laserRay, playersphere)==true)
 	{
-		scale = { 50,50,50 };
-		//assert(0);
+		player->SetHp(player->getHp() - 10);
 	};
 
 }
