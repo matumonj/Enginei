@@ -29,7 +29,7 @@ void mEffekseer::EffekseerSetting(DirectXCommon* dxCommon, DebugCamera* camera,c
 		1, //レンダーターゲット数
 		DXGI_FORMAT_UNKNOWN, //デプスフォーマット
 		false, //反対デプスありか
-		1000);//最大パーティクルの数 できれば５００ぐらいがいいかも　１００００だと複数の時重くなりそう
+		500);//最大パーティクルの数 できれば５００ぐらいがいいかも　１００００だと複数の時重くなりそう
 
 	_efkManager = Effekseer::Manager::Create(1000);//最大インスタンス数
 

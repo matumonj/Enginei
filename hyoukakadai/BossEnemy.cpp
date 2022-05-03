@@ -1,5 +1,5 @@
 #include "BossEnemy.h"
-
+#include"Collision.h"
 BossEnemy::BossEnemy()
 {
 }
@@ -11,6 +11,21 @@ BossEnemy::~BossEnemy()
 
 void BossEnemy::EnemySearchPlayer(Player* player)
 {
+
+}
+void BossEnemy::Attack(Player* player)
+{
+	Ray laserRay;
+	Sphere playersphere;
+	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
+	playersphere.radius = 0.5f;
+	laserRay.start = { Boss_Pos.x,Boss_Pos.y ,Boss_Pos.z };
+	laserRay.dir = { -1,0,0 };
+
+	if (Collision::CheckRay2Sphere(laserRay, playersphere))
+	{
+		player->SetScale({ 0,0,0 });
+	};
 
 }
 //‰Šú‰»ˆ—

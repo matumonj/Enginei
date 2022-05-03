@@ -35,12 +35,6 @@ void PlayScene::SpriteCreate()
 	Sprite::LoadTexture(1, L"Resources/haikei2.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
-	mech = std::make_unique<Texture>();
-	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
-
-	zukki = std::make_unique<Texture>();
-	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
-
 	background = Sprite::Create(1, { 0.0f,0.0f });
 	setumei = Sprite::Create(2, { 0.0f,0.0f });
 	// デバッグテキスト初期化
@@ -57,14 +51,10 @@ void PlayScene::ModelCreate()
 	player = Player::Create(playermodel);
 	player->Initialize();
 	tstmodel = Model::CreateFromOBJ("box1");
-	worldmodel = Model::CreateFromOBJ("skydome");
-	harimodel = Model::CreateFromOBJ("hari");
 	goalmodel = Model::CreateFromOBJ("goalmo");
-
 
 	item = new Item();
 	item->Initialize();
-	collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -73,22 +63,7 @@ void PlayScene::ModelCreate()
 			tst[j][i]->SetModel(tstmodel);
 		}
 	}
-	block = std::make_unique<Object3d>();
-	block->Initialize();// = Object3d::Create();
-	block->SetModel(tstmodel);
-
-	sentan = std::make_unique<Object3d>();
-	sentan->Initialize();// = Object3d::Create();
-	sentan->SetModel(tstmodel);
-
-	world = std::make_unique<Object3d>();
-	world->Initialize();// = Object3d::Create();
-	world->SetModel(worldmodel);
-
-	hari = std::make_unique<Object3d>();
-	hari->Initialize();
-	hari->SetModel(harimodel);
-
+	
 	goal = std::make_unique<Object3d>();
 	goal->Initialize();
 	goal->SetModel(goalmodel);
@@ -102,9 +77,6 @@ void PlayScene::ModelCreate()
 	lightGroup->SetDirLightActive(1, false);
 	lightGroup->SetDirLightActive(2, false);
 	lightGroup->SetPointLightActive(0, true);
-	//pointLightPos[0] = 0.0f;
-	//pointLightPos[1] = 1.0f;
-	//pointLightPos[2] = 0.0f;
 	lightGroup->SetPointLightActive(0, false);
 	lightGroup->SetPointLightActive(1, false);
 	lightGroup->SetPointLightActive(2, false);
@@ -125,15 +97,8 @@ void PlayScene::ModelCreate()
 #pragma region 各パラメータのセット
 void PlayScene::SetPrm()
 {
-	setumei->SetPosition({ 0, 400 });
-	setumei->SetSize({ 500,300 });
-	setumei->setcolor({ 1,1,1,1 });
-
-	hari->SetPosition({ hari_Pos.x + 2.0f,hari_Pos.y,hari_Pos.z });
-
 	half_height = player->GetScale().y;
 	half_Width = player->GetScale().x;
-
 
 	player->SetPosition({ Player_Pos });
 	player->SetScale({ Player_Scl });
@@ -147,14 +112,6 @@ void PlayScene::SetPrm()
 		}
 	}
 	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
-
-	block->SetPosition({ block_pos });
-	block->SetScale({ block_Scl });
-
-	world->SetPosition({ 0,0,0 });
-	world->SetScale({ 1,1,1 });
-
-	sentan->SetPosition({ sentan_Pos });
 
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
@@ -182,10 +139,6 @@ void PlayScene::objUpdate()
 		}
 	}
 
-	world->Update({ 1,1,1,1 });
-	block->Update({ 1,1,1,1 });
-	hari->Update({ 1,1,1,1 });
-
 	goal->Update({ 1,1,1,1 });
 
 }
@@ -206,6 +159,10 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	enemy[4] = std::make_unique<ThrowEnemy>();
 	enemy[5] = std::make_unique<ThrowEnemy>();
 	enemy[6] = std::make_unique<ThrowEnemy>();
+	enemy[7] = std::make_unique<ThrowEnemy>();
+	enemy[8] = std::make_unique<ThrowEnemy>();
+	enemy[9] = std::make_unique<ThrowEnemy>();
+	//enemy[6] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
 
 	enemy[6]->Setposition({ 270,-18.2,0 });
@@ -215,14 +172,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	enemy[2]->Setposition({ 250,-4.2,0 });
 	enemy[1]->Setposition({ 350, -18, 0 });
 	enemy[0]->Setposition({ 200, -7, 0 });
-	enemy[0]->Initialize();
-	enemy[1]->Initialize();
-	enemy[2]->Initialize();
-	enemy[3]->Initialize();
-	enemy[4]->Initialize();
-	enemy[5]->Initialize();
-	enemy[6]->Initialize();
-
+	for (int i = 0; i < emax; i++) {
+		enemy[i]->Initialize();
+	}
 	mapcol = new Collision();
 	c_postEffect = Default;
 
@@ -297,18 +249,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	player->PlayerMoves(Player_Pos, moveSpeed);
 
-
-
-	if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-
-		//jumpFlag = true;
-		// 左に傾けた
-		//Player_Pos.x -= moveSpeed;
-
-	}
-
-
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
@@ -318,13 +258,10 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= moveSpeed;
 	}
 
-
-
 	if (jumpFlag == true) {
 		Player_Pos.y += 0.1f;
 		time += 0.02f;
 	}
-
 
 	///これより上に入力処理をかけ
 	////当たり判定
@@ -343,8 +280,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 	//入力処理より後に当たり判定を描け
-	//aaaaaaa
-	float prm[3] = { grav,time,moveSpeed };
 	Collision::ColMap1(map, tst, mapx, mapy,200,20, grav,time,moveSpeed, jumpFlag, Player_Pos, Old_Pos);
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x-goal->GetScale().x&&Player_Pos.y<=goal_pos.y+goal->GetScale().y&&Player_Pos.y>=goal_pos.y-goal->GetScale().y) {
@@ -359,7 +294,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 #pragma region 線の処理
 
-
 	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 		//grav = 0.0f;
 	} else {
@@ -368,14 +302,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	time += 0.04f;
 	Player_Pos.y -= grav * time * time;
-
-
-	//頂点座標の更新
-	mech->CreateLineTexture(linex, linex2, liney, liney2);
-
-	hari_Pos.x = Line::GetInstance()->getpos().x;
-	hari_Pos.y = Line::GetInstance()->getpos().y;
-
+	
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -399,9 +326,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		object1->PlayAnimation();
 	}
 
-
-
-	//}
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
@@ -417,7 +341,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 
 	player->Attack(Player_Pos);
-	//for (int i = 0; i < 2; i++) {
 	player->CollisionAttack(enemy, Player_Pos);
 
 	SetPrm();//パラメータのセット
@@ -462,25 +385,16 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
-
-
 	player->PreDraw();
 	player->Draw();
 	player->PostDraw();
 
-
-	world->PreDraw();
-	//world->Draw();
-	world->PostDraw();
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			enemy[i]->Draw();
 		}
 	}
-	block->PreDraw();
-	block->Draw();
-	block->PostDraw();
-
+	
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -495,10 +409,6 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	goal->PreDraw();
 	goal->Draw();
 	goal->PostDraw();
-
-	/*hari->PreDraw();
-	hari->Draw();
-	hari->PostDraw();*/
 
 }
 //sプライと以外の描画
@@ -570,9 +480,6 @@ void PlayScene::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("light_position")) {
-		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
-		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
-		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
 		if (ImGui::Button("spotlight ON")) {
 			lightGroup->SetSpotLightActive(0, true);
 		}
@@ -590,16 +497,7 @@ void PlayScene::ImGuiDraw()
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("enemy_position")) {
-		float rf = enemy[0]->GetPosition().x;
-		float rf2 = enemy[0]->GetPosition().y;
-		float rrr = player->getdis();
-		//float rf3 = enemy->GetPosition().z;
-		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &rf2, -100, 100);
-		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-		ImGui::SliderInt("positionX", &co, -200, 200);
-		ImGui::SliderFloat("positionY", &rf2, -200, 200);
-		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
+		
 		ImGui::TreePop();
 	}
 	float linex = Line::GetInstance()->getpos().x;
@@ -613,36 +511,12 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderFloat("time", &time, -200, 200);
 		ImGui::TreePop();
 	}
-	float sx = player->GetArea_S().x;
-	float sy = player->GetArea_S().y;
-
-	float ex = player->GetArea_e().x;
-	float ey = player->GetArea_e().y;
-
-	if (ImGui::TreeNode("half")) {
-		ImGui::SliderFloat("sx", &sx, -200, 200);
-		ImGui::SliderFloat("sy", &sy, -200, 200);
-		ImGui::SliderFloat("ex", &ex, -200, 200);
-		ImGui::SliderFloat("ey", &ey, -200, 200);
-		ImGui::TreePop();
-	}
+	
 	if (ImGui::TreeNode("Old")) {
 		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
 		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
 		ImGui::TreePop();
 	}
-
-
-	/*if (ImGui::TreeNode("1")) {
-		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("+_height", &half_height, -200, 200);
-		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("-_height", &half_height, -200, 200);
-		ImGui::SliderFloat("map_1_width", &width, -200, 200);
-		ImGui::SliderFloat("map_1_height", &height, -200, 200);
-		ImGui::TreePop();
-	}*/
-
 
 	ImGui::End();
 

@@ -3,6 +3,7 @@
 #include"GameUI.h"
 #define PI 3.14159
 using namespace DirectX;
+
 Texture* Line::Twine = nullptr;
 float Line::FollowangleX, Line::FollowangleZ, Line::FollowangleR;
 float Line::FollowSpeed = 1.0f;
@@ -21,7 +22,7 @@ float Line::olddistance = 0;
 const float Line::LengThenSpeed = 1.0f;
 const float Line::MaxLen = 30.0f;
 const float Line::MinLen = 0.0f;
-float Line::LimitGauge;
+float Line::LimitGauge,Line::necolor=1,Line::twcolor=1;
 bool Line::lengthserchf = false;
 bool Line::colf = false,Line::colfsub=false;
 float Line::grav = 0.05f;
@@ -140,13 +141,13 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	}
 	//////////中心点//////飛ばす角度///////////////////半径(距離)
 	if (notdoubletuch == true) {
-		if (Input::GetInstance()->TriggerButtonRB()||Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		if (Input::GetInstance()->TriggerButtonRB() || Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			Line::GetInstance()->SetTrigger(true);
 			trigger = true;//線を伸ばすフラグね
 			elf = false;
 			stopflag = false;
 			notdoubletuch = false;
-			
+
 			//Line = 1;
 		}
 	}
@@ -179,9 +180,8 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 
 		} else if (Input::GetInstance()->TriggerKey(DIK_D) && boundflag != true) {
 
-		} 
-		else if ((Input::GetInstance()->TriggerButonX() || Input::GetInstance()->TriggerKey(DIK_F)) &&boundflag!=true) {
-	
+		} else if ((Input::GetInstance()->TriggerButonX() || Input::GetInstance()->TriggerKey(DIK_F)) && boundflag != true) {
+
 			returnflag = true;//線がプレイヤーの方へ戻ってくるフラグ,紐の長さがmaxlen超えて針がブロックとあたっていなかったらこれtrueに
 		}
 		//線の終点とプレイヤーとの距離求める
@@ -192,14 +192,13 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		//プレイヤーと紐の距離が一定以内に縮まったら
 		if (distance <= 0.8f) {
 			colf = true;//UIゲージ減らす処理gameui.cppの方
-		
+
 			//elf = false;
 			boundflag = false;
 			subradius = 0;//線の長さを0に
 			stopflag = true;
 			notdoubletuch = true;
-		}
-		else if (distance <= 2.0f) {
+		} else if (distance <= 2.0f) {
 			colfsub = true;//UIゲージ減らす処理gameui.cppの方
 		}
 
@@ -222,7 +221,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		stopflag = true;
 		notdoubletuch = true;
 	} else {
-		
+
 		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
 		/*メモ:ずっと中心点を現時点のプレイヤーの座標に設定してるとプレイヤーが動いた分だけ
 　　　　　線の終点も動いてしまうから(subradiusの部分が中心点依存)*/
@@ -248,14 +247,15 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	Twine->CreateLineTexture(linex, linex2, liney, liney2);
 	Twine->SetPosition(po);
 	Twine->Update(matview, matprojection);
-
+	Twine->SetColor({ 1, 1, 1, twcolor
+		});
 
 	NeedleObj->SetPosition({ linex2,liney2,Player_Pos.z });
 	//needlerot = player->GetRotation();
 	needlepos = NeedleObj->GetPosition();
 	NeedleObj->SetScale({ 1.4f,1.4f,1.5f });
 	NeedleObj->SetRotation({ needlerot });
-	NeedleObj->Update({ 1,1,1,1 });
+	NeedleObj->Update({ 1,1,1,necolor });
 }
 
 void Line::Draw(DirectXCommon* dxcomn)
@@ -273,9 +273,9 @@ void Line::Draw(DirectXCommon* dxcomn)
 void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 {
 	if (elf) {
-		Twine->SetColor({ 1,0,0,1 });
+		Twine->SetColor({ 1,0,0,twcolor });
 	} else {
-		Twine->SetColor({ 1,1,1,1 });
+		Twine->SetColor({ 1,1,1,twcolor });
 	}
 	//int in = -1;
 	float dis[4];
@@ -321,9 +321,9 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 void Line::CollisionEnemy(Enemy* position)
 {
 	if (elf) {
-		Twine->SetColor({ 1,0,0,1 });
+		Twine->SetColor({ 1,0,0,twcolor });
 	} else {
-		Twine->SetColor({ 1,1,1,1 });
+		Twine->SetColor({ 1,1,1,twcolor });
 	}
 	//int in = -1;
 	float dis;

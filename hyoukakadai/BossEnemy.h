@@ -50,7 +50,7 @@ public:
     void Finalize()override;
 
     void EnemySearchPlayer(Player*player)override;
-
+    void Attack(Player* player)override;
 public:
     /// <summary>
    /// アクセッサ

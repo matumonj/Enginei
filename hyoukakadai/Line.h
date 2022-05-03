@@ -57,7 +57,11 @@ private:
 	static float oldlinex, oldliney;
 	static bool mapcol;// = false;
 	static bool colfsub;
+	static float twcolor;
+	static float necolor;
 public:
+	void settwcolor(float c) {  twcolor=c; }
+	void setnecolor(float c) { necolor=c; }
 	static void Finalize();
 	static Line* GetInstance();
 	static void Initialize();

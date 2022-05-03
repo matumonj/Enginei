@@ -1,6 +1,7 @@
 #include "ThrowEnemy.h"
 #include"Line.h"
 #include"imgui.h"
+#include"Collision.h"
 ThrowEnemy::ThrowEnemy()
 {
 }
@@ -96,6 +97,19 @@ void ThrowEnemy::Attack(Player* player)
 			}
 		}
 	}
+	Ray laserRay;
+	Sphere playersphere;
+	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
+	playersphere.radius = 0.5f;
+	laserRay.start = { Position.x,Position.y ,Position.z };
+	laserRay.dir = { -1,0,0,0 };
+
+	if (Collision::CheckRay2Sphere(laserRay, playersphere)==true)
+	{
+		scale = { 50,50,50 };
+		//assert(0);
+	};
+
 }
 
 void ThrowEnemy::Draw()
