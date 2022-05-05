@@ -48,12 +48,12 @@ private:
 private:
 	DirectXCommon* dxcomn;
 	Sprite* background = nullptr;
-
+	int atb;
 	Sprite* setumei = nullptr;
 
 	DebugTxt* debugText;
-	static const int emax = 10;
-	std::unique_ptr<Enemy>enemy[emax];
+	int emax = 10;
+	std::unique_ptr<Enemy>enemy[10];
 	//Enemy* enemy[2];
 	std::unique_ptr <Effects> effects;
 	std::unique_ptr <Effects> attackeffects;

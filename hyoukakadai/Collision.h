@@ -15,7 +15,10 @@ public:
 		float Right;
 	};
 public:
+	static float GetLen(XMFLOAT3 position, XMFLOAT3 position2);
 	static void ColMap1(int map[15][200], std::unique_ptr<Object3d> tst[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3 &Player_Pos, XMFLOAT3 &Old_Pos);
+	static void ColMapb1(int map[15][200], std::unique_ptr<Object3d> tst[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos, Enemy*enemy);
+
 	static bool ColMap2(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);
 	static bool ColMap3(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);
 

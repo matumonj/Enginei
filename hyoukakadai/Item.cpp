@@ -50,7 +50,7 @@ void Item::Draw()
 }
 void Item::Drop(std::unique_ptr<Enemy>enemy[])
 {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < itemMax; i++) {
 		if (enemy[i] != nullptr) {
 			position[i] = enemy[i]->GetPosition();
 		}

@@ -1,24 +1,28 @@
 #include "Effects.h"
+#include"imgui.h"
 Effects::~Effects()
 {
-	delete efk;
+	delete efk,attackefk;
 }
 void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 {
 	//エフェクトのインスタンス生成
 	efk = new mEffekseer();
 	attackefk = new mEffekseer();
+	bossattackefk = new mEffekseer();
 	//efk1 = new mEffekseer();
 
 	//エフェクトのセット(3引き数に)
 	attackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/attack - コピー.efk", (const EFK_CHAR*)L"effect/10");
 	efk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/deadef.efk", (const EFK_CHAR*)L"effect/10");
+	bossattackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/laser.efk", (const EFK_CHAR*)L"effect/10");
+	//b_Effect_Rot = { -25.08,90,0 };
 	//efk1->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/SimpleLaser.efk", (const EFK_CHAR*)L"effect/10");
 }
 
 void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<Enemy>enemy[],Player*player)
 {
-	for (int i=0; i < 4; i++) {
+	for (int i=0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			if (enemy[i]->GetState_DEAD() == true) {
 				df = true;
@@ -75,10 +79,23 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 	//view,projection行列をエフェクトのテクスチャにかける
 	efk->EffekseerUpdate(dxcomn, camera);
 	attackefk->EffekseerUpdate(dxcomn, camera);
+	bossattackefk->EffekseerUpdate(dxcomn, camera);
+
 	//efk1->EffekseerUpdate(dxcomn, camera);
 
 }
-
+void Effects::ImGuiDraw()
+{
+	ImGui::Begin("1");
+	ImGui::SetWindowPos(ImVec2(200, 0));
+	ImGui::SetWindowSize(ImVec2(500, 300));
+	if (ImGui::TreeNode("cameraposition")) {
+		
+		//ImGui::SliderFloat("cy", &cy, 200, -200);
+		ImGui::TreePop();
+	}
+	ImGui::End();
+}
 void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Player* player)
 {
 	//for (int i = 0; i < 4; i++) {
@@ -137,7 +154,33 @@ void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Pla
 	//view,projection行列をエフェクトのテクスチャにかける
 	efk->EffekseerUpdate(dxcomn, camera);
 	attackefk->EffekseerUpdate(dxcomn, camera);
+	bossattackefk->EffekseerUpdate(dxcomn, camera);
+
 	//efk1->EffekseerUpdate(dxcomn, camera);
+
+}
+void Effects::BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera, bool altAttack, XMFLOAT3 bpos)
+{
+	b_Effect_Pos =bpos;
+	
+	b_Effect_SCl = {1,1,10 };
+	if (altAttack) {
+
+		b_attack = true;
+	}
+	else {
+		b_attack = false;
+	}
+	if (b_attack) {
+		bossattackefk->Load_Effect();
+		b_attack = false;
+		
+	}
+	bossattackefk->SetPosition(b_Effect_Pos.x, b_Effect_Pos.y, b_Effect_Pos.z);
+	bossattackefk->SetRotation(b_Effect_Rot.x, b_Effect_Rot.y, b_Effect_Rot.z);
+	bossattackefk->SetScale(b_Effect_SCl.x, b_Effect_SCl.y, b_Effect_SCl.z);
+	//bossattackefk->SetColor(0, 1, 0);
+
 
 }
 void Effects::Draw(DirectXCommon*dxcomn)
@@ -145,5 +188,6 @@ void Effects::Draw(DirectXCommon*dxcomn)
 	//エフェクトの画像
 	efk->EffekseerDraw(dxcomn->GetCmdList());
 	attackefk->EffekseerDraw(dxcomn->GetCmdList());
+	bossattackefk->EffekseerDraw(dxcomn->GetCmdList());
 	//efk1->EffekseerDraw(dxcomn->GetCmdList());
 }

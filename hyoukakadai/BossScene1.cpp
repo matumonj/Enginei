@@ -1,4 +1,4 @@
-#include "PlayScene.h"
+#include "BossScene1.h"
 #include"Input.h"
 #include"DirectXCommon.h"
 #include"ClearScene.h"
@@ -10,23 +10,24 @@
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
-//ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ
+#include"CollisionPrimitive.h"
+//ƒRƒƒ“ƒgƒAƒEƒg
 
 
-//ã‚·ãƒ¼ãƒ³ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-PlayScene::PlayScene(SceneManager* sceneManager)
+//ƒV[ƒ“‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+BossScene1::BossScene1(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
 
 }
 
-#pragma region ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
-//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”Ÿæˆ
-void PlayScene::SpriteCreate()
+#pragma region ƒXƒvƒ‰ƒCƒg‚Ì¶¬
+//ƒXƒvƒ‰ƒCƒg¶¬
+void BossScene1::SpriteCreate()
 {
-	// ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆç”¨ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
+	// ƒfƒoƒbƒOƒeƒLƒXƒg—pƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
 	Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont2.png");
-	//æ™®é€šã®ãƒ†ã‚¯ã‚¹ãƒãƒ£(ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã˜ã‚ƒãªã„ã‚ˆ)
+	//•’Ê‚ÌƒeƒNƒXƒ`ƒƒ(ƒXƒvƒ‰ƒCƒg‚¶‚á‚È‚¢‚æ)
 	Line::Initialize();
 	GameUI::AllowUISet();
 
@@ -35,17 +36,11 @@ void PlayScene::SpriteCreate()
 	Sprite::LoadTexture(1, L"Resources/haikei2.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
-	background = Sprite::Create(1, { 0.0f,0.0f });
-	setumei = Sprite::Create(2, { 0.0f,0.0f });
-	// ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆåˆæœŸåŒ–
-	dxcomn = new DirectXCommon();
-	debugText = new DebugTxt();
-	debugText->Initialize(debugTextTexNumber);
 }
 #pragma endregion
 
 #pragma region 
-void PlayScene::ModelCreate()
+void BossScene1::ModelCreate()
 {
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
@@ -63,16 +58,16 @@ void PlayScene::ModelCreate()
 			tst[j][i]->SetModel(tstmodel);
 		}
 	}
-	
+
 	goal = std::make_unique<Object3d>();
 	goal->Initialize();
 	goal->SetModel(goalmodel);
 
-	// ãƒ©ã‚¤ãƒˆç”Ÿæˆ
+	// ƒ‰ƒCƒg¶¬
 	lightGroup = LightGroup::Create();
-	// 3Dã‚ªãƒ–ã‚¨ã‚¯ãƒˆã«ãƒ©ã‚¤ãƒˆã‚’ã‚»ãƒƒãƒˆ
+	// 3DƒIƒuƒGƒNƒg‚Éƒ‰ƒCƒg‚ğƒZƒbƒg
 	Object3d::SetLightGroup(lightGroup);
-	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®è¨­å®š
+	//ƒpƒ‰ƒ[ƒ^‚Ìİ’è
 	lightGroup->SetDirLightActive(0, false);
 	lightGroup->SetDirLightActive(1, false);
 	lightGroup->SetDirLightActive(2, false);
@@ -94,8 +89,8 @@ void PlayScene::ModelCreate()
 }
 #pragma endregion
 
-#pragma region å„ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
-void PlayScene::SetPrm()
+#pragma region Šeƒpƒ‰ƒ[ƒ^‚ÌƒZƒbƒg
+void BossScene1::SetPrm()
 {
 	half_height = player->GetScale().y;
 	half_Width = player->GetScale().x;
@@ -113,16 +108,13 @@ void PlayScene::SetPrm()
 	}
 	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
 
-	background->SetPosition({ 0, 0 });
-	background->SetSize({ WinApp::window_width,WinApp::window_height });
-	background->setcolor({ 1,1,1,1 });
 }
 #pragma endregion
 
-#pragma region ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ+ãƒ©ã‚¤ãƒˆã®æ›´æ–°å‡¦ç†
-void PlayScene::objUpdate()
+#pragma region ƒIƒuƒWƒFƒNƒg+ƒ‰ƒCƒg‚ÌXVˆ—
+void BossScene1::objUpdate()
 {
-	{//ãƒ©ã‚¤ãƒˆã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’åæ˜  	
+	{//ƒ‰ƒCƒg‚Ìƒpƒ‰ƒ[ƒ^‚ğ”½‰f 	
 		lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
 		lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightpos));
 		lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
@@ -144,81 +136,58 @@ void PlayScene::objUpdate()
 }
 #pragma endregion
 
-#pragma region åˆæœŸåŒ–
-void PlayScene::Initialize(DirectXCommon* dxCommon)
+#pragma region ‰Šú‰»
+void BossScene1::Initialize(DirectXCommon* dxCommon)
 {
 	//
 
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
-	enemy[0] = std::make_unique<MobEnemy>();
-	enemy[1] = std::make_unique<MobEnemy>();
-	enemy[2] = std::make_unique<ThrowEnemy>();
-	enemy[3] = std::make_unique<BossEnemy>();
-	enemy[4] = std::make_unique<ThrowEnemy>();
-	enemy[5] = std::make_unique<ThrowEnemy>();
-	enemy[6] = std::make_unique<ThrowEnemy>();
-	enemy[7] = std::make_unique<ThrowEnemy>();
-	enemy[8] = std::make_unique<ThrowEnemy>();
-	enemy[9] = std::make_unique<BossEnemy>();
-	//enemy[6] = std::make_unique<ThrowEnemy>();
-	//enemy[0] = new MobEnemy();
-	enemy[9]->Setposition({ 940,-4.2,0 });
-	//enemy[6]->Setposition({ 270,-18.2,0 });
-	enemy[8]->Setposition({ 270,-18.2,0 });
-	enemy[7]->Setposition({ 270,-18.2,0 });
-	enemy[6]->Setposition({ 270,-18.2,0 });
-	enemy[5]->Setposition({ 170,-18.2,0 });
-	enemy[4]->Setposition({ 20,-14.2,0 });
-	enemy[3]->Setposition({ 80,-4.2,0 });
-	enemy[2]->Setposition({ 20,-4.2,0 });
-	enemy[1]->Setposition({ 350, -18, 0 });
-	enemy[0]->Setposition({ 200, -7, 0 });
-	for (int i = 0; i < emax; i++) {
-		enemy[i]->Initialize();
-	}
+	bossenemy = std::make_unique<BossEnemy>();
+	
+	//bossenemy->Setposition({ 20, -4, 0 });
+	
+	bossenemy->Initialize();
 	mapcol = new Collision();
-	c_postEffect = Default;
-
+	
 	collision = new Collision();
 	SpriteCreate();//
 	ModelCreate();//
-	
-	// ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
+
+	// ƒJƒƒ‰¶¬
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
-	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
+	// 3DƒIƒuƒWƒFƒNƒg‚ÉƒJƒƒ‰‚ğƒZƒbƒg
 	Object3d::SetCamera(camera);
 
 	effects->Initialize(dxCommon, camera);
 	attackeffects->Initialize(dxCommon, camera);
 
-
-	//ãƒ¢ãƒ‡ãƒ«åã‚’æŒ‡å®šã—ã¦ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
+	//ƒ‚ƒfƒ‹–¼‚ğw’è‚µ‚Äƒtƒ@ƒCƒ‹“Ç‚İ‚İ
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
-	//ãƒ‡ãƒã‚¤ã‚¹ã‚’ã‚»ãƒƒãƒˆ
+	//ƒfƒoƒCƒX‚ğƒZƒbƒg
 	f_Object3d::SetDevice(dxCommon->GetDev());
-	//ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
+	//ƒJƒƒ‰‚ğƒZƒbƒg
 	f_Object3d::SetCamera(camera);
-	//ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ç”Ÿæˆ
+	//ƒOƒ‰ƒtƒBƒbƒNƒpƒCƒvƒ‰ƒCƒ“¶¬
 	f_Object3d::CreateGraphicsPipeline();
 
-	//FBXãƒ¢ãƒ‡ãƒ«ã®ç”Ÿæˆ
+	//FBXƒ‚ƒfƒ‹‚Ì¶¬
 	object1 = new f_Object3d();
 	object1->Initialize();
 	object1->SetModel(fbxmodel);
 	/*audio = new Audio();
 	audio->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
-	postEffect = new PostEffect();
-	postEffect->Initialize();
-
+	camera->SetEye({ Player_Pos.x+20,Player_Pos.y,Player_Pos.z - 57.0f });
+	camera->SetTarget({ Player_Pos.x+20,Player_Pos.y ,Player_Pos.z-10 });
+	bossenemy->Setposition({ 40,-4,0 });
 }
 #pragma endregion
 
-#pragma region æ›´æ–°å‡¦ç†
-void PlayScene::Update(DirectXCommon* dxCommon)
+#pragma region XVˆ—
+void BossScene1::Update(DirectXCommon* dxCommon)
 {
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
@@ -228,31 +197,30 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	LONG u_r = 32768;
 	LONG a = 30000;
 
-	//å·¦
+	//¶
 	player->PlayerMoves(Player_Pos, moveSpeed);
+	///////// ƒRƒ“ƒgƒ[ƒ‰[ //////////
+	// ƒXƒeƒBƒbƒN‚Ì•ûŒü”»’è
+	// –³”½‰”ÍˆÍ
 
-	///////// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ //////////
-	// ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ–¹å‘åˆ¤å®š
-	// ç„¡åå¿œç¯„å›²
-
-	//å·¦
-	// æ–¹å‘ã ã‘ã‚’èª¿ã¹ã‚‹æ–¹æ³•
+	//¶
+	// •ûŒü‚¾‚¯‚ğ’²‚×‚é•û–@
 	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
 	//{
-	//	// å·¦ã«å‚¾ã‘ãŸ
+	//	// ¶‚ÉŒX‚¯‚½
 	//	Player_Pos.x -= moveSpeed;
 
 	//}
 	//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 	//{
-	//	// å³ã«å‚¾ã‘ãŸ
+	//	// ‰E‚ÉŒX‚¯‚½
 	//	Player_Pos.x += moveSpeed;
 	//}
 
 
 	player->PlayerMoves(Player_Pos, moveSpeed);
 
-	//FBXãƒ¢ãƒ‡ãƒ«ã®æ›´æ–°
+	//FBXƒ‚ƒfƒ‹‚ÌXV
 	object1->Updata(TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += moveSpeed;
@@ -266,10 +234,11 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 		time += 0.02f;
 	}
 
-	///ã“ã‚Œã‚ˆã‚Šä¸Šã«å…¥åŠ›å‡¦ç†ã‚’ã‹ã‘
-	////å½“ãŸã‚Šåˆ¤å®š
+	///‚±‚ê‚æ‚èã‚É“ü—Íˆ—‚ğ‚©‚¯
+	////“–‚½‚è”»’è
 
 	float disl;
+	//‚±‚ê‚ÍˆÚ‚·
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
 			if (map[j][i] == 1 || map[j][i] == 2) {
@@ -282,20 +251,39 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
-	//å…¥åŠ›å‡¦ç†ã‚ˆã‚Šå¾Œã«å½“ãŸã‚Šåˆ¤å®šã‚’æã‘
-	Collision::ColMap1(map, tst, mapx, mapy,200,20, grav,time,moveSpeed, jumpFlag, Player_Pos, Old_Pos);
 
-	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x-goal->GetScale().x&&Player_Pos.y<=goal_pos.y+goal->GetScale().y&&Player_Pos.y>=goal_pos.y-goal->GetScale().y) {
-		BaseScene* scene = new ClearScene(sceneManager_);//æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
-		sceneManager_->SetnextScene(scene);//ã‚·ãƒ¼ãƒ³ã®ã‚»ãƒƒãƒˆ
+	//‚±‚ê•Ê‚ñ‚Æ‚±‚ëˆÚ‚·‚Ì‘Š“–‚ß‚ñ‚Ç‚¢‚©‚ç˜‚¦’u‚«
+	Ray BossLaserRay=BossEnemy::GetInstance()->GetLaserRay();
+	Sphere mapsphere[20][200];
+	for (int i = 0; i < MAX_X; i++) {
+		for (int j = 0; j < MAX_Y; j++) {
+			
+			if (map[j][i] == 1) {
+				mapsphere[j][i].radius = 0.5f;
+				mapsphere[j][i].center = { tst[j][i]->GetPosition().x, tst[j][i]->GetPosition().y ,tst[j][i]->GetPosition().z };
+
+				if (Collision::CheckRay2Sphere(BossLaserRay, mapsphere[j][i])==true) {
+				//	map[j][i] = 0;
+					break;
+				}
+			}
+		}
 	}
 
-	if (Line::GetInstance()->Getboundflag()==true) {
+	//“ü—Íˆ—‚æ‚èŒã‚É“–‚½‚è”»’è‚ğ•`‚¯
+	Collision::ColMap1(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
+	
+	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
+		BaseScene* scene = new ClearScene(sceneManager_);//Ÿ‚ÌƒV[ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+		sceneManager_->SetnextScene(scene);//ƒV[ƒ“‚ÌƒZƒbƒg
+	}
+
+	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
 		time = 0;
 	}
 
-#pragma region ç·šã®å‡¦ç†
+#pragma region ü‚Ìˆ—
 
 	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 		//grav = 0.0f;
@@ -305,9 +293,9 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	time += 0.04f;
 	Player_Pos.y -= grav * time * time;
-	
+
 #pragma endregion
-	//æœ€å¤§å€¤ãŒæ¸›ã‚‹ã¨ãã«ä½¿ã†ãƒ•ãƒ©ã‚°ã¯ã“ã£ã¡ã§ç®¡ç†
+	//Å‘å’l‚ªŒ¸‚é‚Æ‚«‚Ég‚¤ƒtƒ‰ƒO‚Í‚±‚Á‚¿‚ÅŠÇ—
 	colf = Line::GetInstance()->GetColf();
 
 	GameUI::UIUpdate(
@@ -318,25 +306,25 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	Line::GetInstance()->SetColf(colf);
 
-	//needlepos = Line::GetInstance()->getpos();
-
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemy(enemy);
+	Line::CollisionEnemy(&bossenemy);
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
-	//FBXã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
+	//FBX‚ÌƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
 	}
-
-	//ã‚«ãƒ¡ãƒ©é–¢ä¿‚ã®å‡¦ç†
-	camera->SetTarget({ 0,1,0 });//æ³¨è¦–ç‚¹
-	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
-	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
-
+	XMFLOAT3 bpos;
+	if (bossenemy != nullptr) {
+		bpos = bossenemy->GetPosition();
+	}
+	//ƒJƒƒ‰ŠÖŒW‚Ìˆ—
+	//camera->SetTarget({ 0,1,0 });//’‹“_
+	//camera->SetDistance(distance);//
+	
 	camera->Update();
-
+	
+	effects->BossAttackEffect(dxCommon, camera, atb, bpos);
 	player->SetPosition(Player_Pos);
 	player->SetRotation(Player_Rot);
 
@@ -344,70 +332,66 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 
 	player->Attack(Player_Pos);
-	player->CollisionAttack(enemy, Player_Pos);
+	player->CollisionAttack(&bossenemy, Player_Pos);
 
-	SetPrm();//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
+	SetPrm();//ƒpƒ‰ƒ[ƒ^‚ÌƒZƒbƒg
 
-	objUpdate();//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°å‡¦ç†
+	objUpdate();//ƒIƒuƒWƒFƒNƒg‚ÌXVˆ—
+
+	effects->Update(dxCommon, camera, &bossenemy, player);
 	
-	XMFLOAT3 bpos = enemy[3]->GetPosition();
-	
-	
-	effects->Update(dxCommon, camera, enemy, player);
-
-	//enemyã«nullpträ»£å…¥ã™ã‚‹ã¨ãã¯æ•µãŒæ­»ã‚“ã ã‚‰
-	for (int i = 0; i < 10; i++) {
-		if (enemy[i] != nullptr) {
-			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ¤œçŸ¥
-			enemy[i]->Attack(player);
-			enemy[i]->ColMap(map,tst, mapx, mapy, MAX_X, MAX_Y);
-			enemy[i]->Update(Player_Pos);
-
-			enemy[i]->EnemySearchPlayer(player);
-			//ã‚‚ã—æ•µãŒæ­»ã‚“ã ã‚‰ç ´æ£„
-			if (enemy[i]->GetState_DEAD() == true) {
-				Destroy_unique(enemy[i]);
+	//bossenemy‚Énullptr‘ã“ü‚·‚é‚Æ‚«‚Í“G‚ª€‚ñ‚¾‚ç
+		if (bossenemy != nullptr) {
+			//ƒvƒŒƒCƒ„[‚ÌŒŸ’m
+			bossenemy->Motion(10);
+			bossenemy->Attack(player);
 			
+
+			bossenemy->Update(Player_Pos);
+			bossenemy->ColMap(map, tst, mapx, mapy, 200, 20);
+			bossenemy->EnemySearchPlayer(player);
+			//‚à‚µ“G‚ª€‚ñ‚¾‚ç”jŠü
+			if (bossenemy->GetState_DEAD() == true) {
+				Destroy_unique(bossenemy);
 			}
 		}
-	}
-	//enemy[3]->Update(Player_Pos);
+		//BossPos = bossenemy->GetPosition();
+	
+	//bossenemy[3]->Update(Player_Pos);
 	atb = BossEnemy::GetInstance()->GetaltAttack();
-	effects->BossAttackEffect(dxCommon, camera, atb, bpos);
+	
 	item->HealEfficasy(player);
-	item->Update(enemy);
+	item->Update(&bossenemy);
 	//Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
-	//ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸
-	if (Input::GetInstance()->TriggerKey(DIK_R)||(Player_Pos.y<=-50)) {//æŠ¼ã•ã‚ŒãŸã‚‰
-		BaseScene* scene = new ClearScene(sceneManager_);//æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
-		sceneManager_->SetnextScene(scene);//ã‚·ãƒ¼ãƒ³ã®ã‚»ãƒƒãƒˆ
+	//ƒV[ƒ“ƒ`ƒFƒ“ƒW
+	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//‰Ÿ‚³‚ê‚½‚ç
+		//BaseScene* scene = new ClearScene(sceneManager_);//Ÿ‚ÌƒV[ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+		//sceneManager_->SetnextScene(scene);//ƒV[ƒ“‚ÌƒZƒbƒg
 		//delete scene;
 	}
 }
 #pragma endregion 
 
-//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»
-#pragma region ãƒ¢ãƒ‡ãƒ«ã®æç”»
-void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
+//ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ
+#pragma region ƒ‚ƒfƒ‹‚Ì•`‰æ
+void BossScene1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	player->PreDraw();
 	player->Draw();
 	player->PostDraw();
 
-	for (int i = 0; i < 10; i++) {
-		if (enemy[i] != nullptr) {
-			enemy[i]->Draw();
+		if (bossenemy != nullptr) {
+			bossenemy->Draw();
 		}
-	}
-	
+
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1|| map[j][i] ==2) {
+			if (map[j][i] == 1 || map[j][i] == 2) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
@@ -420,70 +404,43 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	goal->PostDraw();
 
 }
-//sãƒ—ãƒ©ã‚¤ã¨ä»¥å¤–ã®æç”»
-void PlayScene::MyGameDraw(DirectXCommon* dxcomn)
+//sƒvƒ‰ƒC‚ÆˆÈŠO‚Ì•`‰æ
+void BossScene1::MyGameDraw(DirectXCommon* dxcomn)
 {
-
 	Sprite::PreDraw(dxcomn->GetCmdList());
-	background->Draw();
-	//setumei->Draw();
+	
 	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
-
-	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»
+	//ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ
 	SpriteDraw(dxcomn->GetCmdList());
 
-
-	//æ™®é€šã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»
+	//•’Ê‚ÌƒeƒNƒXƒ`ƒƒ‚Ì•`‰æ
 	Line::Draw(dxcomn);
 
-	//weffect->Draw(dxcomn);
-	GameUI::AllowUIDraw(dxcomn);
-	GameUI::TargetUIDraw(dxcomn);
-	GameUI::UIDraw(dxcomn);
-	GameUI::PlayerUIDraw(dxcomn);
-
+	GameUI::AllDraw(dxcomn);
+	
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
-	//FBXã®æç”»
+	//FBX‚Ì•`‰æ
 	object1->Draw(dxcomn->GetCmdList());
 
 }
 #pragma endregion
-//â†“ã«å…¥ã‚‹
+//«‚É“ü‚é
 #pragma region
-void PlayScene::Draw(DirectXCommon* dxcomn)
+void BossScene1::Draw(DirectXCommon* dxcomn)
 {
-	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å ´åˆã‚ã‘(Bã§ã¼ã‹ã— DãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)
-	switch (c_postEffect)
-	{
-	case Blur://ã¼ã‹ã—ã€€æç”»æº–é•ã†ã ã‘
-		postEffect->PreDrawScene(dxcomn->GetCmdList());
-		MyGameDraw(dxcomn);
-		postEffect->PostDrawScene(dxcomn->GetCmdList());
-
-		dxcomn->BeginDraw();
-		postEffect->Draw(dxcomn->GetCmdList());
-		ImGuiDraw();//imguiã¯æœ€å¾Œã®æ–¹å…¥ã‚Œã¨ã
-		dxcomn->EndDraw();
-		break;
-
-	case Default://æ™®é€šã®ã‚„ã¤ç‰¹ã«ä½•ã‚‚ã‹ã‹ã£ã¦ã„ãªã„
-		postEffect->PreDrawScene(dxcomn->GetCmdList());
-		postEffect->Draw(dxcomn->GetCmdList());
-		postEffect->PostDrawScene(dxcomn->GetCmdList());
-
 		dxcomn->BeginDraw();
 		MyGameDraw(dxcomn);
-		ImGuiDraw();
+		effects->ImGuiDraw();
+		ImGuiDraw();//imgui‚ÍÅŒã‚Ì•û“ü‚ê‚Æ‚­
+	
 		dxcomn->EndDraw();
-		break;
-	}
 }
 #pragma endregion
 
-void PlayScene::ImGuiDraw()
+void BossScene1::ImGuiDraw()
 {
 	ImGui::Begin("Obj1");
 	ImGui::SetWindowPos(ImVec2(0, 0));
@@ -498,15 +455,15 @@ void PlayScene::ImGuiDraw()
 		ImGui::ColorPicker3("light_color", spotLightColor);
 		ImGui::TreePop();
 	}
-	float x = BossEnemy::GetInstance()->GetScale().x;
+	float x;// = bossenemy->GetPosition().x;
 	if (ImGui::TreeNode("Effect_position")) {
 		ImGui::SliderFloat("positionX", &x, -200, 200);
-		ImGui::SliderInt("positionY", &atb, -200, 200);
+		ImGui::SliderFloat("positionY", &BossMoveSpeed, -200, 200);
 		//ImGui::SliderInt("positionZ", &elf, -200, 200);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("enemy_position")) {
-		
+
 		ImGui::TreePop();
 	}
 	float linex = Line::GetInstance()->getpos().x;
@@ -520,7 +477,7 @@ void PlayScene::ImGuiDraw()
 		ImGui::SliderFloat("time", &time, -200, 200);
 		ImGui::TreePop();
 	}
-	
+
 	if (ImGui::TreeNode("Old")) {
 		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
 		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
@@ -529,19 +486,9 @@ void PlayScene::ImGuiDraw()
 
 	ImGui::End();
 
-	ImGui::Begin("postEffect");
-	if (ImGui::RadioButton("Blur", &c_postEffect)) {
-		c_postEffect = Blur;
-	}
-	if (ImGui::RadioButton("Default", &c_postEffect)) {
-		c_postEffect = Default;
-	}
-
-	ImGui::End();
-
 }
-#pragma region è§£æ”¾éƒ¨åˆ†
-void PlayScene::Finalize()
+#pragma region ‰ğ•ú•”•ª
+void BossScene1::Finalize()
 {
 	//delete sceneManager_;
 

@@ -64,5 +64,7 @@ public:
 	static void TargetUIUpdate(XMMATRIX matview, XMMATRIX matprojection, bool flag);
 
 	static void TargetUIDraw(DirectXCommon* dxcomn);
+
+	static void AllDraw(DirectXCommon* dxcomn);
 };
 

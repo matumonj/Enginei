@@ -278,7 +278,7 @@ void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
 		Twine->SetColor({ 1,1,1,twcolor });
 	}
 	//int in = -1;
-	float dis[4];
+	float dis[10];
 	for (int i = 0; i < 10; i++) {
 		if (position[i] != nullptr) {
 			dis[i] = sqrtf((position[i]->GetPosition().x - needlepos.x) * (position[i]->GetPosition().x - needlepos.x) +

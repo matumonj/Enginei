@@ -23,7 +23,7 @@ void ThrowEnemy::Initialize()
 	//MobObject = new Object3d();
 	EnemyObj = Object3d::Create();
 	EnemyObj->SetModel(EnemyModel);
-	scale = { 0.5f,0.5f,0.5 };
+	scale = { 1.5f,1.5f,1.5 };
 	rotation = { 0,-90,0 };
 	//position = { 0,20,0 };
 	HP = 10;
@@ -97,19 +97,8 @@ void ThrowEnemy::Attack(Player* player)
 			}
 		}
 	}
-	//
-	Ray laserRay;
-	Sphere playersphere;
-	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
-	playersphere.radius = 0.5f;
-	laserRay.start = { Position.x,Position.y ,Position.z };
-	laserRay.dir = { -1,0,0,0 };
-
-	if (Collision::CheckRay2Sphere(laserRay, playersphere)==true)
-	{
-		player->SetHp(player->getHp() - 10);
-	};
-
+	//bi-mu
+	
 }
 
 void ThrowEnemy::Draw()
@@ -169,7 +158,7 @@ void ThrowEnemy::ProjectileMotion()
 	attackcount++;
 }
 
-void ThrowEnemy::ColMap(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y)
+void ThrowEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y)
 {
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {

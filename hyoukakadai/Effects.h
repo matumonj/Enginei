@@ -26,8 +26,10 @@ private:
 	//エフェクト用(ただプログラムでつくれるものはプログラムで作る方がいい　多用はいくない)
 	mEffekseer* efk = nullptr;
 	mEffekseer* attackefk = nullptr;
+	mEffekseer* bossattackefk = nullptr;
 	bool df;
 	bool attack;
+	bool b_attack;
 public:
 	~Effects();
 	//XMFLOAT3 GetPosition
@@ -39,12 +41,17 @@ public:
 	XMFLOAT3 a_Effect_Rot;
 	XMFLOAT3 a_Effect_SCl;
 
+	XMFLOAT3 b_Effect_Pos = {  };
+	XMFLOAT3 b_Effect_Rot = {0,90,0};
+	XMFLOAT3 b_Effect_SCl;
 public:
+	void BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera, bool altAttack, XMFLOAT3 bpos);
 	void Initialize(DirectXCommon* dxcomn, DebugCamera* camera);
 	void Update(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[],Player*player);
 	void Update(DirectXCommon* dxcomn, DebugCamera* camera, Enemy*enemy, Player* player);
 
 	void Draw(DirectXCommon*dxcomn);
 	void Finalize();
+	void ImGuiDraw();
 };
 

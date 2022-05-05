@@ -376,7 +376,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 				enemy->enemyappearance(tyutorial);
 				//プレイヤーの検知
 				enemy->Attack(player);
-				enemy->ColMap(map, mapx, mapy, MAX_X, MAX_Y);
+				enemy->ColMap(map,tstn, mapx, mapy, MAX_X, MAX_Y);
 				enemy->Update(Player_Pos);
 
 				enemy->EnemySearchPlayer(player);

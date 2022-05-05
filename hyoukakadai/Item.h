@@ -26,7 +26,7 @@ public:
 	void HealEfficasy(Player*player);
 	void GetItem(Player* plauer);
 private:
-	static const int itemMax = 4;
+	static const int itemMax = 10;
 	bool GetPossible[itemMax];
 	Object3d* itemObj[itemMax] = { nullptr };
 	Model* itemModel =  nullptr ;

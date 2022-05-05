@@ -8,6 +8,7 @@
 #include <string>
 #include"Input.h"
 #include"TyutorialSprite.h"
+#include"Object3d.h"
 /// <summary>
 /// “GƒLƒƒƒ‰‚ÌŠî’êƒNƒ‰ƒX
 /// </summary>
@@ -95,6 +96,6 @@ public:
 	void SetScale(XMFLOAT3 scale) { Scale = scale; }
 	void SetRotation(XMFLOAT3 rot) { Rotation = rot; }
 	XMFLOAT3 GetPosition() { return Position; }
-	virtual void ColMap(int map[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y) =0;
+	virtual void ColMap(int map[20][200] , std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y) =0;
 };
 

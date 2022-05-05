@@ -65,7 +65,7 @@ private:
 	Effects* effect;
 	TyutorialSprite* tyutorial;
 private:
-	
+	std::unique_ptr<Object3d>tstn[20][200];
 	XMFLOAT3 Player_Pos = { 20,0,0 };// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };

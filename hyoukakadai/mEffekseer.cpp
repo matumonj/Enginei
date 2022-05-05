@@ -1,5 +1,12 @@
 #include "mEffekseer.h"
 
+mEffekseer::~mEffekseer()
+{
+	_efkManager->Release();
+	_efkRenderer->Release();
+	_effect->Release();
+}
+
 //カメラ設定
 void mEffekseer::SyncronizeEffekseerCamera(DirectXCommon* dxCommon,DebugCamera* camera)
 {
@@ -16,7 +23,11 @@ void mEffekseer::SyncronizeEffekseerCamera(DirectXCommon* dxCommon,DebugCamera* 
 	_efkRenderer->SetCameraMatrix(fkViewMat);
 	_efkRenderer->SetProjectionMatrix(fkProjMat);
 }
-
+void mEffekseer::SetColor(float r, float g, float b)
+{
+	//_efkHandle= Effekseer::Color().
+//	_efkManager->SetAllColor(_efkHandle, { r,g,b});
+}
 void mEffekseer::EffekseerSetting(DirectXCommon* dxCommon, DebugCamera* camera,const EFK_CHAR*name1,const EFK_CHAR*name2)
 {
 	//とりあえずはこのまま
@@ -29,7 +40,7 @@ void mEffekseer::EffekseerSetting(DirectXCommon* dxCommon, DebugCamera* camera,c
 		1, //レンダーターゲット数
 		DXGI_FORMAT_UNKNOWN, //デプスフォーマット
 		false, //反対デプスありか
-		500);//最大パーティクルの数 できれば５００ぐらいがいいかも　１００００だと複数の時重くなりそう
+		1000);//最大パーティクルの数 できれば５００ぐらいがいいかも　１００００だと複数の時重くなりそう
 
 	_efkManager = Effekseer::Manager::Create(1000);//最大インスタンス数
 
@@ -89,11 +100,12 @@ void mEffekseer::EffekseerUpdate(DirectXCommon* dxCommon, DebugCamera* camera)
 	//_efkHandle = _efkManager->Play(_effect, positionx, positiony, positionz);
 	_efkManager->SetScale(_efkHandle, scalex, scaley, scalez);
 	_efkManager->SetRotation(_efkHandle, rotationx, rotationy, rotationz);
-	SyncronizeEffekseerCamera(dxCommon,camera);
+	SyncronizeEffekseerCamera(dxCommon, camera);
 	auto efkpos = _efkManager->GetLocation(_efkHandle);
-	efkpos.X += 0.1f;
+	//efkpos.X += 0.1f;
+	//_efkManager->
 	_efkManager->SetLocation(_efkHandle, efkpos);
-
+	
 }
 
 void mEffekseer::EffekseerDraw(ID3D12GraphicsCommandList* cmdList)
@@ -106,4 +118,6 @@ void mEffekseer::EffekseerDraw(ID3D12GraphicsCommandList* cmdList)
 	_efkManager->Draw();//エフェクト描画
 	_efkRenderer->EndRendering();//描画後処理
 	EffekseerRendererDX12::EndCommandList(_efkCmdList);
+
+	
 }

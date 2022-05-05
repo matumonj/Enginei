@@ -66,7 +66,7 @@ public:
     XMFLOAT3 GetPosition() { return Mob_Pos; }
     XMFLOAT3 GetRotation() { return Mob_Rot; }
     XMFLOAT3 GetScale() { return Mob_Scl; }
-    void ColMap(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);
+    void ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200],float mapy[15][200], const int X, const int Y);
     void enemyappearance(TyutorialSprite*sprite);
 };
 

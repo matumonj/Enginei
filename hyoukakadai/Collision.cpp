@@ -1,6 +1,6 @@
 #include "Collision.h"//collision
 #include"Line.h"
-void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y, float& grav,float& time,float& movespeed,bool &jumpf, XMFLOAT3 &Player_Pos, XMFLOAT3 &Old_Pos)
+void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos)
 {
 	//grav-grav
 	//time-time
@@ -10,7 +10,7 @@ void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
-			if (map[j][i] == 1&&Line::GetInstance()->Getboundflag()==false) {
+			if (map[j][i] == 1 && Line::GetInstance()->Getboundflag() == false) {
 				mapx[j][i] = tst[j][i]->GetPosition().x;
 				mapy[j][i] = tst[j][i]->GetPosition().y;
 				height = tst[j][i]->GetScale().y;
@@ -23,7 +23,7 @@ void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200
 						grav = 0.0f;
 						time = 0;
 						jumpf = false;
-					//	Line::GetInstance()->SetBondflag(false);
+						//	Line::GetInstance()->SetBondflag(false);
 						break;
 					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
 						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
@@ -61,7 +61,7 @@ void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200
 
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
-			if (map[j][i] == 1&&Line::GetInstance()->Getboundflag()==true) {
+			if (map[j][i] == 1 && Line::GetInstance()->Getboundflag() == true) {
 				mapx[j][i] = tst[j][i]->GetPosition().x;
 				mapy[j][i] = tst[j][i]->GetPosition().y;
 				height = tst[j][i]->GetScale().y;
@@ -77,12 +77,12 @@ void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200
 
 						Line::GetInstance()->SetBondflag(false);
 						Line::GetInstance()->SetSubradius(0);
-						
+
 						break;
 					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
 						// Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
 						Line::GetInstance()->Setpos(Player_Pos.x, Player_Pos.y);
-					
+
 						//Line::GetInstance()->SetBondflag(false);
 					//	Line::GetInstance()->SetSubradius(0);
 						Line::GetInstance()->Setmapcol(false);
@@ -90,7 +90,7 @@ void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200
 
 						Line::GetInstance()->SetBondflag(false);
 						Line::GetInstance()->SetSubradius(0);
-						
+
 						break;
 					}
 
@@ -110,13 +110,13 @@ void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200
 
 						Line::GetInstance()->SetBondflag(false);
 						Line::GetInstance()->SetSubradius(0);
-						
+
 						break;
 					}
 					//プレイヤーの右辺
 					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
 						Line::GetInstance()->Setpos(Player_Pos.x, Player_Pos.y);
-						
+
 						//Line::GetInstance()->SetBondflag(false);
 						//Line::GetInstance()->SetSubradius(0);
 						Line::GetInstance()->Setmapcol(false);
@@ -124,7 +124,58 @@ void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200
 
 						Line::GetInstance()->SetBondflag(false);
 						Line::GetInstance()->SetSubradius(0);
-						
+
+						break;
+					}
+				} else {
+					movespeed = 0.2f;
+				}
+			}
+		}
+	}
+	//
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			if (map[j][i] == 2 && Line::GetInstance()->Getboundflag() == false && Line::GetInstance()->getcolfsub() == false) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
+					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						jumpf = false;
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+
+				} else {
+					movespeed = 0.2f;
+					grav = 0.03;
+				}
+
+				//プレイヤーの左辺
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+
+						Player_Pos.y = Player_Pos.y + 0.001f;
+						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+
+						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
+						//Line::GetInstance()->SetBondflag(false);
 						break;
 					}
 				} else {
@@ -134,57 +185,117 @@ void Collision::ColMap1(int map[15][200], std::unique_ptr<Object3d>  tst[15][200
 		}
 	}
 
-//
+	/// <summary>
+	/// 
+	/// 
+	/// </summary>
+	/// <param name="dxCommon"></param>
 
-for (int i = 0; i < X; i++) {
-	for (int j = 0; j < Y; j++) {
-		if (map[j][i] == 2 && Line::GetInstance()->Getboundflag() == false && Line::GetInstance()->getcolfsub() == false) {
-			mapx[j][i] = tst[j][i]->GetPosition().x;
-			mapy[j][i] = tst[j][i]->GetPosition().y;
-			height = tst[j][i]->GetScale().y;
-			width = tst[j][i]->GetScale().x;
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
 
-			if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
-				if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-					Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-					//moveSpeed = 0;
-					grav = 0.0f;
-					time = 0;
-					jumpf = false;
-					//Line::GetInstance()->SetBondflag(false);
-					break;
-				} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-					Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-					//Line::GetInstance()->SetBondflag(false);
-					break;
+			if (map[j][i] == 2 && Line::GetInstance()->Getboundflag() == true && Line::GetInstance()->getcolfsub() == true) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y + 0.2f;
+				width = tst[j][i]->GetScale().x + 0.2f;
+
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
+					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+						map[j][i] = 0;
+						Line::GetInstance()->setcolfsub(false);
+						break;
+					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+						map[j][i] = 0;
+						Line::GetInstance()->setcolfsub(false);
+						break;
+					}
+
 				}
-
-			} else {
-				movespeed= 0.2f;
-				grav = 0.03;
-			}
-
-			//プレイヤーの左辺
-			if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-				if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-
-					Player_Pos.y = Player_Pos.y + 0.001f;
-					Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-					//Line::GetInstance()->SetBondflag(false);
-					break;
+				//プレイヤーの左辺
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						map[j][i] = 0;
+						Line::GetInstance()->setcolfsub(false);
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+						map[j][i] = 0;
+						Line::GetInstance()->setcolfsub(false);
+						break;
+					}
 				}
-				//プレイヤーの右辺
-				else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-
-					Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-					//Line::GetInstance()->SetBondflag(false);
-					break;
-				}
-			} else {
-			movespeed = 0.2f;
 			}
 		}
 	}
+}
+float Collision::GetLen(XMFLOAT3 position, XMFLOAT3 position2)
+{
+	float len;
+	len = sqrt((position.x - position2.x) * (position.x - position2.x) + (position.y - position2.y) * (position.y - position2.y));
+	return len;
+}
+//
+void Collision::ColMapb1(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[15][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos,Enemy*enemy)
+{
+	//grav-grav
+	//time-time
+	//movespeed-movespeed
+	float height;//
+	float width;
+	XMFLOAT3 Player_Scl = { 1,1,1 };
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			if (map[j][i] == 1) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
+					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						jumpf = false;
+						//	Line::GetInstance()->SetBondflag(false);
+						break;
+					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+
+				} else {
+					movespeed = 0.2f;
+					grav = 0.03;
+				}
+
+				//プレイヤーの左辺
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+
+						Player_Pos.y = Player_Pos.y + 0.001f;
+						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+
+						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+				} else {
+					movespeed = 0.2f;
+				}
+			}
+		}
+	}
+	//enemy->Setposition(Player_Pos);
 }
 
 /// <summary>
@@ -193,45 +304,6 @@ for (int i = 0; i < X; i++) {
 /// </summary>
 /// <param name="dxCommon"></param>
 
-for (int i = 0; i < X; i++) {
-	for (int j = 0; j < Y; j++) {
-
-		if (map[j][i] == 2 && Line::GetInstance()->Getboundflag() == true && Line::GetInstance()->getcolfsub() == true) {
-			mapx[j][i] = tst[j][i]->GetPosition().x;
-			mapy[j][i] = tst[j][i]->GetPosition().y;
-			height = tst[j][i]->GetScale().y + 0.2f;
-			width = tst[j][i]->GetScale().x + 0.2f;
-
-			if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
-				if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-					map[j][i] = 0;
-					Line::GetInstance()->setcolfsub(false);
-					break;
-				} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-					map[j][i] = 0;
-					Line::GetInstance()->setcolfsub(false);
-					break;
-				}
-
-			}
-			//プレイヤーの左辺
-			if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-				if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-					map[j][i] = 0;
-					Line::GetInstance()->setcolfsub(false);
-					break;
-				}
-				//プレイヤーの右辺
-				else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-					map[j][i] = 0;
-					Line::GetInstance()->setcolfsub(false);
-					break;
-				}
-			}
-		}
-	}
-}
-}
 void Collision::ClosestPtPoint2Triangle(const DirectX::XMVECTOR& point, const Triangle& triangle, DirectX::XMVECTOR* closest)
 {
 	// pointがp0の外側の頂点領域の中にあるかどうかチェック
@@ -507,16 +579,16 @@ bool Collision::CheckRay2Sphere(const Ray& lay, const Sphere& sphere, float* dis
 	return true;
 }
 
-float Collision::LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d** map[], Player*player,float radius)
+float Collision::LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d** map[], Player* player, float radius)
 {
 	BoxVertex** MapObject;
 	BoxVertex PlayerObject;
 
 	PlayerObject.Left = player->GetPosition().x - 1;
 	PlayerObject.Right = player->GetPosition().x + 1;
-	PlayerObject.Up = player->GetPosition().y+ 1;
-	PlayerObject.Down= player->GetPosition().y - 1;
-	
+	PlayerObject.Up = player->GetPosition().y + 1;
+	PlayerObject.Down = player->GetPosition().y - 1;
+
 	for (int i = 0; i < Map_Y; i++) {
 		for (int j = 0; j < Map_X; j++) {
 			MapObject[i][j].Right = map[i][j]->GetPosition().x + 1;
@@ -531,7 +603,7 @@ float Collision::LinetoBoxCollision(const int Map_X, const int Map_Y, Object3d**
 			return MapObject[i][j].Right >= PlayerObject.Left && PlayerObject.Right >= MapObject[i][j].Left && MapObject[i][j].Up >= PlayerObject.Down && PlayerObject.Up >= MapObject[i][j].Down;
 		}
 	}
-	
+
 }
 
 bool Collision::BoxCollision_Down(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2) {
@@ -601,7 +673,7 @@ bool Collision::BoxCollision_Left(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 o
 	//object1の左頂点
 	Object2.Left = object2.x - radius2.x;
 	//object1の右頂点
-	Object2.Right = Object2.Left+2;
+	Object2.Right = Object2.Left + 2;
 	//object1の下頂点
 	Object2.Down = object2.y - radius2.y;
 	//object1の上頂点
@@ -626,7 +698,7 @@ bool Collision::BoxCollision_Right(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 
 	//object1の右頂点
 	Object2.Right = object2.x + radius2.x;
 	//object1の左頂点
-	Object2.Left = Object2.Right-2;
+	Object2.Left = Object2.Right - 2;
 	//object1の下頂点
 	Object2.Down = object2.y - radius2.y;
 	//object1の上頂点

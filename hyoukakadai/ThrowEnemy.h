@@ -52,7 +52,7 @@ public:
     void Attack(Player* player)override;
     void Motion(int time)override;
     void ProjectileMotion();
-    void ColMap(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y)override;
+    void ColMap(int map[20][200] , std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y)override;
     bool GetStateAttack() { if (enemyState == State::Attack)return true; }
     void enemyappearance(TyutorialSprite* sprite) override{};
    

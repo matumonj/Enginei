@@ -211,6 +211,14 @@ void GameUI::PlayerUIDraw(DirectXCommon* dxcomn)
 	PlayerHP->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
+void GameUI::AllDraw(DirectXCommon* dxcomn)
+{
+	//weffect->Draw(dxcomn);
+	AllowUIDraw(dxcomn);
+	TargetUIDraw(dxcomn);
+	UIDraw(dxcomn);
+	PlayerUIDraw(dxcomn);
+}
 
 void GameUI::Finalize()
 {
