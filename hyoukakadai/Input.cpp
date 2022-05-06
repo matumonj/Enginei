@@ -39,7 +39,7 @@ void Input::Initialize(WinApp* winapp)
 	//c
 	// 入力データ形式のセット
 	if (devC != nullptr) {
-		result = devC->SetDataFormat(&c_dfDIJoystick); // 標準形式
+		result = devC->SetDataFormat(&c_dfDIJoystick2); // 標準形式
 
 		// 排他制御レベルのセット
 		result = devC->SetCooperativeLevel(winapp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
