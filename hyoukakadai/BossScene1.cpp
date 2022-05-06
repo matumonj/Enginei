@@ -204,18 +204,18 @@ void BossScene1::Update(DirectXCommon* dxCommon)
 	// –³”½‰ž”ÍˆÍ
 
 	//¶
-	// •ûŒü‚¾‚¯‚ð’²‚×‚é•û–@
-	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	//{
-	//	// ¶‚ÉŒX‚¯‚½
-	//	Player_Pos.x -= moveSpeed;
+	 //•ûŒü‚¾‚¯‚ð’²‚×‚é•û–@
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+		// ¶‚ÉŒX‚¯‚½
+		Player_Pos.x -= moveSpeed;
 
-	//}
-	//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	//{
-	//	// ‰E‚ÉŒX‚¯‚½
-	//	Player_Pos.x += moveSpeed;
-	//}
+	}
+	else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+		// ‰E‚ÉŒX‚¯‚½
+		Player_Pos.x += moveSpeed;
+	}
 
 
 	player->PlayerMoves(Player_Pos, moveSpeed);

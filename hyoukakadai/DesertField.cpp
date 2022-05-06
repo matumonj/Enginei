@@ -510,7 +510,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
 			enemy[i]->Attack(player);
-			enemy[i]->ColMap(map, mapx, mapy, MAX_X, MAX_Y);
+			enemy[i]->ColMap(map, tst, mapx,mapy,MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
 
 			enemy[i]->EnemySearchPlayer(player);

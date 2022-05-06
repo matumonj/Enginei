@@ -28,6 +28,7 @@
 #include"Model.h"
 #include"Collision.h"
 #include"BaseScene.h"
+#include"DesertField.h"
 #include"DebugTxt.h"
 #include"LightGroup.h"
 #include"DebugCamera.h"
