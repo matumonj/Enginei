@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include"Input.h"
 #include"PlayScene.h"
+#include"DesertField.h"
 #include"Tutorial.h"
 #include"SceneManager.h"
 #include"imgui.h"
@@ -26,7 +27,7 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 {
 	//ENTERで次のシーンへ
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {//押されたら
-		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 	//if (Input::GetInstance()->TriggerKey(DIK_F))

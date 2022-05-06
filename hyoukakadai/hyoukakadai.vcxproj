@@ -172,6 +172,7 @@
     <ClCompile Include="CollisionPrimitive.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="DebugTxt.cpp" />
+    <ClCompile Include="DesertField.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="Effects.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="CollisionTypes.h" />
     <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="DebugTxt.h" />
+    <ClInclude Include="DesertField.h" />
     <ClInclude Include="Destroy.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DirectXCommon.h" />

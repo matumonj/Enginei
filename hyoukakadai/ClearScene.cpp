@@ -1,6 +1,7 @@
 #include "ClearScene.h"
 #include"Input.h"
 #include"PlayScene.h"
+#include"DesertField.h"
 #include"Tutorial.h"
 #include"SceneManager.h"
 #include"imgui.h"
