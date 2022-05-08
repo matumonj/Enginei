@@ -46,7 +46,7 @@ protected:
 		DEAD,
 	};
 	State enemyState = State::ALIVE;
-	int HP = 10;
+	int HP;// = 10;
 public:
 
 	inline bool GetState_DEAD() {
@@ -64,9 +64,11 @@ public:
 			return false;
 		}
 	}
-	void SetDead(bool f) { if (f) { enemyState = State::DEAD; } }
-	void SetHP(int HP) { this->HP = HP; }
-
+	void SetDead(bool f) {
+		if (f) { enemyState = State::DEAD; } 
+	}
+	virtual void SetHP(int HP) { this->HP = HP; }
+	virtual int GetHP() { return HP; }
 	virtual void EnemySearchPlayer(Player* player) = 0;
 	virtual void enemyappearance(TyutorialSprite* sprite) = 0;
 	
@@ -85,7 +87,7 @@ public:
 	/// </summary>
 	virtual void Draw();
 
-	virtual void Motion(int timer)=0;
+	virtual void Motion(Player* player)=0;
 	//virtual float Distance(Player* player);
 	virtual void Attack(Player*player)=0;
 	/// <summary>

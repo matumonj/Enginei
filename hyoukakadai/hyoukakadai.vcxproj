@@ -164,6 +164,7 @@
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
+    <ClCompile Include="BossEnemy2.cpp" />
     <ClCompile Include="BossScene1.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClearScene.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="ThronEnemy.cpp" />
     <ClCompile Include="ThrowEnemy.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TouchableObject.cpp" />
@@ -217,6 +219,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BossEnemy.h" />
+    <ClInclude Include="BossEnemy2.h" />
     <ClInclude Include="BossScene1.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ClearScene.h" />
@@ -266,6 +269,7 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="ThronEnemy.h" />
     <ClInclude Include="ThrowEnemy.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TouchableObject.h" />

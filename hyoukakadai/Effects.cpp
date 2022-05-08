@@ -90,8 +90,8 @@ void Effects::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(200, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("cameraposition")) {
-		
-		//ImGui::SliderFloat("cy", &cy, 200, -200);
+		float cy;
+		ImGui::SliderFloat("cy", &b_Effect_Rot.y, 200, -200);
 		ImGui::TreePop();
 	}
 	ImGui::End();
@@ -159,13 +159,17 @@ void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Pla
 	//efk1->EffekseerUpdate(dxcomn, camera);
 
 }
-void Effects::BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera, bool altAttack, XMFLOAT3 bpos)
+void Effects::BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera, bool stay,bool altAttack, XMFLOAT3 bpos)
 {
 	b_Effect_Pos =bpos;
-	
-	b_Effect_SCl = {1,1,10 };
-	if (altAttack) {
+	if (stay == true) {
+		b_Effect_SCl = { 0.5,0.5,0.01 };
+	}
+	else {
+		b_Effect_SCl = { 1,2.5,10 };
+	}
 
+	if (altAttack||stay) {
 		b_attack = true;
 	}
 	else {
@@ -173,7 +177,7 @@ void Effects::BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera, bool 
 	}
 	if (b_attack) {
 		bossattackefk->Load_Effect();
-		b_attack = false;
+		//b_attack = false;
 		
 	}
 	bossattackefk->SetPosition(b_Effect_Pos.x, b_Effect_Pos.y, b_Effect_Pos.z);

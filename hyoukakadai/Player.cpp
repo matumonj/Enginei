@@ -97,9 +97,7 @@ void Player::Attack(XMFLOAT3 playerpos)
 			timer = 0;
 		}
 	}
-	HP = max(HP, 0);
-	HP = min(HP, 10);
-
+	
 }
 void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 {
@@ -122,7 +120,7 @@ void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 
 
 
-void Player::CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos)
+void Player::CollisionAttack1(Enemy*enemy, XMFLOAT3 playerpos)
 {
 	damageArea.Area_s = { position.x - Area_X_s,position.y - 8 };
 	damageArea.Area_e = { position.x + Area_X_e ,position.y + 5 };
@@ -130,12 +128,12 @@ void Player::CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos)
 	//当たり判定
 
 	if (action == Action::Attack) {
-		for (int i = 0; i < 10; i++)
-		{
-			if (enemy != nullptr) {
-				if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy->GetPosition().x - 1,enemy->GetPosition().y - 1 }, { enemy->GetPosition().x + 1,enemy->GetPosition().y + 1 }) == true) {
-					enemy->SetDead(true);
-				}
+		
+		if (enemy != nullptr) {
+			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e,
+				{ enemy->GetPosition().x - 10,enemy->GetPosition().y - 10 },
+				{ enemy->GetPosition().x + 10,enemy->GetPosition().y + 10 }) == true) {
+				enemy->SetHP(enemy->GetHP() - 1);
 			}
 		}
 	}

@@ -4,12 +4,14 @@
 #include"DebugCamera.h"
 #include"Destroy.h"
 #include"Line.h"
+#include"BossEnemy.h"
 //糸にかかわるUI
 using namespace DirectX;
 Sprite* GameUI::LineLength = nullptr;
 Sprite* GameUI::LineLengthout = nullptr;
 Sprite* GameUI::Attention[3] = { nullptr };
 Sprite* GameUI::PlayerHP = nullptr;
+Sprite* GameUI::BossHP;
 nTexture* GameUI::AllowTexure = nullptr;
 nTexture* GameUI::TargetTexture = nullptr;
 
@@ -18,6 +20,7 @@ XMFLOAT2 GameUI::lscl, GameUI::loutscl;//スケール
 XMFLOAT3 GameUI::Alowpos, GameUI::Alowrot, GameUI::Alowscl = { 1,0.5,10 };
 XMFLOAT3 GameUI::Targetpos, GameUI::Targetrot, GameUI::Targetscl = { 0.8,0.8,1 };
 XMFLOAT2 GameUI::playerHPPos, GameUI::playerHPScl; //座標
+XMFLOAT2 GameUI::BossHPpos, GameUI::BossHPscl;
 
 float GameUI::alpha = 0.5, GameUI::walpha = 0, GameUI::Targetalpha = 0;
 float GameUI::tempx = 0;
@@ -49,9 +52,19 @@ void GameUI::UISpriteSet()
 	lscl = { 0,40 };
 	Attention[0]->SetSize({ 1500,800 });
 	Attention[0]->SetPosition({ WinApp::window_width / 2 - 600,WinApp::window_height / 2 });
-
+	BossHP= Sprite::Create(10, { 0.0f,-200.0f });
+	BossHPpos = { 200,800 };
 }
-
+void GameUI::BossUIUpdate(Enemy* enemy) {
+	if (enemy != nullptr) {
+		float f = enemy->GetHP() * 10;
+		BossHPscl = { f ,70 };
+		BossHP->SetPosition(BossHPpos);
+		BossHP->SetSize(BossHPscl);
+		BossHP->setcolor({ 1,1,1,1 });
+	}
+	//BossHP->SetSize(BossHPscl);
+}
 void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 {
 	lsclMax = 300;// loutscl.x - 30;
@@ -78,7 +91,7 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 		tempx = loutscl.x;
 	}
 	AttentionUI();
-
+	
 	LineLength->SetPosition(lpos);
 	LineLength->SetSize(lscl);
 	LineLengthout->SetPosition(loutpos);
@@ -92,6 +105,7 @@ void GameUI::UIDraw(DirectXCommon* dxcomn)
 	Attention[0]->Draw();
 	LineLengthout->Draw();
 	LineLength->Draw();
+	BossHP->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
 
@@ -199,7 +213,7 @@ void GameUI::PlayerUISet()
 void GameUI::PlayerUIUpdate(Player* player)
 {
 
-	playerHPScl.x = player->getHp() * 50;
+	playerHPScl.x = player->getHp() * 5;
 	PlayerHP->SetSize(playerHPScl);
 	PlayerHP->SetPosition(playerHPPos);
 	PlayerHP->setcolor({ 1,1,1,1 });

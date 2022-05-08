@@ -87,6 +87,18 @@
     <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\エフェクト">
       <UniqueIdentifier>{c918944e-2360-46e1-941b-593efd2a13b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Boss">
+      <UniqueIdentifier>{75446c8f-a807-4a83-a537-1967560974f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Mob">
+      <UniqueIdentifier>{ddca3d5b-f200-4ae9-a0c9-181e3d539385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Thorn">
+      <UniqueIdentifier>{07862206-f52c-4950-8418-d4889e430317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Throw">
+      <UniqueIdentifier>{a162c6c0-ce0d-4e93-a90a-402832c49c86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -167,12 +179,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\基底クラス</Filter>
     </ClCompile>
-    <ClCompile Include="BossEnemy.cpp">
-      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
-    </ClCompile>
-    <ClCompile Include="MobEnemy.cpp">
-      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
-    </ClCompile>
     <ClCompile Include="Effects.cpp">
       <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\エフェクト</Filter>
     </ClCompile>
@@ -218,9 +224,6 @@
     <ClCompile Include="pEffect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ThrowEnemy.cpp">
-      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
-    </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -242,8 +245,23 @@
     <ClCompile Include="Scene2.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="BossEnemy.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="MobEnemy.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Mob</Filter>
+    </ClCompile>
+    <ClCompile Include="ThronEnemy.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Thorn</Filter>
+    </ClCompile>
+    <ClCompile Include="ThrowEnemy.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="BossEnemy2.cpp">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Boss</Filter>
+    </ClCompile>
     <ClCompile Include="BossScene1.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -334,12 +352,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\基底クラス</Filter>
     </ClInclude>
-    <ClInclude Include="BossEnemy.h">
-      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="MobEnemy.h">
-      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
-    </ClInclude>
     <ClInclude Include="Effects.h">
       <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\エフェクト</Filter>
     </ClInclude>
@@ -394,9 +406,6 @@
     <ClInclude Include="Destroy.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ThrowEnemy.h">
-      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -420,6 +429,21 @@
     </ClInclude>
     <ClInclude Include="BossScene1.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BossEnemy2.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BossEnemy.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="MobEnemy.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Mob</Filter>
+    </ClInclude>
+    <ClInclude Include="ThronEnemy.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Thorn</Filter>
+    </ClInclude>
+    <ClInclude Include="ThrowEnemy.h">
+      <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Throw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

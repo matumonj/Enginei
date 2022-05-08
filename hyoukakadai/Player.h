@@ -33,7 +33,7 @@ public:
 	void OnCollision(const CollisionInfo& info)override;
 	void Attack(XMFLOAT3 playerpos);
 	void CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos);
-	void CollisionAttack(Enemy*enemy, XMFLOAT3 playerpos);
+	void CollisionAttack1(Enemy*enemy, XMFLOAT3 playerpos);
 	void PlayerMoves(XMFLOAT3& move,float moveSpeed);
 	void FlyingAttack(Enemy*enemy);
 	void FlyingAttack(std::unique_ptr<Enemy> enemy[]);
@@ -48,7 +48,7 @@ public:
 	bool GetRot_Right() { if (playerRot == State::Right) return true; }
 	void Finalize();
 private:
-	int HP = 10;
+	int HP = 100;
 	int AttackCoolTime = 10;
 	int index = -1;
 	float dis[2];

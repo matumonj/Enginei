@@ -365,7 +365,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 		player->Attack(Player_Pos);
 		player->FlyingAttack(enemy);
-		player->CollisionAttack(enemy, Player_Pos);
+		player->CollisionAttack1(enemy, Player_Pos);
 
 		SetPrm();//パラメータのセット
 

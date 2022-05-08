@@ -12,7 +12,9 @@ ThrowEnemy::ThrowEnemy()
 ThrowEnemy::~ThrowEnemy()
 {
 	delete EnemyObj, EnemyModel;
-	delete *ThrowObj, *ThrowModel;
+	for (int i = 0; i < _countof(ThrowModel); i++) {
+		delete ThrowObj[i], ThrowModel[i];
+	}
 }
 void ThrowEnemy::Initialize()
 {
@@ -60,7 +62,7 @@ void ThrowEnemy::Update(XMFLOAT3 position)
 
 		break;
 	case State::Attack:
-		ProjectileMotion();
+		ProjectileMotion(position);
 		rotation.x++;
 		break;
 	case State::None:
@@ -120,7 +122,7 @@ void ThrowEnemy::Draw()
 	if (ImGui::SliderFloat("y", &Position.y, 200, -200));
 	ImGui::End();
 }
-void ThrowEnemy::Motion(int time)
+void ThrowEnemy::Motion(Player* player)
 {
 
 }
@@ -129,7 +131,7 @@ void ThrowEnemy::EnemySearchPlayer(Player* time)
 
 }
 
-void ThrowEnemy::ProjectileMotion()
+void ThrowEnemy::ProjectileMotion(XMFLOAT3 position)
 {
 	for (int i = 0; i < 10; i++) {
 		if (throwparam[i].flag == true) {
@@ -137,8 +139,14 @@ void ThrowEnemy::ProjectileMotion()
 			throwparam[i].movex=(throwparam[i].initialvec_x* throwparam[i].time)/600/(i+1);
 			throwparam[i].movey=(throwparam[i].initialvec_y * throwparam[i].time+
 				0.5f * throwparam[i].grav * throwparam[i].time * throwparam[i].time) / 600/(i+1);
-			thposition[i].x -= throwparam[i].movex*2;
+			if (position.x <= Position.x) {
+				thposition[i].x -= throwparam[i].movex * 2;
+			}
+			else {
+				thposition[i].x += throwparam[i].movex * 2;
+			}
 			thposition[i].y += throwparam[i].movey*2;
+
 			if (thposition[i].y < Position.y) {
 				//throwparam[i].flag = false;
 			}

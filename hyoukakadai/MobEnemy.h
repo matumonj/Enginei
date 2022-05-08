@@ -53,7 +53,7 @@ public:
     /// </summary>
     void Finalize()override;
     void Follow(Player*player);
-    void Motion(int time)override;
+    void Motion(Player* player)override;
     void Attack(Player*player)override;
     float angleXs, angleZs, angleRs;
     float centerSpeed = 0.1f;

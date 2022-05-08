@@ -20,5 +20,6 @@ private:
 public:
 	inline float easeIn();
 	inline float easeOut();
+	static void Follow(XMFLOAT3& position, XMFLOAT3& position2,float dis,float speed);
 };
 

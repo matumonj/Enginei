@@ -322,7 +322,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemy(enemy);
+	Line::CollisionEnemys(enemy);
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
@@ -373,7 +373,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	}
 	//enemy[3]->Update(Player_Pos);
 	atb = BossEnemy::GetInstance()->GetaltAttack();
-	effects->BossAttackEffect(dxCommon, camera, atb, bpos);
+	//effects->BossAttackEffect(dxCommon, camera, atb, bpos);
 	item->HealEfficasy(player);
 	item->Update(enemy);
 	//Fader::FeedSpriteUpdate();

@@ -24,12 +24,14 @@ private:
 	static Sprite* LineLengthout;
 	static Sprite* Attention[3];
 	static Sprite* PlayerHP;
+	static Sprite* BossHP;
 	static XMFLOAT2 lpos,loutpos;//座標
 	static XMFLOAT2 lscl,loutscl;//スケール
 	static float tempx;
 	static float lsclMax;
 	static float alpha;
 	static float walpha;
+	static XMFLOAT2 BossHPpos, BossHPscl;
 	static nTexture* AllowTexure;
 	static XMFLOAT3 Alowpos, Alowscl,Alowrot;//座標
 	static nTexture* TargetTexture;
@@ -39,6 +41,7 @@ private:
 	static XMFLOAT2 playerHPPos, playerHPScl;//座標 
 	static float Targetalpha;
 public:
+	static void BossUIUpdate(Enemy* enemy);
 	float Getsclx() { return loutscl.x; }
 	static void UISpriteSet();
 	static void UIUpdate(float length,bool flag, bool &boundflag,float movement);

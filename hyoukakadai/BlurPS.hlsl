@@ -9,8 +9,8 @@ float4 main(PSInput In) : SV_Target0
 
     // step-1 基準テクセル+近傍8テクセルの平均を計算する
     // 2.5テクセル分ずらすためのUV値を求める
-    float offsetU = 1.5f / 1280.0f;
-    float offsetV = 1.5f / 720.0f;
+    float offsetU = 1000.5f / 1280.0f;
+    float offsetV = 600.5f / 720.0f;
 
     // 基準テクセルから右のテクセルのカラーをサンプリングする
     color += sceneTexture.Sample(Sampler, In.uv + float2(offsetU, 0.0f));

@@ -104,7 +104,7 @@ void mEffekseer::EffekseerUpdate(DirectXCommon* dxCommon, DebugCamera* camera)
 	auto efkpos = _efkManager->GetLocation(_efkHandle);
 	//efkpos.X += 0.1f;
 	//_efkManager->
-	_efkManager->SetLocation(_efkHandle, efkpos);
+	//_efkManager->SetLocation(_efkHandle, efkpos);
 	
 }
 

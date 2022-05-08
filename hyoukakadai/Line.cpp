@@ -135,14 +135,14 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		//	needlerot.z = +315;
 		//}
 	//}
-	if (!elf) {
+	if (!elf&&!mapcol) {
 		linex2 = tempx + cosf((lineangle)*PI / 180.0f) * subradius;
 		liney2 = tempy + sinf((lineangle)*PI / 180.0f) * subradius + 0.5f;
 	}
 	//////////中心点//////飛ばす角度///////////////////半径(距離)
 	if (notdoubletuch == true) {
 		if (Input::GetInstance()->TriggerButtonRB() || Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			Line::GetInstance()->SetTrigger(true);
+			//Line::GetInstance()->SetTrigger(true);
 			trigger = true;//線を伸ばすフラグね
 			elf = false;
 			stopflag = false;
@@ -172,7 +172,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 
 		}
 
-		if ((Input::GetInstance()->TriggerButtonB() || Input::GetInstance()->TriggerKey(DIK_D)) && elf) {
+		if (( Input::GetInstance()->TriggerKey(DIK_D)) && elf) {
 			boundflag = true;//線の終点へ吸い付くフラグ
 		}
 
@@ -190,7 +190,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			((player->GetPosition().y - liney2) * (player->GetPosition().y - liney2))
 		);
 		//プレイヤーと紐の距離が一定以内に縮まったら
-		if (distance <= 0.8f) {
+		if (distance <= 2.0f) {
 			colf = true;//UIゲージ減らす処理gameui.cppの方
 
 			//elf = false;
@@ -198,9 +198,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			subradius = 0;//線の長さを0に
 			stopflag = true;
 			notdoubletuch = true;
-		} else if (distance <= 2.0f) {
-			colfsub = true;//UIゲージ減らす処理gameui.cppの方
-		}
+		} 
 
 	}
 	//先の長さが最大超えた、またはブロックあたったらその時点のプレイヤーと線の距離を求める（その距離分ゲージ減らす）
@@ -218,8 +216,8 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		moveSpeed = 0.5f;
 		Player_Pos.x += (FollowangleX / FollowangleR) * moveSpeed;
 		Player_Pos.y += (FollowangleZ / FollowangleR) * moveSpeed;
-		stopflag = true;
-		notdoubletuch = true;
+		//stopflag = true;
+		//notdoubletuch = true;
 	} else {
 
 		//吸い付くフラグがFALSEんときだけ中心点をプレイヤーの方に
@@ -247,8 +245,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	Twine->CreateLineTexture(linex, linex2, liney, liney2);
 	Twine->SetPosition(po);
 	Twine->Update(matview, matprojection);
-	Twine->SetColor({ 1, 1, 1, twcolor
-		});
+	
 
 	NeedleObj->SetPosition({ linex2,liney2,Player_Pos.z });
 	//needlerot = player->GetRotation();
@@ -270,7 +267,7 @@ void Line::Draw(DirectXCommon* dxcomn)
 }
 
 
-void Line::CollisionEnemy(std::unique_ptr<Enemy>position[])
+void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 {
 	if (elf) {
 		Twine->SetColor({ 1,0,0,twcolor });
@@ -349,14 +346,17 @@ void Line::CollisionEnemy(Enemy* position)
 	if (mapcol) {
 		oldlinex = linex2;
 		oldliney = liney2;
+		
 		if (elf) {
 			linex2 = oldlinex;
 			liney2 = oldliney;
+			
 		}
 	}
 
 	if (returnflag || colf) {
 		elf = false;
+		//boundflag = false;
 		mapcol = false;
 	}
 }
