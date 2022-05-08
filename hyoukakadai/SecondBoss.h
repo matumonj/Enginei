@@ -6,6 +6,7 @@
 class SecondBoss :
     public Enemy
 {
+    //
     public:
         /// <summary>
         /// コンストラクタ
