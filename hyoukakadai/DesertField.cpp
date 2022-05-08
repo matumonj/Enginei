@@ -471,7 +471,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemy(enemy);
+	Line::CollisionEnemy(enemy->get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
