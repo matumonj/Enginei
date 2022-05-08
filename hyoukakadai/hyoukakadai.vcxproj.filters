@@ -263,6 +263,9 @@
     <ClCompile Include="BossScene1.cpp">
       <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Boss</Filter>
     </ClCompile>
+    <ClCompile Include="DesertField.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugCamera.h">
@@ -430,6 +433,7 @@
     <ClInclude Include="BossScene1.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="BossEnemy2.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -445,6 +449,11 @@
     <ClInclude Include="ThrowEnemy.h">
       <Filter>ソース ファイル\ゲーム内のオブジェクト%28playerとか%29\敵キャラという名のモブ\派生クラス\Throw</Filter>
     </ClInclude>
+=======
+    <ClInclude Include="DesertField.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+>>>>>>> 1942cc00b4569d55a6281bd4131c4c95f8bbe950
   </ItemGroup>
   <ItemGroup>
     <None Include="FBX.hlsli">
