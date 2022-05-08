@@ -164,7 +164,7 @@
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
-    <ClCompile Include="BossEnemy2.cpp" />
+    <ClCompile Include="FirstBoss.cpp" />
     <ClCompile Include="BossScene1.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClearScene.cpp" />
@@ -205,6 +205,7 @@
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SecondBoss.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -220,7 +221,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BossEnemy.h" />
-    <ClInclude Include="BossEnemy2.h" />
+    <ClInclude Include="FirstBoss.h" />
     <ClInclude Include="BossScene1.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ClearScene.h" />
@@ -267,6 +268,7 @@
     <ClInclude Include="RaycastHit.h" />
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SecondBoss.h" />
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Sprite.h" />

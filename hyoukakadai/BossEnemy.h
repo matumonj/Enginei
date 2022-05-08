@@ -29,7 +29,7 @@ private:
     XMFLOAT3 Boss_Rot;
     XMFLOAT3 Boss_Scl = {9,9,9};
     float bossmovespeed = 0.1f;
-    float bossgrav = 0.05f;
+    float bossgrav = 0.03f;
     float bosstime = 0;
     int Attackcount = 0;
     static Ray laserRay;//マップブロックとの当たり判定にも使うからstatic

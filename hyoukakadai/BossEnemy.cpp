@@ -406,19 +406,19 @@ void BossEnemy::SummonEnemy(XMFLOAT3 position)
 		switch (i)
 		{
 		case 0:
-			summonEnemy[0].initialvec_x = -1.0f;
+			summonEnemy[0].initialvec_x = -0.5f;
 			break;
 		case 1:
-			summonEnemy[1].initialvec_x = -0.5f;
+			summonEnemy[1].initialvec_x = -0.25f;
 			break;
 		case 2:
 			summonEnemy[2].initialvec_x = 0.0f;
 			break;
 		case 3:
-			summonEnemy[3].initialvec_x = 0.5f;
+			summonEnemy[3].initialvec_x = 0.25f;
 			break;
 		case 4:
-			summonEnemy[4].initialvec_x = 1.0f;
+			summonEnemy[4].initialvec_x = 0.5f;
 			break;
 		default:
 			break;
