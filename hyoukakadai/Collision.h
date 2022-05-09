@@ -15,6 +15,7 @@ public:
 		float Right;
 	};
 public:
+	static float GetLen_X(float position, float position2);
 	static float GetLen(XMFLOAT3 position, XMFLOAT3 position2);
 	static float GetLenX(XMFLOAT3 position, XMFLOAT3 position2);
 	static float GetLenY(XMFLOAT3 position, XMFLOAT3 position2);

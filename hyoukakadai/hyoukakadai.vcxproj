@@ -180,6 +180,7 @@
     <ClCompile Include="Fader.cpp" />
     <ClCompile Include="FbxLoader.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="FirstBossScene.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="f_Model.cpp" />
     <ClCompile Include="f_Object3d.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SecondBoss.cpp" />
+    <ClCompile Include="SecondBossScene.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -241,6 +243,7 @@
     <ClInclude Include="Fader.h" />
     <ClInclude Include="FbxLoader.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="FirstBossScene.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="f_Model.h" />
     <ClInclude Include="f_Object3d.h" />
@@ -251,6 +254,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshCollider.h" />
+    <ClInclude Include="mHelper.h" />
     <ClInclude Include="MobEnemy.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="Input.h" />
@@ -269,6 +273,7 @@
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SecondBoss.h" />
+    <ClInclude Include="SecondBossScene.h" />
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Sprite.h" />

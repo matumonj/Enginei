@@ -100,6 +100,8 @@ class FirstBoss :
         void Follow(XMFLOAT3 position);
         //
         void SummonEnemy(XMFLOAT3 position);
+
+        void RushAttack();
     private:
         const int NormalDmage = 1;
 
@@ -115,7 +117,12 @@ class FirstBoss :
             NormalAttack,
             SetStartPos
         };
-
+        struct RushAttack{
+            float count;
+            float aftermovex;
+            bool rushflag;
+        }rushAttackPrm;
+        
         BossAction bossAction = None;
         static bool stayflag;
     public:
