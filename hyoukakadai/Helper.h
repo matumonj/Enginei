@@ -18,8 +18,8 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
-	inline float easeIn();
-	inline float easeOut();
+	//inline float easeIn();
+	//inline float easeOut();
 	static void Follow(XMFLOAT3& position, XMFLOAT3& position2,float dis,float speed);
 };
 

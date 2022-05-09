@@ -253,6 +253,12 @@ float Collision::GetLen(XMFLOAT3 position, XMFLOAT3 position2)
 	return len;
 }
 
+float Collision::GetLen_X(float position,float position2)
+{
+	float len;
+	len = sqrt((position - position2) * (position - position2));
+	return len;
+}
 float Collision::GetLenX(XMFLOAT3 position, XMFLOAT3 position2)
 {
 	float len;

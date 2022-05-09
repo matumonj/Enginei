@@ -2,8 +2,9 @@
 #include"Collision.h"
 #include"MobEnemy.h"
 #include"Helper.h"
+#include"mHelper.h"
 #define PI 3.14
-
+bool FirstBoss::stayflag;
 // Sphere FirstBoss::playersphere;
 FirstBoss::FirstBoss()
 {
@@ -54,7 +55,7 @@ void FirstBoss::Initialize()
 	
 	//パラメータのセット
 	Position = { 40,-4,0 };
-	Boss_Scl = { 0.5,0.5,0.5 };
+	Boss_Scl = {3,3,3 };
 	Boss_Rot = { 0,180,0 };
 	//モデルの読込
 	HP = MaxHP;
@@ -66,6 +67,17 @@ void FirstBoss::Update(XMFLOAT3 position)
 {
 	Old_Pos = Position;
 
+	if (bossjumpflag == true) {
+		if (bossjumpflag2) {
+			Position.y += 0.5f;
+		} else {
+			Position.y += 0.2f;
+		}
+		bosstime += 0.02f;
+	} else {
+		bossjumpflag2 = false;
+	}
+
 	if (HP <= 0) {
 		enemyState = State::DEAD;
 	} else {
@@ -74,7 +86,7 @@ void FirstBoss::Update(XMFLOAT3 position)
 	BossObject->Update({ 1,1,1,1 });
 	//モブ
 	BossObject->SetPosition(Position);
-	BossObject->SetScale({ 1,1,1 });
+	BossObject->SetScale({ 3,3,3 });
 	BossObject->SetRotation(Boss_Rot);
 
 }
@@ -99,7 +111,7 @@ void FirstBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200]
 //movespeed-movespeed
 	float height;//
 	float width;
-	XMFLOAT3 Player_Scl = { 1,1,1 };
+	XMFLOAT3 Player_Scl = { 3,3,3 };
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
 			if (map[j][i] == 1) {
@@ -154,14 +166,21 @@ void FirstBoss::Motion(Player* player)
 	switch (bossAction)
 	{
 	case SetStartPos://初期位置に戻るやつ
-		Helper::Follow(startPos, Position, 0.1f, bossmovespeed);
+		//Helper::Follow(startPos, Position, 0.1f, bossmovespeed);
 		if (Collision::GetLen(Position, startPos) <= 1.0f) {
 			bossAction = Stay;//初期位置に戻ったらビームの準備(待機)
 		}
 		MoveBlockJump();//ここでも戻る途中ブロックとかあったらジャンプ
 		break;
 	case None:
-		Follow(player->GetPosition());
+		RushAttack();
+		//Follow(player->GetPosition());
+		if (player->GetPosition().x > Position.x) {
+			SetRotation({ 0,90,0 });
+		}
+		else {
+			SetRotation({ 0,-90,0 });
+		}
 
 		if (HP < MaxHP / 2) {
 			bossAction = SetStartPos;//体力が一定以下なったら初期位置に
@@ -216,5 +235,26 @@ void FirstBoss::Follow(XMFLOAT3 position)
 		+ (Position.y - position.y) * (Position.y - position.y));
 	if (angleR > 5) {
 		Position.x += (angleX / angleR) * (bossmovespeed / 2);
+	}
+}
+
+
+void FirstBoss::RushAttack()
+{
+	if (Input::GetInstance()->TriggerKey(DIK_R)) {
+		rushAttackPrm.rushflag = true;
+	}
+	if (!rushAttackPrm.rushflag) {
+		rushAttackPrm.aftermovex = Position.x-25;
+	}
+	else {
+		if (Collision::GetLen_X(rushAttackPrm.aftermovex, Position.x) >= 0.5f) {
+			rushAttackPrm.count+=0.01f;
+			Position.x = EaseOut(rushAttackPrm.count, Position.x, rushAttackPrm.aftermovex);
+		}
+		else {
+			rushAttackPrm.rushflag = false;
+			bossjumpflag = true;
+		}
 	}
 }
