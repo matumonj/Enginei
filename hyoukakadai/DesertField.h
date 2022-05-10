@@ -164,10 +164,7 @@ private:
 	float FollowangleX, FollowangleZ, FollowangleR;
 	float FollowSpeed = 1.0f;
 	//float Limit = 0;
-	bool trigger = false;
-	bool boundflag = false;
-	bool returnflag = false;
-
+	
 	bool jumpFlag = false;
 
 	int Ontime = 300;

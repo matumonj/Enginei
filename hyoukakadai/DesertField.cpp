@@ -349,7 +349,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 				height = tst[j][i]->GetScale().y;
 				width = tst[j][i]->GetScale().x;
 				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
+					if ( Line::GetInstance()->Gettriggerflag() == true) {
 						Line::GetInstance()->Setmapcol(true);
 						Line::GetInstance()->Setelf(true);
 					}

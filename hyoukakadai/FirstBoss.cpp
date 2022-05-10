@@ -9,6 +9,7 @@ float FirstBoss::startcount = 0;
 bool FirstBoss::stayflag;
 XMFLOAT3 FirstBoss::startPos;
 bool FirstBoss::bossjumpflag = false;
+int FirstBoss::attacktime = 0;
 // Sphere FirstBoss::playersphere;
 FirstBoss::FirstBoss()
 {
@@ -63,6 +64,7 @@ void FirstBoss::Initialize()
 	Boss_Rot = { 0,0,0 };
 	Rotation = { 30,80,80 };
 	//モデルの読込
+	Rotation.z = 0;
 	HP = MaxHP;
 	startPos = { 40,-18,0 };
 }
@@ -111,7 +113,7 @@ void FirstBoss::Update(XMFLOAT3 position)
 	}
 	//Rotation.x = 0;
 	Rotation.x = 0;
-	Rotation.z = 0;
+
 	BossObject->SetPosition(Position);
 	BossObject->SetScale({2,2,2 });
 	BossObject->SetRotation(Rotation);
@@ -227,7 +229,7 @@ void FirstBoss::Motion(Player* player)
 		if (HP < MaxHP / 2) {
 			bossAction = SetStartPos;//体力が一定以下なったら初期位置に
 		}
-		if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 3) {
+		if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 5) {
 			Follow(player->GetPosition());
 			//MoveBlockJump();//ボスの埋まり回避用とブロック飛び越えとか
 		
@@ -237,6 +239,7 @@ void FirstBoss::Motion(Player* player)
 				attacktime = 0;
 			}
 		}
+		
 		if (HP < 5) {
 			bossAction = RushAttacks;
 		}
@@ -259,7 +262,9 @@ void FirstBoss::Motion(Player* player)
 		break;
 
 	case Stay://ビーム前の待機
-
+		if (startcount > 1.0f) {
+			bossAction = None;
+		}
 		break;
 
 	case NormalAttack:
@@ -303,7 +308,9 @@ void FirstBoss::RushAttack(Player* player)
 			bossAction = None;
 		}
 	}
-
+	if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 5) {
+		player->SetHp(player->getHp() - 1);
+	}
 }
 
 void FirstBoss::RushAttackStay(Player* player)
@@ -385,7 +392,7 @@ void FirstBoss::appearance(float& camerapos)
 		camerapos = 67.235f;
 		bossjumpflag = true;
 		if (startcount > 1.0f) {
-			bossAction = None;
+			
 			phase = true;
 		}
 	}

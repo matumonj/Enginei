@@ -167,9 +167,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 			if (Line::GetInstance()->Getboundflag() == true) {
 				nextphaseflag_bond = true;
 			}
-			if (Line::GetInstance()->Getreturnflag() == true) {
-				nextphaseflag_return = true;
-			}
+			
 			if (nextphaseflag_bond) {
 				task = Clear::LineBond;
 				//Line::GetInstance()->SetReturnflag(false);

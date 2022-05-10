@@ -17,7 +17,7 @@ void Collision::ColMap1(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 				width = tst[j][i]->GetScale().x;
 
 				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-					if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
+					if ( Line::GetInstance()->Gettriggerflag() == true) {
 						Line::GetInstance()->Setmapcol(true);
 						Line::GetInstance()->Setelf(true);
 					}

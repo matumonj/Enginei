@@ -29,7 +29,6 @@ private:
 	static float FollowSpeed ;
 	static bool trigger ;
 	static bool boundflag ;
-	static bool returnflag ;
 	static bool drawflag;
 	static bool stopflag;
 	static bool notdoubletuch;
@@ -83,14 +82,12 @@ public:
 	float Getolddistance() { return olddistance; }
 	float GetlineAngle() { return lineangle; }
 	bool Getboundflag() { return boundflag; }
-	bool Getreturnflag() { return returnflag; }
 	bool Gettriggerflag() { return trigger; }
 	XMFLOAT3 getpos() { return {linex2,liney2,needlepos.z}; }
 	bool Getelf() { return elf; }
 	void Setelf(bool flag) { elf = flag; }
 	void SetTrigger(bool flag) { trigger = flag; }
 	void SetBondflag(bool f) { boundflag = f; }
-	void SetReturnflag(bool f ){returnflag = f; }
 	bool getmapcol() {
 		if (!mapcol && !elf) { 
 			return true; 

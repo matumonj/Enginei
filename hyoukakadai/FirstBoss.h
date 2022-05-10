@@ -110,7 +110,7 @@ class FirstBoss :
 
        void NormalAttacks(Player* player);
     private:
-        int attacktime = 0;
+        static int attacktime ;
         bool phase;
         float cameratime = 0;
         const int NormalDmage = 1;

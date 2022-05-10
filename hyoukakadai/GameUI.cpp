@@ -102,9 +102,9 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 void GameUI::UIDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
-	Attention[0]->Draw();
-	LineLengthout->Draw();
-	LineLength->Draw();
+	//Attention[0]->Draw();
+	//LineLengthout->Draw();
+	//LineLength->Draw();
 	BossHP->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }

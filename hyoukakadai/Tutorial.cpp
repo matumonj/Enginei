@@ -223,7 +223,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 			for (int j = 0; j < MAX_Y; j++) {
 				if (map[j][i] == 1|| map[j][i] == 2) {
 					if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-						if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
+						if (Line::GetInstance()->Gettriggerflag() == true) {
 							Line::GetInstance()->Setmapcol(true);
 							Line::GetInstance()->Setelf(true);
 						}
