@@ -113,6 +113,8 @@ class FirstBoss :
 
        void RushAttackStay(Player* player);
 
+       void RushAttackStayPrm(Player* player);
+
        void NormalAttacks(Player* player);
 
        void GetDamage();

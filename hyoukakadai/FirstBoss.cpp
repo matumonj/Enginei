@@ -179,12 +179,6 @@ void FirstBoss::Motion(Player* player)
 	case SetStartPos://‰ŠúˆÊ’u‚É–ß‚é‚â
 		BefHP = HP;
 
-		if (player->GetPosition().x < Position.x) {
-			startPos.x = 67;
-		} else {
-			startPos.x = 20;
-		}
-
 		if (Collision::GetLen(startPos, Position) <= dis + 1) {
 			bossAction = RushAttacks;
 		} else {
@@ -203,17 +197,8 @@ void FirstBoss::Motion(Player* player)
 		RushAttack(player);
 		break;
 	case None:
-		//Rotation.x = 0;
-		if (player->GetPosition().x < Position.x) {
-			if (Rotation.y != 180) {
-				Rotation.y += 10;
-			}
-		} else if (player->GetPosition().x >= Position.x) {
-			//	rottime += 0.1f;
-			if (Rotation.y != 0) {
-				Rotation.y -= 10;
-			}
-		}
+		RushAttackStayPrm(player);
+
 		attacktime++;
 		if (Input::GetInstance()->TriggerKey(DIK_S)) {
 			bossAction = SetStartPos;
@@ -332,17 +317,30 @@ void FirstBoss::RushAttackStay(Player* player)
 		rushAttackPrm.rushflag = true;
 		shaketime = 100;
 	}
-	Position.x += shakex;
+	Position.x += shakex;	
+}
 
+
+void FirstBoss::RushAttackStayPrm(Player* player)
+{
+	float SetPositionRight = 67.0f;
+	float SetPositionLeft = 20.0f;
 	if (!rushAttackPrm.rushflag) {
 		if (player->GetPosition().x < Position.x) {
-			rushAttackPrm.aftermovex = Position.x - 40;
+			startPos.x = SetPositionRight;
+			rushAttackPrm.aftermovex = Position.x - 30;
+			if (Rotation.y != 180) {
+				Rotation.y += 10;
+			}
 		} else {
-			rushAttackPrm.aftermovex = Position.x + 40;
+			startPos.x = SetPositionLeft;
+			rushAttackPrm.aftermovex = Position.x + 30;
+			if (Rotation.y != 0) {
+				Rotation.y -= 10;
+			}
 		}
 	}
 }
-
 void FirstBoss::NormalAttacks(Player* player)
 {
 	//DamageAreaStart = { Position.x,Position.y + 2 };
