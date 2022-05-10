@@ -16,7 +16,7 @@ TitleScene::TitleScene(SceneManager* sceneManager)
 /// </summary>
 void TitleScene::Initialize(DirectXCommon* dxCommon)
 {
-	titlesprite->LoadTexture(3, L"Resources/title.png");
+	titlesprite->LoadTexture(3, L"Resources/background.png");
 	titlesprite = Sprite::Create(3, { 0.0f,0.0f });
 }
 
@@ -26,8 +26,8 @@ void TitleScene::Initialize(DirectXCommon* dxCommon)
 void TitleScene::Update(DirectXCommon* dxCommon)
 {
 	//ENTERで次のシーンへ
-	if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
+	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {//押されたら
+		BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 	//if (Input::GetInstance()->TriggerKey(DIK_F))

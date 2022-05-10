@@ -177,7 +177,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 
-
 	player->PlayerMoves(Player_Pos, moveSpeed);
 	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
 	if (Input::GetInstance()->Pushkey(DIK_LEFT))
@@ -395,7 +394,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
-	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonA() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
+	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonB() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
 		BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;

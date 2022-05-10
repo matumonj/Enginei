@@ -10,7 +10,6 @@
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
-#include"BossScene1.h"
 //コメントアウト
 
 
@@ -241,7 +240,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -273,9 +272,6 @@ void DesertField::Update(DirectXCommon* dxCommon)
 
 	LONG u_r = 32768;
 	LONG a = 30000;
-
-	object1->Setpos({ Player_Pos.x+4.0f,Player_Pos.y,Player_Pos.z });
-
 
 	//左
 	player->PlayerMoves(Player_Pos, moveSpeed);
@@ -430,7 +426,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new BossScene1(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 

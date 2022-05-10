@@ -120,6 +120,5 @@ class SecondBoss :
         static bool stayflag;
     public:
         bool GetAltStay() { return stayflag; }
-    };
-
+};
 

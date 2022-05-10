@@ -82,7 +82,7 @@ protected:	//メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuffTransform;
 	//ローカルスケール
-	XMFLOAT3 scale = { 0.003f, 0.003f, 0.003f };
+	XMFLOAT3 scale = { 1, 1, 1 };
 	//X,Y,Z軸回りのローカル回転角
 	XMFLOAT3 rotation = { 0, 0, 0 };
 	//ローカル座標
