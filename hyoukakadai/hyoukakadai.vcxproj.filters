@@ -65,6 +65,8 @@
     <ClCompile Include="TyutorialSprite.cpp" />
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="SecondBoss.cpp" />
+    <ClCompile Include="FirstBossScene.cpp" />
+    <ClCompile Include="SecondBossScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -129,6 +131,9 @@
     <ClInclude Include="TyutorialSprite.h" />
     <ClInclude Include="WinApp.h" />
     <ClInclude Include="SecondBoss.h" />
+    <ClInclude Include="FirstBossScene.h" />
+    <ClInclude Include="SecondBossScene.h" />
+    <ClInclude Include="mHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />

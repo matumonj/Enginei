@@ -38,6 +38,7 @@
 #include"DirectXCommon.h"
 #include"nTexture.h"
 #include"BossScene1.h"
+#include"FirstBossScene.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
 

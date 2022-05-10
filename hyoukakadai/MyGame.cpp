@@ -10,8 +10,10 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 	nTexture::StaticInitialize(dxcomn->GetDev(), WinApp::window_width, WinApp::window_height);
 
 	//Scene = new TitleScene();
-	//‰ŠúƒV[ƒ“
-	BaseScene*scene_ = new TitleScene(sceneManger);
+	//åˆæœŸã‚·ãƒ¼ãƒ³
+
+	BaseScene*scene_ = new FirstBossScene(sceneManger);
+
 	sceneManger->SetnextScene(scene_);
 
 	//Scene->Initialize();
@@ -29,7 +31,7 @@ void MyGame::Draw(DirectXCommon* dxcomn)
 }
 
 
-//”wŒiƒXƒvƒ‰ƒCƒg•`‰æ@­‚µ‚ß‚ñ‚Ç‚­‚³‚¢‚â‚è•û clearDepthBuffer()‚æ‚Ý‚±‚Þ‚½‚ß
+//èƒŒæ™¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»ã€€å°‘ã—ã‚ã‚“ã©ãã•ã„ã‚„ã‚Šæ–¹ clearDepthBuffer()ã‚ˆã¿ã“ã‚€ãŸã‚
 void MyGame::backGround()
 {
 	//->BackGround(dxcomn->GetCmdList());
