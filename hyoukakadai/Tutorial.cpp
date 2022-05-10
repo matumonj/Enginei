@@ -213,6 +213,11 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		}
 	}
 
+	if (Input::GetInstance()->TriggerButonY()) {
+		BaseScene* scene = new  TitleScene(sceneManager_);//次のシーンのインスタンス生成
+		sceneManager_->SetnextScene(scene);//シーンのセット
+	}
+
 	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//このやり方後で直す
 		for (int i = 0; i < MAX_X; i++) {
 			for (int j = 0; j < MAX_Y; j++) {
@@ -306,6 +311,10 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 #pragma region 線の処理
 
+		if (Line::GetInstance()->Getboundflag() == true) {
+			grav = 0;
+			time = 0;
+		}
 
 		if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 			//grav = 0.0f;
@@ -335,6 +344,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		//FBXのアニメーション再生
 		if (Input::GetInstance()->Pushkey(DIK_0)) {
 			object1->PlayAnimation();
+			grav = 0;
 		}
 
 		//カメラ関係の処理
@@ -379,7 +389,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
 	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonA() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
-		BaseScene* scene = new  PlayScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new  DesertField(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}

@@ -205,6 +205,16 @@ bool Input::TriggerButonX()
 	return false;
 }
 
+bool Input::TriggerButonY()
+{
+	// 前回が0で、今回が0でなければトリガー
+	if (!CStatePre.rgbButtons[3] && CState.rgbButtons[3]) {
+		return true;
+	}
+
+	return false;
+}
+
 Input::CMove Input::GetCMove()
 {
 	CMove tmp;
