@@ -113,6 +113,8 @@ private:
 	bool colf = false;
 	float grav = 0.05f;
 	float time = 0.1;
+
+	bool jumpFlag = false;
 	//float botttomy = 0;
 private://“_ŒõŒ¹
 	LightGroup* lightGroup = nullptr;

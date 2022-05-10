@@ -236,23 +236,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	// スティックの方向判定
 	// 無反応範囲
 
-	//左
-	// 方向だけを調べる方法
-	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	//{
-	//	// 左に傾けた
-	//	Player_Pos.x -= moveSpeed;
-
-	//}
-	//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	//{
-	//	// 右に傾けた
-	//	Player_Pos.x += moveSpeed;
-	//}
-
-
-	player->PlayerMoves(Player_Pos, moveSpeed);
-
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
