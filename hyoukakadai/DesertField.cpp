@@ -280,54 +280,15 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	//左
 	player->PlayerMoves(Player_Pos, moveSpeed);
 
-	if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	{
-		//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-			// 左に傾けた
-		//playerRot = State::Left;
-		Player_Pos.x -= moveSpeed;
-		//}
-	}
-	else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	{
-		//	if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-				// 右に傾けた
-		//playerRot = State::Right;
-		Player_Pos.x += moveSpeed;
-		//}
-	}
+	
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲
 
-	//左
-	// 方向だけを調べる方法
-	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	//{
-	//	// 左に傾けた
-	//	Player_Pos.x -= moveSpeed;
-
-	//}
-	//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	//{
-	//	// 右に傾けた
-	//	Player_Pos.x += moveSpeed;
-	//}
-
-
-	player->PlayerMoves(Player_Pos, moveSpeed);
 
 
 
-	if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-
-		jumpFlag = true;
-		// 左に傾けた
-		//Player_Pos.x -= moveSpeed;
-
-	}
-
+	
 
 	//FBXモデルの更新
 	object1->Updata(TRUE);
@@ -338,6 +299,14 @@ void DesertField::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= moveSpeed;
 	}
 
+	if (Input::GetInstance()->GetCMove().lY < u_r - a)
+	{
+
+		jumpFlag = true;
+		// 左に傾けた
+		//Player_Pos.x -= moveSpeed;
+
+	}
 
 
 	if (jumpFlag == true) {
