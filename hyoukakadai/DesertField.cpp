@@ -11,6 +11,8 @@
 #include"Destroy.h"
 #include"Fader.h"
 #include"BossScene1.h"
+#include"FirstBossScene.h"
+#include"GamOver.h"
 //コメントアウト
 
 
@@ -399,7 +401,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new BossScene1(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
@@ -503,7 +505,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
