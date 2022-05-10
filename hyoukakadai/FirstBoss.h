@@ -101,10 +101,18 @@ class FirstBoss :
         //
         void SummonEnemy(XMFLOAT3 position);
 
-        void RushAttack();
+       void RushAttack(Player* player);
+
+       void RushAttackStay(Player* player);
+
+       void NormalAttacks(Player* player);
     private:
         const int NormalDmage = 1;
-
+        float oshake, oshakex, oshakey;
+        float shake, shakex, shakey;
+        int shaketime = 100;
+        XMFLOAT2 DamageArea;
+        XMFLOAT2 DamageAreaStart;
     private:
         XMFLOAT3 startPos;
         float movement;
@@ -115,6 +123,7 @@ class FirstBoss :
             MoveLeft,
             Stay,
             NormalAttack,
+            RushAttacks,
             SetStartPos
         };
         struct RushAttack{
