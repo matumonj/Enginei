@@ -13,7 +13,7 @@ ClearScene::ClearScene(SceneManager* sceneManager):BaseScene(sceneManager)
 
 void ClearScene::Initialize(DirectXCommon* dxCommon)
 {
-	clearsprite->LoadTexture(3, L"Resources/kari.png");
+	clearsprite->LoadTexture(3, L"Resources/clear.png");
 	clearsprite = Sprite::Create(3, { 0.0f,0.0f });
 }
 

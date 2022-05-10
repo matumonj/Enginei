@@ -3,6 +3,7 @@
 #include"DirectXCommon.h"
 #include"ClearScene.h"
 #include"TitleScene.h"
+#include"DesertField.h"
 #include"SceneManager.h"
 #include"MobEnemy.h"
 #include"BossEnemy.h"
@@ -235,23 +236,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	// スティックの方向判定
 	// 無反応範囲
 
-	//左
-	// 方向だけを調べる方法
-	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	//{
-	//	// 左に傾けた
-	//	Player_Pos.x -= moveSpeed;
-
-	//}
-	//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	//{
-	//	// 右に傾けた
-	//	Player_Pos.x += moveSpeed;
-	//}
-
-
-	player->PlayerMoves(Player_Pos, moveSpeed);
-
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
@@ -383,7 +367,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R)||(Player_Pos.y<=-50)) {//押されたら
-		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}

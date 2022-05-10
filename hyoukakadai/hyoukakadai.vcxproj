@@ -185,6 +185,7 @@
     <ClCompile Include="f_Model.cpp" />
     <ClCompile Include="f_Object3d.cpp" />
     <ClCompile Include="GameUI.cpp" />
+    <ClCompile Include="GamOver.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="f_Model.h" />
     <ClInclude Include="f_Object3d.h" />
     <ClInclude Include="GameUI.h" />
+    <ClInclude Include="GamOver.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Line.h" />

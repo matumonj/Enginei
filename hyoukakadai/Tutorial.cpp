@@ -10,6 +10,8 @@
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
+#include"DesertField.h"
+
 //コメントアウト
 //シーンのコンストラクタ
 Tutorial::Tutorial(SceneManager* sceneManager)
@@ -177,7 +179,25 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	//FBXモデルの更新
 	object1->Updata(TRUE);
 
+
 	player->PlayerMoves(Player_Pos, moveSpeed);
+
+	if (Input::GetInstance()->GetCMove().lY < u_r - a)
+	{
+
+		jumpFlag = true;
+		// 左に傾けた
+		//Player_Pos.x -= moveSpeed;
+
+	}
+
+
+	if (jumpFlag == true) {
+		Player_Pos.y += 0.12f;
+		time += 0.02f;
+	}
+
+
 	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
 	if (Input::GetInstance()->Pushkey(DIK_LEFT))
 	{
@@ -191,6 +211,11 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
 			Player_Pos.x += moveSpeed;
 		}
+	}
+
+	if (Input::GetInstance()->TriggerButonY()) {
+		BaseScene* scene = new  TitleScene(sceneManager_);//次のシーンのインスタンス生成
+		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
 	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//このやり方後で直す
@@ -228,6 +253,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 					if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
 						if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
 							Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+							jumpFlag = false;
 							//moveSpeed = 0;
 							grav = 0.0f;
 							time = 0;
@@ -238,6 +264,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 							break;
 						} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i]) {
 							Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+							jumpFlag = false;
 							if (Line::GetInstance()->Getboundflag() == true) {
 								Line::GetInstance()->SetBondflag(false);
 								Line::GetInstance()->SetSubradius(0.0f);
@@ -282,46 +309,12 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 			}
 		}
 
-		//
-		for (int i = 0; i < MAX_X; i++) {
-			for (int j = 0; j < MAX_Y; j++) {
-				if (map[j][i] == 2 && Line::GetInstance()->getcolfsub() == true&& Line::GetInstance()->Getboundflag()==true) {
-					mapx[j][i] = tst[j][i]->GetPosition().x;
-					mapy[j][i] = tst[j][i]->GetPosition().y;
-					height = 2.7;//もとの値より少し小さめにしたほうが自然
-					width = 1.2;
-			
-					if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-						if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-	
-							map[j][i] = 0;
-							Line::GetInstance()->setcolfsub(false);
-							break;
-						} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i]) {
-							map[j][i] = 0;
-							Line::GetInstance()->setcolfsub(false);
-							break;
-						}
-					}
-					//プレイヤーの左辺
-					if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] < Player_Pos.y + Player_Scl.y)) {
-						if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-							map[j][i] = 0;
-							Line::GetInstance()->setcolfsub(false);
-							break;
-						}
-						//プレイヤーの右辺
-						else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-							map[j][i] = 0;
-							Line::GetInstance()->setcolfsub(false);
-							break;
-						}
-					} 
-				}
-			}
-		}
 #pragma region 線の処理
 
+		if (Line::GetInstance()->Getboundflag() == true) {
+			grav = 0;
+			time = 0;
+		}
 
 		if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 			//grav = 0.0f;
@@ -351,6 +344,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		//FBXのアニメーション再生
 		if (Input::GetInstance()->Pushkey(DIK_0)) {
 			object1->PlayAnimation();
+			grav = 0;
 		}
 
 		//カメラ関係の処理
@@ -394,8 +388,8 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
-	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonB() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
-		BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
+	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonA() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
+		BaseScene* scene = new  DesertField(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}

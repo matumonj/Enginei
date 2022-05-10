@@ -10,6 +10,9 @@
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
+#include"BossScene1.h"
+#include"FirstBossScene.h"
+#include"GamOver.h"
 //コメントアウト
 
 
@@ -240,7 +243,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -273,57 +276,21 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	LONG u_r = 32768;
 	LONG a = 30000;
 
+	object1->Setpos({ Player_Pos.x+4.0f,Player_Pos.y,Player_Pos.z });
+
+
 	//左
 	player->PlayerMoves(Player_Pos, moveSpeed);
 
-	if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	{
-		//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-			// 左に傾けた
-		//playerRot = State::Left;
-		Player_Pos.x -= moveSpeed;
-		//}
-	}
-	else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	{
-		//	if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-				// 右に傾けた
-		//playerRot = State::Right;
-		Player_Pos.x += moveSpeed;
-		//}
-	}
+	
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲
 
-	//左
-	// 方向だけを調べる方法
-	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	//{
-	//	// 左に傾けた
-	//	Player_Pos.x -= moveSpeed;
-
-	//}
-	//else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	//{
-	//	// 右に傾けた
-	//	Player_Pos.x += moveSpeed;
-	//}
-
-
-	player->PlayerMoves(Player_Pos, moveSpeed);
 
 
 
-	if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-
-		jumpFlag = true;
-		// 左に傾けた
-		//Player_Pos.x -= moveSpeed;
-
-	}
-
+	
 
 	//FBXモデルの更新
 	object1->Updata(TRUE);
@@ -334,6 +301,14 @@ void DesertField::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= moveSpeed;
 	}
 
+	if (Input::GetInstance()->GetCMove().lY < u_r - a)
+	{
+
+		jumpFlag = true;
+		// 左に傾けた
+		//Player_Pos.x -= moveSpeed;
+
+	}
 
 
 	if (jumpFlag == true) {
@@ -426,7 +401,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
@@ -530,7 +505,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}

@@ -67,6 +67,7 @@
     <ClCompile Include="SecondBoss.cpp" />
     <ClCompile Include="FirstBossScene.cpp" />
     <ClCompile Include="SecondBossScene.cpp" />
+    <ClCompile Include="GamOver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="FirstBossScene.h" />
     <ClInclude Include="SecondBossScene.h" />
     <ClInclude Include="mHelper.h" />
+    <ClInclude Include="GamOver.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />
