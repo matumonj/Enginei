@@ -33,7 +33,7 @@ public: // サブクラス
 	//定数バッファ用データ構造体
 	struct ConstBufferDataB0
 	{
-		//XMFLOAT4 color;
+		XMFLOAT4 color;
 		//XMMATRIX mat;
 		// 定数バッファ用データ構造体B0
 		XMMATRIX viewproj;    // ビュープロジェクション行列
@@ -227,8 +227,9 @@ protected: // メンバ変数
 	XMMATRIX matWorld;
 	// 親オブジェクト
 	Object3d* parent = nullptr;
-
+	XMFLOAT4 colors = {1,1,1,1};
 public:
+	void SetColor(XMFLOAT4 color) { this->colors = color; }
 	void SetCollider(BaseCollider* collider);
 	virtual void OnCollision(const CollisionInfo& info) {}
 protected:

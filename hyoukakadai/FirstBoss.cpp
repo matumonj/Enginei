@@ -91,31 +91,12 @@ void FirstBoss::Update(XMFLOAT3 position)
 		enemyState = State::ALIVE;
 	}
 	BossObject->Update({ 1,1,1,1 });
+	GetDamage();
 	//モブ
-	//Rotation = { 0,180,0 };
-
-	if (position.x < Position.x) {
-		//Rotation = { 0,180,0 };
-		if(Rotation.y!=180){
-			Rotation.y+=10;
-		}
-		//rottime += 0.1f;
-		//Easing::EaseOut(rottime, Rotation.x, 0);
-		// SetRotation({ 0,180,0 });
-	} else if (position.x >= Position.x) {
-		//	rottime += 0.1f;
-		if (Rotation.y != 0) {
-			Rotation.y -= 10;
-		}
-		//Rotation = { 0,0,0 };
-		//Easing::EaseOut(rottime, Rotation.x, 180);
-		//SetRotation({ 0,-90,0 });
-	}
-	//Rotation.x = 0;
 	Rotation.x = 0;
 
 	BossObject->SetPosition(Position);
-	BossObject->SetScale({2,2,2 });
+	BossObject->SetScale({ 2,2,2 });
 	BossObject->SetRotation(Rotation);
 	//BossObject->SetRotation(Boss_Rot);
 
@@ -195,14 +176,9 @@ void FirstBoss::Motion(Player* player)
 	const float dis = 0.5f;
 	switch (bossAction)
 	{
-	case SetStartPos://初期位置に戻るやつ
-		if (player->GetPosition().x > Position.x) {
-			//Rotation = { 0,90,0 };
-			// SetRotation({ 0,180,0 });
-		} else {
-			//Rotation = { 0,120,0 };
-			//SetRotation({ 0,-90,0 });
-		}
+	case SetStartPos://初期位置に戻るや
+		BefHP = HP;
+
 		if (player->GetPosition().x < Position.x) {
 			startPos.x = 67;
 		} else {
@@ -212,6 +188,12 @@ void FirstBoss::Motion(Player* player)
 		if (Collision::GetLen(startPos, Position) <= dis + 1) {
 			bossAction = RushAttacks;
 		} else {
+			if (startPos.x == 67 && Rotation.y != 0) {
+				Rotation.y -= 10;
+			}
+			if (startPos.x == 20 && Rotation.y != 180) {
+				Rotation.y += 10;
+			}
 			Helper::Follow(startPos, Position, dis, bossmovespeed);
 		}
 		break;
@@ -222,27 +204,38 @@ void FirstBoss::Motion(Player* player)
 		break;
 	case None:
 		//Rotation.x = 0;
+		if (player->GetPosition().x < Position.x) {
+			if (Rotation.y != 180) {
+				Rotation.y += 10;
+			}
+		} else if (player->GetPosition().x >= Position.x) {
+			//	rottime += 0.1f;
+			if (Rotation.y != 0) {
+				Rotation.y -= 10;
+			}
+		}
 		attacktime++;
 		if (Input::GetInstance()->TriggerKey(DIK_S)) {
 			bossAction = SetStartPos;
-		}	
+		}
 		if (HP < MaxHP / 2) {
 			bossAction = SetStartPos;//体力が一定以下なったら初期位置に
 		}
 		if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 5) {
 			Follow(player->GetPosition());
 			//MoveBlockJump();//ボスの埋まり回避用とブロック飛び越えとか
-		
+
 		} else {
 			if (attacktime % 50 == 0) {
 				bossAction = NormalAttack;//プレイヤーが上の方逃げたら投擲
 				attacktime = 0;
 			}
 		}
-		
-		if (HP < 5) {
-			bossAction = RushAttacks;
+
+		if (HP != MaxHP &&HP!=BefHP && HP % 4 == 0) {
+			bossAction = SetStartPos;
 		}
+
 		break;
 	case MoveRight://突進右
 		if (movement < 10) {
@@ -285,9 +278,9 @@ void FirstBoss::Follow(XMFLOAT3 position)
 	angleZ = (position.y - Position.y);
 	angleR = sqrtf((Position.x - position.x) * (Position.x - position.x)
 		+ (Position.y - position.y) * (Position.y - position.y));
-	
-		Position.x += (angleX / angleR) * (bossmovespeed / 2);
-	
+
+	Position.x += (angleX / angleR) * (bossmovespeed / 2);
+
 }
 
 
@@ -311,6 +304,11 @@ void FirstBoss::RushAttack(Player* player)
 	if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 5) {
 		player->SetHp(player->getHp() - 1);
 	}
+	if (startPos.x == 67) {
+		Rotation.y = 180;
+	} else if (startPos.x == 20) {
+		Rotation.y = 0;
+	}
 }
 
 void FirstBoss::RushAttackStay(Player* player)
@@ -320,9 +318,9 @@ void FirstBoss::RushAttackStay(Player* player)
 		oshakex = rand() % 7 - 14;
 		oshakey = rand() % 7 - 14;
 
-		shakex = oshakex * 0.01f;
-		shakey = oshakey * 0.01f;
-		shake = oshake * 0.01f;
+		shakex = oshakex * 0.05f;
+		shakey = oshakey * 0.05f;
+		shake = oshake * 0.05f;
 		shakex -= shake;
 		shakey -= shake;
 		shaketime--;
@@ -350,27 +348,27 @@ void FirstBoss::NormalAttacks(Player* player)
 	//DamageAreaStart = { Position.x,Position.y + 2 };
 	if (Rotation.y == 180) {//右向いてるときの
 		DamageAreaStart = { Position.x,Position.y + 2 };
-		DamageArea = { Position.x-8 ,Position.y - 2 };
+		DamageArea = { Position.x - 8 ,Position.y - 2 };
 		if (Collision::Boxcol({ player->GetPosition().x,player->GetPosition().y },
 			{ player->GetPosition().x + 2,player->GetPosition().y + 2 }, DamageArea, DamageAreaStart
 		) == true) {
 			player->SetHp(player->getHp() - 1);
 		}
 	} else {
-		DamageAreaStart = { Position.x,Position.y-2 };
-		DamageArea = { Position.x+5,Position.y + 2 };
+		DamageAreaStart = { Position.x,Position.y - 2 };
+		DamageArea = { Position.x + 5,Position.y + 2 };
 		if (Collision::Boxcol({ player->GetPosition().x,player->GetPosition().y },
 			{ player->GetPosition().x + 2,player->GetPosition().y + 2 }, DamageAreaStart, DamageArea
 		) == true) {
 			player->SetHp(player->getHp() - 1);
 		}
 	}
-	
-	if (Rotation.z <= 360) {
-		Rotation.z += 20;
-	}
-	else {
-		
+
+	if (Rotation.z >= -360) {
+		bossjumpflag = true;
+		Rotation.z -= 20;
+	} else {
+		bossjumpflag = false;
 		bossAction = None;
 		Rotation.z = 0;
 	}
@@ -381,19 +379,40 @@ void FirstBoss::NormalAttacks(Player* player)
 
 void FirstBoss::appearance(float& camerapos)
 {
-	
+
 	if (phase) {
 		cameratime += 0.01f;
 		camerapos = Easing::EaseOut(cameratime, camerapos, 35.37f);
 		//bossAction = None;
-	}
-	else {
-		startcount+=0.01;
+	} else {
+		startcount += 0.01;
 		camerapos = 67.235f;
 		bossjumpflag = true;
 		if (startcount > 1.0f) {
-			
+
 			phase = true;
 		}
 	}
+}
+
+void FirstBoss::GetDamage()
+{
+
+	if (HP == MaxHP) {
+		OldHP = HP - 1;
+	}
+	if (HP == OldHP && !damageRec) {
+		damageRec = true;
+		OldHP--;
+	}
+	if (damageRec) {
+		r = 1.0f; g = 0.2f; b = 0.0f;
+		damageRec = false;
+	} else {
+		if (r > 0.0f)r -= 0.1f;
+		if (g < 1.0f)g += 0.1f;
+		if (b < 1.0f)b += 0.1f;
+		//BossObject->SetColor({ 1,1.0f,1.0f,1 });
+	}
+	BossObject->SetColor({ r,g,b,1.0f });
 }

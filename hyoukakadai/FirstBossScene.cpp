@@ -170,7 +170,7 @@ void FirstBossScene::Initialize(DirectXCommon* dxCommon)
 	object1->Initialize();
 	object1->SetModel(fbxmodel);
 	/*audio = new Audio();
-	audio->Initialize();
+	audi]o->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	//camerapositionx = 46.94f;
 	camerapositiony = -4.5f;
@@ -209,9 +209,6 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 			// 右に傾けた
 			Player_Pos.x += moveSpeed;
 		}
-	//}
-
-		//player->PlayerMoves(Player_Pos, moveSpeed);
 
 		//FBXモデルの更新
 		object1->Updata(TRUE);
@@ -232,10 +229,6 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	//入力処理より後に当たり判定を描け
 
 	GameUI::BossUIUpdate(bossenemy.get());
-
-	float disl;
-	//これは移す
-
 
 	Collision::ColMap1(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
 

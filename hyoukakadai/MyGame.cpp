@@ -12,7 +12,7 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 	//Scene = new TitleScene();
 	//初期シーン
 
-	BaseScene*scene_ = new TitleScene(sceneManger);
+	BaseScene*scene_ = new FirstBossScene(sceneManger);
 
 	sceneManger->SetnextScene(scene_);
 

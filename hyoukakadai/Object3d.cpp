@@ -399,7 +399,7 @@ void Object3d::Update(XMFLOAT4 color)
 	// 定数バッファへデータ転送
 	//ConstBufferDataB0* constMap = nullptr;
 	//result = constBuffB0->Map(0, nullptr, (void**)&constMap);
-	//constMap->color = color;
+	constMap->color = colors;
 	//constMap->mat = matWorld * matview * matprojection;	// 行列の合成
 	//result = constBuffB0->Map(0, nullptr, (void**)&constMap);
 	//constMap->viewproj =,matview * matprojection;

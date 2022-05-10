@@ -26,6 +26,10 @@ class FirstBoss :
         Model* BossModel = nullptr;
 
     private:
+        float r = 1;
+        float g = 1;
+        float b = 1;
+        int BefHP;
         //ÉpÉâÉÅÅ[É^
         XMFLOAT3 Boss_Pos;
         XMFLOAT3 Boss_Rot;
@@ -41,7 +45,8 @@ class FirstBoss :
         bool bossjumpflag2 = false;
     private:
         XMFLOAT3 Old_Pos;
-        static XMFLOAT3 position;
+        int OldHP;
+        //static XMFLOAT3 position;
         float oldx, oldy;
         int time = 0;
         int time2 = 0;
@@ -109,7 +114,10 @@ class FirstBoss :
        void RushAttackStay(Player* player);
 
        void NormalAttacks(Player* player);
+
+       void GetDamage();
     private:
+        bool damageRec = false;
         static int attacktime ;
         bool phase;
         float cameratime = 0;
