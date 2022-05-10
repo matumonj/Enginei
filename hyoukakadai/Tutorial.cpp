@@ -38,14 +38,14 @@ void Tutorial::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("tutorialblock");
+	tstmodel = Model::CreateFromOBJ("box1");
 	harimodel = Model::CreateFromOBJ("hari");
 
 	collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i] = Object3d::Create();
+			tst[j][i]=std::make_unique<Object3d>();
 			tst[j][i]->Initialize();// Object3d::Create();
 			tst[j][i]->SetModel(tstmodel);
 		}
@@ -219,96 +219,11 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//このやり方後で直す
-		for (int i = 0; i < MAX_X; i++) {
-			for (int j = 0; j < MAX_Y; j++) {
-				if (map[j][i] == 1|| map[j][i] == 2) {
-					if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-						if (Line::GetInstance()->Gettriggerflag() == true) {
-							Line::GetInstance()->Setmapcol(true);
-							Line::GetInstance()->Setelf(true);
-						}
-					}
-				}
-		/*	else if (map[j][i] == 2) {
-
-					if ((Line::GetInstance()->getpos().x + 0.8f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 0.8f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 0.8f > mapy[j][i] && Line::GetInstance()->getpos().y - 0.8f < mapy[j][i] + height) {
-						if (Line::GetInstance()->Getreturnflag() != true && Line::GetInstance()->Gettriggerflag() == true) {
-							Line::GetInstance()->Setmapcol(true);
-							Line::GetInstance()->Setelf(true);
-						}
-					}
-				}*/
-			}
-		}
+	
 		float disl;
 		//入力処理より後に当たり判定を描け
-		for (int i = 0; i < MAX_X; i++) {
-			for (int j = 0; j < MAX_Y; j++) {
-				if (map[j][i] == 1 || (map[j][i] == 2 && Line::GetInstance()->getcolfsub()==false&&Line::GetInstance()->Getboundflag() == false)) {
-					mapx[j][i] = tst[j][i]->GetPosition().x;
-					mapy[j][i] = tst[j][i]->GetPosition().y;
-					height = 2.5;
-					width = 1;
-
-					if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-						if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-							Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-							jumpFlag = false;
-							//moveSpeed = 0;
-							grav = 0.0f;
-							time = 0;
-							if (Line::GetInstance()->Getboundflag() == true) {
-								Line::GetInstance()->SetBondflag(false);
-								Line::GetInstance()->SetSubradius(0.0f);
-							}
-							break;
-						} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i]) {
-							Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-							jumpFlag = false;
-							if (Line::GetInstance()->Getboundflag() == true) {
-								Line::GetInstance()->SetBondflag(false);
-								Line::GetInstance()->SetSubradius(0.0f);
-							}
-							break;
-						}
-
-					} else {
-						moveSpeed = 0.2f;
-						grav = 0.03;
-					}
-
-					//プレイヤーの左辺
-					if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] < Player_Pos.y + Player_Scl.y)) {
-						if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-							Player_Pos.y = Player_Pos.y + 0.001f;
-							Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-							grav = 0.0f;
-							time = 0;
-							if (Line::GetInstance()->Getboundflag() == true) {
-								Line::GetInstance()->SetBondflag(false);
-								Line::GetInstance()->SetSubradius(0.0f);
-							}
-							break;
-						}
-						//プレイヤーの右辺
-						else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-							Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-							//grav = 0.0f;
-							//time = 0;
-							//moveSpeed = 0;
-							if (Line::GetInstance()->Getboundflag() == true) {
-								Line::GetInstance()->SetBondflag(false);
-								Line::GetInstance()->SetSubradius(0.0f);
-							}
-							break;
-						}
-					} else {
-						moveSpeed = 0.2f;
-					}
-				}
-			}
-		}
-
+			//入力処理より後に当たり判定を描け
+		Collision::ColMap1(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
 #pragma region 線の処理
 
 		if (Line::GetInstance()->Getboundflag() == true) {
@@ -370,7 +285,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 				enemy->enemyappearance(tyutorial);
 				//プレイヤーの検知
 				enemy->Attack(player);
-				enemy->ColMap(map,tstn, mapx, mapy, MAX_X, MAX_Y);
+				enemy->ColMap(map,tst, mapx, mapy, MAX_X, MAX_Y);
 				enemy->Update(Player_Pos);
 
 				enemy->EnemySearchPlayer(player);
@@ -473,7 +388,7 @@ void Tutorial::Finalize()
 {
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			Destroy(tst[j][i]);
+			Destroy_unique(tst[j][i]);
 		}
 	}
 	Destroy(playermodel);

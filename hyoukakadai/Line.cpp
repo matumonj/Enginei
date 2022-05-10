@@ -61,6 +61,7 @@ void Line::Initialize()
 	colf = false;
 	lengthserchf = false;
 	needlerot.z = 0;
+	stopflag = true;
 }
 
 void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFLOAT3& Player_Pos, bool& mapcolf, float& moveSpeed)
@@ -95,58 +96,6 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	LONG a = 30000;
 	LONG b = 15000;
 
-	//if (stopflag == true) {
-	//	if (Input::GetInstance()->GetCMove().lRx < u_r - a)
-	//	{
-	//		// 左に傾けた
-	//		lineangle = +180;
-	//		needlerot.z = +180;
-	//	}
-	//	else if (Input::GetInstance()->GetCMove().lRx > u_r + a)
-	//	{
-	//		// 右に傾けた
-	//		lineangle = 0;
-	//		needlerot.z = 0;
-	//	}
-	//	if (Input::GetInstance()->GetCMove().lRy < u_r - a)
-	//	{
-	//		// 傾けた
-	//		lineangle = +90;
-	//		needlerot.z = +90;
-
-	//	}
-	//	else if (Input::GetInstance()->GetCMove().lRy > u_r + a)
-	//	{
-	//		// 傾けた
-	//		lineangle = +270;
-	//		needlerot.z = +270;
-	//	}
-
-		//// 右上に傾けた
-		//if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy < u_r - b)
-		//{
-		//	lineangle = +45;
-		//	needlerot.z = +45;
-		//}
-		//// 左上に傾けた
-		//if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy < u_r - b)
-		//{
-		//	lineangle = +135;
-		//	needlerot.z = +135;
-		//}
-		//// 左下に傾けた
-		//if (Input::GetInstance()->GetCMove().lRx < u_r - b && Input::GetInstance()->GetCMove().lRy > u_r + b)
-		//{
-		//	lineangle = +225;
-		//	needlerot.z = +225;
-		//}
-		//// 右下に傾けた
-		//if (Input::GetInstance()->GetCMove().lRx > u_r + b && Input::GetInstance()->GetCMove().lRy > u_r + b)
-		//{
-		//	lineangle = +315;
-		//	needlerot.z = +315;
-		//}
-	//}
 	if (!elf && !mapcol) {
 		if (stopflag == true) {
 			if (Input::GetInstance()->GetCMove().lRx < u_r - a)
@@ -231,7 +180,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
 		
-		if ( Input::GetInstance()->TriggerButtonB() && elf) {
+		if ( Input::GetInstance()->TriggerButtonRB() && elf) {
 			boundflag = true;//線の終点へ吸い付くフラグ
 		}
 

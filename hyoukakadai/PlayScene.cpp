@@ -222,10 +222,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 void PlayScene::Update(DirectXCommon* dxCommon)
 {
 	Old_Pos = Player_Pos;
-	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y + 10;
-	spotLightpos[2] = 0;
-
+	
 	LONG u_r = 32768;
 	LONG a = 30000;
 
@@ -382,7 +379,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->Draw();
 	player->PostDraw();
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 1; i++) {
 		if (enemy[i] != nullptr) {
 			enemy[i]->Draw();
 		}
