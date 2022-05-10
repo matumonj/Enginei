@@ -9,23 +9,23 @@ class SecondBoss :
     //
     public:
         /// <summary>
-        /// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+        /// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
         /// </summary>
         SecondBoss();
 
         /// <summary>
-        /// ƒfƒXƒgƒ‰ƒNƒ^
+        /// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
         /// </summary>
         ~SecondBoss();
 
     private:
-        //ƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+        //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
         Object3d* BossObject = nullptr;
-        //ƒ‚ƒfƒ‹‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+        //ãƒ¢ãƒ‡ãƒ«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
         Model* BossModel = nullptr;
 
     private:
-        //ƒpƒ‰ƒ[ƒ^
+        //ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
         XMFLOAT3 Boss_Pos;
         XMFLOAT3 Boss_Rot;
         XMFLOAT3 Boss_Scl = { 9,9,9 };
@@ -34,7 +34,7 @@ class SecondBoss :
         float bosstime = 0;
         int Attackcount = 0;
 
-        const int MaxHP = 20;//‘Ì—Í‚Ì‰Šú’l
+        const int MaxHP = 20;//ä½“åŠ›ã®åˆæœŸå€¤
 
         bool bossjumpflag = false;
         bool bossjumpflag2 = false;
@@ -82,21 +82,21 @@ class SecondBoss :
         void Finalize()override;
 
     public:
-        //–„‚ß‚İ‰ñ”ğ—p
+        //åŸ‹ã‚è¾¼ã¿å›é¿ç”¨
         void MoveBlockJump();
-        //‚¢‚ç‚ñ
+        //ã„ã‚‰ã‚“
         void ColMapb1(int map[15][200], std::unique_ptr<Object3d> tst[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);
-        //ƒvƒŒƒCƒ„[ŒŸ’m
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ¤œçŸ¥
         void EnemySearchPlayer(Player* player)override;
-        //‚¢‚ç‚ñ‚©‚à
+        //ã„ã‚‰ã‚“ã‹ã‚‚
         void Attack(Player* player)override;
-        //ƒ}ƒbƒg‚Ì“–‚½‚è”»’è
+        //ãƒãƒƒãƒˆã®å½“ãŸã‚Šåˆ¤å®š
         void ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y)override;
         //
         void enemyappearance(TyutorialSprite* sprite)override {};
-        //ƒ{ƒX‚ÌƒAƒNƒVƒ‡ƒ“
+        //ãƒœã‚¹ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
         void Motion(Player* player)override;
-        //’ÇÕ
+        //è¿½è·¡
         void Follow(XMFLOAT3 position);
         //
         void SummonEnemy(XMFLOAT3 position);
@@ -120,5 +120,8 @@ class SecondBoss :
         static bool stayflag;
     public:
         bool GetAltStay() { return stayflag; }
-};
+
+    };
+
+
 
