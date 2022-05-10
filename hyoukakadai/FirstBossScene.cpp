@@ -174,15 +174,15 @@ void FirstBossScene::Initialize(DirectXCommon* dxCommon)
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	//camerapositionx = 46.94f;
 	camerapositiony = -4.5f;
-	camerapositionz = -40.51;
-	bossenemy->Setposition({ 40,-4,0 });
+	camerapositionz = -12.15f;
+	bossenemy->Setposition({ 57,-4,0 });
 }
 #pragma endregion
 
 #pragma region 更新処理
 void FirstBossScene::Update(DirectXCommon* dxCommon)
 {
-	camerapositionx = Player_Pos.x;
+	//camerapositionx = Player_Pos.x;
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
@@ -198,30 +198,29 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	// 無反応範囲
 
 	//左
-	 //方向だけを調べる方法
-	if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	{
-		// 左に傾けた
-		Player_Pos.x -= moveSpeed;
+	//方向だけを調べる方法
+		if (Input::GetInstance()->GetCMove().lX < u_r - a)
+		{
+			// 左に傾けた
+			Player_Pos.x -= moveSpeed;
 
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	{
-		// 右に傾けた
-		Player_Pos.x += moveSpeed;
-	}
+		} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+		{
+			// 右に傾けた
+			Player_Pos.x += moveSpeed;
+		}
+	//}
 
+		//player->PlayerMoves(Player_Pos, moveSpeed);
 
-	//player->PlayerMoves(Player_Pos, moveSpeed);
-
-	//FBXモデルの更新
-	object1->Updata(TRUE);
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= moveSpeed;
-	}
-
+		//FBXモデルの更新
+		object1->Updata(TRUE);
+		if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+			Player_Pos.x += moveSpeed;
+		}
+		if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
+			Player_Pos.x -= moveSpeed;
+		}
 	if (jumpFlag == true) {
 		Player_Pos.y += 0.1f;
 		time += 0.02f;
@@ -278,8 +277,11 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	//カメラ関係の処理
 	//camera->SetTarget({ 0,1,0 });//注視点
 	//camera->SetDistance(distance);//
-	camera->SetEye({ camerapositionx,camerapositiony,camerapositionz });
-	camera->SetTarget({ camerapositionx,camerapositiony - 2 ,Player_Pos.z - 10 });
+	//XMFLOAT3 camerapos={
+	FirstBoss::GetInstance()->appearance(camerapositionx);
+	camera->SetEye({ camerapositionx,camerapositiony,camerapositionz - 20 });
+	camera->SetTarget({ camerapositionx,camerapositiony - 2 ,camerapositionz });
+
 	camera->Update();
 
 	effects->BossAttackEffect(dxCommon, camera, FirstBoss::GetInstance()->GetAltStay(), atb, bpos);
@@ -385,7 +387,7 @@ void FirstBossScene::Draw(DirectXCommon* dxcomn)
 	dxcomn->BeginDraw();
 	MyGameDraw(dxcomn);
 	effects->ImGuiDraw();
-	ImGuiDraw();//imguiは最後の方入れとく
+	//ImGuiDraw();//imguiは最後の方入れとく
 	dxcomn->EndDraw();
 }
 #pragma endregion
@@ -408,8 +410,12 @@ void FirstBossScene::ImGuiDraw()
 	//int x= bossenemy->GetHP();
 	if (ImGui::TreeNode("Effect_position")) {
 		//ImGui::SliderInt("positionX", &x, -200, 200);
+		float x = player->GetPosition().x;
+		ImGui::SliderFloat("positionX", &x, -200, 200);
 		ImGui::SliderFloat("positionY", &camerapositiony, -200, 200);
 		ImGui::SliderFloat("positionz", &camerapositionz, -200, 200);
+		camera->SetEye({ camerapositionx,camerapositiony,camerapositionz-20 });
+		camera->SetTarget({ camerapositionx,camerapositiony - 2 ,camerapositionz});
 		//ImGui::SliderInt("positionZ", &elf, -200, 200);
 		ImGui::TreePop();
 	}

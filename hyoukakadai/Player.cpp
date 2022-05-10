@@ -131,8 +131,8 @@ void Player::CollisionAttack1(Enemy*enemy, XMFLOAT3 playerpos)
 		
 		if (enemy != nullptr) {
 			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e,
-				{ enemy->GetPosition().x - 10,enemy->GetPosition().y - 10 },
-				{ enemy->GetPosition().x + 10,enemy->GetPosition().y + 10 }) == true) {
+				{ enemy->GetPosition().x - 3,enemy->GetPosition().y - 3 },
+				{ enemy->GetPosition().x + 3,enemy->GetPosition().y + 3}) == true) {
 				enemy->SetHP(enemy->GetHP() - 1);
 			}
 		}

@@ -2,6 +2,7 @@
 #pragma once
 #include"Object3d.h"
 #include"Model.h"
+#include"DebugCamera.h"
 #include "Enemy.h"
 #include"CollisionPrimitive.h"
 class FirstBoss :
@@ -36,7 +37,7 @@ class FirstBoss :
 
         const int MaxHP = 20;//ëÃóÕÇÃèâä˙íl
 
-        bool bossjumpflag = false;
+        static bool bossjumpflag;
         bool bossjumpflag2 = false;
     private:
         XMFLOAT3 Old_Pos;
@@ -44,7 +45,8 @@ class FirstBoss :
         float oldx, oldy;
         int time = 0;
         int time2 = 0;
-
+        float rottime = 0;
+      static float startcount;
     public:
         static FirstBoss* GetInstance();
 
@@ -63,6 +65,7 @@ class FirstBoss :
         XMFLOAT3 GetScale() { return Boss_Scl; }
 
     public:
+        void  appearance(float &camerapos);
 
         void SetJumpFlag(bool f) { bossjumpflag = f; }
 
@@ -107,6 +110,9 @@ class FirstBoss :
 
        void NormalAttacks(Player* player);
     private:
+        int attacktime = 0;
+        bool phase;
+        float cameratime = 0;
         const int NormalDmage = 1;
         float oshake, oshakex, oshakey;
         float shake, shakex, shakey;
@@ -114,7 +120,7 @@ class FirstBoss :
         XMFLOAT2 DamageArea;
         XMFLOAT2 DamageAreaStart;
     private:
-        XMFLOAT3 startPos;
+        static XMFLOAT3 startPos;
         float movement;
         bool Wrap = false;
         enum BossAction {
@@ -132,7 +138,7 @@ class FirstBoss :
             bool rushflag;
         }rushAttackPrm;
         
-        BossAction bossAction = None;
+        BossAction bossAction = Stay;
         static bool stayflag;
     public:
         bool GetAltStay() { return stayflag; }
