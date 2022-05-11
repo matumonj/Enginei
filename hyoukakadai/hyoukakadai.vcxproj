@@ -211,6 +211,7 @@
     <ClCompile Include="SecondBossScene.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="ThronEnemy.cpp" />
     <ClCompile Include="ThrowEnemy.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="StageSelect.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThronEnemy.h" />
     <ClInclude Include="ThrowEnemy.h" />

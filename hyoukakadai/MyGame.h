@@ -35,6 +35,7 @@
 #include"Framework.h"
 #include"PlayScene.h"
 #include"TitleScene.h"
+#include"StageSelect.h"
 #include"DirectXCommon.h"
 #include"nTexture.h"
 #include"BossScene1.h"
