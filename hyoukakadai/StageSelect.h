@@ -43,6 +43,7 @@ private:
 	Stage NowSelectStage = TutorialStage;
 	bool SelectEnd = false;
 	bool Selectflag = false;
+	const int StageTotalAmount = 4;
 public:
 	void SelectMove();
 

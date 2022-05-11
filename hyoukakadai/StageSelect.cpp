@@ -8,7 +8,7 @@
 #include"mHelper.h"
 #include"Fader.h"
 //コメントアウト
-
+#define PI 360.0
 
 //シーンのコンストラクタ
 StageSelect::StageSelect(SceneManager* sceneManager)
@@ -210,7 +210,7 @@ void StageSelect::SelectMove()
 	} else {
 		time = 0.0f;
 		RotNow = obj_Rot.y;
-		Rotnext = obj_Rot.y + 90;
+		Rotnext = obj_Rot.y + (PI/StageTotalAmount);
 		if (Input::GetInstance()->TriggerButtonRB())
 		{
 			Selectflag = true;
