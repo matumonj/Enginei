@@ -29,6 +29,7 @@ private:
 	static float FollowSpeed ;
 	static bool trigger ;
 	static bool boundflag ;
+	static bool returnflag;
 	static bool drawflag;
 	static bool stopflag;
 	static bool notdoubletuch;
@@ -76,6 +77,7 @@ public:
 	void Setmapcol(bool f) { mapcol = f; }
 	float GetLength() { return subradius; }
 	bool GetColf() { return colf; }
+	bool Getreturnflag() { return returnflag; }
 	void Setpos(float lx,float ly) { linex2=lx;  liney2 = ly;
 	}
 	void SetColf(bool colf) { this->colf = colf; }
@@ -87,6 +89,7 @@ public:
 	bool Getelf() { return elf; }
 	void Setelf(bool flag) { elf = flag; }
 	void SetTrigger(bool flag) { trigger = flag; }
+	void SetReturnflag(bool f) { returnflag = f; }
 	void SetBondflag(bool f) { boundflag = f; }
 	bool getmapcol() {
 		if (!mapcol && !elf) { 
