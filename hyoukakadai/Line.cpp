@@ -11,6 +11,7 @@ bool Line::trigger = false;
 int Line::f;
 bool Line::boundflag = false;
 bool Line::stopflag = true;
+bool Line::returnflag = false;
 bool Line::notdoubletuch = true;
 float Line::tempx, Line::tempy;
 float Line::linex, Line::linex2, Line::liney, Line::liney2;
@@ -54,6 +55,7 @@ void Line::Initialize()
 	subradius = 0;
 	lineangle = 0;
 	boundflag = false;
+	returnflag = false;
 
 	trigger = false;
 	mapcol = false;
@@ -175,7 +177,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		if (subradius > MaxLen && !elf) {//一定以上行って何も当たらなかったら
 			trigger = false;
 			lengthserchf = true;
-		
+			returnflag = true;
 		}
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
@@ -227,7 +229,19 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		tempy = Player_Pos.y;
 	}
 	//線が戻ってくる処理
-	
+	if (returnflag) {
+		subradius -= 1.5f;
+
+		if (subradius <= 0.5f) {//先の長さが０なったら切る
+			returnflag = false;
+			//mapcolf = false;
+			colf = true;
+			stopflag = true;
+			notdoubletuch = true;
+
+		}
+	}
+
 	max(subradius, MinLen);
 	min(subradius, MaxLen);
 	Twine->CreateLineTexture(linex, linex2, liney, liney2);
@@ -280,7 +294,9 @@ void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 			if (position[index] != nullptr) {
 				linex2 = position[index]->GetPosition().x;
 				liney2 = position[index]->GetPosition().y;
-				
+			}
+			else {
+				returnflag = true;
 			}
 		}
 	}
@@ -325,6 +341,9 @@ void Line::CollisionEnemy(Enemy* position)
 			linex2 = position->GetPosition().x;
 			liney2 = position->GetPosition().y;
 		} 
+		else {
+			returnflag = true;
+		}
 	}
 	if (mapcol) {
 		oldlinex = linex2;
