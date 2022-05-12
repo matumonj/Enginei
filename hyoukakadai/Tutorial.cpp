@@ -301,7 +301,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		GameUI::PlayerUIUpdate(player);
 	}
 
-	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
 	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonA() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
 		BaseScene* scene = new  DesertField(sceneManager_);//次のシーンのインスタンス生成

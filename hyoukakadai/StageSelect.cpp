@@ -5,7 +5,9 @@
 #include"DesertField.h"
 #include"SceneManager.h"
 #include"Destroy.h"
+#include"FirstBossScene.h"
 #include"mHelper.h"
+#include"imgui.h"
 #include"Fader.h"
 //コメントアウト
 #define PI 360.0
@@ -21,7 +23,29 @@ StageSelect::StageSelect(SceneManager* sceneManager)
 //スプライト生成
 void StageSelect::SpriteCreate()
 {
+	//注意
+	Sprite::LoadTexture(100, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(101, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(102, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(103, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(104, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(105, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(106, L"Resources/targetSprite.png");
 
+	StageSprite[0] = Sprite::Create(100, { 200,0 });
+	StageSprite[1] = Sprite::Create(101, { 200,0 });
+	StageSprite[2] = Sprite::Create(102, { 200,0 });
+	StageSprite[3] = Sprite::Create(103, { 200,0 });
+	StageSprite[4] = Sprite::Create(104, { 200,0 });
+	StageSprite[5] = Sprite::Create(105, { 200,0 });
+	TargetSprite= Sprite::Create(106, { 200,0 });
+	
+	SpritePosition[0] = { 480,480 };
+	SpritePosition[1] = { 960,480 };
+	SpritePosition[2] = { 1440,480 };
+	SpriteScale[0] = { 0,0 };
+	SpriteScale[1] = { 0,0 };
+	SpriteScale[2] = { 0,0 };
 }
 #pragma endregion
 
@@ -35,7 +59,10 @@ void StageSelect::ModelCreate()
 	SelectStageObj->SetPosition({ 0,0,0 });
 	SelectStageObj->SetScale({ 8,8,8 });
 	obj_Rot = { 0,0,0 };
-
+	for (int i = 0; i < 6; i++) {
+		StageSprite[i]->SetAnchorPoint({ 0.5,0.5 });
+	}
+	TargetSprite->SetAnchorPoint({ 0.5,0.5 });
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -50,13 +77,14 @@ void StageSelect::ModelCreate()
 	lightGroup->SetPointLightActive(2, false);
 	lightGroup->SetSpotLightActive(0, true);
 
+	Fader::SetFeedSprite();
 }
 #pragma endregion
 
 #pragma region 初期化
 void StageSelect::Initialize(DirectXCommon* dxCommon)
 {
-
+	nextScene = false;
 	SpriteCreate();//
 	ModelCreate();//
 
@@ -64,7 +92,9 @@ void StageSelect::Initialize(DirectXCommon* dxCommon)
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
-
+	for (int i = 0; i < 3; i++) {
+		TargetSpritePos[i] = SpritePosition[i];
+	}
 }
 #pragma endregion
 
@@ -90,11 +120,14 @@ void StageSelect::Update(DirectXCommon* dxCommon)
 		lightGroup->SetSpotLightAtten(0, XMFLOAT3(spotLightAtten));
 		lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));
 	}
+
 	lightGroup->Update();
 	SelectStageObj->SetRotation(obj_Rot);
 	SelectStageObj->Update({ 1,1,1,1 });
 	SelectMove();
 	Select();
+	SpriteUpdate();
+	Fader::FeedSpriteUpdate();
 	//シーンチェンジ
 //	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
 	//	BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
@@ -126,6 +159,14 @@ void StageSelect::Draw(DirectXCommon* dxcomn)
 
 	dxcomn->BeginDraw();
 	MyGameDraw(dxcomn);
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	TargetSprite->Draw();
+	Fader::FeedSpriteDraw();
+	for (int i = 0; i < 6; i++) {
+		StageSprite[i]->Draw();
+	}
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
 	ImGuiDraw();
 	dxcomn->EndDraw();
 }
@@ -146,7 +187,7 @@ void StageSelect::ImGuiDraw()
 		float x = spotLightpos[1];
 		ImGui::SliderFloat("x", &obj_Rot.y, -300, 300);
 		ImGui::SliderFloat("y", &spotLightpos[1], -300, 300);
-		ImGui::SliderFloat("z", &spotLightpos[2], -300, 300);
+		ImGui::SliderInt("z", &SelectNum, -300, 300);
 		ImGui::ColorPicker3("light_color", spotLightColor);
 		ImGui::TreePop();
 	}
@@ -167,54 +208,177 @@ void StageSelect::Finalize()
 void StageSelect::Select()
 {
 	NowSelectStage = selectStage[SelectNum];
-
-	if (Selectflag != true&& Input::GetInstance()->TriggerButtonA()) {
-		switch (NowSelectStage)
-		{
-		case TutorialStage:
-			if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-				BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
-				sceneManager_->SetnextScene(scene);//シーンのセット
+		if (Selectflag_right != true && Selectflag_left != true && stageSpriteScene == None) {
+			switch (NowSelectStage)
+			{
+			case TutorialStage:
+				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+					nextScene = true;
+				}
+				if (nextScene) {
+					stageSpriteScene = Jungle;
+					
+				}
+				break;
+			case Stage1_1:
+				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+					nextScene = true;
+				}
+				if (nextScene) {
+					stageSpriteScene = Sea;
+					Fader::feedIn(0.5f, 1);
+				}
+				break;
+			case Stage1_2:
+				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+					BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+				break;
+			case Stage2_1:
+				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+					BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+				break;
+			case Stage2_2:
+				break;
+			default:
+				break;
 			}
-			break;
-		case Stage1_1:
-			if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-				BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
-				sceneManager_->SetnextScene(scene);//シーンのセット
-			}
-			break;
-		case Stage1_2:
-			if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-				BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
-				sceneManager_->SetnextScene(scene);//シーンのセット
-			}
-			break;
-		case Stage2_1:
-			break;
-		case Stage2_2:
-			break;
-		default:
-			break;
 		}
 	}
-}
 
 void StageSelect::SelectMove()
 {
-	if (Selectflag) {
-		time += 0.02f;
-		obj_Rot.y = Easing::EaseOut(time, RotNow, Rotnext);
-		if (obj_Rot.y >= Rotnext - 1) {
-			Selectflag = false;
+	if (stageSpriteScene == None) {
+		if (!Selectflag_left) {
+			if (Selectflag_right) {
+				time += 0.02f;
+				obj_Rot.y = Easing::EaseOut(time, RotNow, Rotnext);
+				if (obj_Rot.y >= Rotnext - 1) {
+					Selectflag_right = false;
+				}
+			} else {
+				time = 0.0f;
+				RotNow = obj_Rot.y;
+				Rotnext = obj_Rot.y + (PI / StageTotalAmount);
+				if (Input::GetInstance()->TriggerButtonRB())
+				{
+					Selectflag_right = true;
+					SelectNum++;
+				}
+			}
 		}
-	} else {
-		time = 0.0f;
-		RotNow = obj_Rot.y;
-		Rotnext = obj_Rot.y + (PI/StageTotalAmount);
-		if (Input::GetInstance()->TriggerButtonRB())
-		{
-			Selectflag = true;
-			SelectNum++;
+	//
+		if (!Selectflag_right) {
+			if (Selectflag_left) {
+				time += 0.02f;
+				obj_Rot.y = Easing::EaseOut(time, RotNow, Rotnext);
+				if (obj_Rot.y <= Rotnext + 1) {
+					Selectflag_left = false;
+				}
+			} else {
+				time = 0.0f;
+				RotNow = obj_Rot.y;
+				Rotnext = obj_Rot.y - (PI / StageTotalAmount);
+				if (Input::GetInstance()->TriggerButtonLB())
+				{
+					Selectflag_left = true;
+					SelectNum--;
+				}
+			}
 		}
 	}
+	const int MinStage = -1;
+	const int MaxStage = 5;
+	obj_Rot.y = max(obj_Rot.y, 0);
+	obj_Rot.y = min(obj_Rot.y, 360);
+	SelectNum = max(SelectNum, 0);
+	SelectNum = min(SelectNum, 4);
+}
+
+void StageSelect::SpriteUpdate()
+{
+		switch (stageSpriteScene)
+		{
+		case Jungle:
+			nextScene = false;
+			Fader::feedIn(0.5f, 1);
+			stime += 0.01f;
+			for (int i = 0; i < 3; i++) {
+				SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 300);
+				SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 300);
+
+				StageSprite[i]->SetPosition(SpritePosition[i]);
+				StageSprite[i]->SetSize(SpriteScale[i]);
+			}
+			if (Input::GetInstance()->TriggerButtonB()) {
+				stime = 0;
+				stageSpriteScene =Stay;
+			}
+			SelectStageofStage();
+			break;
+		case Sea:
+			nextScene = false;
+			stime += 0.01f;
+			for (int i = 0; i < 3; i++) {
+				SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 300);
+				SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 300);
+				for (int j = 3; j < 6; j++) {
+					StageSprite[j]->SetPosition(SpritePosition[i]);
+					StageSprite[j]->SetSize(SpriteScale[i]);
+				}
+			}
+			if (Input::GetInstance()->TriggerButtonB()) {
+				stageSpriteScene = None;
+			}
+			SelectStageofStage();
+			break;
+		case Stay:
+			Fader::feedOut(0.0f, 0.1f);
+			if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+				stageSpriteScene = None;
+			}
+			stime += 0.01f;
+			for (int i = 0; i < 3; i++) {
+				if (SpriteScale[i].x >= 0) {
+					SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 0);
+				}
+				if (SpriteScale[i].y >= 0) {
+					SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 0);
+				}
+			}
+			for (int i = 0; i < 6; i++) {
+				for (int j = 0; j < 3; j++) {
+					StageSprite[i]->SetPosition(SpritePosition[j]);
+					StageSprite[i]->SetSize(SpriteScale[j]);
+				}
+			}
+			TargetSprite->SetSize({ 0,0 });
+
+			break;
+		case None:
+			stime = 0;
+			break;
+		default:
+			
+			break;
+		}
+
+	}
+
+
+void StageSelect::SelectStageofStage()
+{
+	if (Input::GetInstance()->TriggerButtonRB()) {//押されたら
+		TargetNum++;
+	}
+	else if (Input::GetInstance()->TriggerButtonLB()) {
+		TargetNum--;
+	}
+	TargetNum = max(TargetNum, 0);
+	TargetNum = min(TargetNum, 3);
+	TargetSprite->SetPosition(TargetSpritePos[TargetNum]);
+	TargetSprite->SetSize({ 300,300 });
 }

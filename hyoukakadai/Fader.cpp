@@ -10,7 +10,7 @@ Fader* Fader::GetInstance()
 }
 bool Fader::SetFeedSprite()
 {
-	Sprite::LoadTexture(10, L"Resources/feed.png");
+	Sprite::LoadTexture(10, L"Resources/white1x1.png");
 	sprite = Sprite::Create(10, { 0,0 });
 	alpha = 0.0f;
 	return true;

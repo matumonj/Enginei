@@ -184,6 +184,18 @@ bool Input::TriggerButtonRB()
 	return false;
 }
 
+
+bool Input::TriggerButtonLB()
+{
+	// 前回が0で、今回が0でなければトリガー
+	if (!CStatePre.rgbButtons[4] && CState.rgbButtons[4]) {
+		return true;
+	}
+
+	// トリガーでない
+	return false;
+}
+
 bool Input::TriggerButtonB()
 {
 	// 前回が0で、今回が0でなければトリガー
