@@ -40,6 +40,7 @@
 #include"nTexture.h"
 #include"BossScene1.h"
 #include"FirstBossScene.h"
+#include"ForestStage1.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
 

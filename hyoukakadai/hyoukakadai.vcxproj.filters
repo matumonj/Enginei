@@ -69,6 +69,7 @@
     <ClCompile Include="SecondBossScene.cpp" />
     <ClCompile Include="GamOver.cpp" />
     <ClCompile Include="StageSelect.cpp" />
+    <ClCompile Include="ForestStage1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -138,6 +139,7 @@
     <ClInclude Include="mHelper.h" />
     <ClInclude Include="GamOver.h" />
     <ClInclude Include="StageSelect.h" />
+    <ClInclude Include="ForestStage1.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />

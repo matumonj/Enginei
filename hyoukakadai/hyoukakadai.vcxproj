@@ -181,6 +181,7 @@
     <ClCompile Include="FbxLoader.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="FirstBossScene.cpp" />
+    <ClCompile Include="ForestStage1.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="f_Model.cpp" />
     <ClCompile Include="f_Object3d.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="FbxLoader.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FirstBossScene.h" />
+    <ClInclude Include="ForestStage1.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="f_Model.h" />
     <ClInclude Include="f_Object3d.h" />
