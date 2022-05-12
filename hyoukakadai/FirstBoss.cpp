@@ -5,6 +5,7 @@
 #include"mHelper.h"
 #include<random>
 #define PI 3.14
+int FirstBoss::StayCount = 0;
 float FirstBoss::startcount = 0;
 bool FirstBoss::stayflag;
 XMFLOAT3 FirstBoss::startPos;
@@ -197,6 +198,7 @@ void FirstBoss::Motion(Player* player)
 		RushAttack(player);
 		break;
 	case None:
+		//StayCount = 0;
 		RushAttackStayPrm(player);
 
 		attacktime++;
@@ -240,9 +242,12 @@ void FirstBoss::Motion(Player* player)
 		break;
 
 	case Stay://ビーム前の待機
-		if (startcount > 1.0f) {
+		StayCount++;
+		if (StayCount > 300) {
 			bossAction = None;
+			StayCount = 0;
 		}
+		
 		break;
 
 	case NormalAttack:
@@ -280,10 +285,11 @@ void FirstBoss::RushAttack(Player* player)
 			rushAttackPrm.count += 0.01f;
 			Position.x = Easing::EaseOut(rushAttackPrm.count, Position.x, rushAttackPrm.aftermovex);
 		} else {
+			bossAction = Stay;
 			rushAttackPrm.count = 0.0f;
 			rushAttackPrm.rushflag = false;
 			bossjumpflag = true;
-			bossAction = None;
+			
 		}
 	}
 	if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 5) {
@@ -328,13 +334,13 @@ void FirstBoss::RushAttackStayPrm(Player* player)
 	if (!rushAttackPrm.rushflag) {
 		if (player->GetPosition().x < Position.x) {
 			startPos.x = SetPositionRight;
-			rushAttackPrm.aftermovex = Position.x - 30;
+			rushAttackPrm.aftermovex = Position.x - 20;
 			if (Rotation.y != 180) {
 				Rotation.y += 10;
 			}
 		} else {
 			startPos.x = SetPositionLeft;
-			rushAttackPrm.aftermovex = Position.x + 30;
+			rushAttackPrm.aftermovex = Position.x + 20;
 			if (Rotation.y != 0) {
 				Rotation.y -= 10;
 			}

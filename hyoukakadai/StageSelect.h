@@ -6,6 +6,7 @@
 #include"DirectXCommon.h"
 #include"DebugCamera.h"
 #include"LightGroup.h"
+#include"Sprite.h"
 class StageSelect:public BaseScene
 {
 public:
@@ -23,6 +24,11 @@ private: // エイリアス
 private:
 	Object3d* SelectStageObj;
 	Model* SelectStageModel;
+	Sprite* StageSprite[6];
+	Sprite* TargetSprite;
+	XMFLOAT2 TargetSpritePos[3];
+	XMFLOAT2 SpritePosition[3];
+	XMFLOAT2 SpriteScale[3];
 private:
 	enum Stage {
 		TutorialStage,
@@ -42,10 +48,13 @@ private:
 	float RotNow;
 	Stage NowSelectStage = TutorialStage;
 	bool SelectEnd = false;
-	bool Selectflag = false;
+	bool Selectflag_right = false;
+	bool Selectflag_left = false;
 	const int StageTotalAmount = 4;
+	bool nextScene;
 public:
 	void SelectMove();
+	//void SelectMove_Left();
 
 	void Select();
 	private:
@@ -79,7 +88,26 @@ public:
 		float spotLightColor[3] = { 1,1,1 };
 		float spotLightAtten[3] = { 0.0f,0.0f,0.0f };
 		float spotLightFactorAngle[2] = { 20.0f,30.0f };
-
+private:
+	int TargetNum;
+	bool SpriteSclflag;
+	int NowSpriteNum;
+	enum StageSprites
+	{
+		Jungle,
+		Sea,
+		Etc,
+		Stay,
+		None,
+	};
+	enum whSelect {
+		Stage_JorS,
+		Stage3,
+	};
+	whSelect whStage = Stage_JorS;
+	const int MaxStage = 3;
+	float stime = 0.0f;
+	StageSprites stageSpriteScene = None;
 	public:
 		void SpriteCreate();
 		void ModelCreate();
@@ -91,6 +119,6 @@ public:
 		void Draw(DirectXCommon* dxcomn)override;
 		void ImGuiDraw();
 		void Finalize()override;
-
-		
+		void SelectStageofStage();
+		void SpriteUpdate();
 	};

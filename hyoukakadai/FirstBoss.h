@@ -119,6 +119,7 @@ class FirstBoss :
 
        void GetDamage();
     private:
+        static int StayCount;
         bool damageRec = false;
         static int attacktime ;
         bool phase;
@@ -148,7 +149,7 @@ class FirstBoss :
             bool rushflag;
         }rushAttackPrm;
         
-        BossAction bossAction = Stay;
+        BossAction bossAction =None;
         static bool stayflag;
     public:
         bool GetAltStay() { return stayflag; }
