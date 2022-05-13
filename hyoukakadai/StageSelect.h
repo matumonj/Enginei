@@ -89,7 +89,7 @@ public:
 		float spotLightAtten[3] = { 0.0f,0.0f,0.0f };
 		float spotLightFactorAngle[2] = { 20.0f,30.0f };
 private:
-	int TargetNum;
+	int TargetNum=-1;
 	bool SpriteSclflag;
 	int NowSpriteNum;
 	enum StageSprites

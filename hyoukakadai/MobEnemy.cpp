@@ -62,7 +62,7 @@ void MobEnemy::Update(XMFLOAT3 position)
 	}
 	SetHP(HP);
 	MobObject->SetScale({0.5,0.5,0.5 });
-	MobObject->SetRotation({ 0,180,0 });
+	MobObject->SetRotation(Mob_Rot);
 
 	//Follow(position);
 	MobObject->SetColor({ 1,1,1,1 });
@@ -97,7 +97,7 @@ void MobEnemy::Follow(Player*player)
 	angleZ = (player->GetPosition().y - Position.y);
 	angleR = sqrtf((Position.x - player->GetPosition().x) * (Position.x - player->GetPosition().x)
 		+ (Position.y - player->GetPosition().y) * (Position.y - player->GetPosition().y));
-	if (angleR>5) {
+	if (angleR>2) {
 		Position.x += (angleX / angleR) * movespeed;
 		//Position.y += (angleZ / angleR) * centerSpeed;
 	}
@@ -109,7 +109,19 @@ void MobEnemy::Follow(Player*player)
 	dis = sqrtf((player->GetPosition().x - Position.x) * (player->GetPosition().x - Position.x) +
 		(player->GetPosition().y - Position.y) * (player->GetPosition().y - Position.y));
 	if (dis <= 2) {
+		player->SetHp(player->getHp() - 1);
 		//Attack(player);
+	}
+	if (player->GetPosition().x >= Position.x) {
+		if (Mob_Rot.y <= 90) {
+			Mob_Rot.y += 10;
+		}
+	}
+	else
+	{
+		if (Mob_Rot.y >= -90) {
+			Mob_Rot.y -= 10;
+		}
 	}
 }
 
