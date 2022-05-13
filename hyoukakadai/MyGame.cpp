@@ -12,7 +12,7 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 	//Scene = new TitleScene();
 	//初期シーン
 
-	BaseScene*scene_ = new ForestStage1(sceneManger);
+	BaseScene*scene_ = new DesertField(sceneManger);
 
 	sceneManger->SetnextScene(scene_);
 
