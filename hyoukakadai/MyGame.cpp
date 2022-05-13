@@ -12,7 +12,9 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 	//Scene = new TitleScene();
 	//初期シーン
 
+
 	BaseScene*scene_ = new StageSelect(sceneManger);
+
 
 	sceneManger->SetnextScene(scene_);
 
