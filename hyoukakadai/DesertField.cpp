@@ -217,7 +217,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 	enemy[3]->Setposition({ 80,-4.2,0 });
 	enemy[2]->Setposition({ 250,-4.2,0 });
 	enemy[1]->Setposition({ 350, -18, 0 });
-	enemy[0]->Setposition({ 200, -7, 0 });
+	enemy[0]->Setposition({ 50, -7, 0 });
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
 	enemy[2]->Initialize();
@@ -484,8 +484,9 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
-			enemy[i]->Attack(player);
+			//enemy[0]->
 			enemy[i]->ColMap(map, tst, mapx,mapy,MAX_X, MAX_Y);
+			enemy[i]->Attack(player);
 			enemy[i]->Update(Player_Pos);
 
 			enemy[i]->EnemySearchPlayer(player);

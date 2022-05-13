@@ -20,7 +20,7 @@ MobEnemy::~MobEnemy()
 void MobEnemy::Initialize()
 {
 	//モデルの読込
-	MobModel = Model::CreateFromOBJ("bossenemy");
+	MobModel = Model::CreateFromOBJ("enemy2");
 	//モデル割り当て
 	//MobObject = new Object3d();
 	MobObject = Object3d::Create();
@@ -56,14 +56,16 @@ void MobEnemy::Update(XMFLOAT3 position)
 	//モブ
 	//MobObject->SetPosition(Position);
 	if (HP < 0) {
-		enemyState = State::DEAD;
+		//enemyState = State::DEAD;
 	} else {
 	//	enemyState = State::ALIVE;
 	}
-	MobObject->SetScale({ 0.5,0.5,0.5 });
+	SetHP(HP);
+	MobObject->SetScale({0.5,0.5,0.5 });
 	MobObject->SetRotation({ 0,180,0 });
 
 	//Follow(position);
+	MobObject->SetColor({ 1,1,1,1 });
 	MobObject->Update({ 1,1,1,1 });
 	MobObject->SetPosition(Position);
 
@@ -96,18 +98,18 @@ void MobEnemy::Follow(Player*player)
 	angleR = sqrtf((Position.x - player->GetPosition().x) * (Position.x - player->GetPosition().x)
 		+ (Position.y - player->GetPosition().y) * (Position.y - player->GetPosition().y));
 	if (angleR>5) {
-		Position.x += (angleX / angleR) * centerSpeed;
-		Position.y += (angleZ / angleR) * centerSpeed;
+		Position.x += (angleX / angleR) * movespeed;
+		//Position.y += (angleZ / angleR) * centerSpeed;
 	}
 	//Position.x =player.x;
 	//Position.y =player.y;
-	MobObject->SetPosition(Position);
+	//MobObject->SetPosition(Position);
 	//MobObject->SetPosition(Position);
 	float dis;
 	dis = sqrtf((player->GetPosition().x - Position.x) * (player->GetPosition().x - Position.x) +
 		(player->GetPosition().y - Position.y) * (player->GetPosition().y - Position.y));
 	if (dis <= 2) {
-		Attack(player);
+		//Attack(player);
 	}
 }
 
@@ -127,11 +129,82 @@ void MobEnemy::Motion(Player* player)
 }
 void MobEnemy::Attack(Player*player)
 {
+	float dis;
+	dis = sqrtf((player->GetPosition().x - Position.x) * (player->GetPosition().x - Position.x) +
+		(player->GetPosition().y - Position.y) * (player->GetPosition().y - Position.y));
+	if (dis <= 5) {
+		followf = true;
+		//Attack(player);
+	}
+	if (followf) {
+		Follow(player);
+	}
 		//player->SetHp(player->getHp() - AttackDamage);
 }
 void MobEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200] , float mapx[20][200], float mapy[20][200], const int X, const int Y)
 {
-	
+	//grav-grav
+	Old_Pos = Position;
+//time-time
+//movespeed-movespeed
+	float height;//
+	float width;
+	XMFLOAT3 Player_Scl = { 1,1,1 };
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			if (map[j][i] == 1) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+
+				if ((Position.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Position.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
+					if (Old_Pos.y > mapy[j][i] && Position.y - Player_Scl.y < mapy[j][i] + height) {
+						Position.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						//jumpflag = false;
+						//	Line::GetInstance()->SetBondflag(false);
+						break;
+					} else if (Old_Pos.y <mapy[j][i] && Position.y + Player_Scl.y>mapy[j][i] - height) {
+						Position.y = mapy[j][i] - (Player_Scl.y + height);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+
+				} else {
+					movespeed = 0.1f;
+					grav = 0.03;
+				}
+
+				//プレイヤーの左辺
+				if ((Position.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Position.y + Player_Scl.y)) {
+					if (Position.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						//bossjumpflag = true;
+						Position.y = Position.y + 0.001f;
+						Position.x = width + mapx[j][i] + Player_Scl.x;
+
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Position.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+						//bossjumpflag = true;
+						
+						Position.x = mapx[j][i] - (Player_Scl.x + width);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+				} else {
+					movespeed = 0.1f;
+				}
+			}
+		}
+	}
+
+	time += 0.04f;
+	Position.y -= grav * time * time;
 }
 
 void MobEnemy::enemyappearance(TyutorialSprite* sprite)

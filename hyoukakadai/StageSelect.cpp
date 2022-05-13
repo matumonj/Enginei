@@ -101,7 +101,6 @@ void StageSelect::Initialize(DirectXCommon* dxCommon)
 #pragma region çXêVèàóù
 void StageSelect::Update(DirectXCommon* dxCommon)
 {
-
 	LONG u_r = 32768;
 	LONG a = 30000;
 
@@ -199,7 +198,12 @@ void StageSelect::ImGuiDraw()
 void StageSelect::Finalize()
 {
 	//delete sceneManager_;
-
+	delete camera;
+	delete SelectStageModel, SelectStageObj;
+	for (int i = 0; i < 6; i++) {
+		delete StageSprite[i];
+	}
+	delete TargetSprite;
 	//delete efk,efk1;
 
 }
@@ -226,7 +230,7 @@ void StageSelect::Select()
 				}
 				if (nextScene) {
 					stageSpriteScene = Sea;
-					Fader::feedIn(0.5f, 1);
+					
 				}
 				break;
 			case Stage1_2:
@@ -321,17 +325,23 @@ void StageSelect::SpriteUpdate()
 			break;
 		case Sea:
 			nextScene = false;
+			Fader::feedIn(0.5f, 1);
 			stime += 0.01f;
 			for (int i = 0; i < 3; i++) {
 				SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 300);
 				SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 300);
 				for (int j = 3; j < 6; j++) {
-					StageSprite[j]->SetPosition(SpritePosition[i]);
+					
+
+					StageSprite[3]->SetPosition(SpritePosition[0]);
+					StageSprite[4]->SetPosition(SpritePosition[1]);
+					StageSprite[5]->SetPosition(SpritePosition[2]);//StageSprite[j]->SetPosition(SpritePosition[i]);
 					StageSprite[j]->SetSize(SpriteScale[i]);
 				}
 			}
 			if (Input::GetInstance()->TriggerButtonB()) {
-				stageSpriteScene = None;
+				stime = 0;
+				stageSpriteScene = Stay;
 			}
 			SelectStageofStage();
 			break;
@@ -349,7 +359,11 @@ void StageSelect::SpriteUpdate()
 					SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 0);
 				}
 			}
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 3; i++) {
+				StageSprite[i]->SetPosition(SpritePosition[i]);
+					StageSprite[i]->SetSize(SpriteScale[i]);
+			}
+			for (int i = 3; i < 6; i++) {
 				for (int j = 0; j < 3; j++) {
 					StageSprite[i]->SetPosition(SpritePosition[j]);
 					StageSprite[i]->SetSize(SpriteScale[j]);

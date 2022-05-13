@@ -55,6 +55,15 @@ public:
     void Follow(Player*player);
     void Motion(Player* player)override;
     void Attack(Player*player)override;
+private:
+    bool followf;
+    float movespeed = 0.2f;
+    float grav = 0.03f;
+    float time = 0;
+    int Attackcount = 0;
+    XMFLOAT3 Old_Pos;
+    const int MaxHP = 20;//‘Ì—Í‚Ì‰Šú’l
+
     float angleXs, angleZs, angleRs;
     float centerSpeed = 0.1f;
     const int AttackDamage = 2;
