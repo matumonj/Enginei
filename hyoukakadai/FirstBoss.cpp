@@ -247,7 +247,7 @@ void FirstBoss::Motion(Player* player)
 			bossAction = None;
 			StayCount = 0;
 		}
-		
+		rushAttackPrm.count = 0.0f;
 		break;
 
 	case NormalAttack:
@@ -334,13 +334,13 @@ void FirstBoss::RushAttackStayPrm(Player* player)
 	if (!rushAttackPrm.rushflag) {
 		if (player->GetPosition().x < Position.x) {
 			startPos.x = SetPositionRight;
-			rushAttackPrm.aftermovex = Position.x - 20;
+			rushAttackPrm.aftermovex = SetPositionRight - 20;
 			if (Rotation.y != 180) {
 				Rotation.y += 10;
 			}
 		} else {
 			startPos.x = SetPositionLeft;
-			rushAttackPrm.aftermovex = Position.x + 20;
+			rushAttackPrm.aftermovex = SetPositionLeft + 20;
 			if (Rotation.y != 0) {
 				Rotation.y -= 10;
 			}

@@ -322,6 +322,21 @@ void StageSelect::SpriteUpdate()
 				stageSpriteScene =Stay;
 			}
 			SelectStageofStage();
+			//
+			if (SpriteScale[0].x>=300&&Input::GetInstance()->TriggerButtonA()) {//押されたら
+				if (TargetNum == 0) {
+					BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+				else if (TargetNum == 1) {
+					BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+				else if (TargetNum == 2) {
+					BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
 			break;
 		case Sea:
 			nextScene = false;
