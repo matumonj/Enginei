@@ -164,6 +164,7 @@
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
+    <ClCompile Include="BossScene2.cpp" />
     <ClCompile Include="FirstBoss.cpp" />
     <ClCompile Include="BossScene1.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BossEnemy.h" />
+    <ClInclude Include="BossScene2.h" />
     <ClInclude Include="FirstBoss.h" />
     <ClInclude Include="BossScene1.h" />
     <ClInclude Include="Camera.h" />
