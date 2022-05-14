@@ -42,6 +42,7 @@
 #include"FirstBossScene.h"
 #include"BossScene2.h"
 #include"ForestStage1.h"
+#include"ForestStage2.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
