@@ -125,9 +125,13 @@ void BossEnemy::Update(XMFLOAT3 position)
 	BossObject->SetRotation(Boss_Rot);
 
 }
+void BossEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)
+{
+
+}
 
 //•`‰æˆ—
-void BossEnemy::Draw()
+void BossEnemy::Draw(DirectXCommon*dxcomn)
 {
 	BossObject->PreDraw();
 	BossObject->Draw();
@@ -139,7 +143,7 @@ void BossEnemy::Draw()
 		ThrowObj[i]->PostDraw();
 	}
 	for (int i = 0; i < SummonMax; i++) {
-		enemy[i]->Draw();
+		enemy[i]->Draw(dxcomn);
 	}
 }
 

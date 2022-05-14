@@ -381,7 +381,7 @@ void PlayScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 
 	for (int i = 0; i < 1; i++) {
 		if (enemy[i] != nullptr) {
-			enemy[i]->Draw();
+			enemy[i]->Draw(dxcomn);
 		}
 	}
 	

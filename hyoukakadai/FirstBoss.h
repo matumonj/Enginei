@@ -85,10 +85,10 @@ class FirstBoss :
 
         void Update(XMFLOAT3 position)override;
 
-        void Draw()override;
+        void Draw(DirectXCommon* dxcomn)override;
 
         void Finalize()override;
-
+        void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
     public:
         //ñÑÇﬂçûÇ›âÒîóp
         void MoveBlockJump();

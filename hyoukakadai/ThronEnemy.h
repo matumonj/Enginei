@@ -1,10 +1,10 @@
 #pragma once
 #include "Enemy.h"
-#pragma once
 #include"mEffekseer.h"
 #include"Object3d.h"
 #include"Model.h"
 #include"TyutorialSprite.h"
+#include"nTexture.h"
 class ThronEnemy :
     public Enemy
 {
@@ -20,6 +20,9 @@ class ThronEnemy :
         ~ThronEnemy();
 
     private:
+        nTexture* searchTexture;
+        int searchCount = 0;
+        bool searchFlag;
         //オブジェクトのインスタンス
         Object3d* ThronObject = nullptr;
         //モデルのインスタンス
@@ -30,7 +33,7 @@ class ThronEnemy :
        
     public:
         void EnemySearchPlayer(Player* player)override;
-
+        void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
         /// <summary>
         /// 初期化
         /// </summary>
@@ -44,7 +47,7 @@ class ThronEnemy :
         /// <summary>
         /// 描画処理
         /// </summary>
-        void Draw()override;
+        void Draw(DirectXCommon* dxcomn)override;
 
         /// <summary>
         /// 解放処理

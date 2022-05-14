@@ -318,10 +318,7 @@ void Tutorial::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->Draw();
 	player->PostDraw();
 
-	if (enemy != nullptr) {
-		enemy->Draw();
-	}
-
+	
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1|| map[j][i] == 2) {
@@ -339,6 +336,9 @@ void Tutorial::MyGameDraw(DirectXCommon* dxcomn)
 
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
+	if (enemy != nullptr) {
+		enemy->Draw(dxcomn);
+	}
 
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);

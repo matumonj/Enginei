@@ -90,7 +90,7 @@ public:
 
     void Update(XMFLOAT3 position)override;
 
-    void Draw()override;
+    void Draw(DirectXCommon*dxcomn)override;
 
     void Finalize()override;
 
@@ -115,6 +115,8 @@ public:
     void Follow(XMFLOAT3 position);
     //
     void SummonEnemy(XMFLOAT3 position);
+    void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
+
 private:
     static const int ThrowObjMax = 5;
     const int ThrowDamage = 1;

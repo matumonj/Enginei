@@ -60,6 +60,10 @@ void SecondBoss::Initialize()
 	HP = MaxHP;
 	startPos = { 40,-18,0 };
 }
+void SecondBoss::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)
+{
+
+}
 
 //XVˆ—
 void SecondBoss::Update(XMFLOAT3 position)
@@ -80,7 +84,7 @@ void SecondBoss::Update(XMFLOAT3 position)
 }
 
 //•`‰æˆ—
-void SecondBoss::Draw()
+void SecondBoss::Draw(DirectXCommon*dxcomn)
 {
 	BossObject->PreDraw();
 	BossObject->Draw();

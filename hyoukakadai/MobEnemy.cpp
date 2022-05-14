@@ -72,7 +72,7 @@ void MobEnemy::Update(XMFLOAT3 position)
 }
 
 //•`‰æˆ—
-void MobEnemy::Draw()
+void MobEnemy::Draw(DirectXCommon* dxcomn)
 {
 	MobObject->PreDraw();
 	MobObject->Draw();
@@ -226,4 +226,7 @@ void MobEnemy::enemyappearance(TyutorialSprite* sprite)
 			Position.y -= 0.5f;
 		}
 	}
+}
+void MobEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
+
 }

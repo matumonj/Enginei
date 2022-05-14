@@ -11,15 +11,7 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 
 	//Scene = new TitleScene();
 	//初期シーン
-
-<<<<<<< HEAD
 	BaseScene*scene_ = new DesertField(sceneManger);
-=======
-
-	BaseScene*scene_ = new StageSelect(sceneManger);
->>>>>>> 8e35184421c66c96e28c41084eeadf73b19c3489
-
-
 	sceneManger->SetnextScene(scene_);
 
 	//Scene->Initialize();

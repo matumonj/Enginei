@@ -28,6 +28,7 @@ void ThronEnemy::Initialize()
 	//ThronObject->Initialize();
 	//パラメータのセット
 	HP = 10;
+	
 }
 
 //更新処理
@@ -70,7 +71,7 @@ void ThronEnemy::Update(XMFLOAT3 position)
 }
 
 //描画処理
-void ThronEnemy::Draw()
+void ThronEnemy::Draw(DirectXCommon* dxcomn)
 {
 	ThronObject->PreDraw();
 	ThronObject->Draw();
@@ -198,4 +199,7 @@ void ThronEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 void ThronEnemy::enemyappearance(TyutorialSprite* sprite)
 {
 	
+}
+void ThronEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)
+{
 }

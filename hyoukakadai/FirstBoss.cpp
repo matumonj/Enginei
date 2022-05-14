@@ -104,7 +104,7 @@ void FirstBoss::Update(XMFLOAT3 position)
 }
 
 //•`‰æˆ—
-void FirstBoss::Draw()
+void FirstBoss::Draw(DirectXCommon* dxcomn)
 {
 	BossObject->PreDraw();
 	BossObject->Draw();
@@ -425,4 +425,7 @@ void FirstBoss::GetDamage()
 		//BossObject->SetColor({ 1,1.0f,1.0f,1 });
 	}
 	BossObject->SetColor({ r,g,b,1.0f });
+}
+void FirstBoss::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
+	
 }

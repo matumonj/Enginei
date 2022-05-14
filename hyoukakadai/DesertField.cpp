@@ -490,6 +490,8 @@ void DesertField::Update(DirectXCommon* dxCommon)
 			enemy[i]->Update(Player_Pos);
 
 			enemy[i]->EnemySearchPlayer(player);
+			enemy[i]->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
+
 			//もし敵が死んだら破棄
 			if (enemy[i]->GetState_DEAD() == true) {
 				Destroy_unique(enemy[i]);
@@ -527,11 +529,7 @@ void DesertField::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	world->PreDraw();
 	//world->Draw();
 	world->PostDraw();
-	for (int i = 0; i < 10; i++) {
-		if (enemy[i] != nullptr) {
-			enemy[i]->Draw();
-		}
-	}
+	
 	block->PreDraw();
 	block->Draw();
 	block->PostDraw();
@@ -546,6 +544,7 @@ void DesertField::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 			}
 		}
 	}
+
 
 	goal->PreDraw();
 	goal->Draw();
@@ -570,7 +569,12 @@ void DesertField::MyGameDraw(DirectXCommon* dxcomn)
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
 
-
+	for (int i = 0; i < 10; i++) {
+		if (enemy[i] != nullptr) {
+			enemy[i]->Draw(dxcomn);
+			enemy[i]->SearchActionDraw(dxcomn);
+		}
+	}
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
 

@@ -32,6 +32,7 @@ private:
     XMFLOAT3 Mob_Scl;
 public:
     void EnemySearchPlayer(Player* player)override;
+    void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
 
     /// <summary>
     /// ‰Šú‰»
@@ -46,7 +47,7 @@ public:
     /// <summary>
     /// •`‰æˆ—
     /// </summary>
-    void Draw()override;
+    void Draw(DirectXCommon* dxcomn)override;
 
     /// <summary>
     /// ‰ğ•úˆ—

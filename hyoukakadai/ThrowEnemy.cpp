@@ -42,7 +42,11 @@ void ThrowEnemy::Initialize()
 	}
 	//MobObject->Initialize();
 	//パラメータのセット
+	//SearchActionInit();
+	nTexture::LoadTexture(130, L"Resources/target.png");
+	searchTexture = nTexture::Create(130, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 
+	searchTexture->CreateNormalTexture();
 }
 
 void ThrowEnemy::Update(XMFLOAT3 position)
@@ -109,7 +113,7 @@ void ThrowEnemy::Attack(Player* player)
 	Motion(player);
 }
 
-void ThrowEnemy::Draw()
+void ThrowEnemy::Draw(DirectXCommon* dxcomn)
 {
 	EnemyObj->PreDraw();
 	EnemyObj->Draw();
@@ -122,12 +126,31 @@ void ThrowEnemy::Draw()
 			ThrowObj[i]->PostDraw();
 		}
 	}
-
+	nTexture::PreDraw(dxcomn->GetCmdList());
+	if (searchFlag) {
+		searchTexture->Draw();
+	}
+	nTexture::PostDraw();
 	ImGui::Begin("the");
 	if (ImGui::SliderFloat("x", &Position.x, 200, -200));
 	if (ImGui::SliderFloat("y", &Position.y, 200, -200));
 	ImGui::End();
 }
+void ThrowEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
+	if (Collision::GetLen_X(position.x, Position.x) < 5 && !searchFlag) {
+		searchFlag = true;
+	}
+	if (searchFlag) {
+		searchCount++;
+		if (searchCount > 10) {
+			searchFlag = false;
+			searchCount = 0;
+		}
+	}
+	searchTexture->SetColor({ 1,1,1,1 });
+	searchTexture->SetPosition(Position);
+	searchTexture->Update(matview, matprojection);
+};
 void ThrowEnemy::Motion(Player* player)
 {
 	if (!followf) {

@@ -3,6 +3,8 @@
 #include"Object3d.h"
 #include"Model.h"
 #include "Enemy.h"
+#include"nTexture.h"
+#include"DirectXCommon.h"
 class ThrowEnemy :
     public Enemy
 {
@@ -10,6 +12,9 @@ public:
     ThrowEnemy();
     ~ThrowEnemy();
 private:
+    nTexture* searchTexture;
+    int searchCount = 0;
+    bool searchFlag;
     Model* EnemyModel = nullptr;
     Object3d* EnemyObj = nullptr;
     
@@ -58,9 +63,10 @@ private:
     int jumpcount = 0;
     bool jumpflag = false;
 public:
+    void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
     void Initialize()override;
     void Update(XMFLOAT3 position)override;
-    void Draw()override;
+    void Draw(DirectXCommon* dxcomn)override;
     void EnemySearchPlayer(Player*player)override;
     void Attack(Player* player)override;
     void Motion(Player* player)override;

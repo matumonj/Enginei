@@ -336,7 +336,7 @@ void FirstBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->PostDraw();
 
 	if (bossenemy != nullptr) {
-		bossenemy->Draw();
+		bossenemy->Draw(dxcomn);
 	}
 
 	item->Draw();

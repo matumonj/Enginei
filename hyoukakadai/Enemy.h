@@ -8,6 +8,7 @@
 #include <string>
 #include"Input.h"
 #include"TyutorialSprite.h"
+#include"Texture.h"
 #include"Object3d.h"
 /// <summary>
 /// “GƒLƒƒƒ‰‚ÌŠî’êƒNƒ‰ƒX
@@ -36,6 +37,8 @@ protected:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
+private:
+	
 protected:
 	XMFLOAT3 Position;
 	XMFLOAT3 Rotation;
@@ -48,7 +51,9 @@ protected:
 	State enemyState = State::ALIVE;
 	int HP;// = 10;
 public:
-
+	void SearchActionInit();
+	virtual void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)=0;
+	void SearchActionDraw(DirectXCommon* dxcomn);
 	inline bool GetState_DEAD() {
 		if (enemyState == State::DEAD) {
 			return true;
@@ -71,7 +76,7 @@ public:
 	virtual int GetHP() { return HP; }
 	virtual void EnemySearchPlayer(Player* player) = 0;
 	virtual void enemyappearance(TyutorialSprite* sprite) = 0;
-	
+
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
@@ -85,7 +90,7 @@ public:
 	/// <summary>
 	/// •`‰æˆ—
 	/// </summary>
-	virtual void Draw();
+	virtual void Draw(DirectXCommon* dxcomn);
 
 	virtual void Motion(Player* player)=0;
 	//virtual float Distance(Player* player);

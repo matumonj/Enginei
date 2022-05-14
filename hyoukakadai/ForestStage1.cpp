@@ -525,7 +525,7 @@ void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	world->PostDraw();
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
-			enemy[i]->Draw();
+			enemy[i]->Draw(dxcomn);
 		}
 	}
 	block->PreDraw();

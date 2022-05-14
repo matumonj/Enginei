@@ -77,7 +77,7 @@ class SecondBoss :
 
         void Update(XMFLOAT3 position)override;
 
-        void Draw()override;
+        void Draw(DirectXCommon*dxcomn)override;
 
         void Finalize()override;
 
@@ -100,6 +100,8 @@ class SecondBoss :
         void Follow(XMFLOAT3 position);
         //
         void SummonEnemy(XMFLOAT3 position);
+        void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
+
     private:
         const int NormalDmage = 1;
 
