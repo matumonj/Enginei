@@ -1,3 +1,4 @@
+
 #include "ThrowEnemy.h"
 #include"Line.h"
 #include"imgui.h"
@@ -25,7 +26,7 @@ void ThrowEnemy::Initialize()
 	//MobObject = new Object3d();
 	EnemyObj = Object3d::Create();
 	EnemyObj->SetModel(EnemyModel);
-	scale = { 1.5f,1.5f,1.5 };
+	scale = { 0.5f,0.5f,0.5 };
 	rotation = { 0,-90,0 };
 	//position = { 0,20,0 };
 	HP = 10;
@@ -46,6 +47,10 @@ void ThrowEnemy::Initialize()
 
 void ThrowEnemy::Update(XMFLOAT3 position)
 {
+	if (jumpflag == true) {
+		Position.y += 0.2f;
+		time += 0.02f;
+	}
 	if (HP <= 0) {
 		enemyState = State::Dead;
 	}
@@ -77,6 +82,7 @@ void ThrowEnemy::Update(XMFLOAT3 position)
 	if (enemyState != State::Dead) {
 		for (int i = 0; i < _countof(ThrowModel); i++) {
 			ThrowObj[i]->SetPosition(thposition[i]);
+			ThrowObj[i]->SetScale({ 0.5,0.5,0.5 });
 			ThrowObj[i]->Update({ 1,1,1,1 });
 		}
 		EnemyObj->SetPosition(Position);
@@ -89,18 +95,18 @@ void ThrowEnemy::Update(XMFLOAT3 position)
 void ThrowEnemy::Attack(Player* player)
 {
 	float dis;
-	if(enemyState==State::Attack){
+	if (enemyState == State::Attack) {
 		for (int i = 0; i < _countof(ThrowModel); i++) {
 			dis = sqrtf((thposition[i].x - player->GetPosition().x) * (thposition[i].x - player->GetPosition().x) +
 				(thposition[i].y - player->GetPosition().y) * (thposition[i].y - player->GetPosition().y));
-			if (dis <= 2&& throwparam[i].flag ==true) {
+			if (dis <= 2 && throwparam[i].flag == true) {
 				player->SetHp(player->getHp() - Damage);
 				throwparam[i].flag = false;
 			}
 		}
 	}
 	//bi-mu
-	
+	Motion(player);
 }
 
 void ThrowEnemy::Draw()
@@ -124,7 +130,34 @@ void ThrowEnemy::Draw()
 }
 void ThrowEnemy::Motion(Player* player)
 {
-
+	if (!followf) {
+		jumpcount++;
+		if (jumpcount % 200 == 0) {
+			jumpflag = true;
+			jumpcount = 0;
+		}
+		//movement++;
+		if (!jumpflag) {
+			Position.x += pmmove * movespeed;
+		}
+		if (movement > 20) {
+			pmmove = -1;
+			movereturn = true;
+		}
+		if (movereturn) {
+			movement--;
+			if (movement < -200) {
+				pmmove = 1;
+				movereturn = false;
+			}
+		} else {
+			movement++;
+			if (movement > 100) {
+				pmmove = -1;
+				movereturn = true;
+			}
+		}
+	}
 }
 void ThrowEnemy::EnemySearchPlayer(Player* time)
 {
@@ -133,26 +166,27 @@ void ThrowEnemy::EnemySearchPlayer(Player* time)
 
 void ThrowEnemy::ProjectileMotion(XMFLOAT3 position)
 {
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 3; i++) {
 		if (throwparam[i].flag == true) {
 			throwparam[i].time++;
-			throwparam[i].movex=(throwparam[i].initialvec_x* throwparam[i].time)/600/(i+1);
-			throwparam[i].movey=(throwparam[i].initialvec_y * throwparam[i].time+
-				0.5f * throwparam[i].grav * throwparam[i].time * throwparam[i].time) / 600/(i+1);
-			if (position.x <= Position.x) {
-				thposition[i].x -= throwparam[i].movex * 2;
-			}
-			else {
-				thposition[i].x += throwparam[i].movex * 2;
-			}
-			thposition[i].y += throwparam[i].movey*2;
+			throwparam[i].movex = (throwparam[i].initialvec_x * throwparam[i].time) / 600 / (i + 1);
+			throwparam[i].movey = (throwparam[i].initialvec_y * throwparam[i].time +
+				0.5f * throwparam[i].grav * throwparam[i].time * throwparam[i].time) / 600 / (i + 1);
+
+				thposition[i].x += pm[i]*throwparam[i].movex * 2;
+			thposition[i].y += throwparam[i].movey * 2;
 
 			if (thposition[i].y < Position.y) {
 				//throwparam[i].flag = false;
 			}
 		}
-		if(attackcount%20==0){
+		if (attackcount % 20 == 0) {
 			if (throwparam[i].flag == false) {
+				if (position.x <= Position.x) {
+					pm[i] =- 1;
+				} else {
+					pm[i] = 1;;
+				}
 				throwparam[i].flag = true;
 				thposition[i] = Position;
 				throwparam[i].time = 0;
@@ -162,15 +196,80 @@ void ThrowEnemy::ProjectileMotion(XMFLOAT3 position)
 			}
 		}
 
-}
+	}
 	attackcount++;
 }
 
 void ThrowEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y)
 {
+	//grav-grav
+	Old_Pos = Position;
+	//time-time
+	//movespeed-movespeed
+	float height;//
+	float width;
+	XMFLOAT3 Player_Scl = { 1,1,1 };
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
-			for (int k = 0; k < 10; k++) {
+			if (map[j][i] == 1) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+
+				if ((Position.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Position.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
+					if (Old_Pos.y > mapy[j][i] && Position.y - Player_Scl.y < mapy[j][i] + height) {
+						Position.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						jumpflag = false;
+						//	Line::GetInstance()->SetBondflag(false);
+						break;
+					} else if (Old_Pos.y <mapy[j][i] && Position.y + Player_Scl.y>mapy[j][i] - height) {
+						Position.y = mapy[j][i] - (Player_Scl.y + height);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+
+				} else {
+					movespeed = 0.1f;
+					grav = 0.03;
+				}
+
+				//プレイヤーの左辺
+				if ((Position.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Position.y + Player_Scl.y)) {
+					if (Position.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						//jumpflag = true;
+						Position.y = Position.y + 0.001f;
+						Position.x = width + mapx[j][i] + Player_Scl.x;
+
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Position.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+						//jumpflag = true;
+
+						Position.x = mapx[j][i] - (Player_Scl.x + width);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+				} else {
+					movespeed = 0.1f;
+				}
+			}
+		}
+	}
+
+	time += 0.04f;
+	Position.y -= grav * time * time;
+
+
+	//
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			for (int k = 0; k < 3; k++) {
 				if (map[j][i] == 1) {
 					if ((thposition[k].x + 0.5f > mapx[j][i] - 0.5f && thposition[k].x - 0.5f < mapx[j][i] + 0.5f) &&
 						thposition[k].y + 0.5f > mapy[j][i] && thposition[k].y - 0.5f < mapy[j][i] + 0.5f) {
@@ -182,6 +281,5 @@ void ThrowEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 				}
 			}
 		}
-				}
-	
+	}
 }

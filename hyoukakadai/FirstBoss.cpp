@@ -243,7 +243,7 @@ void FirstBoss::Motion(Player* player)
 
 	case Stay://ビーム前の待機
 		StayCount++;
-		if (StayCount > 300) {
+		if (StayCount > 150) {
 			bossAction = None;
 			StayCount = 0;
 		}
@@ -252,6 +252,12 @@ void FirstBoss::Motion(Player* player)
 
 	case NormalAttack:
 		NormalAttacks(player);
+		break;
+	case StartBattle:
+		if (startcount > 2.0f) {
+			bossAction = None;
+		//	phase = true;
+		}
 		break;
 	default:
 		break;
@@ -392,8 +398,8 @@ void FirstBoss::appearance(float& camerapos)
 		startcount += 0.01;
 		camerapos = 67.235f;
 		bossjumpflag = true;
-		if (startcount > 1.0f) {
-
+		if (startcount > 2.0f) {
+			bossAction = None;
 			phase = true;
 		}
 	}

@@ -202,7 +202,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
-	enemy[0] = std::make_unique<MobEnemy>();
+	enemy[0] = std::make_unique<ThrowEnemy>();
 	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[2] = std::make_unique<ThrowEnemy>();
 	enemy[3] = std::make_unique<ThrowEnemy>();
@@ -217,7 +217,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 	enemy[3]->Setposition({ 80,-4.2,0 });
 	enemy[2]->Setposition({ 250,-4.2,0 });
 	enemy[1]->Setposition({ 350, -18, 0 });
-	enemy[0]->Setposition({ 50, -7, 0 });
+	enemy[0]->Setposition({ 50, -15, 0 });
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
 	enemy[2]->Initialize();
@@ -484,7 +484,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
-			//enemy[0]->
+			//enemy[0]->Motion(player);
 			enemy[i]->ColMap(map, tst, mapx,mapy,MAX_X, MAX_Y);
 			enemy[i]->Attack(player);
 			enemy[i]->Update(Player_Pos);

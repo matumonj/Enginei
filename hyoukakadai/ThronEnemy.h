@@ -56,12 +56,22 @@ class ThronEnemy :
         float angleXs, angleZs, angleRs;
         float centerSpeed = 0.1f;
         const int AttackDamage = 2;
+        bool followf;
+        float movespeed = 0.2f;
+        float grav = 0.03f;
+        float time = 0;
+        int Attackcount = 0;
+        XMFLOAT3 Old_Pos;
+        bool movexrand;
+        float movement = 0;
+        int jumpcount = 0;
+        bool jumpflag = false;
     public:
         /// <summary>
         /// アクセッサ
         /// </summary>
         /// <returns></returns>
-        void ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[15][200], const int X, const int Y);
+        void ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y);
         void enemyappearance(TyutorialSprite* sprite);
  
 };

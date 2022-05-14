@@ -141,7 +141,8 @@ class FirstBoss :
             Stay,
             NormalAttack,
             RushAttacks,
-            SetStartPos
+            SetStartPos,
+            StartBattle
         };
         struct RushAttack{
             float count;
@@ -149,7 +150,7 @@ class FirstBoss :
             bool rushflag;
         }rushAttackPrm;
         
-        BossAction bossAction =None;
+        BossAction bossAction =StartBattle;
         static bool stayflag;
     public:
         bool GetAltStay() { return stayflag; }

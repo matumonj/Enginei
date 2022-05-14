@@ -13,16 +13,16 @@ private:
     Model* EnemyModel = nullptr;
     Object3d* EnemyObj = nullptr;
     
-    Model* ThrowModel[10] = { nullptr };
-    Object3d* ThrowObj[10] = { nullptr };
+    Model* ThrowModel[3] = { nullptr };
+    Object3d* ThrowObj[3] = { nullptr };
 
     XMFLOAT3 position = {};
     XMFLOAT3 scale = {};
     XMFLOAT3 rotation = {};
 
-    XMFLOAT3 thposition[10] = {};
-    XMFLOAT3 thscale[10] = {};
-    XMFLOAT3 throtation[10] = {};
+    XMFLOAT3 thposition[3] = {};
+    XMFLOAT3 thscale[3] = {};
+    XMFLOAT3 throtation[3] = {};
 
     enum class State {
         SearchPlayer,
@@ -38,12 +38,25 @@ private:
         int time=0;
         bool flag = false;
     };
-    ThrowParam throwparam[10];
-    int attackf[10] = { false };
+    int pm[3];
+    int pmmove;
+    bool movereturn;
+    ThrowParam throwparam[3];
+    int attackf[3] = { false };
     int attackcount = 0;
     State enemyState = State::None;
     int cooltime = 0;
     int Damage = 1;
+    bool followf;
+    float movespeed = 0.2f;
+    float grav = 0.03f;
+    float time = 0;
+    int Attackcount = 0;
+    XMFLOAT3 Old_Pos;
+    bool movexrand;
+    float movement = 0;
+    int jumpcount = 0;
+    bool jumpflag = false;
 public:
     void Initialize()override;
     void Update(XMFLOAT3 position)override;
