@@ -70,10 +70,14 @@ void Item::HealEfficasy(Player*player)
 			(position[i].y - player->GetPosition().y) * (position[i].y - player->GetPosition().y));
 		if (GetPossible[i] == true) {
 			if (dis[i] <= 1) {
+				colitem = true;
 				GetItem(player);
 				Destroy(itemObj[i]);
 			}
 		}
+		}
+		else {
+			colitem = false;
 		}
 	}
 }

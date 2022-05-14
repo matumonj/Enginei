@@ -8,6 +8,7 @@ void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 {
 	//エフェクトのインスタンス生成
 	efk = new mEffekseer();
+	Healefk = new mEffekseer();
 	attackefk = new mEffekseer();
 	bossattackefk = new mEffekseer();
 	//efk1 = new mEffekseer();
@@ -16,12 +17,25 @@ void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 	attackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/attack - コピー.efk", (const EFK_CHAR*)L"effect/10");
 	efk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/deadef.efk", (const EFK_CHAR*)L"effect/10");
 	bossattackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/laser.efk", (const EFK_CHAR*)L"effect/10");
+	Healefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/Heal.efk", (const EFK_CHAR*)L"effect/10");
+
 	//b_Effect_Rot = { -25.08,90,0 };
 	//efk1->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/SimpleLaser.efk", (const EFK_CHAR*)L"effect/10");
 }
-
+void Effects::HealEffect(bool heal)
+{
+	if (heal) {
+		healf = true;
+	}
+	if (healf) {
+		Healefk->Load_Effect();
+		healf = false;
+	}
+}
 void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<Enemy>enemy[],Player*player)
 {
+	Healefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
+	
 	for (int i=0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			if (enemy[i]->GetState_DEAD() == true) {
@@ -30,6 +44,7 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 			if (df == true) {
 				efk->SetPosition(enemy[i]->GetPosition().x, enemy[i]->GetPosition().y, enemy[i]->GetPosition().z);
 				efk->Load_Effect();
+
 				df = false;
 			}
 		}
@@ -57,6 +72,7 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 	}
 	if (attack) {
 		attackefk->Load_Effect();
+		
 		attack = false;
 	}
 	//エフェクトのパラメータセット
@@ -80,7 +96,7 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 	efk->EffekseerUpdate(dxcomn, camera);
 	attackefk->EffekseerUpdate(dxcomn, camera);
 	bossattackefk->EffekseerUpdate(dxcomn, camera);
-
+	Healefk->EffekseerUpdate(dxcomn, camera);
 	//efk1->EffekseerUpdate(dxcomn, camera);
 
 }
@@ -109,7 +125,9 @@ void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Pla
 				df = false;
 			}
 		}
-	
+		Healefk->SetPosition(player->GetPosition().x - 2, player->GetPosition().y, player->GetPosition().z);
+		Healefk->Load_Effect();
+
 	if (player->GetRot_Left()==true) {
 		attackefk->SetPosition(player->GetPosition().x - 2, player->GetPosition().y, player->GetPosition().z);
 		attackefk->SetRotation(1, 180, 0);
@@ -190,6 +208,8 @@ void Effects::BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera, bool 
 void Effects::Draw(DirectXCommon*dxcomn)
 {
 	//エフェクトの画像
+
+	Healefk->EffekseerDraw(dxcomn->GetCmdList());
 	efk->EffekseerDraw(dxcomn->GetCmdList());
 	attackefk->EffekseerDraw(dxcomn->GetCmdList());
 	bossattackefk->EffekseerDraw(dxcomn->GetCmdList());

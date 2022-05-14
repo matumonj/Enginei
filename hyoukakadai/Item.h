@@ -25,7 +25,9 @@ public:
 	void Drop(std::unique_ptr<Enemy>enemy[]);
 	void HealEfficasy(Player*player);
 	void GetItem(Player* plauer);
+	bool ColItem() { return colitem; }
 private:
+	bool colitem;
 	static const int itemMax = 10;
 	bool GetPossible[itemMax];
 	Object3d* itemObj[itemMax] = { nullptr };

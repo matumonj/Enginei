@@ -43,8 +43,8 @@ void ThrowEnemy::Initialize()
 	//MobObject->Initialize();
 	//パラメータのセット
 	//SearchActionInit();
-	nTexture::LoadTexture(130, L"Resources/target.png");
-	searchTexture = nTexture::Create(130, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
+	nTexture::LoadTexture(130, L"Resources/Sertch.png");
+	searchTexture = nTexture::Create(130, { 0,-50,50 }, { 0.3,0.3,0.3 }, { 1,1,1,1 });
 
 	searchTexture->CreateNormalTexture();
 }
@@ -137,18 +137,19 @@ void ThrowEnemy::Draw(DirectXCommon* dxcomn)
 	ImGui::End();
 }
 void ThrowEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
-	if (Collision::GetLen_X(position.x, Position.x) < 5 && !searchFlag) {
+	if (Collision::GetLen_X(position.x, Position.x) < 5&& searchCount<=20) {
 		searchFlag = true;
 	}
 	if (searchFlag) {
 		searchCount++;
-		if (searchCount > 10) {
+		if (searchCount > 20) {
 			searchFlag = false;
-			searchCount = 0;
+			//searchCount = 0;
 		}
 	}
+	searchTexture->SetScale({ 0.3,0.3,0.3 });
 	searchTexture->SetColor({ 1,1,1,1 });
-	searchTexture->SetPosition(Position);
+	searchTexture->SetPosition({ Position.x, Position.y+2, Position.z });
 	searchTexture->Update(matview, matprojection);
 };
 void ThrowEnemy::Motion(Player* player)

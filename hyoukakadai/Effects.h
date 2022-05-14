@@ -27,9 +27,11 @@ private:
 	mEffekseer* efk = nullptr;
 	mEffekseer* attackefk = nullptr;
 	mEffekseer* bossattackefk = nullptr;
+	mEffekseer* Healefk = nullptr;
 	bool df;
 	bool attack;
 	bool b_attack;
+	bool healf;
 public:
 	~Effects();
 	//XMFLOAT3 GetPosition
@@ -49,7 +51,7 @@ public:
 	void Initialize(DirectXCommon* dxcomn, DebugCamera* camera);
 	void Update(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[],Player*player);
 	void Update(DirectXCommon* dxcomn, DebugCamera* camera, Enemy*enemy, Player* player);
-
+	void HealEffect(bool heal);
 	void Draw(DirectXCommon*dxcomn);
 	void Finalize();
 	void ImGuiDraw();
