@@ -52,7 +52,10 @@ private:
 	Sprite* setumei = nullptr;
 
 	DebugTxt* debugText;
-	std::unique_ptr<Enemy>enemy[10];
+
+	std::unique_ptr<Enemy>enemy[10];//1セット
+	std::unique_ptr<Enemy>enemy2nd[10];//2セット
+
 	//Enemy* enemy[2];
 	std::unique_ptr <Effects> effects;
 	std::unique_ptr <Effects> attackeffects;
