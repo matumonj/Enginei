@@ -79,7 +79,7 @@ void ForestBoss::Initialize()
 	Rotation.z = 0;
 	HP = MaxHP;
 	startPos = { 40,-18,0 };
-}
+}//
 
 //XVˆ—
 void ForestBoss::Update(XMFLOAT3 position)
