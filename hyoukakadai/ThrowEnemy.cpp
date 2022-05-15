@@ -152,6 +152,8 @@ void ThrowEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3
 	searchTexture->SetPosition({ Position.x, Position.y+2, Position.z });
 	searchTexture->Update(matview, matprojection);
 };
+void ThrowEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)
+{}
 void ThrowEnemy::Motion(Player* player)
 {
 	if (!followf) {

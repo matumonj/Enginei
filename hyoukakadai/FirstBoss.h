@@ -118,6 +118,8 @@ class FirstBoss :
        void NormalAttacks(Player* player);
 
        void GetDamage();
+       void ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)override;
+
     private:
         static int StayCount;
         bool damageRec = false;

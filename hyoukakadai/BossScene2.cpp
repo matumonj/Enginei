@@ -8,6 +8,7 @@
 #include"BossEnemy.h"
 #include"ThrowEnemy.h"
 #include"Line.h"
+#include"ForestBoss.h"
 #include"Destroy.h"
 #include"Fader.h"
 #include"CollisionPrimitive.h"
@@ -142,11 +143,35 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
-	bossenemy = std::make_unique<BossEnemy>();
-
+	bossenemy = std::make_unique<ForestBoss>();
+	enemycolony1[0]= std::make_unique<MobEnemy>();
+	enemycolony1[1] = std::make_unique<MobEnemy>();
+	enemycolony1[2] = std::make_unique<MobEnemy>();
+	enemycolony1[3] = std::make_unique<MobEnemy>();
+	enemycolony1[4] = std::make_unique<MobEnemy>();
+	enemycolony1[5] = std::make_unique<MobEnemy>();
+	enemycolony1[6] = std::make_unique<MobEnemy>();
+	enemycolony1[7] = std::make_unique<MobEnemy>();
+	enemycolony1[8] = std::make_unique<MobEnemy>();
+	enemycolony1[9] = std::make_unique<MobEnemy>();
 	//bossenemy->Setposition({ 20, -4, 0 });
+	enemycolony2[0] = std::make_unique<MobEnemy>();
+	enemycolony2[1] = std::make_unique<MobEnemy>();
+	enemycolony2[2] = std::make_unique<MobEnemy>();
+	enemycolony2[3] = std::make_unique<MobEnemy>();
+	enemycolony2[4] = std::make_unique<MobEnemy>();
+	enemycolony2[5] = std::make_unique<MobEnemy>();
+	enemycolony2[6] = std::make_unique<MobEnemy>();
+	enemycolony2[7] = std::make_unique<MobEnemy>();
+	enemycolony2[8] = std::make_unique<MobEnemy>();
+	enemycolony2[9] = std::make_unique<MobEnemy>();
+	for (int i = 0; i < 10; i++) {
+		enemycolony1[i]->Initialize();
+		enemycolony2[i]->Initialize();
+	}
 
-	bossenemy->Initialize();
+		bossenemy->Initialize();
+
 	mapcol = new Collision();
 
 	collision = new Collision();
@@ -266,7 +291,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	Line::GetInstance()->SetColf(colf);
 
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
-
+	Line::CollisionEnemys(enemycolony1);
+	Line::CollisionEnemys(enemycolony2);
 	Line::CollisionEnemy(bossenemy.get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
@@ -290,7 +316,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	player->SetRotation(Player_Rot);
 	player->SetScale(Player_Scl);
 	player->CollisionAttack1(bossenemy.get(), Player_Pos);
-
+	player->CollisionAttack(enemycolony1, Player_Pos);
+	player->CollisionAttack(enemycolony2, Player_Pos);
 	player->Attack(Player_Pos);
 
 	SetPrm();//パラメータのセット
@@ -306,13 +333,46 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 		bossenemy->Motion(player);
 		bossenemy->Attack(player);
 		bossenemy->Update(Player_Pos);
+		ForestBoss::GetInstance()->SkewersAttack(map, tst);
+
 		bossenemy->EnemySearchPlayer(player);
 		//もし敵が死んだら破棄
 		if (bossenemy->GetState_DEAD() == true) {
 			Destroy_unique(bossenemy);
 		}
 	}
+	float len[10];
+	for (int i = 0; i < 10; i++) {
+		//Collision::GetLen(enemycolony1[i]->GetPosition(),Player_Pos)
+			if (enemycolony1[i] != nullptr) {
+				if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
 
+				enemycolony1[i]->Motion(player);
+				enemycolony1[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
+				enemycolony1[i]->Attack(player);
+				enemycolony1[i]->Update(Player_Pos);
+				enemycolony1[i]->EnemySearchPlayer(player);
+				//もし敵が死んだら破棄
+				if (enemycolony1[i]->GetState_DEAD() == true) {
+					Destroy_unique(enemycolony1[i]);
+				}
+			}
+		}
+		if (enemycolony2[i] != nullptr) {
+			if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
+
+				enemycolony2[i]->Motion(player);
+				enemycolony2[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
+				enemycolony2[i]->Attack(player);
+				enemycolony2[i]->Update(Player_Pos);
+				enemycolony2[i]->EnemySearchPlayer(player);
+				//もし敵が死んだら破棄
+				if (enemycolony2[i]->GetState_DEAD() == true) {
+					Destroy_unique(enemycolony2[i]);
+				}
+			}
+		}
+		}
 	//BossPos = bossenemy->GetPosition();
 
 //bossenemy[3]->Update(Player_Pos);
@@ -320,6 +380,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	item->HealEfficasy(player);
 	item->Update(&bossenemy);
+	item->Update(enemycolony1);
+	item->Update(enemycolony2);
 	//Fader::FeedSpriteUpdate();
 
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
@@ -342,10 +404,6 @@ void BossScene2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->PreDraw();
 	player->Draw();
 	player->PostDraw();
-
-	if (bossenemy != nullptr) {
-		bossenemy->Draw(dxcomn);
-	}
 
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
@@ -374,6 +432,17 @@ void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
 
+	if (bossenemy != nullptr) {
+		bossenemy->Draw(dxcomn);
+	}
+	for (int i = 0; i < 10; i++) {
+		if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
+			enemycolony1[i]->Draw(dxcomn);
+		}
+		if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
+			enemycolony2[i]->Draw(dxcomn);
+		}
+	}
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
 
@@ -454,10 +523,16 @@ void BossScene2::Finalize()
 	effects.reset();
 	bossenemy.reset();
 	for (int i = 0; i < 20; i++) {
+		enemycolony1[i].reset();
+		enemycolony2->reset();
+	}
+
+	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 200; j++) {
 			tst[i][j].reset();
 		}
 	}
+	bossenemy.reset();
 	goal.reset();
 	delete player, playermodel;
 	delete tstmodel;

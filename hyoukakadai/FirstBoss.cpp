@@ -278,7 +278,8 @@ void FirstBoss::Follow(XMFLOAT3 position)
 	Position.x += (angleX / angleR) * (bossmovespeed / 2);
 
 }
-
+void FirstBoss::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)
+{}
 
 void FirstBoss::RushAttack(Player* player)
 {

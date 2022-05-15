@@ -26,7 +26,7 @@ private:
     Model* BossModel = nullptr;
 
     //オブジェクトのインスタンス
-    Object3d* SkewersObject = nullptr;
+    Object3d* SkewersObject[3] = { nullptr };
     //モデルのインスタンス
     Model* SkewersBossModel = nullptr;
 
@@ -40,7 +40,9 @@ private:
     XMFLOAT3 Boss_Pos;
     XMFLOAT3 Boss_Rot;
     XMFLOAT3 Boss_Scl = { 9,9,9 };
-    XMFLOAT3 Skewers_Scl = { 9,9,9 };
+    static const int max = 3;
+    static XMFLOAT3 Skewers_Scl[max];
+    
     float bossmovespeed = 0.1f;
     float bossgrav = 0.03f;
     float bosstime = 0;
@@ -51,6 +53,7 @@ private:
     static bool bossjumpflag;
     bool bossjumpflag2 = false;
 private:
+   // bool woodatkflag;
     XMFLOAT3 Old_Pos;
     int OldHP;
     //static XMFLOAT3 position;
@@ -86,6 +89,7 @@ public:
     void SetGrav(float g) { bossgrav = g; }
 
     void SetTtime(float t) { bosstime = t; }
+    void ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)override;
 
 public:
     void Initialize()override;
@@ -100,14 +104,13 @@ public:
     //埋め込み回避用
     void MoveBlockJump();
     //いらん
-    void ColMapb1(int map[15][200], std::unique_ptr<Object3d> tst[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);
+    static void SkewersAttack(int map[130][20], std::unique_ptr<Object3d> tst[130][20]);
     //プレイヤー検知
     void EnemySearchPlayer(Player* player)override;
     //いらんかも
     void Attack(Player* player)override;
     //マットの当たり判定
-    //void ColMap(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][200], float mapy[130][20], const int X, const int Y)override;
-    //
+    void ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y);
     void enemyappearance(TyutorialSprite* sprite)override {};
     //ボスのアクション
     void Motion(Player* player)override;
@@ -118,10 +121,16 @@ public:
 
     void NormalAttacks(Player* player);
 
-    void SkewersAttack();
+    //void SkewersAttack();
 
     void GetDamage();
 private:
+    static XMFLOAT3 wpos[max];
+    static bool woodatkflag;
+    static float woodatkCount;
+    static float woodatkCount2;
+    static float woodatkCount3;
+    private:
     static int StayCount;
     bool damageRec = false;
     static int attacktime;
@@ -147,7 +156,13 @@ private:
         SetStartPos,
         StartBattle
     };
-   
+
+    enum Phase {
+        StartFloor,
+        SecondFloor,
+        FinalFloor,
+    };
+    Phase Bossphase = StartFloor;
     BossAction bossAction = StartBattle;
     static bool stayflag;
 public:

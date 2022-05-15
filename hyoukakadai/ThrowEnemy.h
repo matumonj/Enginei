@@ -74,6 +74,7 @@ public:
     void ColMap(int map[20][200] , std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y)override;
     bool GetStateAttack() { if (enemyState == State::Attack)return true; }
     void enemyappearance(TyutorialSprite* sprite) override{};
-   
+    void ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)override;
+
 };
 

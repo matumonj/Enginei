@@ -116,7 +116,7 @@ public:
     //
     void SummonEnemy(XMFLOAT3 position);
     void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
-
+    void ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)override;
 private:
     static const int ThrowObjMax = 5;
     const int ThrowDamage = 1;

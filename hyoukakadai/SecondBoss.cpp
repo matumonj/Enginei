@@ -90,7 +90,8 @@ void SecondBoss::Draw(DirectXCommon*dxcomn)
 	BossObject->Draw();
 	BossObject->PostDraw();
 }
-
+void SecondBoss::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)
+{}
 //‰ğ•úˆ—
 void SecondBoss::Finalize()
 {
