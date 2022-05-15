@@ -232,28 +232,10 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	//これは移す
 
 
-	Collision::ColMap2(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
+	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
 
 	//これ別んところ移すの相当めんどいから据え置き
-	Ray BossLaserRay = BossEnemy::GetInstance()->GetLaserRay();
-	Sphere mapsphere[130][20];
-	if (BossEnemy::GetInstance()->GetAltAttacklag() == true) {
-		for (int i = 0; i < MAX_X; i++) {
-			for (int j = 0; j < MAX_Y; j++) {
-
-				if (map[j][i] == 1) {
-					mapsphere[j][i].radius = 2.5f;
-					mapsphere[j][i].center = { tst[j][i]->GetPosition().x, tst[j][i]->GetPosition().y ,tst[j][i]->GetPosition().z };
-
-					if (Collision::CheckRay2Sphere(BossLaserRay, mapsphere[j][i]) == true) {
-						map[j][i] = 0;
-						break;
-					}
-				}
-			}
-		}
-	}
-
+	
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
 		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
