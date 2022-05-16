@@ -43,6 +43,7 @@
 #include"BossScene2.h"
 #include"ForestStage1.h"
 #include"ForestStage2.h"
+#include"SeaScene1.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
