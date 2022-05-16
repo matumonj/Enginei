@@ -75,7 +75,7 @@ void TitleScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	Sprite::PreDraw(cmdList);
 	titlesprite->Draw();
-	Fader::FeedSpriteDraw();
+	//Fader::FeedSpriteDraw();
 	Sprite::PostDraw(cmdList);
 }
 
