@@ -92,6 +92,8 @@ private:
 	int TargetNum=-1;
 	bool SpriteSclflag;
 	int NowSpriteNum;
+	bool ni;
+
 	enum StageSprites
 	{
 		Jungle,

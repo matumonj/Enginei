@@ -325,8 +325,7 @@ void StageSelect::SpriteUpdate()
 			//
 			if (SpriteScale[0].x>=300&&Input::GetInstance()->TriggerButtonA()) {//押されたら
 				if (TargetNum == 0) {
-					BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
-					sceneManager_->SetnextScene(scene);//シーンのセット
+					ni = true;
 				}
 				else if (TargetNum == 1) {
 					BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
@@ -334,6 +333,13 @@ void StageSelect::SpriteUpdate()
 				}
 				else if (TargetNum == 2) {
 					BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
+			if (ni == true) {
+				Fader::feedIn(1.0f, 0.1f);
+				if (Fader::GetInstance()->GetAlpha() >= 0.9) {
+					BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}

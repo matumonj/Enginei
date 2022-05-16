@@ -3,6 +3,7 @@
 #include"Object3d.h"
 #include"Model.h"
 #include "Enemy.h"
+
 #include"TyutorialSprite.h"
 class MobEnemy :
     public Enemy

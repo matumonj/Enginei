@@ -4,6 +4,7 @@
 #include"Model.h"
 #include"DebugCamera.h"
 #include "Enemy.h"
+#include"OBBCollision.h"
 #include"CollisionPrimitive.h"
 class ForestBoss :
     public Enemy
@@ -20,11 +21,23 @@ public:
     ~ForestBoss();
 
 private:
+    OBB pobb;
+    OBB earmobb_right;// = nullptr;
+    OBB earmobb_left;// = nullptr;
+    OBBCollision* pobbcolright = nullptr;
+    OBBCollision* pobbcolleft = nullptr;
     //オブジェクトのインスタンス
     Object3d* BossObject = nullptr;
     //モデルのインスタンス
     Model* BossModel = nullptr;
 
+    Object3d* BossArmObj[2] = { nullptr };
+    //モデルのインスタンス
+    Model* BossArmModel = nullptr;
+    XMFLOAT3 Arm_Pos[2];
+    XMFLOAT3 Arm_Rot[2];
+    XMFLOAT3 Arm_Scl[2];
+    bool ArmAttackflag;
     //オブジェクトのインスタンス
     Object3d* SkewersObject[3] = { nullptr };
     //モデルのインスタンス
@@ -122,9 +135,14 @@ public:
     void NormalAttacks(Player* player);
 
     //void SkewersAttack();
-
+    void collisionArm(Player* player);
+    void ArmAytack();
     void GetDamage();
 private:
+    bool armreturn;
+    XMFLOAT3 OldArm_Scl[2];
+    float armattacktime;
+    float armattacktime2;
     static XMFLOAT3 wpos[max];
     static bool woodatkflag;
     static float woodatkCount;
@@ -142,11 +160,13 @@ private:
     int shaketime = 100;
     XMFLOAT2 DamageArea;
     XMFLOAT2 DamageAreaStart;
+    float rotfollow;
 private:
     static XMFLOAT3 startPos;
     float movement;
     bool Wrap = false;
     enum BossAction {
+        KeepPos,
         None,
         MoveRight,
         MoveLeft,

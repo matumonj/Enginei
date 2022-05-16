@@ -6,6 +6,7 @@
 #include"SceneManager.h"
 #include"imgui.h"
 #include"Helper.h"
+#include"Fader.h"
 TitleScene::TitleScene(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
@@ -27,6 +28,7 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 {
 	//ENTERで次のシーンへ
 	if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+		Fader::feedIn(1.0,0.05f);
 		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
@@ -59,7 +61,7 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 	//Helper::Update(alpha);
 	alpha = min(alpha, 1.1f);
 	alpha = max(alpha, 0.0f);
-
+	//Fader::FeedSpriteUpdate();
 	titlesprite->setcolor({ 1,1,1,alpha });
 	//titlesprite->SpriteUpdate()
 	titlesprite->SetSize({ WinApp::window_width,WinApp::window_height });
@@ -73,6 +75,7 @@ void TitleScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	Sprite::PreDraw(cmdList);
 	titlesprite->Draw();
+	//Fader::FeedSpriteDraw();
 	Sprite::PostDraw(cmdList);
 }
 
