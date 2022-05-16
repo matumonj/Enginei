@@ -229,7 +229,7 @@ void MobEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20]
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
-			if (map[j][i] == 1) {
+			if (map[j][i] == 1|| map[j][i] == 2) {
 				mapx[j][i] = tst[j][i]->GetPosition().x;
 				mapy[j][i] = tst[j][i]->GetPosition().y;
 				height = tst[j][i]->GetScale().y;
@@ -281,7 +281,7 @@ void MobEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20]
 	}
 
 	time += 0.04f;
-	Position.y -= grav * time * time;
+	Position.y -= grav; //;* time * time;
 }
 
 void MobEnemy::enemyappearance(TyutorialSprite* sprite)

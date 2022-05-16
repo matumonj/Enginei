@@ -98,13 +98,6 @@ void BossScene2::SetPrm()
 	player->SetScale({ Player_Scl });
 	player->SetRotation({ Player_Rot });
 
-	for (int j = 0; j < MAX_Y; j++) {
-		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			tst[j][i]->SetRotation({ tst_Rot });
-			tst[j][i]->SetScale({ tst_Scl });
-		}
-	}
 	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
 
 }
@@ -143,34 +136,6 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
-	bossenemy = std::make_unique<ForestBoss>();
-	enemycolony1[0]= std::make_unique<MobEnemy>();
-	enemycolony1[1] = std::make_unique<MobEnemy>();
-	enemycolony1[2] = std::make_unique<MobEnemy>();
-	enemycolony1[3] = std::make_unique<MobEnemy>();
-	enemycolony1[4] = std::make_unique<MobEnemy>();
-	enemycolony1[5] = std::make_unique<MobEnemy>();
-	enemycolony1[6] = std::make_unique<MobEnemy>();
-	enemycolony1[7] = std::make_unique<MobEnemy>();
-	enemycolony1[8] = std::make_unique<MobEnemy>();
-	enemycolony1[9] = std::make_unique<MobEnemy>();
-	//bossenemy->Setposition({ 20, -4, 0 });
-	enemycolony2[0] = std::make_unique<MobEnemy>();
-	enemycolony2[1] = std::make_unique<MobEnemy>();
-	enemycolony2[2] = std::make_unique<MobEnemy>();
-	enemycolony2[3] = std::make_unique<MobEnemy>();
-	enemycolony2[4] = std::make_unique<MobEnemy>();
-	enemycolony2[5] = std::make_unique<MobEnemy>();
-	enemycolony2[6] = std::make_unique<MobEnemy>();
-	enemycolony2[7] = std::make_unique<MobEnemy>();
-	enemycolony2[8] = std::make_unique<MobEnemy>();
-	enemycolony2[9] = std::make_unique<MobEnemy>();
-	for (int i = 0; i < 10; i++) {
-		enemycolony1[i]->Initialize();
-		enemycolony2[i]->Initialize();
-	}
-
-		bossenemy->Initialize();
 
 	mapcol = new Collision();
 
@@ -206,13 +171,95 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	//camerapositionx = 46.94f;
 	camerapositiony = -4.5f;
 	camerapositionz = -40.51;
+	bossenemy = std::make_unique<ForestBoss>();
+	enemycolony1[0] = std::make_unique<MobEnemy>();
+	enemycolony1[1] = std::make_unique<MobEnemy>();
+	enemycolony1[2] = std::make_unique<MobEnemy>();
+	enemycolony1[3] = std::make_unique<MobEnemy>();
+	enemycolony1[4] = std::make_unique<MobEnemy>();
+	enemycolony1[5] = std::make_unique<MobEnemy>();
+	enemycolony1[6] = std::make_unique<MobEnemy>();
+	enemycolony1[7] = std::make_unique<MobEnemy>();
+	enemycolony1[8] = std::make_unique<MobEnemy>();
+	enemycolony1[9] = std::make_unique<MobEnemy>();
+
+	//bossenemy->Setposition({ 20, -4, 0 });
+	enemycolony2[0] = std::make_unique<MobEnemy>();
+	enemycolony2[1] = std::make_unique<MobEnemy>();
+	enemycolony2[2] = std::make_unique<MobEnemy>();
+	enemycolony2[3] = std::make_unique<MobEnemy>();
+	enemycolony2[4] = std::make_unique<MobEnemy>();
+	enemycolony2[5] = std::make_unique<MobEnemy>();
+	enemycolony2[6] = std::make_unique<MobEnemy>();
+	enemycolony2[7] = std::make_unique<MobEnemy>();
+	enemycolony2[8] = std::make_unique<MobEnemy>();
+	enemycolony2[9] = std::make_unique<MobEnemy>();
+
+	for (int i = 0; i < 10; i++) {
+		//enemycolony2[i] = nullptr;
+		enemycolony1[i]->Initialize();
+		enemycolony2[i]->Initialize();
+	}
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			tst[j][i]->SetRotation({ tst_Rot });
+			tst[j][i]->SetScale({ tst_Scl });
+		}
+	}
+	bossenemy->Initialize();
+
 	bossenemy->Setposition({ 40,-4,0 });
+	if (startSet == false) {
+
+		for (int i = 0; i < 130; i++) {
+			for (int j = 0; j < 20; j++) {
+				if (map[i][j] == 10) {
+					enemycolony1[0]->Setposition(tst[i][j]->GetPosition());
+					//	break;
+				} else if (map[i][j] == 11) {
+					enemycolony1[1]->Setposition(tst[i][j]->GetPosition());
+					//break;
+				} else if (map[i][j] == 12) {
+					enemycolony1[2]->Setposition(tst[i][j]->GetPosition());
+					//	break;
+				} else if (map[i][j] == 13) {
+					enemycolony1[3]->Setposition(tst[i][j]->GetPosition());
+					//	break;
+				} else if (map[i][j] == 14) {
+					enemycolony1[4]->Setposition(tst[i][j]->GetPosition());
+					//break;
+				} else if (map[i][j] == 15) {
+					enemycolony1[5]->Setposition(tst[i][j]->GetPosition());
+					//break;
+				} else if (map[i][j] == 16) {
+					enemycolony1[6]->Setposition(tst[i][j]->GetPosition());
+					//	break;
+				} else if (map[i][j] == 17) {
+					enemycolony1[7]->Setposition(tst[i][j]->GetPosition());
+					//	break;
+				} else if (map[i][j] == 18) {
+					enemycolony1[8]->Setposition(tst[i][j]->GetPosition());
+					//break;
+					//enemycolony1[8]->Setposition(tst[i][j]->GetPosition());
+				} else if (map[i][j] == 19) {
+					enemycolony1[9]->Setposition(tst[i][j]->GetPosition());
+					xx = tst[i][j]->GetPosition().x;
+					//break;
+					//break;
+				}
+			}
+		}
+	}
+
 }
 #pragma endregion
 
 #pragma region 更新処理
 void BossScene2::Update(DirectXCommon* dxCommon)
 {
+
 	camerapositionx = Player_Pos.x;
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
@@ -323,6 +370,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
+	effects->Update(dxCommon, camera, enemycolony1, player);
 
 	effects->Update(dxCommon, camera, &bossenemy, player);
 
@@ -345,7 +393,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < 10; i++) {
 		//Collision::GetLen(enemycolony1[i]->GetPosition(),Player_Pos)
 			if (enemycolony1[i] != nullptr) {
-				if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
+				//if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
 
 				enemycolony1[i]->Motion(player);
 				enemycolony1[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
@@ -355,7 +403,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 				//もし敵が死んだら破棄
 				if (enemycolony1[i]->GetState_DEAD() == true) {
 					Destroy_unique(enemycolony1[i]);
-				}
+				///}
 			}
 		}
 		if (enemycolony2[i] != nullptr) {
@@ -436,12 +484,14 @@ void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 		bossenemy->Draw(dxcomn);
 	}
 	for (int i = 0; i < 10; i++) {
-		if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
+		//if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
+		if (enemycolony1[i] != nullptr) {
 			enemycolony1[i]->Draw(dxcomn);
 		}
-		if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
+		//}
+		//if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
 			enemycolony2[i]->Draw(dxcomn);
-		}
+		//}
 	}
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
@@ -495,10 +545,10 @@ void BossScene2::ImGuiDraw()
 	}
 	float linex = Line::GetInstance()->getpos().x;
 	float liney = Line::GetInstance()->getpos().y;
-	float rr = player->GetPosition().x;
+	float rr = enemycolony1[9]->GetPosition().y;
 	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -200, 200);
-		ImGui::SliderFloat("positionY", &liney, -200, 200);
+		ImGui::SliderFloat("positionX", &xx, -200, 200);
+		ImGui::SliderFloat("positionY", &Player_Pos.y, -200, 200);
 		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
 		ImGui::SliderFloat("grav", &grav, -200, 200);
 		ImGui::SliderFloat("time", &time, -200, 200);
