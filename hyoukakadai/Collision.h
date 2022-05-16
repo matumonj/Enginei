@@ -20,9 +20,9 @@ public:
 	static float GetLenX(XMFLOAT3 position, XMFLOAT3 position2);
 	static float GetLenY(XMFLOAT3 position, XMFLOAT3 position2);
 	static void ColMap1(int map[20][200], std::unique_ptr<Object3d> tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3 &Player_Pos, XMFLOAT3 &Old_Pos);
-	static void ColMapb1(int map[15][200], std::unique_ptr<Object3d> tst[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos, Enemy*enemy);
+	static void ColMapb1(int map[130][20], std::unique_ptr<Object3d> tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos);
 	//êXÇÃBossóp
-	static void ColMap2(int map[130][20], std::unique_ptr<Object3d> tst[130][20], float mapx[130][20], float mapy[120][20], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos);
+	static void ColMap2(int map[130][20], std::unique_ptr<Object3d> tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos);
 	
 	
 	static bool ColMap3(int map[15][200], float mapx[15][200], float mapy[15][200], const int X, const int Y);

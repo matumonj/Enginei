@@ -76,7 +76,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	LimitGauge = GameUI::GetInstance()->Getsclx();
 	if (LimitGauge < 0) {
 		//trigger = false;//紐出せないように
-		subradius = 0;//伸ばせる紐の長さを０に強制
+		//subradius = 0;//伸ばせる紐の長さを０に強制
 		//boundflag = false;
 		//returnflag = false;
 	}
