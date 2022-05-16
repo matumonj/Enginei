@@ -20,6 +20,7 @@
 #include"Enemy.h"
 #include"Effects.h"
 #include"GameUI.h"
+#include"OBBCollision.h"
 #include"Player.h"
 #include"Item.h"
 #include<memory>
@@ -159,7 +160,7 @@ private:
 		{2,2,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,2},
 		{2,2,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,2,2},
 		{2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2},
-		{2,2,0,0,19,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2},
+		{2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2},
 		{2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2},
 		{2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2},
 		{2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2},
@@ -265,6 +266,8 @@ private:
 	bool colf = false;
 	float grav = 0.03f;
 	float time = 0.1;
+	OBB pobb;// = nullptr;
+	
 	//float botttomy = 0;
 private://“_ŒõŒ¹
 	LightGroup* lightGroup = nullptr;

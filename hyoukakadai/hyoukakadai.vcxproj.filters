@@ -73,6 +73,7 @@
     <ClCompile Include="BossScene2.cpp" />
     <ClCompile Include="ForestStage2.cpp" />
     <ClCompile Include="ForestBoss.cpp" />
+    <ClCompile Include="OBBCollision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -146,6 +147,8 @@
     <ClInclude Include="BossScene2.h" />
     <ClInclude Include="ForestStage2.h" />
     <ClInclude Include="ForestBoss.h" />
+    <ClInclude Include="OBB.h" />
+    <ClInclude Include="OBBCollision.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />

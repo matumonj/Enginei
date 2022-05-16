@@ -86,6 +86,7 @@ void MobEnemy::Finalize()
 }
 void MobEnemy::EnemySearchPlayer(Player* player)
 {
+	
 	//Follow(player);
 }
 

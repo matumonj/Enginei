@@ -340,7 +340,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 	Line::CollisionEnemys(enemycolony1);
 	Line::CollisionEnemys(enemycolony2);
-	Line::CollisionEnemy(bossenemy.get());
+	//Line::CollisionEnemy(bossenemy.get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
@@ -547,7 +547,7 @@ void BossScene2::ImGuiDraw()
 	float liney = Line::GetInstance()->getpos().y;
 	float rr = enemycolony1[9]->GetPosition().y;
 	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &xx, -200, 200);
+		ImGui::SliderFloat("positionX", &Player_Pos.x, -200, 200);
 		ImGui::SliderFloat("positionY", &Player_Pos.y, -200, 200);
 		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
 		ImGui::SliderFloat("grav", &grav, -200, 200);

@@ -204,6 +204,7 @@
     <ClCompile Include="mEffekseer.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="nTexture.cpp" />
+    <ClCompile Include="OBBCollision.cpp" />
     <ClCompile Include="Object3d.cpp" />
     <ClCompile Include="pEffect.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -274,6 +275,8 @@
     <ClInclude Include="mEffekseer.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="nTexture.h" />
+    <ClInclude Include="OBB.h" />
+    <ClInclude Include="OBBCollision.h" />
     <ClInclude Include="Object3d.h" />
     <ClInclude Include="pEffect.h" />
     <ClInclude Include="Player.h" />

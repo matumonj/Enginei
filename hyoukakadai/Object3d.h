@@ -166,6 +166,9 @@ private:// 静的メンバ関数
 
 
 public: // メンバ関数
+	XMMATRIX matScale, matRot, matTrans;
+
+	XMMATRIX GetMatrot() { return matRot; }
 	Object3d() = default;
 
 	virtual ~Object3d();
