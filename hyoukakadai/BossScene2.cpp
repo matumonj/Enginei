@@ -44,7 +44,7 @@ void BossScene2::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("box1");
+	tstmodel = Model::CreateFromOBJ("block");
 	goalmodel = Model::CreateFromOBJ("goalmo");
 
 	item = new Item();
@@ -324,8 +324,9 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 		//grav = 0.0f;
 	}
 	else {
-		grav = 0.03f;
+		grav = 0.01f*time;
 	}
+	Player_Pos.y -= grav;
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -490,7 +491,9 @@ void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 		}
 		//}
 		//if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
+		if (enemycolony2[i] != nullptr) {
 			enemycolony2[i]->Draw(dxcomn);
+		}
 		//}
 	}
 	//普通のテクスチャの描画
@@ -547,9 +550,9 @@ void BossScene2::ImGuiDraw()
 	float liney = Line::GetInstance()->getpos().y;
 	float rr = enemycolony1[9]->GetPosition().y;
 	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &Player_Pos.x, -200, 200);
-		ImGui::SliderFloat("positionY", &Player_Pos.y, -200, 200);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+		//ImGui::SliderFloat("positionX", &Player_Pos.x, -200, 200);
+		//ImGui::SliderFloat("positionY", &Player_Pos.y, -200, 200);
+		//ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
 		ImGui::SliderFloat("grav", &grav, -200, 200);
 		ImGui::SliderFloat("time", &time, -200, 200);
 		ImGui::TreePop();

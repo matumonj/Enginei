@@ -5,6 +5,7 @@
 #include"mHelper.h"
 #include<random>
 #define PI 3.14
+#include"imgui.h"
 int ForestBoss::StayCount = 0;
 float ForestBoss::startcount = 0;
 bool ForestBoss::stayflag;
@@ -116,16 +117,10 @@ void ForestBoss::Update(XMFLOAT3 position)
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i]->Update({ 1,1,1,1 });
 	}
-	
-	XMVECTOR positionA = { position.x, position.y, position.z };
-	XMVECTOR positionB = { Arm_Pos[0].x,Arm_Pos[0].y,Arm_Pos[0].z };
-	//プレイヤーと敵のベクトルの長さ(差)を求める
-	XMVECTOR SubVector = DirectX::XMVectorSubtract(positionB, positionA);// positionA - positionB;
-	rotfollow = atan2f(SubVector.m128_f32[0], SubVector.m128_f32[1]);
-	Arm_Rot[0].z = rotfollow*60+180 ;//60=角度調整用 180=反転
 	Arm_Pos[0] = Position;
+	Arm_Pos[1] = Position;
 									 //Arm_Rot[1].z = rotfollow  ;//60=角度調整用 180=反転
-	ArmAytack();
+	
 	for (int i = 0; i < 2; i++) {
 		BossArmObj[i]->SetPosition(Arm_Pos[i]);
 		BossArmObj[i]->SetRotation(Arm_Rot[i]);
@@ -212,6 +207,11 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 		SkewersObject[i]->Draw();
 		SkewersObject[i]->PostDraw();
 	}
+	ImGui::Begin("scl");
+	
+	ImGui::SliderFloat("scly",&Arm_Scl[0].y, 20.0f, 20.0f);
+	ImGui::SliderFloat("scly", &lene, 20.0f, 20.0f);
+	ImGui::End();
 }
 
 //解放処理
@@ -224,6 +224,10 @@ void ForestBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 
 void ForestBoss::Motion(Player* player)
 {
+	lene = Collision::GetLen(Arm_Pos[0], player->GetPosition());
+
+	ArmAytack(player);
+	ArmAttack_Left(player);
 	const float dis = 0.5f;
 	switch (bossAction)
 	{
@@ -439,14 +443,15 @@ void ForestBoss::collisionArm(Player* player)
 	}
 }
 
-void ForestBoss::ArmAytack()
+void ForestBoss::ArmAytack(Player*player)
 {
+	
 	if (Input::GetInstance()->TriggerKey(DIK_A)) {
 		ArmAttackflag = true;
 	}
 	if (ArmAttackflag) {
 		armattacktime += 0.03f;
-		Arm_Scl[0].y = Easing::EaseOut(armattacktime, OldArm_Scl[0].y, OldArm_Scl[0].y+ 10);
+		Arm_Scl[0].y = Easing::EaseOut(armattacktime, OldArm_Scl[0].y, OldArm_Scl[0].y+5);
 		if (Collision::GetLen({ OldArm_Scl[0].x,OldArm_Scl[0].y+10,OldArm_Scl[0].z }, Arm_Scl[0]) < 1) {
 			ArmAttackflag = false;
 			armreturn=true;
@@ -463,5 +468,57 @@ void ForestBoss::ArmAytack()
 			armreturn = false;
 			armattacktime2 = 0;
 	}
+	}
+	if (!ArmAttackflag && !armreturn) {
+		XMVECTOR positionA = { player->GetPosition().x,player->GetPosition().y, player->GetPosition().z };
+		XMVECTOR positionB = { Arm_Pos[0].x,Arm_Pos[0].y,Arm_Pos[0].z };
+		//プレイヤーと敵のベクトルの長さ(差)を求める
+		XMVECTOR SubVector = DirectX::XMVectorSubtract(positionB, positionA);// positionA - positionB;
+		rotfollow = atan2f(SubVector.m128_f32[0], SubVector.m128_f32[1]);
+
+		Arm_Rot[0].z = rotfollow * 60 + 180;//60=角度調整用 180=反転
+
+	}
+}
+
+
+void ForestBoss::ArmAttack_Left(Player* player)
+{
+
+	if (Input::GetInstance()->TriggerKey(DIK_B)) {
+		Sec_ArmAttackflag = true;
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_C)) {
+		Sec_ArmAttackflag = true;
+		ArmAttackflag = true;
+	}
+	if (Sec_ArmAttackflag) {
+		Sec_armattacktime += 0.03f;
+		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime, OldArm_Scl[1].y, OldArm_Scl[1].y + 5);
+		if (Collision::GetLen({ OldArm_Scl[1].x,OldArm_Scl[1].y + 10,OldArm_Scl[1].z }, Arm_Scl[1]) < 1) {
+			Sec_ArmAttackflag = false;
+			Sec_armreturn = true;
+			Sec_armattacktime = 0.0f;
+		}
+	} else {
+		OldArm_Scl[1] = Arm_Scl[1];
+	}
+	if (Sec_armreturn) {
+		Sec_armattacktime2 += 0.01f;
+		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime2, Arm_Scl[1].y, 0);
+		if (Collision::GetLenY(Arm_Scl[1], { 0,0,0 }) < 1) {
+			Sec_armreturn = false;
+			Sec_armattacktime2 = 0;
+		}
+	}
+	if (!Sec_ArmAttackflag && !Sec_armreturn) {
+		XMVECTOR positionA = { player->GetPosition().x,player->GetPosition().y, player->GetPosition().z };
+		XMVECTOR positionB = { Arm_Pos[1].x,Arm_Pos[1].y,Arm_Pos[1].z };
+		//プレイヤーと敵のベクトルの長さ(差)を求める
+		XMVECTOR SubVector = DirectX::XMVectorSubtract(positionB, positionA);// positionA - positionB;
+		Sec_rotfollow = -1*atan2f(SubVector.m128_f32[0], SubVector.m128_f32[1]);
+
+		Arm_Rot[1].z = Sec_rotfollow * 60 + 180;//60=角度調整用 180=反転
+
 	}
 }

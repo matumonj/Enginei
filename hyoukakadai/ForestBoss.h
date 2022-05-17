@@ -136,13 +136,22 @@ public:
 
     //void SkewersAttack();
     void collisionArm(Player* player);
-    void ArmAytack();
+    void ArmAytack(Player* player);
+    void ArmAttack_Left(Player* player);
     void GetDamage();
 private:
+
+    float lene;
+    float ArmMaxlen;
     bool armreturn;
     XMFLOAT3 OldArm_Scl[2];
     float armattacktime;
     float armattacktime2;
+
+    bool Sec_ArmAttackflag;
+    bool Sec_armreturn;
+    float Sec_armattacktime;
+    float Sec_armattacktime2;
     static XMFLOAT3 wpos[max];
     static bool woodatkflag;
     static float woodatkCount;
@@ -161,6 +170,7 @@ private:
     XMFLOAT2 DamageArea;
     XMFLOAT2 DamageAreaStart;
     float rotfollow;
+    float Sec_rotfollow;
 private:
     static XMFLOAT3 startPos;
     float movement;

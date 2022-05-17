@@ -52,7 +52,7 @@ void StageSelect::SpriteCreate()
 #pragma region 
 void StageSelect::ModelCreate()
 {
-	SelectStageModel = Model::CreateFromOBJ("stage");
+	SelectStageModel = Model::CreateFromOBJ("stage1");
 	SelectStageObj = Object3d::Create();
 	SelectStageObj->SetModel(SelectStageModel);
 	SelectStageObj->Initialize();
