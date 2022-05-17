@@ -459,7 +459,7 @@ void Collision::ColMapb1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
 						//moveSpeed = 0;
 						grav = 0.0f;
-						//time = 0;
+						time = 0;
 						//jumpf = false;
 						break;
 					} else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
@@ -469,7 +469,7 @@ void Collision::ColMapb1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 
 				} else {
 					movespeed = 0.2f;
-					grav = 0.02;
+					grav = 0.03;
 				}
 
 				//ÉvÉåÉCÉÑÅ[ÇÃç∂ï”
@@ -497,11 +497,9 @@ void Collision::ColMapb1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 		}
 	}
 	time += 0.04f;
-<<<<<<< HEAD
-	
-=======
+
 	Player_Pos.y -= grav*time*time;
->>>>>>> cfc05198cbef154c4648f897cf695abf7479be01
+
 	//enemy->Setposition(Player_Pos);
 }
 
