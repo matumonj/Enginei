@@ -1,4 +1,4 @@
-#include "SeaScene1.h"
+#include "BossScene3.h"
 #include"Input.h"
 #include"DirectXCommon.h"
 #include"ClearScene.h"
@@ -11,13 +11,14 @@
 #include"Destroy.h"
 #include"Fader.h"
 #include"BossScene1.h"
+
 #include"FirstBossScene.h"
 #include"GamOver.h"
 //コメントアウト
 
 
 //シーンのコンストラクタ
-SeaScene1::SeaScene1(SceneManager* sceneManager)
+BossScene3::BossScene3(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
 
@@ -25,7 +26,7 @@ SeaScene1::SeaScene1(SceneManager* sceneManager)
 
 #pragma region スプライトの生成
 //スプライト生成
-void SeaScene1::SpriteCreate()
+void BossScene3::SpriteCreate()
 {
 	// デバッグテキスト用テクスチャ読み込み
 	Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont2.png");
@@ -54,7 +55,7 @@ void SeaScene1::SpriteCreate()
 #pragma endregion
 
 #pragma region 
-void SeaScene1::ModelCreate()
+void BossScene3::ModelCreate()
 {
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
@@ -126,7 +127,7 @@ void SeaScene1::ModelCreate()
 #pragma endregion
 
 #pragma region 各パラメータのセット
-void SeaScene1::SetPrm()
+void BossScene3::SetPrm()
 {
 	setumei->SetPosition({ 0, 400 });
 	setumei->SetSize({ 500,300 });
@@ -166,7 +167,7 @@ void SeaScene1::SetPrm()
 #pragma endregion
 
 #pragma region オブジェクト+ライトの更新処理
-void SeaScene1::objUpdate()
+void BossScene3::objUpdate()
 {
 	{//ライトのパラメータを反映 	
 		lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
@@ -195,7 +196,7 @@ void SeaScene1::objUpdate()
 #pragma endregion
 
 #pragma region 初期化
-void SeaScene1::Initialize(DirectXCommon* dxCommon)
+void BossScene3::Initialize(DirectXCommon* dxCommon)
 {
 	//
 
@@ -266,7 +267,7 @@ void SeaScene1::Initialize(DirectXCommon* dxCommon)
 #pragma endregion
 
 #pragma region 更新処理
-void SeaScene1::Update(DirectXCommon* dxCommon)
+void BossScene3::Update(DirectXCommon* dxCommon)
 {
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
@@ -457,13 +458,11 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 
 	//}
 	//カメラ関係の処理
-	
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y+CameraPos,Player_Pos.z - 27.0f });
-	camera->SetTarget({ Player_Pos.x,Player_Pos.y+CameraPos ,Player_Pos.z });
-	
-	
+	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
+	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
+
 	camera->Update();
 
 	player->SetPosition(Player_Pos);
@@ -519,7 +518,7 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 
 //スプライトの描画
 #pragma region モデルの描画
-void SeaScene1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
+void BossScene3::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
 
@@ -558,7 +557,7 @@ void SeaScene1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 
 }
 //sプライと以外の描画
-void SeaScene1::MyGameDraw(DirectXCommon* dxcomn)
+void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 {
 
 	Sprite::PreDraw(dxcomn->GetCmdList());
@@ -595,7 +594,7 @@ void SeaScene1::MyGameDraw(DirectXCommon* dxcomn)
 #pragma endregion
 //↓に入る
 #pragma region
-void SeaScene1::Draw(DirectXCommon* dxcomn)
+void BossScene3::Draw(DirectXCommon* dxcomn)
 {
 	//ポストエフェクトの場合わけ(Bでぼかし Dがデフォルト)
 	switch (c_postEffect)
@@ -625,7 +624,7 @@ void SeaScene1::Draw(DirectXCommon* dxcomn)
 }
 #pragma endregion
 
-void SeaScene1::ImGuiDraw()
+void BossScene3::ImGuiDraw()
 {
 	ImGui::Begin("Obj1");
 	ImGui::SetWindowPos(ImVec2(0, 0));
@@ -719,7 +718,7 @@ void SeaScene1::ImGuiDraw()
 
 }
 #pragma region 解放部分
-void SeaScene1::Finalize()
+void BossScene3::Finalize()
 {
 	//delete sceneManager_;
 

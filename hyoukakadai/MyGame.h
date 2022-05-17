@@ -28,7 +28,6 @@
 #include"Model.h"
 #include"Collision.h"
 #include"BaseScene.h"
-#include"DesertField.h"
 #include"DebugTxt.h"
 #include"LightGroup.h"
 #include"DebugCamera.h"
@@ -44,6 +43,8 @@
 #include"ForestStage1.h"
 #include"ForestStage2.h"
 #include"SeaScene1.h"
+#include"DesertField.h"
+#include"BossScene3.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
 

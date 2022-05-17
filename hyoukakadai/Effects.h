@@ -35,16 +35,16 @@ private:
 public:
 	~Effects();
 	//XMFLOAT3 GetPosition
-	XMFLOAT3 Effect_Pos = { -50,-10,90 };
+	XMFLOAT3 Effect_Pos = { -50.0f,-10.0f,90.0f };
 	XMFLOAT3 Effect_Rot;
 	XMFLOAT3 Effect_SCl;
 
-	XMFLOAT3 a_Effect_Pos = { -50,-10,90 };
+	XMFLOAT3 a_Effect_Pos = { -50.0f,-10.0f,90.0f };
 	XMFLOAT3 a_Effect_Rot;
 	XMFLOAT3 a_Effect_SCl;
 
 	XMFLOAT3 b_Effect_Pos = {  };
-	XMFLOAT3 b_Effect_Rot =  {0,-174.277,0};
+	XMFLOAT3 b_Effect_Rot =  {0.0f,-174.277f,0.0f};
 	XMFLOAT3 b_Effect_SCl;
 public:
 	void BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera,bool stay, bool altAttack, XMFLOAT3 bpos);
