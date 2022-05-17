@@ -10,7 +10,7 @@
 #include"imgui.h"
 #include"Fader.h"
 //コメントアウト
-#define PI 360.0
+#define PI 360.0f
 
 //シーンのコンストラクタ
 StageSelect::StageSelect(SceneManager* sceneManager)

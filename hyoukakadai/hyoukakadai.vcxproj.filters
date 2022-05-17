@@ -73,7 +73,9 @@
     <ClCompile Include="BossScene2.cpp" />
     <ClCompile Include="ForestStage2.cpp" />
     <ClCompile Include="ForestBoss.cpp" />
+    <ClCompile Include="SeaScene1.cpp" />
     <ClCompile Include="OBBCollision.cpp" />
+    <ClCompile Include="BossScene3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -147,8 +149,10 @@
     <ClInclude Include="BossScene2.h" />
     <ClInclude Include="ForestStage2.h" />
     <ClInclude Include="ForestBoss.h" />
+    <ClInclude Include="SeaScene1.h" />
     <ClInclude Include="OBB.h" />
     <ClInclude Include="OBBCollision.h" />
+    <ClInclude Include="BossScene3.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />

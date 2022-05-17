@@ -90,7 +90,7 @@ private:
 	float BossTime;
 	XMFLOAT3 BossPos;
 	XMFLOAT3 BossOldPos;
-	float moveSpeed = 0.2f;
+	float moveSpeed = 0.1f;
 	//tst
 	XMFLOAT3 tst_Pos = { 0,200,0 };
 	XMFLOAT3 tst_Scl = { 1,1,1 };
