@@ -90,7 +90,7 @@ private:
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;
-	float moveSpeed = 0.1f;
+	float moveSpeed = 0.2f;
 	//tst
 	XMFLOAT3 tst_Pos = { 0,11,0 };
 	XMFLOAT3 tst_Scl = { 1,1,1 };

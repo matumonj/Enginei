@@ -497,7 +497,7 @@ void Collision::ColMapb1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 		}
 	}
 	time += 0.04f;
-	Player_Pos.y -= grav;
+	Player_Pos.y -= grav*time*time;
 	//enemy->Setposition(Player_Pos);
 }
 

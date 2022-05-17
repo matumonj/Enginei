@@ -457,11 +457,13 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 
 	//}
 	//ƒJƒƒ‰ŠÖŒW‚Ìˆ—
+	
 	camera->SetTarget({ 0,1,0 });//’Ž‹“_
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
-	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
-
+	camera->SetEye({ Player_Pos.x,Player_Pos.y+CameraPos,Player_Pos.z - 27.0f });
+	camera->SetTarget({ Player_Pos.x,Player_Pos.y+CameraPos ,Player_Pos.z });
+	
+	
 	camera->Update();
 
 	player->SetPosition(Player_Pos);

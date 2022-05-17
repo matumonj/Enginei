@@ -205,6 +205,8 @@ private://点光源
 	float pointLightColor[3] = { 1,1,1 };
 	float pointLightAtten[3] = { 0.05f,0.05f,0.05f };
 
+	float CameraPos = 8;
+
 	int SpotLightflag = false;
 private://スポットライト
 	float spotLightDir[3] = { 0,-1,0 };
