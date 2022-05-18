@@ -34,6 +34,7 @@ XMFLOAT3 Line::po = { 0,0,0 }, Line::needlepos, Line::needlerot;
 bool Line::elf = false;
 float Line::oldlinex, Line::oldliney;
 int Line::index = -1;
+int Line::index2 = -1;
 bool Line::mapcol = false;
 Line* Line::GetInstance()
 {
@@ -271,6 +272,7 @@ void Line::Draw(DirectXCommon* dxcomn)
 
 void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 {
+	//int index;
 	if (elf) {
 		Twine->SetColor({ 1,0,0,twcolor });
 	} else {
@@ -296,7 +298,9 @@ void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 				liney2 = position[index]->GetPosition().y;
 			}
 			else {
-				returnflag = true;
+				if (index2 == -1) {
+					returnflag = true;
+				}
 			}
 		}
 	}
@@ -310,6 +314,54 @@ void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 	}
 
 	if ( colf) {
+		elf = false;
+		mapcol = false;
+	}
+}
+//
+
+void Line::CollisionEnemys2group(std::unique_ptr<Enemy>position[])
+{
+	if (elf) {
+		Twine->SetColor({ 1,0,0,twcolor });
+	} else {
+		Twine->SetColor({ 1,1,1,twcolor });
+	}
+	//int in = -1;
+	float dis[10];
+	for (int i = 0; i < 10; i++) {
+		if (position[i] != nullptr) {
+			dis[i] = sqrtf((position[i]->GetPosition().x - needlepos.x) * (position[i]->GetPosition().x - needlepos.x) +
+				(position[i]->GetPosition().y - needlepos.y) * (position[i]->GetPosition().y - needlepos.y));
+
+			if (dis[i] <= 2 && trigger && !elf) {
+				elf = true;
+				index2 = i;//あたった敵の要素番号を割り当て
+			}
+		}
+
+		//衝突時
+		if (elf && !mapcol) {
+			if (position[index2] != nullptr) {
+				linex2 = position[index2]->GetPosition().x;
+				liney2 = position[index2]->GetPosition().y;
+			} else {
+				if (index == -1) {
+					returnflag = true;
+				}
+				}
+		}
+	}
+	if (mapcol) {
+		oldlinex = linex2;
+		oldliney = liney2;
+		if (elf) {
+			linex2 = oldlinex;
+			liney2 = oldliney;
+		}
+	}
+
+	if (colf) {
 		elf = false;
 		mapcol = false;
 	}

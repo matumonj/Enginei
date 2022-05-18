@@ -199,6 +199,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 		//enemycolony2[i] = nullptr;
 		enemycolony1[i]->Initialize();
 		enemycolony2[i]->Initialize();
+		enemycolony2[i]->Setposition({ 1222,1,1 });
 	}
 
 	for (int j = 0; j < MAX_Y; j++) {
@@ -212,11 +213,12 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 
 	bossenemy->Setposition({ 40,-4,0 });
 	if (startSet == false) {
-
+		
 		for (int i = 0; i < 130; i++) {
 			for (int j = 0; j < 20; j++) {
 				if (map[i][j] == 10) {
 					enemycolony1[0]->Setposition(tst[i][j]->GetPosition());
+
 					//	break;
 				} else if (map[i][j] == 11) {
 					enemycolony1[1]->Setposition(tst[i][j]->GetPosition());
@@ -340,8 +342,9 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	Line::GetInstance()->SetColf(colf);
 
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
-	Line::CollisionEnemys(enemycolony1);
-	Line::CollisionEnemys(enemycolony2);
+	Line::GetInstance()->CollisionEnemys(enemycolony1);
+	Line::GetInstance()->CollisionEnemys2group(enemycolony2);
+	//Line::CollisionEnemys2group(enemycolony1, enemycolony2);
 	//Line::CollisionEnemy(bossenemy.get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
@@ -374,6 +377,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	objUpdate();//オブジェクトの更新処理
 	effects->Update(dxCommon, camera, enemycolony1, player);
+	effects->Update(dxCommon, camera, enemycolony2, player);
 
 	effects->Update(dxCommon, camera, &bossenemy, player);
 
@@ -410,8 +414,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 			}
 		}
 		if (enemycolony2[i] != nullptr) {
-			if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
-
+			//if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
 				enemycolony2[i]->Motion(player);
 				enemycolony2[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
 				enemycolony2[i]->Attack(player);
@@ -422,7 +425,6 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 					Destroy_unique(enemycolony2[i]);
 				}
 			}
-		}
 		}
 	//BossPos = bossenemy->GetPosition();
 
@@ -578,7 +580,7 @@ void BossScene2::Finalize()
 	effects.reset();
 	bossenemy.reset();
 	for (int i = 0; i < 20; i++) {
-		enemycolony1[i].reset();
+		enemycolony1->reset();
 		enemycolony2->reset();
 	}
 

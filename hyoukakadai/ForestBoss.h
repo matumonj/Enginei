@@ -32,6 +32,10 @@ private:
     Model* BossModel = nullptr;
 
     Object3d* BossArmObj[2] = { nullptr };
+    Object3d* BarrelObj = nullptr;
+    Model* BarrelModel;
+    XMFLOAT3 Barrel_Rot;
+    XMFLOAT3 Barrel_Scl;
     //モデルのインスタンス
     Model* BossArmModel = nullptr;
     XMFLOAT3 Arm_Pos[2];
@@ -49,6 +53,7 @@ private:
     Model* ShotModel = nullptr;
 
 private:
+    bool ChangeAttack;
     float r = 1;
     float g = 1;
     float b = 1;
@@ -63,6 +68,12 @@ private:
     float BulAngle[3];
     int attackcount;
 private:
+    bool BarrelRec;
+    float BarrelRotFollow=0;
+    bool BarrelReverse;
+    float BarrelsclTime;
+private:
+
     XMFLOAT3 Boss_Pos;
     XMFLOAT3 Boss_Rot;
     XMFLOAT3 Boss_Scl = { 9,9,9 };
@@ -165,6 +176,7 @@ private:
     bool Sec_armreturn;
     float Sec_armattacktime;
     float Sec_armattacktime2;
+    int ArmAttackCount;
     static XMFLOAT3 wpos[max];
     static bool woodatkflag;
     static float woodatkCount;
@@ -197,6 +209,7 @@ private:
         NormalAttack,
         Skewers,
         SetStartPos,
+        ArmAttacks,
         StartBattle
     };
 

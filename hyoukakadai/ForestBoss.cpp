@@ -65,9 +65,9 @@ void ForestBoss::Initialize()
 	//モデル割り当て
 	BossObject = Object3d::Create();
 	BossObject->SetModel(BossModel);
-
+	BarrelModel= Model::CreateFromOBJ("wood");
 	SkewersBossModel= Model::CreateFromOBJ("wood");
-	ShotModel = Model::CreateFromOBJ("wood");
+	ShotModel = Model::CreateFromOBJ("sphere");
 	BossArmModel = Model::CreateFromOBJ("wood");
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i] = Object3d::Create();
@@ -77,7 +77,8 @@ void ForestBoss::Initialize()
 		BossArmObj[i] = Object3d::Create();
 		BossArmObj[i]->SetModel(BossArmModel);
 	}
-	
+	BarrelObj=Object3d::Create();
+	BarrelObj->SetModel(BarrelModel);
 	//パラメータのセット
 
 	Position = { 67,-4,0 };
@@ -99,6 +100,10 @@ void ForestBoss::Initialize()
 		Shot_Pos[i] = { Position };
 
 	}
+	Barrel_Scl = { 1,5,1 };
+	BarrelObj->SetScale({ 1,5,1 });
+	BarrelObj->SetPosition(Position);
+	Barrel_Rot = { 0,180,90 };
 }//
 
 //更新処理
@@ -145,6 +150,7 @@ void ForestBoss::Update(XMFLOAT3 position)
 		ShotObj[i]->SetScale({1,1,1});
 		ShotObj[i]->Update({ 1,1,1,1 });
 	}
+	
 	GetDamage();
 	//モブ
 	Rotation.x = 0;
@@ -158,6 +164,11 @@ void ForestBoss::Update(XMFLOAT3 position)
 		//BossObject->SetRotation(Boss_Rot);
 		SkewersObject[i]->SetPosition(wpos[i]);
 	}
+	BarrelObj->SetPosition(Position);
+	BarrelObj->SetScale(Barrel_Scl);
+	BarrelObj->SetRotation(Barrel_Rot);
+	//BarrelObj->SetScale({1,5,1});
+	BarrelObj->Update({ 1,1,1,1 });
 }
 void ForestBoss::SkewersAttack(int map[130][20], std::unique_ptr<Object3d> tst[130][20])
 {
@@ -219,7 +230,7 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 	}
 	
 	BossObject->PreDraw();
-	BossObject->Draw();
+	//BossObject->Draw();
 	BossObject->PostDraw();
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i]->PreDraw();
@@ -231,6 +242,9 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 		ShotObj[i]->Draw();
 		ShotObj[i]->PostDraw();
 	}
+	BarrelObj->PreDraw();
+	BarrelObj->Draw();
+	BarrelObj->PostDraw();
 	ImGui::Begin("scl");
 	
 	ImGui::SliderFloat("scly",&Arm_Scl[0].y, 20.0f, 20.0f);
@@ -251,10 +265,6 @@ void ForestBoss::Motion(Player* player)
 	NormalAttacks(player);
 	lene = Collision::GetLen(Arm_Pos[0], player->GetPosition());
 
-	if (AttackNum >= 2) {
-		ArmAytack(player);
-		ArmAttack_Left(player);
-	}
 	const float dis = 0.5f;
 	switch (bossAction)
 	{
@@ -322,6 +332,10 @@ void ForestBoss::Motion(Player* player)
 			bossAction = None;
 			//	phase = true;
 		}
+		break;
+	case ArmAttacks:
+		ArmAytack(player);
+		ArmAttack_Left(player);
 		break;
 	default:
 		break;
@@ -460,8 +474,8 @@ void ForestBoss::collisionArm(Player* player)
 
 void ForestBoss::ArmAytack(Player*player)
 {
-	
-	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+	ArmAttackCount++;
+	if (ArmAttackCount%300==0) {
 		ArmAttackflag = true;
 	}
 	if (ArmAttackflag) {
@@ -543,20 +557,28 @@ void ForestBoss::NormalAttacks(Player* player)
 {
 	float x[3];
 	float y[3];
+	if (Input::GetInstance()->TriggerKey(DIK_S)) {
+		BarrelRec = true;
+	}
 	for (int i = 0; i < 3; i++) {
-		if (attackcount % 50 == 0) {
+		if (attackcount % 100 == 0) {
 			if (!shotf[i]) {
-				shotf[i] = true;
-				Shot_Pos[i] = Position;
-				x[i] = player->GetPosition().x- Shot_Pos[i].x;
-				y[i] =  player->GetPosition().y- Shot_Pos[i].y;
-				// 平方根を求めるのに標準関数の sqrt を使う、
-				// これを使うには math.h をインクルードする必要がある
+				//shotf[i] = true;
+				//if (Input::GetInstance()->TriggerKey(DIK_S)) {
+				if (!ChangeAttack) {
+					shotf[i] = true;
+					BarrelRec = true;
+				}
+				//}
+
+				Shot_Pos[i] = { Arm_Pos[0].x,Arm_Pos[0].y, Arm_Pos[0].z };
+				x[i] = player->GetPosition().x - Shot_Pos[i].x;
+				y[i] = player->GetPosition().y - Shot_Pos[i].y;
+
 				BulAngle[i] = sqrtf(x[i] * x[i] + y[i] * y[i]);
 
-				// １フレーム当たり８ドット移動するようにする
-				Xspeed[i] = (0.5*x[i] / BulAngle[i]);
-				Yspeed[i] = (0.5*y[i] / BulAngle[i]);
+				Xspeed[i] = ( 0.2 * x[i] / BulAngle[i]);
+				Yspeed[i] = ( 0.2 * y[i] / BulAngle[i]);
 				break;
 			}
 		}
@@ -565,16 +587,53 @@ void ForestBoss::NormalAttacks(Player* player)
 			Shot_Pos[i].y += Yspeed[i];
 			if (Collision::GetLen(Shot_Pos[i], player->GetPosition()) < 1) {
 				player->SetHp(player->getHp() - 1);
-				//shotf[i] = false;
-				//break;
+				shotf[i] = false;
+				break;
 			}
 			if (Collision::GetLen(Shot_Pos[i], Position) > 100) {
 				shotf[i] = false;
-				//break;
+				break;
 			}
+		
 		}
 		 
 		}
-
+	//きったねえ
 	attackcount++;
-}
+	if (BarrelRec) {
+		if (Barrel_Scl.y > 3) {
+			Barrel_Scl.y -= 0.08f;
+		}
+		else {
+			BarrelRec = false;
+		}
+		}
+	else {
+		if (!ChangeAttack) {
+			if (Barrel_Scl.y < 5) {
+				Barrel_Scl.y += 0.05f;
+			}
+		}
+	}
+
+	if (player->GetPosition().y > 40) {
+		ChangeAttack = true;
+	}
+	if (ChangeAttack) {
+		if (Barrel_Scl.y >= 0) {
+			Barrel_Scl.y -= 0.05;
+		}
+		else {
+			bossAction = ArmAttacks;
+		}
+	}
+	//Barrel_Scl.y -= 0.05f;
+	XMVECTOR positionA = { player->GetPosition().x,player->GetPosition().y, player->GetPosition().z };
+	XMVECTOR positionB = { Position.x,Position.y,Position.z };
+	//プレイヤーと敵のベクトルの長さ(差)を求める
+	XMVECTOR SubVector = DirectX::XMVectorSubtract(positionB, positionA);// positionA - positionB;
+	BarrelRotFollow = atan2f(SubVector.m128_f32[0], SubVector.m128_f32[1]);
+
+	Barrel_Rot.z = BarrelRotFollow * 60 + 180;//60=角度調整用 180=反転
+
+	}
