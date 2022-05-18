@@ -247,6 +247,70 @@ void Collision::ColMap1(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 
 }
 
+void Collision::CollisionMap(int map[20][200], std::unique_ptr<Object3d> tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos,XMFLOAT3 Player_Scl, XMFLOAT3& Old_Pos, int MAP_NUMBER)
+{
+	float height;//
+	float width;
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			if (map[j][i] == MAP_NUMBER ) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
+					if (Line::GetInstance()->Gettriggerflag() == true) {
+						Line::GetInstance()->Setmapcol(true);
+						Line::GetInstance()->Setelf(true);
+					}
+				}
+
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
+					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						jumpf = false;
+						break;
+					}
+					else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+						break;
+					}
+
+				}
+				else {
+					movespeed = 0.2f;
+					grav = 0.03;
+				}
+
+				//プレイヤーの左辺
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						Player_Pos.y = Player_Pos.y + 0.001f;
+						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+						//grav = 0.0f;
+						//time = 0;
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
+						//grav = 0.0f;
+						//time = 0;
+						//moveSpeed = 0;
+						break;
+					}
+				}
+				else {
+					movespeed = 0.2f;
+				}
+			}
+		}
+	}
+}
+
 void Collision::ColMap2(int map[130][20], std::unique_ptr<Object3d> tst[130][20], float mapx[130][20],  float mapy[130][20], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos)
 {
 	//grav-grav
@@ -497,16 +561,7 @@ void Collision::ColMapb1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 		}
 	}
 	time += 0.04f;
-<<<<<<< HEAD
-	
-	Player_Pos.y -= grav;// *time* time;
-//>>>>>>> cfc05198cbef154c4648f897cf695abf7479be01
-=======
 
-	Player_Pos.y -= grav*time*time;
-
->>>>>>> a11cb979d65f944e1146cf8187f8d51a857c2667
-	//enemy->Setposition(Player_Pos);
 }
 
 /// <summary>
