@@ -271,7 +271,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	LONG a = 30000;
 
 	//左
-	player->PlayerMoves(Player_Pos, moveSpeed);
+	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time);
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲

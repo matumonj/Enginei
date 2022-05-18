@@ -280,7 +280,7 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 
 
 	//左
-	player->PlayerMoves(Player_Pos, moveSpeed);
+	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time);
 
 
 	///////// コントローラー //////////
@@ -325,25 +325,11 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 	//入力処理より後に当たり判定を描け
 	//aaaaaaa
 
-	if (OnFlag == true) {
-		if (Ontime >= 0) {
-			Ontime--;
-		}
-		else if (Ontime <= 0) {
-			OnFlag = false;
-		}
-	}
-
-	if (OnFlag == false) {
-		Ontime++;
-		if (Ontime >= 300) {
-			OnFlag = true;
-		}
-	}
+	
 
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
-			if (map[j][i] == 1 || (map[j][i] == 2 && OnFlag == true)) {
+			if (map[j][i] == 1 || map[j][i] == 2) {
 				mapx[j][i] = tst[j][i]->GetPosition().x;
 				mapy[j][i] = tst[j][i]->GetPosition().y;
 				height = tst[j][i]->GetScale().y;
@@ -539,7 +525,7 @@ void SeaScene1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1 || (map[j][i] == 2 && OnFlag == true)) {
+			if (map[j][i] == 1 ) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();

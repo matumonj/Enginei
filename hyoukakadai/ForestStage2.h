@@ -65,6 +65,7 @@ private:
 	Player* player;
 	//std::unique_ptr<Object3d>player[10];
 	std::unique_ptr<Object3d>tst[20][200];
+	std::unique_ptr<Object3d>reef[20][200];
 	std::unique_ptr<Object3d> sentan = nullptr;
 	std::unique_ptr<Object3d> world = nullptr;
 	std::unique_ptr<Object3d>block = nullptr;
@@ -78,6 +79,7 @@ private:
 	Model* worldmodel = nullptr;
 	Model* harimodel = nullptr;
 	Model* goalmodel = nullptr;
+	Model* reefmodel = nullptr;
 	PostEffect* postEffect = nullptr;
 	DebugCamera* camera;
 	Item* item = nullptr;
@@ -168,8 +170,6 @@ private:
 
 	bool jumpFlag = false;
 
-	int Ontime = 300;
-	bool OnFlag = false;
 
 	float debuga;
 	float tempx, tempy;

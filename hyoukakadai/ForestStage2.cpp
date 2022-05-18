@@ -56,10 +56,11 @@ void ForestStage2::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("block");
+	tstmodel = Model::CreateFromOBJ("wood");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
 	goalmodel = Model::CreateFromOBJ("goalmo");
+	reefmodel = Model::CreateFromOBJ("reef");
 
 
 	item = new Item();
@@ -71,6 +72,10 @@ void ForestStage2::ModelCreate()
 			tst[j][i] = std::make_unique<Object3d>();
 			tst[j][i]->Initialize();// Object3d::Create();
 			tst[j][i]->SetModel(tstmodel);
+
+			reef[j][i] = std::make_unique<Object3d>();
+			reef[j][i]->Initialize();// Object3d::Create();
+			reef[j][i]->SetModel(reefmodel);
 		}
 	}
 	block = std::make_unique<Object3d>();
@@ -144,6 +149,10 @@ void ForestStage2::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
+
+			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			reef[j][i]->SetRotation({ tst_Rot });
+			reef[j][i]->SetScale({ tst_Scl });
 		}
 	}
 	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
@@ -179,6 +188,7 @@ void ForestStage2::objUpdate()
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->Update({ 1,1,1,1 });
+			reef[j][i]->Update({ 1,1,1,1 });
 		}
 	}
 
@@ -277,7 +287,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
-		player->PlayerMoves(Player_Pos, moveSpeed);
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time);
 	}
 
 	///////// コントローラー //////////
@@ -322,66 +332,64 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	//入力処理より後に当たり判定を描け
 	//aaaaaaa
 
-	
+	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
+	Collision::CollisionMap(map, reef, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
 
-	for (int i = 0; i < MAX_X; i++) {
-		for (int j = 0; j < MAX_Y; j++) {
-			if (map[j][i] == 1 || (map[j][i] == 2 )) {
-				mapx[j][i] = tst[j][i]->GetPosition().x;
-				mapy[j][i] = tst[j][i]->GetPosition().y;
-				height = tst[j][i]->GetScale().y;
-				width = tst[j][i]->GetScale().x;
-				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-					if (Line::GetInstance()->Gettriggerflag() == true) {
-						Line::GetInstance()->Setmapcol(true);
-						Line::GetInstance()->Setelf(true);
-					}
-				}
-
-				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						//moveSpeed = 0;
-						grav = 0.0f;
-						time = 0;
-						jumpFlag = false;
-						break;
-					}
-					else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-						break;
-					}
-
-				}
-				else {
-					moveSpeed = 0.2f;
-					grav = 0.03;
-				}
-
-				//プレイヤーの左辺
-				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-						Player_Pos.y = Player_Pos.y + 0.001f;
-						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-						//grav = 0.0f;
-						//time = 0;
-						break;
-					}
-					//プレイヤーの右辺
-					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-						//grav = 0.0f;
-						//time = 0;
-						//moveSpeed = 0;
-						break;
-					}
-				}
-				else {
-					moveSpeed = 0.2f;
-				}
-			}
-		}
-	}
+	//for (int i = 0; i < MAX_X; i++) {
+	//	for (int j = 0; j < MAX_Y; j++) {
+	//		if (map[j][i] == 1 || (map[j][i] == 2 )) {
+	//			mapx[j][i] = tst[j][i]->GetPosition().x;
+	//			mapy[j][i] = tst[j][i]->GetPosition().y;
+	//			height = tst[j][i]->GetScale().y;
+	//			width = tst[j][i]->GetScale().x;
+	//			if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
+	//				if (Line::GetInstance()->Gettriggerflag() == true) {
+	//					Line::GetInstance()->Setmapcol(true);
+	//					Line::GetInstance()->Setelf(true);
+	//				}
+	//			}
+	//			if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
+	//				if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+	//					Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+	//					//moveSpeed = 0;
+	//					grav = 0.0f;
+	//					time = 0;
+	//					jumpFlag = false;
+	//					break;
+	//				}
+	//				else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+	//					Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+	//					break;
+	//				}
+	//			}
+	//			else {
+	//				moveSpeed = 0.2f;
+	//				grav = 0.03;
+	//			}
+	//			//プレイヤーの左辺
+	//			if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+	//				if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+	//					Player_Pos.y = Player_Pos.y + 0.001f;
+	//					Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+	//					//grav = 0.0f;
+	//					//time = 0;
+	//					break;
+	//				}
+	//				//プレイヤーの右辺
+	//				else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+	//					Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
+	//					//grav = 0.0f;
+	//					//time = 0;
+	//					//moveSpeed = 0;
+	//					break;
+	//				}
+	//			}
+	//			else {
+	//				moveSpeed = 0.2f;
+	//			}
+	//		}
+	//	}
+	//}
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
 		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
@@ -396,14 +404,8 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 #pragma region 線の処理
 
 
-	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
-		//grav = 0.0f;
-	}
-	else {
-		grav = 0.03f;
-	}
 
-	time += 0.04f;
+	time += 0.01f;
 	Player_Pos.y -= grav * time * time;
 
 
@@ -469,6 +471,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 			//プレイヤーの検知
 			enemy[i]->Attack(player);
 			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
+			enemy[i]->ColMap(map, reef, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
 
 			enemy[i]->EnemySearchPlayer(player);
@@ -521,10 +524,16 @@ void ForestStage2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1 || (map[j][i] == 2 )) {
+			if (map[j][i] == 2 ) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
+			}
+
+			if (map[j][i] == 1) {
+				reef[j][i]->PreDraw();
+				reef[j][i]->Draw();
+				reef[j][i]->PostDraw();
 			}
 		}
 	}

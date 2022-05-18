@@ -192,7 +192,7 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	LONG a = 30000;
 
 	//左
-	player->PlayerMoves(Player_Pos, moveSpeed);
+	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time);
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲
@@ -218,10 +218,7 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 		if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
 			Player_Pos.x -= moveSpeed;
 		}
-	if (jumpFlag == true) {
-		Player_Pos.y += 0.1f;
-		time += 0.02f;
-	}
+
 
 	///これより上に入力処理をかけ
 	////当たり判定

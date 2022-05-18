@@ -115,6 +115,8 @@ private:
 	float width;
 	float height;
 
+
+
 	bool colf = false;
 	float grav = 0.05f;
 	float time = 0.1f;

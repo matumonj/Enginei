@@ -269,6 +269,8 @@ private:
 	float time = 0.1;
 	OBB pobb;// = nullptr;
 	
+	int Ontime = 300;
+	bool OnFlag = false;
 	//float botttomy = 0;
 private://“_ŒõŒ¹
 	LightGroup* lightGroup = nullptr;

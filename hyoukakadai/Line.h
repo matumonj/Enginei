@@ -78,6 +78,7 @@ public:
 	float GetLength() { return subradius; }
 	bool GetColf() { return colf; }
 	bool Getreturnflag() { return returnflag; }
+	bool GetStop() { return stopflag; }
 	void Setpos(float lx,float ly) { linex2=lx;  liney2 = ly;
 	}
 	void SetColf(bool colf) { this->colf = colf; }

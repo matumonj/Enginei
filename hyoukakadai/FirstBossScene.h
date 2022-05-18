@@ -92,6 +92,8 @@ private:
 	float dx;
 	float dz;
 
+
+
 	//map
 	int blockSize = 2;
 	int map[20][200] = {

@@ -287,7 +287,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 
 
 	//左
-	player->PlayerMoves(Player_Pos, moveSpeed);
+	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time);
 
 	
 	///////// コントローラー //////////

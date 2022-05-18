@@ -81,7 +81,9 @@ private:
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;
 
-	
+	int Ontime = 300;
+	bool OnFlag = false;
+
 	float BossGrav;
 	float BossMoveSpeed;
 	bool BossJumpFlag ;

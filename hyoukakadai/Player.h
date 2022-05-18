@@ -34,7 +34,7 @@ public:
 	void Attack(XMFLOAT3 playerpos);
 	void CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos);
 	void CollisionAttack1(Enemy*enemy, XMFLOAT3 playerpos);
-	void PlayerMoves(XMFLOAT3& move,float moveSpeed);
+	void PlayerMoves(XMFLOAT3& move,float moveSpeed,bool& JumpFlag,float& grav,float& time);
 	void FlyingAttack(Enemy*enemy);
 	void FlyingAttack(std::unique_ptr<Enemy> enemy[]);
 	//DebugTxt* debugtxt = nullptr;
