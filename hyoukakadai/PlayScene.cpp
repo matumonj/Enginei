@@ -303,7 +303,7 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemys(enemy);
+	Line::GetInstance()->CollisionEnemys(enemy);
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {

@@ -47,6 +47,7 @@ private:
 	static bool colf ;
 	static float grav ;
 	static int index;
+	static int index2;
 	static float MoveSpeed;
 	static int L_Cflag;
 	static XMFLOAT3 po;
@@ -69,6 +70,8 @@ public:
 	static void Draw(DirectXCommon* dxcomn);
 	static void CollisionBlock(int** map, float** mapxy[2],float maphalf[2], const int MapX, const int MapY);
 	static void CollisionEnemys(std::unique_ptr<Enemy> Position[]);
+	static void CollisionEnemys2group(std::unique_ptr<Enemy> Position[]);
+
 	static void CollisionEnemy(Enemy*Position);
 public:
 	void SetSubradius(float len) { subradius = len; }

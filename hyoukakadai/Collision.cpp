@@ -560,6 +560,13 @@ void Collision::ColMapb1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 			
 		}
 	}
+	time += 0.04f;
+	float gravtime= grav * time * time;
+
+	Player_Pos.y -=gravtime;
+
+	gravtime = max(0.0f, gravtime);
+	//enemy->Setposition(Player_Pos);
 
 }
 
