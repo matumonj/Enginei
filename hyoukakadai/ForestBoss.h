@@ -43,13 +43,21 @@ private:
     //モデルのインスタンス
     Model* SkewersBossModel = nullptr;
 
+    //オブジェクトのインスタンス
+    Object3d* ShotObj[3] = { nullptr };
+    //モデルのインスタンス
+    Model* ShotModel = nullptr;
+
 private:
     float r = 1;
     float g = 1;
     float b = 1;
     int BefHP;
     //パラメータ
-    
+    XMFLOAT3 Shot_Pos[3];
+    bool shotf[3];
+    bool returnCamera;
+    float returnCameraTime = 0;
     XMFLOAT3 Boss_Pos;
     XMFLOAT3 Boss_Rot;
     XMFLOAT3 Boss_Scl = { 9,9,9 };
@@ -147,7 +155,7 @@ private:
     XMFLOAT3 OldArm_Scl[2];
     float armattacktime;
     float armattacktime2;
-
+    int AttackNum = 0;
     bool Sec_ArmAttackflag;
     bool Sec_armreturn;
     float Sec_armattacktime;

@@ -252,7 +252,8 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 			}
 		}
 	}
-
+	//168,48
+Player_Pos={ 20,38,0 };
 }
 #pragma endregion
 
@@ -352,10 +353,11 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 		bpos = bossenemy->GetPosition();
 	}
 	//ƒJƒƒ‰ŠÖŒW‚Ìˆ—
+	ForestBoss::GetInstance()->appearance(camerapositiony);
 	camera->SetTarget({ 0,1,0 });//’Ž‹“_
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
-	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
+	camera->SetEye({ Player_Pos.x,camerapositiony,Player_Pos.z - 27.0f });
+	camera->SetTarget({ Player_Pos.x,camerapositiony-2 ,Player_Pos.z });
 
 	camera->Update();
 
@@ -551,7 +553,7 @@ void BossScene2::ImGuiDraw()
 	float rr = enemycolony1[9]->GetPosition().y;
 	if (ImGui::TreeNode("Player_position")) {
 		//ImGui::SliderFloat("positionX", &Player_Pos.x, -200, 200);
-		//ImGui::SliderFloat("positionY", &Player_Pos.y, -200, 200);
+		ImGui::SliderFloat("positionY", &Player_Pos.y, -200, 200);
 		//ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
 		ImGui::SliderFloat("grav", &grav, -200, 200);
 		ImGui::SliderFloat("time", &time, -200, 200);

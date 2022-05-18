@@ -67,6 +67,7 @@ void ForestBoss::Initialize()
 	BossObject->SetModel(BossModel);
 
 	SkewersBossModel= Model::CreateFromOBJ("wood");
+	ShotModel = Model::CreateFromOBJ("wood");
 	BossArmModel = Model::CreateFromOBJ("wood");
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i] = Object3d::Create();
@@ -76,7 +77,9 @@ void ForestBoss::Initialize()
 		BossArmObj[i] = Object3d::Create();
 		BossArmObj[i]->SetModel(BossArmModel);
 	}
+	
 	//パラメータのセット
+
 	Position = { 67,-4,0 };
 	Boss_Scl = { 2,2,2 };
 	Boss_Rot = { 0,0,0 };
@@ -90,11 +93,20 @@ void ForestBoss::Initialize()
 		Arm_Rot[i] = { 0,180,90 };
 		Arm_Scl[i] = { 1,5,1 };
 	}
+	for (int i = 0; i < 3; i++) {
+		ShotObj[i] = Object3d::Create();
+		ShotObj[i]->SetModel(ShotModel);
+		Shot_Pos[i] = { Position };
+
+	}
 }//
 
 //更新処理
 void ForestBoss::Update(XMFLOAT3 position)
 {
+	if ((int)position.y % 40 == 0) {
+		AttackNum++;
+	}
 	Old_Pos = Position;
 
 	if (bossjumpflag == true) {
@@ -126,6 +138,12 @@ void ForestBoss::Update(XMFLOAT3 position)
 		BossArmObj[i]->SetRotation(Arm_Rot[i]);
 		BossArmObj[i]->SetScale(Arm_Scl[i]);
 		BossArmObj[i]->Update({1,1,1,1});
+	}
+	for (int i = 0; i < 3; i++) {
+		ShotObj[i]->SetPosition(Shot_Pos[i]);
+		ShotObj[i]->SetRotation({0,0,0});
+		ShotObj[i]->SetScale({1,1,1});
+		ShotObj[i]->Update({ 1,1,1,1 });
 	}
 	GetDamage();
 	//モブ
@@ -199,6 +217,7 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 		BossArmObj[i]->Draw();
 		BossArmObj[i]->PostDraw();
 	}
+	
 	BossObject->PreDraw();
 	BossObject->Draw();
 	BossObject->PostDraw();
@@ -206,6 +225,11 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 		SkewersObject[i]->PreDraw();
 		SkewersObject[i]->Draw();
 		SkewersObject[i]->PostDraw();
+	}
+	for (int i = 0; i < 3; i++) {
+		ShotObj[i]->PreDraw();
+		ShotObj[i]->Draw();
+		ShotObj[i]->PostDraw();
 	}
 	ImGui::Begin("scl");
 	
@@ -226,8 +250,10 @@ void ForestBoss::Motion(Player* player)
 {
 	lene = Collision::GetLen(Arm_Pos[0], player->GetPosition());
 
-	ArmAytack(player);
-	ArmAttack_Left(player);
+	if (AttackNum >= 2) {
+		ArmAytack(player);
+		ArmAttack_Left(player);
+	}
 	const float dis = 0.5f;
 	switch (bossAction)
 	{
@@ -320,55 +346,39 @@ void ForestBoss::Follow(XMFLOAT3 position)
 }
 
 
-void ForestBoss::NormalAttacks(Player* player)
-{
-	//DamageAreaStart = { Position.x,Position.y + 2 };
-	if (Rotation.y == 180) {//右向いてるときの
-		DamageAreaStart = { Position.x,Position.y + 2 };
-		DamageArea = { Position.x - 8 ,Position.y - 2 };
-		if (Collision::Boxcol({ player->GetPosition().x,player->GetPosition().y },
-			{ player->GetPosition().x + 2,player->GetPosition().y + 2 }, DamageArea, DamageAreaStart
-		) == true) {
-			player->SetHp(player->getHp() - 1);
-		}
-	} else {
-		DamageAreaStart = { Position.x,Position.y - 2 };
-		DamageArea = { Position.x + 5,Position.y + 2 };
-		if (Collision::Boxcol({ player->GetPosition().x,player->GetPosition().y },
-			{ player->GetPosition().x + 2,player->GetPosition().y + 2 }, DamageAreaStart, DamageArea
-		) == true) {
-			player->SetHp(player->getHp() - 1);
-		}
-	}
-
-	if (Rotation.z >= -360) {
-		bossjumpflag = true;
-		Rotation.z -= 20;
-	} else {
-		bossjumpflag = false;
-		bossAction = None;
-		Rotation.z = 0;
-	}
-	//player->SetHp(player->getHp() - 1);
-
-	//bossAction = None;
-}
-
 void ForestBoss::appearance(float& camerapos)
 {
-
-	if (phase) {
-		cameratime += 0.01f;
-		camerapos = Easing::EaseOut(cameratime, camerapos, 35.37f);
-		//bossAction = None;
-	} else {
-		startcount += 0.01;
-		camerapos = 67.235f;
-		bossjumpflag = true;
-		if (startcount > 2.0f) {
-			bossAction = None;
-			phase = true;
+	float oldpos=-48;
+	if (phase&&!returnCamera) {
+		cameratime += 0.002f;
+		if (camerapos >= 177) {
+			cameratime = 0;
+			returnCamera = true;
+			phase = false;
 		}
+		else {
+			camerapos = Easing::EaseOut(cameratime, oldpos, 178);
+		}
+	} else {
+		oldpos = camerapos;
+		startcount += 0.01;
+	}
+
+	if (returnCamera) {
+		returnCameraTime += 0.01f;
+		if (camerapos <= -40) {
+			returnCameraTime = 0;
+			returnCamera = false;
+			phase = false;
+		}
+		else {
+			camerapos = Easing::EaseOut(returnCameraTime, 177, -48);
+		}
+
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_J)) {
+		//bossAction = None;
+		phase = true;
 	}
 }
 
@@ -520,5 +530,16 @@ void ForestBoss::ArmAttack_Left(Player* player)
 
 		Arm_Rot[1].z = Sec_rotfollow * 60 + 180;//60=角度調整用 180=反転
 
+	}
+}
+
+
+void ForestBoss::NormalAttacks(Player* player)
+{
+	for (int i = 0; i < 3; i++) {
+		if (!shotf[i]) {
+			Shot_Pos[i] = Position;
+
+		}
 	}
 }
