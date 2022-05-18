@@ -325,9 +325,9 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 		//grav = 0.0f;
 	}
 	else {
-		grav = 0.01f*time;
+		grav = 0.03f;
 	}
-	Player_Pos.y -= grav;
+
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
