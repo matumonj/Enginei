@@ -248,6 +248,7 @@ void ForestBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 
 void ForestBoss::Motion(Player* player)
 {
+	NormalAttacks(player);
 	lene = Collision::GetLen(Arm_Pos[0], player->GetPosition());
 
 	if (AttackNum >= 2) {
@@ -346,12 +347,12 @@ void ForestBoss::Follow(XMFLOAT3 position)
 }
 
 
-void ForestBoss::appearance(float& camerapos)
+void ForestBoss::appearance(float& camerapos,float position)
 {
 	float oldpos=-48;
 	if (phase&&!returnCamera) {
 		cameratime += 0.002f;
-		if (camerapos >= 177) {
+		if (camerapos >= 178) {
 			cameratime = 0;
 			returnCamera = true;
 			phase = false;
@@ -379,6 +380,10 @@ void ForestBoss::appearance(float& camerapos)
 	if (Input::GetInstance()->TriggerKey(DIK_J)) {
 		//bossAction = None;
 		phase = true;
+	}
+
+	if (!returnCamera && !phase) {
+		camerapos = position;
 	}
 }
 
@@ -536,10 +541,40 @@ void ForestBoss::ArmAttack_Left(Player* player)
 
 void ForestBoss::NormalAttacks(Player* player)
 {
+	float x[3];
+	float y[3];
 	for (int i = 0; i < 3; i++) {
-		if (!shotf[i]) {
-			Shot_Pos[i] = Position;
+		if (attackcount % 50 == 0) {
+			if (!shotf[i]) {
+				shotf[i] = true;
+				Shot_Pos[i] = Position;
+				x[i] = player->GetPosition().x- Shot_Pos[i].x;
+				y[i] =  player->GetPosition().y- Shot_Pos[i].y;
+				// 平方根を求めるのに標準関数の sqrt を使う、
+				// これを使うには math.h をインクルードする必要がある
+				BulAngle[i] = sqrtf(x[i] * x[i] + y[i] * y[i]);
 
+				// １フレーム当たり８ドット移動するようにする
+				Xspeed[i] = (0.5*x[i] / BulAngle[i]);
+				Yspeed[i] = (0.5*y[i] / BulAngle[i]);
+				break;
+			}
 		}
-	}
+		if(shotf[i]) {
+			Shot_Pos[i].x += Xspeed[i];
+			Shot_Pos[i].y += Yspeed[i];
+			if (Collision::GetLen(Shot_Pos[i], player->GetPosition()) < 1) {
+				player->SetHp(player->getHp() - 1);
+				//shotf[i] = false;
+				//break;
+			}
+			if (Collision::GetLen(Shot_Pos[i], Position) > 100) {
+				shotf[i] = false;
+				//break;
+			}
+		}
+		 
+		}
+
+	attackcount++;
 }

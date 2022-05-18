@@ -58,6 +58,11 @@ private:
     bool shotf[3];
     bool returnCamera;
     float returnCameraTime = 0;
+    float Xspeed[3];
+    float Yspeed[3];
+    float BulAngle[3];
+    int attackcount;
+private:
     XMFLOAT3 Boss_Pos;
     XMFLOAT3 Boss_Rot;
     XMFLOAT3 Boss_Scl = { 9,9,9 };
@@ -101,7 +106,7 @@ public:
     XMFLOAT3 GetScale() { return Boss_Scl; }
 
 public:
-    void  appearance(float& camerapos);
+    void  appearance(float& camerapos,float position);
 
     void SetJumpFlag(bool f) { bossjumpflag = f; }
 

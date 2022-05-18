@@ -353,7 +353,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 		bpos = bossenemy->GetPosition();
 	}
 	//ƒJƒƒ‰ŠÖŒW‚Ìˆ—
-	ForestBoss::GetInstance()->appearance(camerapositiony);
+	ForestBoss::GetInstance()->appearance(camerapositiony,Player_Pos.y);
 	camera->SetTarget({ 0,1,0 });//’Ž‹“_
 	camera->SetDistance(distance);//
 	camera->SetEye({ Player_Pos.x,camerapositiony,Player_Pos.z - 27.0f });
