@@ -170,8 +170,6 @@ private:
 
 	bool jumpFlag = false;
 
-	int Ontime = 300;
-	bool OnFlag = false;
 
 	float debuga;
 	float tempx, tempy;

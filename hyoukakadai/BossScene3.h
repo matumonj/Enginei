@@ -111,6 +111,9 @@ private:
 
 	float distance = 30;
 
+	int Ontime = 300;
+	bool OnFlag = false;
+
 	float dy;
 	float dx;
 	float dz;
@@ -168,8 +171,6 @@ private:
 
 	bool jumpFlag = false;
 
-	int Ontime = 300;
-	bool OnFlag = false;
 
 	float debuga;
 	float tempx, tempy;

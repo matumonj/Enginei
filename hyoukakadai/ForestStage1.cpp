@@ -289,7 +289,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 
 	if (Line::GetInstance()->Gettriggerflag() != true||Line::GetInstance()->Getboundflag() == true) {
-		player->PlayerMoves(Player_Pos, moveSpeed);
+		player->PlayerMoves(Player_Pos, moveSpeed,jumpFlag,grav,time);
 	}
 
 	///////// コントローラー //////////
@@ -298,6 +298,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 
 
+	
 
 
 
@@ -310,20 +311,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 		Player_Pos.x -= moveSpeed;
 	}
 
-	if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-
-		jumpFlag = true;
-		// 左に傾けた
-		//Player_Pos.x -= moveSpeed;
-
-	}
-
-
-	if (jumpFlag == true) {
-		Player_Pos.y += 0.12f;
-		time += 0.02f;
-	}
+	
 
 
 	///これより上に入力処理をかけ
@@ -334,21 +322,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	//入力処理より後に当たり判定を描け
 	//aaaaaaa
 
-	if (OnFlag == true) {
-		if (Ontime >= 0) {
-			Ontime--;
-		}
-		else if (Ontime <= 0) {
-			OnFlag = false;
-		}
-	}
 
-	if (OnFlag == false) {
-		Ontime++;
-		if (Ontime >= 300) {
-			OnFlag = true;
-		}
-	}
 
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 	Collision::CollisionMap(map, reef, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
@@ -365,7 +339,6 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	//					Line::GetInstance()->Setelf(true);
 	//				}
 	//			}
-
 	//			if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
 	//				if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
 	//					Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
@@ -379,13 +352,11 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	//					Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
 	//					break;
 	//				}
-
 	//			}
 	//			else {
 	//				moveSpeed = 0.2f;
 	//				grav = 0.03;
 	//			}
-
 	//			//プレイヤーの左辺
 	//			if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
 	//				if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
@@ -410,6 +381,8 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	//		}
 	//	}
 	//}
+	
+
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
 		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成

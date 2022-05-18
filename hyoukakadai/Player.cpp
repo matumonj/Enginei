@@ -139,7 +139,7 @@ void Player::CollisionAttack1(Enemy*enemy, XMFLOAT3 playerpos)
 	}
 }
 
-void Player::PlayerMoves(XMFLOAT3& move,float moveSpeed) {
+void Player::PlayerMoves(XMFLOAT3& move, float moveSpeed, bool& JumpFlag, float& grav, float& time ) {
 	///////// コントローラー //////////
 	// スティックの方向判定
 	// 無反応範囲
@@ -164,6 +164,28 @@ void Player::PlayerMoves(XMFLOAT3& move,float moveSpeed) {
 			move.x += moveSpeed;
 		//}
 	}
+	if (Line::GetInstance()->GetStop() == false) {
+		grav = 0;
+		time = 0;
+		JumpFlag = false;
+	}
+	if (Line::GetInstance()->GetStop() == true) {
+		if (Input::GetInstance()->TriggerButtonB())
+		{
+			JumpFlag = true;
+			// 左に傾けた
+			//Player_Pos.x -= moveSpeed;
+
+		}
+	}
+
+	if (JumpFlag == true) {
+		move.y += 0.12f;
+		time += 0.02f;
+	}
+
+	
+
 }
 
 
