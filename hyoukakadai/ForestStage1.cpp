@@ -668,57 +668,7 @@ void ForestStage1::ImGuiDraw()
 		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
 		ImGui::TreePop();
 	}
-	float linex = Line::GetInstance()->getpos().x;
-	float liney = Line::GetInstance()->getpos().y;
-	float rr = player->GetPosition().x;
-	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -200, 200);
-		ImGui::SliderFloat("positionY", &liney, -200, 200);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
-		ImGui::SliderFloat("grav", &grav, -200, 200);
-		ImGui::SliderFloat("time", &time, -200, 200);
-		ImGui::TreePop();
-	}
-	float sx = player->GetArea_S().x;
-	float sy = player->GetArea_S().y;
 
-	float ex = player->GetArea_e().x;
-	float ey = player->GetArea_e().y;
-
-	if (ImGui::TreeNode("half")) {
-		ImGui::SliderFloat("sx", &sx, -200, 200);
-		ImGui::SliderFloat("sy", &sy, -200, 200);
-		ImGui::SliderFloat("ex", &ex, -200, 200);
-		ImGui::SliderFloat("ey", &ey, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
-		ImGui::TreePop();
-	}
-
-
-	/*if (ImGui::TreeNode("1")) {
-		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("+_height", &half_height, -200, 200);
-		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("-_height", &half_height, -200, 200);
-		ImGui::SliderFloat("map_1_width", &width, -200, 200);
-		ImGui::SliderFloat("map_1_height", &height, -200, 200);
-		ImGui::TreePop();
-	}*/
-
-
-	ImGui::End();
-
-	ImGui::Begin("postEffect");
-	if (ImGui::RadioButton("Blur", &c_postEffect)) {
-		c_postEffect = Blur;
-	}
-	if (ImGui::RadioButton("Default", &c_postEffect)) {
-		c_postEffect = Default;
-	}
 
 	ImGui::End();
 
