@@ -50,6 +50,9 @@ void BossScene2::ModelCreate()
 	item = new Item();
 	item->Initialize();
 
+	item2 = new Item();
+	item2->Initialize();
+
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i] = std::make_unique<Object3d>();
@@ -77,8 +80,9 @@ void BossScene2::ModelCreate()
 	lightGroup->SetSpotLightActive(0, true);
 
 
-	effects = std::make_unique<Effects>();;
+	effects = std::make_unique<Effects>();
 
+	effects2 = std::make_unique<Effects>();;
 	attackeffects = std::make_unique<Effects>();;
 
 	//Player_Pos = player->GetPosition();
@@ -149,6 +153,8 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	Object3d::SetCamera(camera);
 
 	effects->Initialize(dxCommon, camera);
+	effects2->Initialize(dxCommon, camera);
+
 	attackeffects->Initialize(dxCommon, camera);
 
 	//モデル名を指定してファイル読み込み
@@ -377,9 +383,9 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	objUpdate();//オブジェクトの更新処理
 	effects->Update(dxCommon, camera, enemycolony1, player);
-	effects->Update(dxCommon, camera, enemycolony2, player);
+	effects2->Update(dxCommon, camera, enemycolony2, player);
 
-	effects->Update(dxCommon, camera, &bossenemy, player);
+	//effects->Update(dxCommon, camera, &bossenemy, player);
 
 	//bossenemyにnullptr代入するときは敵が死んだら
 	if (bossenemy != nullptr) {
@@ -432,9 +438,13 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	atb = BossEnemy::GetInstance()->GetaltAttack();
 
 	item->HealEfficasy(player);
-	item->Update(&bossenemy);
+	item2->HealEfficasy(player);
+
+	effects->HealEffect(item->ColItem());
+	effects2->HealEffect(item2->ColItem());
+	//item->Update(&bossenemy);
 	item->Update(enemycolony1);
-	item->Update(enemycolony2);
+	item2->Update(enemycolony2);
 	//Fader::FeedSpriteUpdate();
 
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
@@ -459,6 +469,7 @@ void BossScene2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->PostDraw();
 
 	item->Draw();
+	item2->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1 || map[j][i] == 2) {
@@ -507,6 +518,7 @@ void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
+	effects2->Draw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
 }

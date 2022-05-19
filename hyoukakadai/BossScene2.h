@@ -59,6 +59,9 @@ private:
 	std::unique_ptr<Enemy>bossenemy;
 	//Enemy* enemy[2];
 	std::unique_ptr <Effects> effects;
+
+	std::unique_ptr <Effects> effects2;
+
 	std::unique_ptr <Effects> attackeffects;
 	Collision* collision = nullptr;
 
@@ -75,6 +78,7 @@ private:
 	Model* goalmodel = nullptr;
 	DebugCamera* camera;
 	Item* item = nullptr;
+	Item* item2 = nullptr;
 	//Effects* effects;
 private:
 	//Plyer
