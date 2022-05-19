@@ -27,6 +27,7 @@ private:
 private:
 	static float FollowangleX, FollowangleZ, FollowangleR;
 	static float FollowSpeed ;
+	static bool goflag;
 	static bool trigger ;
 	static bool boundflag ;
 	static bool returnflag;
