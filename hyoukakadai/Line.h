@@ -61,6 +61,7 @@ private:
 	static bool colfsub;
 	static float twcolor;
 	static float necolor;
+	static float timer;
 public:
 	void settwcolor(float c) {  twcolor=c; }
 	void setnecolor(float c) { necolor=c; }

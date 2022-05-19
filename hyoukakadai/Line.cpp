@@ -22,6 +22,7 @@ float Line::olddistance = 0;
 const float Line::LengThenSpeed = 1.0f;
 const float Line::MaxLen = 30.0f;
 const float Line::MinLen = 0.0f;
+float Line::timer = 0.0;
 float Line::LimitGauge,Line::necolor=1,Line::twcolor=1;
 bool Line::lengthserchf = false;
 bool Line::goflag = false;
@@ -187,6 +188,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		
 		if (goflag == true && elf) {
 			boundflag = true;//線の終点へ吸い付くフラグ
+			timer = 0;
 		}
 
 		//線の終点とプレイヤーとの距離求める
@@ -234,7 +236,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	//線が戻ってくる処理
 	if (returnflag) {
 		subradius -= 1.5f;
-
+		timer = 0;
 		if (subradius <= 0.5f) {//先の長さが０なったら切る
 			returnflag = false;
 			//mapcolf = false;
@@ -242,6 +244,13 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			stopflag = true;
 			notdoubletuch = true;
 			goflag = false;
+		}
+	}
+
+	if (stopflag == false) {
+		timer += 0.15;
+		if (timer >= 10) {
+			returnflag = true;
 		}
 	}
 

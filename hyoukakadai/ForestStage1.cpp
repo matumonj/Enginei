@@ -246,14 +246,14 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
 	// 3Dオブジェクトにカメラをセット
-	Object3d::SetCamera(camera);
+	//Object3d::SetCamera(camera);
 
 	effects->Initialize(dxCommon, camera);
 	attackeffects->Initialize(dxCommon, camera);
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
