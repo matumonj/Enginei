@@ -299,8 +299,8 @@ void FirstBoss::RushAttack(Player* player)
 			
 		}
 	}
-	if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 5) {
-		player->SetHp(player->getHp() - 1);
+	if (Collision::GetLen(Position, player->GetPosition()) <10) {
+		player->SetHp(player->getHp() - 5);
 	}
 	if (startPos.x == 67) {
 		Rotation.y = 180;
@@ -341,13 +341,13 @@ void FirstBoss::RushAttackStayPrm(Player* player)
 	if (!rushAttackPrm.rushflag) {
 		if (player->GetPosition().x < Position.x) {
 			startPos.x = SetPositionRight;
-			rushAttackPrm.aftermovex = SetPositionRight - 50;
+			rushAttackPrm.aftermovex = SetPositionRight - 40;
 			if (Rotation.y != 180) {
 				Rotation.y += 10;
 			}
 		} else {
 			startPos.x = SetPositionLeft;
-			rushAttackPrm.aftermovex = SetPositionLeft + 50;
+			rushAttackPrm.aftermovex = SetPositionLeft + 40;
 			if (Rotation.y != 0) {
 				Rotation.y -= 10;
 			}
@@ -369,7 +369,7 @@ void FirstBoss::NormalAttacks(Player* player)
 		DamageAreaStart = { Position.x,Position.y - 2 };
 		DamageArea = { Position.x + 5,Position.y + 2 };
 		if (Collision::Boxcol({ player->GetPosition().x,player->GetPosition().y },
-			{ player->GetPosition().x + 2,player->GetPosition().y + 2 }, DamageAreaStart, DamageArea
+			{ player->GetPosition().x + 2,player->GetPosition().y + 2}, DamageAreaStart, DamageArea
 		) == true) {
 			player->SetHp(player->getHp() - 1);
 		}

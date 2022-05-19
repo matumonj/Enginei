@@ -374,7 +374,7 @@ void StageSelect::SpriteUpdate()
 			else if (J_stagechanges[2] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
-					BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}

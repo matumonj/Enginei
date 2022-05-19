@@ -185,7 +185,7 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	//camerapositionx = Player_Pos.x;
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y + 10;
+	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
 	LONG u_r = 32768;
