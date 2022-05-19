@@ -49,7 +49,7 @@ void GameUI::UISpriteSet()
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
 	loutpos = { 50,200 };
-	loutscl = { 5000,50 };
+	loutscl = { 500,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
 	Attention[0]->SetSize({ 1500,800 });
@@ -81,8 +81,8 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 	}
 	if (boundflag) {
 		if (loutscl.x >= 0)
-			loutscl.x -= 10;//最大値を減らす
-		if (tempx - loutscl.x > movement * 4) {//最大値の減る量(減る前と減ったあとの最大値を計算)
+			loutscl.x -= 3;//最大値を減らす
+		if (tempx - loutscl.x > movement * 2) {//最大値の減る量(減る前と減ったあとの最大値を計算)
 			boundflag = false;//!boundflag->colf
 		}
 		if (lscl.x >= lsclMax) {//最大値が減ったあと紐の長さがそれ超えるようであれば最大値に合わせる
@@ -105,7 +105,7 @@ void GameUI::UIDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	//Attention[0]->Draw();
-	//LineLengthout->Draw();
+	LineLengthout->Draw();
 	//LineLength->Draw();
 	BossHP->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());

@@ -446,7 +446,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	//item->Update(&bossenemy);
 	item->Update(enemycolony1);
 	item2->Update(enemycolony2);
-	//Fader::FeedSpriteUpdate();
+	Fader::FeedSpriteUpdate();
 
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
@@ -454,8 +454,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		//BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
-		//sceneManager_->SetnextScene(scene);//シーンのセット
+		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
+		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
 }

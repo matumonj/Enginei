@@ -124,6 +124,8 @@ void ForestStage2::ModelCreate()
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
 	//Fader::SetFeedSprite();
+	loadf = false;
+	GameUI::NowLoadSet();
 }
 #pragma endregion
 
@@ -275,6 +277,20 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 #pragma region XVˆ—
 void ForestStage2::Update(DirectXCommon* dxCommon)
 {
+	if (Collision::GetInstance()->Gethit() == true) {
+		loadf = false;
+		Fader::feedOut(0.0f, 0.1f);
+		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+			//::GetInstance()->SetHit(false);
+			loadf = false;
+		}
+	} else{
+		//if (Fader::GetInstance()->GetAlpha() > 0.0f) {
+			loadf = true;
+		//}
+	}
+	GameUI::NowLoadUpdate(loadf);
+
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
@@ -484,7 +500,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	}
 	item->HealEfficasy(player);
 	item->Update(enemy);
-	//Fader::FeedSpriteUpdate();
+	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -575,7 +591,10 @@ void ForestStage2::MyGameDraw(DirectXCommon* dxcomn)
 	effects->Draw(dxcomn);
 	//FBX‚Ì•`‰æ
 	object1->Draw(dxcomn->GetCmdList());
-
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	Fader::FeedSpriteDraw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+	GameUI::NowLoadDraw(dxcomn);
 }
 #pragma endregion
 //«‚É“ü‚é

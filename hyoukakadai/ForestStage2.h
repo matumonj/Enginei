@@ -85,6 +85,7 @@ private:
 	Item* item = nullptr;
 	//Effects* effects;
 private:
+	bool loadf;
 	//Plyer
 	XMFLOAT3 Player_Pos = { 10,-18,0 };// = player->GetPosition();
 						  //10, -18, 0
