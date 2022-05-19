@@ -14,7 +14,11 @@ public:
 		float Left;
 		float Right;
 	};
+	static bool hit;
 public:
+	static Collision* GetInstance();
+	bool Gethit() { return hit; }
+	void SetHit(bool hit) { this->hit = hit; }
 	static float GetLen_X(float position, float position2);
 	static float GetLen(XMFLOAT3 position, XMFLOAT3 position2);
 	static float GetLenX(XMFLOAT3 position, XMFLOAT3 position2);

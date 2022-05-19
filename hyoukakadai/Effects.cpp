@@ -1,5 +1,6 @@
 #include "Effects.h"
 #include"imgui.h"
+#include"GameUI.h"
 Effects::~Effects()
 {
 	delete efk,attackefk;
@@ -22,15 +23,98 @@ void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 	//b_Effect_Rot = { -25.08,90,0 };
 	//efk1->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/SimpleLaser.efk", (const EFK_CHAR*)L"effect/10");
 }
-void Effects::HealEffect(bool heal)
+void Effects::HealEffect(bool heal,bool healfs)
 {
-	if (heal) {
+	GameUI::GetInstance()->GetOutX();
+
+	if (heal||healfs) {
 		healf = true;
+		//healf = true;
 	}
 	if (healf) {
 		Healefk->Load_Effect();
 		healf = false;
 	}
+}
+void Effects::HealEffects(bool heal)
+{
+	GameUI::GetInstance()->GetOutX();
+
+	if (heal ) {
+		healf = true;
+		//healf = true;
+	}
+	if (healf) {
+		Healefk->Load_Effect();
+		healf = false;
+	}
+}
+void Effects::Update2(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[], Player* player)
+{
+	Healefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
+
+	for (int i = 0; i < 10; i++) {
+		if (enemy[i] != nullptr) {
+			if (enemy[i]->GetState_DEAD() == true) {
+				df = true;
+			}
+			if (df == true) {
+				efk->SetPosition(enemy[i]->GetPosition().x, enemy[i]->GetPosition().y, enemy[i]->GetPosition().z);
+				efk->Load_Effect();
+
+				df = false;
+			}
+		}
+	}
+	if (player->GetRot_Left()) {
+		attackefk->SetPosition(player->GetPosition().x - 2, player->GetPosition().y, player->GetPosition().z);
+		attackefk->SetRotation(1, 180, 0);
+	} else if (player->GetRot_Right()) {
+		attackefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
+		attackefk->SetRotation(1, 90, 0);
+		//Effect_Rot = { 0,0,0 };
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+		attack = true;
+	}
+
+	//コントローラー
+	if (Input::GetInstance()->TriggerButtonA()) {
+		//攻撃処理
+		attack = true;
+	}
+	if (player->GetFlyAttack() == true) {
+		attack = true;
+	}
+	if (attack) {
+		attackefk->Load_Effect();
+
+		attack = false;
+	}
+	//エフェクトのパラメータセット
+	/*efk->SetPosition(Effect_Pos.x, Effect_Pos.y, Effect_Pos.z);
+	efk->SetRotation(0, 0, 0);
+	efk->SetScale(1, 1, 1);
+	efk1->SetPosition(-10, 0, 190);*/
+
+	//エフェクトの再生
+	//if (Input::GetInstance()->Pushkey(DIK_SPACE)) {
+	//efk->Load_Effect();
+	////}
+	//efk1->Load_Effect();
+
+	//エフェクトのアニメーション止める
+	//if (Input::GetInstance()->Pushkey(DIK_C)) {
+	//	efk->Stop_Effect();
+	//}
+
+	//view,projection行列をエフェクトのテクスチャにかける
+	efk->EffekseerUpdate(dxcomn, camera);
+	attackefk->EffekseerUpdate(dxcomn, camera);
+	bossattackefk->EffekseerUpdate(dxcomn, camera);
+	Healefk->EffekseerUpdate(dxcomn, camera);
+	//efk1->EffekseerUpdate(dxcomn, camera);
+
 }
 void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<Enemy>enemy[],Player*player)
 {

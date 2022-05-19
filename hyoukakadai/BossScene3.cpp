@@ -478,7 +478,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
-	effects->HealEffect(item->ColItem());
+	effects->HealEffects(item->ColItem());
 	effects->Update(dxCommon, camera, enemy, player);
 
 	//enemyにnullptr代入するときは敵が死んだら

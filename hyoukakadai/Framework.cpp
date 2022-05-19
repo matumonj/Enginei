@@ -1,10 +1,12 @@
 #include "Framework.h"
-
+#include<thread>
 void Framework::Run()
 {
 	Initialize(dxcomn);
-
+	//std::thread th(&Framework::Initialize, this, dxcomn);
+	//th.join();
 	while (true) {
+		
 		//ウィンドウメッセージ処理
 		Update(dxcomn);
 		Draw(dxcomn);
@@ -40,6 +42,7 @@ void Framework::Update(DirectXCommon* dxCommon)
 		winRequest = true;
 		return;
 	}
+	//th.join();
 	input->update();
 	sceneManger->Update(dxCommon);
 }

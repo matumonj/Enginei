@@ -10,6 +10,7 @@
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
+#include<thread>
 #include"BossScene1.h"
 #include"FirstBossScene.h"
 #include"GamOver.h"
@@ -274,9 +275,24 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 }
 #pragma endregion
 
+void ForestStage1::ThInitialize()
+{
+
+}
 #pragma region 更新処理
 void ForestStage1::Update(DirectXCommon* dxCommon)
 {
+	if (Collision::GetInstance()->Gethit() == true) {
+		loadf = false;
+		Fader::feedOut(0.0f, 0.1f);
+		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+			//::GetInstance()->SetHit(false);
+		}
+	}
+	else {
+		loadf = true;
+	}
+	GameUI::NowLoadUpdate(loadf);
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
@@ -483,7 +499,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	}
 	item->HealEfficasy(player);
 	item->Update(enemy);
-	//Fader::FeedSpriteUpdate();
+	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -554,8 +570,8 @@ void ForestStage1::MyGameDraw(DirectXCommon* dxcomn)
 	background->Draw();
 	//setumei->Draw();
 	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	//Fader::FeedSpriteDraw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
-
 
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
@@ -575,6 +591,11 @@ void ForestStage1::MyGameDraw(DirectXCommon* dxcomn)
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
 
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	Fader::FeedSpriteDraw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
+	GameUI::NowLoadDraw(dxcomn);
 }
 #pragma endregion
 //↓に入る

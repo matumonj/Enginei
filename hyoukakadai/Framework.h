@@ -8,6 +8,7 @@
 #include"Object3d.h"
 #include"SceneManager.h"
 #include "FbxLoader.h"
+
 class Framework
 {
 public:
@@ -17,8 +18,9 @@ public:
 	virtual void Draw(DirectXCommon* dxcomn);
 	virtual void Finalize();
 	//virtual void SpriteDraw()=0;
-
+	void func();
 protected:
+	
 	//IScene * Scene;
 	bool winRequest = false;
 	WinApp* winapp = nullptr;

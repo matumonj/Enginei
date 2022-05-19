@@ -341,13 +341,13 @@ void FirstBoss::RushAttackStayPrm(Player* player)
 	if (!rushAttackPrm.rushflag) {
 		if (player->GetPosition().x < Position.x) {
 			startPos.x = SetPositionRight;
-			rushAttackPrm.aftermovex = SetPositionRight - 20;
+			rushAttackPrm.aftermovex = SetPositionRight - 50;
 			if (Rotation.y != 180) {
 				Rotation.y += 10;
 			}
 		} else {
 			startPos.x = SetPositionLeft;
-			rushAttackPrm.aftermovex = SetPositionLeft + 20;
+			rushAttackPrm.aftermovex = SetPositionLeft + 50;
 			if (Rotation.y != 0) {
 				Rotation.y -= 10;
 			}

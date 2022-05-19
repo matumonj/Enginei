@@ -12,6 +12,7 @@
 #include"Fader.h"
 #include"BossScene1.h"
 #include"FirstBossScene.h"
+#include"BossScene2.h"
 #include"GamOver.h"
 //コメントアウト
 
@@ -45,11 +46,11 @@ void DesertField::SpriteCreate()
 	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	background = Sprite::Create(1, { 0.0f,0.0f });
-	setumei = Sprite::Create(2, { 0.0f,0.0f });
+	//setumei = Sprite::Create(2, { 0.0f,0.0f });
 	// デバッグテキスト初期化
-	dxcomn = new DirectXCommon();
-	debugText = new DebugTxt();
-	debugText->Initialize(debugTextTexNumber);
+	//dxcomn = new DirectXCommon();
+	//debugText = new DebugTxt();
+	//debugText->Initialize(debugTextTexNumber);
 }
 #pragma endregion
 
@@ -60,14 +61,14 @@ void DesertField::ModelCreate()
 	player = Player::Create(playermodel);
 	player->Initialize();
 	tstmodel = Model::CreateFromOBJ("block");
-	worldmodel = Model::CreateFromOBJ("skydome");
-	harimodel = Model::CreateFromOBJ("hari");
+	//worldmodel = Model::CreateFromOBJ("skydome");
+	//harimodel = Model::CreateFromOBJ("hari");
 	goalmodel = Model::CreateFromOBJ("goalmo");
 
 
 	item = new Item();
 	item->Initialize();
-	collision = new Collision();
+	//collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -76,22 +77,6 @@ void DesertField::ModelCreate()
 			tst[j][i]->SetModel(tstmodel);
 		}
 	}
-	block = std::make_unique<Object3d>();
-	block->Initialize();// = Object3d::Create();
-	block->SetModel(tstmodel);
-
-	sentan = std::make_unique<Object3d>();
-	sentan->Initialize();// = Object3d::Create();
-	sentan->SetModel(tstmodel);
-
-	world = std::make_unique<Object3d>();
-	world->Initialize();// = Object3d::Create();
-	world->SetModel(worldmodel);
-
-	hari = std::make_unique<Object3d>();
-	hari->Initialize();
-	hari->SetModel(harimodel);
-
 	goal = std::make_unique<Object3d>();
 	goal->Initialize();
 	goal->SetModel(goalmodel);
@@ -128,12 +113,7 @@ void DesertField::ModelCreate()
 #pragma region 各パラメータのセット
 void DesertField::SetPrm()
 {
-	setumei->SetPosition({ 0, 400 });
-	setumei->SetSize({ 500,300 });
-	setumei->setcolor({ 1,1,1,1 });
-
-	hari->SetPosition({ hari_Pos.x + 2.0f,hari_Pos.y,hari_Pos.z });
-
+	
 	half_height = player->GetScale().y;
 	half_Width = player->GetScale().x;
 
@@ -150,14 +130,6 @@ void DesertField::SetPrm()
 		}
 	}
 	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
-
-	block->SetPosition({ block_pos });
-	block->SetScale({ block_Scl });
-
-	world->SetPosition({ 0,0,0 });
-	world->SetScale({ 1,1,1 });
-
-	sentan->SetPosition({ sentan_Pos });
 
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
@@ -184,10 +156,6 @@ void DesertField::objUpdate()
 			tst[j][i]->Update({ 1,1,1,1 });
 		}
 	}
-
-	world->Update({ 1,1,1,1 });
-	block->Update({ 1,1,1,1 });
-	hari->Update({ 1,1,1,1 });
 
 	goal->Update({ 1,1,1,1 });
 
@@ -434,9 +402,6 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	//頂点座標の更新
 	mech->CreateLineTexture(linex, linex2, liney, liney2);
 
-	hari_Pos.x = Line::GetInstance()->getpos().x;
-	hari_Pos.y = Line::GetInstance()->getpos().y;
-
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -484,7 +449,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
-	effects->HealEffect(item->ColItem());
+	effects->HealEffects(item->ColItem());
 	effects->Update(dxCommon, camera, enemy, player);
 
 	//enemyにnullptr代入するときは敵が死んだら
@@ -515,7 +480,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
@@ -533,14 +498,6 @@ void DesertField::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->PostDraw();
 
 
-	world->PreDraw();
-	//world->Draw();
-	world->PostDraw();
-	
-	block->PreDraw();
-	block->Draw();
-	block->PostDraw();
-
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -556,10 +513,6 @@ void DesertField::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	goal->PreDraw();
 	goal->Draw();
 	goal->PostDraw();
-
-	/*hari->PreDraw();
-	hari->Draw();
-	hari->PostDraw();*/
 
 }
 //sプライと以外の描画
@@ -727,7 +680,48 @@ void DesertField::ImGuiDraw()
 void DesertField::Finalize()
 {
 	//delete sceneManager_;
+	delete dxcomn;
+	delete background;
 
+	delete setumei;
+
+	delete debugText;
+
+	for (int i = 0; i < 10; i++) {
+		enemy[i].reset();
+	}
+	//Enemy* enemy[2];
+	effects.reset();
+	attackeffects.reset();
+	delete collision;
+
+	mech.reset();
+	zukki.reset();
+
+	delete player;
+	//std::unique_ptr<Object3d>player[10];
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 200; j++) {
+			tst[i][j].reset();
+		}
+	}
+	
+	
+	goal.reset();
+
+	delete mapcol;
+	Line::Finalize();
+	GameUI::Finalize();
+	delete object1;
+	delete fbxmodel;
+	delete playermodel;
+	delete tstmodel ;
+	delete worldmodel ;
+	delete harimodel ;
+	delete goalmodel ;
+	delete postEffect ;
+	delete camera;
+	delete item ;
 	//delete efk,efk1;
 
 }

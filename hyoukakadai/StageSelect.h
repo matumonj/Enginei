@@ -24,11 +24,14 @@ private: // エイリアス
 private:
 	Object3d* SelectStageObj;
 	Model* SelectStageModel;
+	Object3d* Skydome;
+	Model* DomeModel;
 	Sprite* StageSprite[6];
 	Sprite* TargetSprite;
 	XMFLOAT2 TargetSpritePos[3];
 	XMFLOAT2 SpritePosition[3];
 	XMFLOAT2 SpriteScale[3];
+	float Rot_y;
 private:
 	enum Stage {
 		TutorialStage,
@@ -89,11 +92,14 @@ public:
 		float spotLightAtten[3] = { 0.0f,0.0f,0.0f };
 		float spotLightFactorAngle[2] = { 20.0f,30.0f };
 private:
+	bool Loadf;
 	int TargetNum=-1;
 	bool SpriteSclflag;
 	int NowSpriteNum;
-	bool ni;
-
+	bool J_stagechanges[3];
+	bool S_stagechanges[3];
+	bool H_stagechanges[3];
+	bool C_stagechanges[3];
 	enum StageSprites
 	{
 		Jungle,

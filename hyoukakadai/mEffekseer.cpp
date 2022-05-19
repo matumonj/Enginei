@@ -2,9 +2,7 @@
 
 mEffekseer::~mEffekseer()
 {
-	_efkManager->Release();
-	_efkRenderer->Release();
-	_effect->Release();
+	
 }
 
 //ƒJƒƒ‰İ’è

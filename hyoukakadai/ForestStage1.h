@@ -219,7 +219,7 @@ public:
 	void MyGameDraw(DirectXCommon* dxcomn);
 	void SetPrm();
 	void objUpdate();
-
+	bool loadf;
 public:
 	XMFLOAT3 texpo = { 0,0,0 };
 	void Initialize(DirectXCommon* dxCommon)override;
@@ -233,6 +233,7 @@ public:
 	void ImGuiDraw();
 	void Finalize()override;
 
+	void ThInitialize();
 public:
 	XMFLOAT3 efkposition = { -50,-10,90 };
 	//エフェクト用(ただプログラムでつくれるものはプログラムで作る方がいい　多用はいくない)

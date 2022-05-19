@@ -5,10 +5,14 @@
 #include"DesertField.h"
 #include"SceneManager.h"
 #include"Destroy.h"
+#include"ForestStage1.h"
+#include"ForestStage2.h"
 #include"FirstBossScene.h"
+#include"BossScene2.h"
 #include"mHelper.h"
 #include"imgui.h"
 #include"Fader.h"
+
 //コメントアウト
 #define PI 360.0f
 
@@ -23,6 +27,7 @@ StageSelect::StageSelect(SceneManager* sceneManager)
 //スプライト生成
 void StageSelect::SpriteCreate()
 {
+	GameUI::NowLoadSet();
 	//注意
 	Sprite::LoadTexture(100, L"Resources/Stage1-1.png");
 	Sprite::LoadTexture(101, L"Resources/Stage1-1.png");
@@ -52,10 +57,15 @@ void StageSelect::SpriteCreate()
 #pragma region 
 void StageSelect::ModelCreate()
 {
-	SelectStageModel = Model::CreateFromOBJ("stage1");
+	SelectStageModel = Model::CreateFromOBJ("stageselect");
 	SelectStageObj = Object3d::Create();
 	SelectStageObj->SetModel(SelectStageModel);
+	DomeModel = Model::CreateFromOBJ("skydome");
+	Skydome = Object3d::Create();
+	Skydome->SetModel(DomeModel);
 	SelectStageObj->Initialize();
+	Skydome->Initialize();
+	Skydome->SetPosition({ 0,0,0 });
 	SelectStageObj->SetPosition({ 0,0,0 });
 	SelectStageObj->SetScale({ 8,8,8 });
 	obj_Rot = { 0,0,0 };
@@ -123,10 +133,15 @@ void StageSelect::Update(DirectXCommon* dxCommon)
 	lightGroup->Update();
 	SelectStageObj->SetRotation(obj_Rot);
 	SelectStageObj->Update({ 1,1,1,1 });
+	Rot_y+=0.3f;
+	Skydome->SetRotation({ 0,Rot_y,0 });
+	Skydome->SetScale({ 0.5,0.5,0.5});
+	Skydome->Update({ 1,1,1,1 });
 	SelectMove();
 	Select();
 	SpriteUpdate();
 	Fader::FeedSpriteUpdate();
+	GameUI::NowLoadUpdate(Loadf);
 	//シーンチェンジ
 //	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
 	//	BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
@@ -149,6 +164,10 @@ void StageSelect::MyGameDraw(DirectXCommon* dxcomn)
 	SelectStageObj->PreDraw();
 	SelectStageObj->Draw();
 	SelectStageObj->PostDraw();
+
+	Skydome->PreDraw();
+	Skydome->Draw();
+	Skydome->PostDraw();
 }
 #pragma endregion
 //↓に入る
@@ -166,6 +185,7 @@ void StageSelect::Draw(DirectXCommon* dxcomn)
 	}
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
+	GameUI::NowLoadDraw(dxcomn);
 	ImGuiDraw();
 	dxcomn->EndDraw();
 }
@@ -325,21 +345,34 @@ void StageSelect::SpriteUpdate()
 			//
 			if (SpriteScale[0].x>=300&&Input::GetInstance()->TriggerButtonA()) {//押されたら
 				if (TargetNum == 0) {
-					ni = true;
+					Loadf = true;
+				J_stagechanges[0] = true;
 				}
 				else if (TargetNum == 1) {
-					BaseScene* scene = new PlayScene(sceneManager_);//次のシーンのインスタンス生成
-					sceneManager_->SetnextScene(scene);//シーンのセット
+					J_stagechanges[1] = true;
 				}
 				else if (TargetNum == 2) {
-					BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
+					J_stagechanges[2] = true;
+				}
+			}
+			if (J_stagechanges[0]== true) {
+				Fader::feedIn(1.0f, 0.1f);
+				if (Fader::GetInstance()->GetAlpha() >= 0.9) {
+					BaseScene* scene = new ForestStage1(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
-			if (ni == true) {
+			else if (J_stagechanges[1] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.9) {
-					BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new ForestStage2(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
+			else if (J_stagechanges[2] == true) {
+				Fader::feedIn(1.0f, 0.1f);
+				if (Fader::GetInstance()->GetAlpha() >= 0.9) {
+					BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}

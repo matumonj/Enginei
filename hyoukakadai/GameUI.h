@@ -25,6 +25,8 @@ private:
 	static Sprite* Attention[3];
 	static Sprite* PlayerHP;
 	static Sprite* BossHP;
+	static Sprite* NowLoad;
+	static float LoadAlpha;
 	static XMFLOAT2 lpos,loutpos;//座標
 	static XMFLOAT2 lscl,loutscl;//スケール
 	static float tempx;
@@ -69,5 +71,10 @@ public:
 	static void TargetUIDraw(DirectXCommon* dxcomn);
 
 	static void AllDraw(DirectXCommon* dxcomn);
+	static void NowLoadSet();
+
+	static void NowLoadUpdate(bool onf);
+
+	static void NowLoadDraw(DirectXCommon* dxcomn);
 };
 

@@ -54,7 +54,7 @@ private:
 	DebugTxt* debugText;
 
 	std::unique_ptr<Enemy>enemy[10];//1セット
-	std::unique_ptr<Enemy>enemy2nd[10];//2セット
+	//std::unique_ptr<Enemy>enemy2nd[10];//2セット
 
 	//Enemy* enemy[2];
 	std::unique_ptr <Effects> effects;
@@ -67,10 +67,6 @@ private:
 	Player* player;
 	//std::unique_ptr<Object3d>player[10];
 	std::unique_ptr<Object3d>tst[20][200];
-	std::unique_ptr<Object3d> sentan = nullptr;
-	std::unique_ptr<Object3d> world = nullptr;
-	std::unique_ptr<Object3d>block = nullptr;
-	std::unique_ptr<Object3d>hari = nullptr;
 	std::unique_ptr<Object3d>goal = nullptr;
 
 	Collision* mapcol;

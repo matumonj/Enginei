@@ -73,6 +73,7 @@ void Item::HealEfficasy(Player*player)
 				colitem = true;
 				GetItem(player);
 				Destroy(itemObj[i]);
+				break;
 			}
 		}
 		}

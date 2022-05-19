@@ -25,6 +25,8 @@ XMFLOAT2 GameUI::BossHPpos, GameUI::BossHPscl;
 float GameUI::alpha = 0.5, GameUI::walpha = 0, GameUI::Targetalpha = 0;
 float GameUI::tempx = 0;
 float GameUI::lsclMax;
+Sprite* GameUI::NowLoad;
+float GameUI::LoadAlpha=0;
 GameUI* GameUI::GetInstance()
 {
 	static GameUI instance;
@@ -247,4 +249,32 @@ void GameUI::Finalize()
 	//delete AllowTexure;
 	delete TargetTexture;
 	//delete EnemySearchTexure;
+}
+
+void GameUI::NowLoadSet()
+{
+	Sprite::LoadTexture(42, L"Resources/load.png");
+	NowLoad = Sprite::Create(42, { 0.0f,-200.0f });
+
+	LoadAlpha = 0;
+}
+
+void GameUI::NowLoadUpdate(bool onf)
+{
+	NowLoad->SetPosition({ 1500,600 });
+	NowLoad->SetPosition({ 200,200 });
+	if (onf) {
+		LoadAlpha = 1.0f;
+	}
+	else {
+		LoadAlpha = 0.0f;
+	}
+	NowLoad->setcolor({ 1,1,1,LoadAlpha });
+	
+}
+void GameUI::NowLoadDraw(DirectXCommon* dxcomn)
+{
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	NowLoad->Draw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
 }

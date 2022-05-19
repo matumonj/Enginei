@@ -1,5 +1,12 @@
 #include "Collision.h"//collision
 #include"Line.h"
+bool Collision::hit = false;
+Collision* Collision::GetInstance()
+{
+	static Collision instance;
+	return &instance;
+
+}
 void Collision::ColMap1(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos)
 {
 	//grav-grav
@@ -268,6 +275,7 @@ void Collision::CollisionMap(int map[20][200], std::unique_ptr<Object3d> tst[20]
 				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
 					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
 						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+						hit = true;
 						//moveSpeed = 0;
 						grav = 0.0f;
 						time = 0;
@@ -288,6 +296,7 @@ void Collision::CollisionMap(int map[20][200], std::unique_ptr<Object3d> tst[20]
 				//プレイヤーの左辺
 				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
 					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						hit = true;
 						Player_Pos.y = Player_Pos.y + 0.001f;
 						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
 						//grav = 0.0f;

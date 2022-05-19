@@ -82,7 +82,7 @@ void BossScene2::ModelCreate()
 
 	effects = std::make_unique<Effects>();
 
-	effects2 = std::make_unique<Effects>();;
+	//effects2 = std::make_unique<Effects>();;
 	attackeffects = std::make_unique<Effects>();;
 
 	//Player_Pos = player->GetPosition();
@@ -153,7 +153,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	Object3d::SetCamera(camera);
 
 	effects->Initialize(dxCommon, camera);
-	effects2->Initialize(dxCommon, camera);
+	//effects2->Initialize(dxCommon, camera);
 
 	attackeffects->Initialize(dxCommon, camera);
 
@@ -383,7 +383,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	objUpdate();//オブジェクトの更新処理
 	effects->Update(dxCommon, camera, enemycolony1, player);
-	effects2->Update(dxCommon, camera, enemycolony2, player);
+	effects->Update2(dxCommon, camera, enemycolony2, player);
+	//effects2->Update(dxCommon, camera, enemycolony2, player);
 
 	//effects->Update(dxCommon, camera, &bossenemy, player);
 
@@ -440,8 +441,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	item->HealEfficasy(player);
 	item2->HealEfficasy(player);
 
-	effects->HealEffect(item->ColItem());
-	effects2->HealEffect(item2->ColItem());
+	effects->HealEffect(item->ColItem(), item2->ColItem());
+	//effects->HealEffect2(item2->ColItem());
 	//item->Update(&bossenemy);
 	item->Update(enemycolony1);
 	item2->Update(enemycolony2);
@@ -518,7 +519,7 @@ void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
-	effects2->Draw(dxcomn);
+	//effects2->Draw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
 }
