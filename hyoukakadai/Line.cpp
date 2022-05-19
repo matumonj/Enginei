@@ -24,6 +24,7 @@ const float Line::MaxLen = 30.0f;
 const float Line::MinLen = 0.0f;
 float Line::LimitGauge,Line::necolor=1,Line::twcolor=1;
 bool Line::lengthserchf = false;
+bool Line::goflag = false;
 bool Line::colf = false,Line::colfsub=false;
 float Line::grav = 0.05f;
 float Line::MoveSpeed = 0;
@@ -65,6 +66,7 @@ void Line::Initialize()
 	lengthserchf = false;
 	needlerot.z = 0;
 	stopflag = true;
+	goflag = false;
 }
 
 void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFLOAT3& Player_Pos, bool& mapcolf, float& moveSpeed)
@@ -173,7 +175,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		if (subradius > MaxLen || elf) {//一定以上行ったら+ブロックに針あたったら
 			trigger = false;
 			lengthserchf = true;
-
+			goflag = true;
 		}
 		if (subradius > MaxLen && !elf) {//一定以上行って何も当たらなかったら
 			trigger = false;
@@ -183,7 +185,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
 		
-		if ( Input::GetInstance()->TriggerButtonRB() && elf) {
+		if (goflag == true && elf) {
 			boundflag = true;//線の終点へ吸い付くフラグ
 		}
 
@@ -239,7 +241,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			colf = true;
 			stopflag = true;
 			notdoubletuch = true;
-
+			goflag = false;
 		}
 	}
 
