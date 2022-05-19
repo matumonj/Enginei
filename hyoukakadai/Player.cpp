@@ -149,27 +149,30 @@ void Player::PlayerMoves(XMFLOAT3& move, float moveSpeed, bool& JumpFlag, float&
 	//左
 	// 方向だけを調べる方法
 
-	if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	{
-		//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-			// 左に傾けた
-			playerRot = State::Left;
-			move.x -= moveSpeed;
-		//}
-	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	{
-		//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-			// 右に傾けた
-			playerRot = State::Right;
-			move.x += moveSpeed;
-		//}
-	}
+	
 	if (Line::GetInstance()->GetStop() == false) {
-		grav = 0;
-		time = 0;
+		//grav = 0;
+		//time = 0;
 		JumpFlag = false;
 	}
 	if (Line::GetInstance()->GetStop() == true) {
+
+		if (Input::GetInstance()->GetCMove().lX < u_r - a)
+		{
+			//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
+				// 左に傾けた
+			playerRot = State::Left;
+			move.x -= moveSpeed;
+			//}
+		}
+		else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+		{
+			//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
+				// 右に傾けた
+			playerRot = State::Right;
+			move.x += moveSpeed;
+			//}
+		}
 		if (Input::GetInstance()->TriggerButtonB())
 		{
 			JumpFlag = true;
