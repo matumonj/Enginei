@@ -173,14 +173,14 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	if (trigger) {//trigger:線伸ばすフラグ
 		subradius += LengThenSpeed;//線を伸ばす
 		if (subradius > MaxLen || elf) {//一定以上行ったら+ブロックに針あたったら
-			trigger = false;
 			lengthserchf = true;
 			goflag = true;
+			trigger = false;
 		}
 		if (subradius > MaxLen && !elf) {//一定以上行って何も当たらなかったら
-			trigger = false;
 			lengthserchf = true;
 			returnflag = true;
+			trigger = false;
 		}
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
