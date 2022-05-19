@@ -161,8 +161,13 @@ void Player::PlayerMoves(XMFLOAT3& move, float moveSpeed, bool& JumpFlag, float&
 		{
 			//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
 				// 左に傾けた
-			playerRot = State::Left;
-			move.x -= moveSpeed;
+			if (move.x <= 0) {
+				moveSpeed = 0;
+			}
+			else {
+				playerRot = State::Left;
+				move.x -= moveSpeed;
+			}
 			//}
 		}
 		else if (Input::GetInstance()->GetCMove().lX > u_r + a)
