@@ -120,6 +120,7 @@ private:
 
 	float zanzouSpeed = 0;
 
+	float CamCon = 10;
 	int Line = 0;
 	float Limit = 10;
 	float Limitsave = 0;
@@ -169,6 +170,7 @@ private:
 	//float Limit = 0;
 
 	bool jumpFlag = false;
+
 
 
 	float debuga;
