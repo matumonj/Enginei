@@ -93,7 +93,7 @@ protected:
 	//1フレーム
 	FbxTime frameTime;
 	//アニメーション開始時間
-	FbxTime startTime;
+	FbxTime startTime=1;
 	//アニメーション終了時間
 	FbxTime endTime;
 	//現在時間
