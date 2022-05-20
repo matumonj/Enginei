@@ -21,7 +21,7 @@ public:
 	Model* playermodel = nullptr;
 
 	XMFLOAT3 Player_Pos;
-	XMFLOAT3 Player_Rot;
+	XMFLOAT3 Player_Rot = {0,-90,0};
 	XMFLOAT3 Player_Scl;
 
 	bool flyattack_f = false;
