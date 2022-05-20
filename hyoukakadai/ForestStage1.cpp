@@ -246,14 +246,14 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
 	// 3Dオブジェクトにカメラをセット
-	Object3d::SetCamera(camera);
+	//Object3d::SetCamera(camera);
 
 	effects->Initialize(dxCommon, camera);
 	attackeffects->Initialize(dxCommon, camera);
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -457,10 +457,32 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 	//}
 	//カメラ関係の処理
-	camera->SetTarget({ 0,1,0 });//注視点
-	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
-	camera->SetTarget({ Player_Pos.x,Player_Pos.y ,Player_Pos.z });
+	if (Player_Pos.x <=  27.0f) {
+		camera->SetTarget({ 0,1,0 });//注視点
+		camera->SetDistance(distance);//
+		camera->SetEye({ 27.0f,Player_Pos.y+CamCon,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 27.0f,Player_Pos.y+CamCon ,Player_Pos.z });
+	}
+
+	else if (Player_Pos.x >= 368.0f) {
+		camera->SetTarget({ 0,1,0 });//注視点
+		camera->SetDistance(distance);//
+		camera->SetEye({ 368.0f,Player_Pos.y+CamCon,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 368.0f,Player_Pos.y+CamCon ,Player_Pos.z });
+	}
+	else {
+		camera->SetTarget({ 0,1,0 });//注視点
+		camera->SetDistance(distance);//
+		camera->SetEye({ Player_Pos.x,Player_Pos.y+CamCon,Player_Pos.z - 27.0f });
+		camera->SetTarget({ Player_Pos.x,Player_Pos.y+CamCon ,Player_Pos.z });
+	}
+
+	if (Player_Pos.y >= -13) {
+		CamCon = 0;
+	}
+	else {
+		CamCon = 10;
+	}
 
 	camera->Update();
 
@@ -661,7 +683,7 @@ void ForestStage1::ImGuiDraw()
 		float rrr = player->getdis();
 		//float rf3 = enemy->GetPosition().z;
 		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &rf2, -100, 100);
+		ImGui::SliderFloat("positionY", &Player_Pos.y, -100, 100);
 		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
 		ImGui::SliderInt("positionX", &co, -200, 200);
 		ImGui::SliderFloat("positionY", &rf2, -200, 200);
