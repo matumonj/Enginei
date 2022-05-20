@@ -61,14 +61,14 @@ void ForestBoss::Attack(Player* player)
 void ForestBoss::Initialize()
 {
 	//モデルの読込
-	BossModel = Model::CreateFromOBJ("zako1");
+	BossModel = Model::CreateFromOBJ("boss1");
 	//モデル割り当て
 	BossObject = Object3d::Create();
 	BossObject->SetModel(BossModel);
-	BarrelModel= Model::CreateFromOBJ("wood");
-	SkewersBossModel= Model::CreateFromOBJ("wood");
+	BarrelModel= Model::CreateFromOBJ("arm");
+	SkewersBossModel= Model::CreateFromOBJ("arm");
 	ShotModel = Model::CreateFromOBJ("sphere");
-	BossArmModel = Model::CreateFromOBJ("wood");
+	BossArmModel = Model::CreateFromOBJ("arm");
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i] = Object3d::Create();
 		SkewersObject[i]->SetModel(SkewersBossModel);
@@ -83,10 +83,10 @@ void ForestBoss::Initialize()
 
 	Position = { 67,-4,0 };
 	Boss_Scl = { 2,2,2 };
-	Boss_Rot = { 0,0,0 };
-	Rotation = { 30,80,80 };
+	Boss_Rot = { 0,-180,0 };
+	Rotation = { 0,0,0 };
 	//モデルの読込
-	Rotation.z = 0;
+	//Rotation.z = 0;
 	HP = MaxHP;
 	startPos = { 40,-18,0 };
 	for (int i = 0; i < 2; i++) {
@@ -154,7 +154,9 @@ void ForestBoss::Update(XMFLOAT3 position)
 	GetDamage();
 	//モブ
 	Rotation.x = 0;
-	Position = { 20,position.y + 17,0 };
+	Position.x = 20;
+	Position.z = 0;
+	UpDownMove(position);
 	BossObject->SetPosition(Position);
 	BossObject->SetScale({ 2,2,2 });
 	BossObject->SetRotation(Rotation);
@@ -230,7 +232,7 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 	}
 	
 	BossObject->PreDraw();
-	//BossObject->Draw();
+	BossObject->Draw();
 	BossObject->PostDraw();
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i]->PreDraw();
@@ -562,7 +564,8 @@ void ForestBoss::NormalAttacks(Player* player)
 	}
 	for (int i = 0; i < 3; i++) {
 		if (attackcount % 100 == 0) {
-			if (!shotf[i]) {
+			BarrelFolflag = false;
+			if (!shotf[i]&&!BarrelFolflag) {
 				//shotf[i] = true;
 				//if (Input::GetInstance()->TriggerKey(DIK_S)) {
 				if (!ChangeAttack) {
@@ -581,7 +584,13 @@ void ForestBoss::NormalAttacks(Player* player)
 				Yspeed[i] = ( 0.2 * y[i] / BulAngle[i]);
 				break;
 			}
+
 		}
+			if (BarrelRec) {
+				if (Barrel_Scl.y <= 2) {
+					BarrelFolflag = true;
+				}
+			}
 		if(shotf[i]) {
 			Shot_Pos[i].x += Xspeed[i];
 			Shot_Pos[i].y += Yspeed[i];
@@ -601,7 +610,7 @@ void ForestBoss::NormalAttacks(Player* player)
 	//きったねえ
 	attackcount++;
 	if (BarrelRec) {
-		if (Barrel_Scl.y > 3) {
+		if (Barrel_Scl.y > 2) {
 			Barrel_Scl.y -= 0.08f;
 		}
 		else {
@@ -610,7 +619,7 @@ void ForestBoss::NormalAttacks(Player* player)
 		}
 	else {
 		if (!ChangeAttack) {
-			if (Barrel_Scl.y < 5) {
+			if (Barrel_Scl.y < 3) {
 				Barrel_Scl.y += 0.05f;
 			}
 		}
@@ -628,12 +637,25 @@ void ForestBoss::NormalAttacks(Player* player)
 		}
 	}
 	//Barrel_Scl.y -= 0.05f;
-	XMVECTOR positionA = { player->GetPosition().x,player->GetPosition().y, player->GetPosition().z };
-	XMVECTOR positionB = { Position.x,Position.y,Position.z };
-	//プレイヤーと敵のベクトルの長さ(差)を求める
-	XMVECTOR SubVector = DirectX::XMVectorSubtract(positionB, positionA);// positionA - positionB;
-	BarrelRotFollow = atan2f(SubVector.m128_f32[0], SubVector.m128_f32[1]);
-
-	Barrel_Rot.z = BarrelRotFollow * 60 + 180;//60=角度調整用 180=反転
-
+	
+		XMVECTOR positionA = { player->GetPosition().x,player->GetPosition().y, player->GetPosition().z };
+		XMVECTOR positionB = { Position.x,Position.y,Position.z };
+		//プレイヤーと敵のベクトルの長さ(差)を求める
+		XMVECTOR SubVector = DirectX::XMVectorSubtract(positionB, positionA);// positionA - positionB;
+		BarrelRotFollow = atan2f(SubVector.m128_f32[0], SubVector.m128_f32[1]);
+		Rotation.y = BarrelRotFollow * 60 + 180;
+		if (BarrelFolflag) {
+		
+			Barrel_Rot.z = BarrelRotFollow * 60 + 180;//60=角度調整用 180=反転
 	}
+	}
+
+void ForestBoss::UpDownMove(XMFLOAT3 position)
+{
+	countUpDownMove++;
+	const float moveCycle = 120.0f;
+
+	Position.y = (position.y+17)+ sin(PI * 2 / moveCycle * countUpDownMove) * 2;
+
+
+}

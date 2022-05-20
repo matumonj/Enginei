@@ -68,6 +68,7 @@ private:
     float BulAngle[3];
     int attackcount;
 private:
+    bool BarrelFolflag;
     bool BarrelRec;
     float BarrelRotFollow=0;
     bool BarrelReverse;
@@ -163,8 +164,9 @@ public:
     void ArmAytack(Player* player);
     void ArmAttack_Left(Player* player);
     void GetDamage();
+    void UpDownMove(XMFLOAT3 position);
 private:
-
+    int countUpDownMove;
     float lene;
     float ArmMaxlen;
     bool armreturn;

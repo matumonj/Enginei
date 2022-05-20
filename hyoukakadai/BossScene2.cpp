@@ -272,7 +272,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	camerapositionx = Player_Pos.x;
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y + 10;
+	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
 	LONG u_r = 32768;
@@ -365,8 +365,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	ForestBoss::GetInstance()->appearance(camerapositiony,Player_Pos.y);
 	camera->SetTarget({ 0,1,0 });//’Ž‹“_
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,camerapositiony,Player_Pos.z - 27.0f });
-	camera->SetTarget({ Player_Pos.x,camerapositiony-2 ,Player_Pos.z });
+	camera->SetEye({ Player_Pos.x,camerapositiony+5,Player_Pos.z - 35.0f });
+	camera->SetTarget({ Player_Pos.x,camerapositiony+3 ,Player_Pos.z });
 
 	camera->Update();
 
