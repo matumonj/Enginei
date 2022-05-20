@@ -226,8 +226,9 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	//“ü—Íˆ—‚æ‚èŒã‚É“–‚½‚è”»’è‚ğ•`‚¯
 
 	GameUI::BossUIUpdate(bossenemy.get());
+	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
-	Collision::ColMap1(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
+	//Collision::CollisionMap(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos,1);
 
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
