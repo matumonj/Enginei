@@ -1,5 +1,6 @@
 #pragma once
 #include"Object3d.h"
+#include"f_Object3d.h"
 #include"Enemy.h"
 #include<memory>
 class Line;
@@ -34,7 +35,7 @@ public:
 	void Attack(XMFLOAT3 playerpos);
 	void CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos);
 	void CollisionAttack1(Enemy*enemy, XMFLOAT3 playerpos);
-	void PlayerMoves(XMFLOAT3& move,float moveSpeed,bool& JumpFlag,float& grav,float& time);
+	void PlayerMoves(XMFLOAT3& move,float moveSpeed,bool& JumpFlag,float& grav,float& time,XMFLOAT3& rot);
 	void FlyingAttack(Enemy*enemy);
 	void FlyingAttack(std::unique_ptr<Enemy> enemy[]);
 	//DebugTxt* debugtxt = nullptr;
