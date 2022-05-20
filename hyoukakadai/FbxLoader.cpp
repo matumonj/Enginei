@@ -132,7 +132,7 @@ void FbxLoader::ParseNodeRecursive(f_Model* model, FbxNode* fbxNode, Node* paren
         ParseNodeRecursive(model, fbxNode->GetChild(i));
     }
 }
-
+//スキニング情報の読み取り
 void FbxLoader::ParseMesh(f_Model* model, FbxNode* fbxNode)
 {
     //ノードのメッシュを取得
@@ -147,7 +147,7 @@ void FbxLoader::ParseMesh(f_Model* model, FbxNode* fbxNode)
     //スキニング情報の読み取り
     ParseSkin(model, fbxMesh);
 }
-
+//行列の変換
 void FbxLoader::ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxAMatrix& src)
 {
     //行
@@ -322,6 +322,11 @@ void FbxLoader::ParseSkin(f_Model* model, FbxMesh* fbxMesh)
     FbxSkin* fbxSkin = static_cast<FbxSkin*>(fbxMesh->GetDeformer(0, FbxDeformer::eSkin));
     //スキニング情報がなければ終了
     if (fbxSkin == nullptr) {
+        for (int i = 0; i < model->vertices.size(); i++) {
+            model->vertices[i].boneIndex[0] = 0;
+            model->vertices[i].boneWeight[0] = 1.0f;
+
+        }
         return;
     }
 
@@ -414,7 +419,7 @@ void FbxLoader::ParseSkin(f_Model* model, FbxMesh* fbxMesh)
                         for (int j = 1; j < f_Model::MAX_BONE_INDICES; j++) {
                             weight += vertices[i].boneWeight[j];
                         }
-                        //合計で1.0f（200%）になるように調整
+                        //合計で1.0f（100%）になるように調整
                         vertices[i].boneWeight[0] = 1.0f - weight;
                         break;
                     }

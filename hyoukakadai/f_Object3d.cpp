@@ -110,9 +110,7 @@ void f_Object3d::CreateGraphicsPipeline()
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // 標準設定
 	// ラスタライザステート
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	//gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
-	// デプスステンシルステート
+
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 
 	// レンダーターゲットのブレンド設定
@@ -178,7 +176,7 @@ void f_Object3d::CreateGraphicsPipeline()
 	if (FAILED(result)) { assert(0); }
 }
 
-void f_Object3d::Initialize()
+bool f_Object3d::Initialize(DirectXCommon* dxcomn, DebugCamera* camerabool)
 {
 	HRESULT result;
 	//定数バッファ
@@ -200,17 +198,29 @@ void f_Object3d::Initialize()
 		nullptr,
 		IID_PPV_ARGS(&constBuffSkin));
 
+	//
+	ConstBufferDataSkin* constMapSkin = nullptr;
+	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
+	for (int i = 0; i < MAX_BONES; i++) {
+		//単位行列ぶちこむ
+		constMapSkin->bones[i] = XMMatrixIdentity();
+	}
+	constBuffSkin->Unmap(0, nullptr);
 	//1フレーム分の時間を60FPSで設定
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
+
+	return true;
 }
 
-void f_Object3d::Updata(bool animeloop)
+void f_Object3d::Updata(XMFLOAT4 color, DirectXCommon* dxcomn, DebugCamera* camerabool, bool animeloop)
 {
 	XMMATRIX matScale, matRot, matTrans;
 
 	//スケール、回転、平行移動行列の計算
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
 	matRot = XMMatrixIdentity();
+
+
 	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
 	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
 	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
@@ -223,11 +233,11 @@ void f_Object3d::Updata(bool animeloop)
 	matWorld *= matTrans;			//ワールド行列に平行移動を反映
 
 	//ビュープロジェクション行列
-	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
+	const XMMATRIX& matViewProjection = camerabool->GetViewProjectionMatrix();
 	//モデルのメッシュトランスフォーム
 	const XMMATRIX& modelTransform = model->GetModelTransform();
 	//カメラ座標
-	const XMFLOAT3& cameraPos = camera->GetEye();
+	const XMFLOAT3& cameraPos = camerabool->GetEye();
 
 	HRESULT result;
 	//定数バッファへのデータ転送
@@ -244,17 +254,15 @@ void f_Object3d::Updata(bool animeloop)
 	std::vector<f_Model::Bone>& bones = model->GetBones();
 
 	//アニメーション
-		if (isPlay) {
-			//1フレーム進める
-			currentTime += frameTime;
-			//最後まで再生したら先頭に戻す
-			if (currentTime > endTime) {
-				if (animeloop == TRUE) {
+	if (isPlay) {
+		currentTime += frameTime;
+		//最後まで再生したら先頭に戻す
+		if (currentTime > endTime) {
+			if (animeloop == TRUE) {
 				currentTime = startTime;
-				}
-				else {
-					currentTime = endTime;
-				}
+			} else {
+				currentTime = endTime;
+			}
 		}
 	}
 

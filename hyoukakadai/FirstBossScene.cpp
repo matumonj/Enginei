@@ -12,7 +12,7 @@
 #include"Destroy.h"
 #include"Fader.h"
 #include"CollisionPrimitive.h"
-
+#include"StageSelect.h"
 //コメントアウト
 
 
@@ -167,7 +167,7 @@ void FirstBossScene::Initialize(DirectXCommon* dxCommon)
 
 	//FBXモデルの生成
 	object1 = new f_Object3d();
-	object1->Initialize();
+	object1->Initialize(dxCommon, camera);
 	object1->SetModel(fbxmodel);
 	/*audio = new Audio();
 	audi]o->Initialize();
@@ -211,7 +211,7 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 		}
 
 		//FBXモデルの更新
-		object1->Updata(TRUE);
+		object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 		if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 			Player_Pos.x += moveSpeed;
 		}
@@ -318,8 +318,8 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		//BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
-		//sceneManager_->SetnextScene(scene);//シーンのセット
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
+		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
 }

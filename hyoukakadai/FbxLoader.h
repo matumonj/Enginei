@@ -9,8 +9,7 @@
 
 class FbxLoader
 {
-private:	//エイリアス
-//std::を省略
+private:
 	using string = std::string;
 
 
@@ -88,8 +87,7 @@ private:
 	FbxImporter* fbxImporter = nullptr;
 
 
-public:	//定数
-	//モデル格納ルートパス
+public:
 	static const string baseDirectory;
 	//テクスチャがない場合の標準テクスチャファイル名
 	static const string defaultTextureFileName;

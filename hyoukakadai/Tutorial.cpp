@@ -153,7 +153,7 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 	effect->Initialize(dxCommon, camera);
 	//FBXモデルの生成
 	object1 = new f_Object3d();
-	object1->Initialize();
+	object1->Initialize(dxCommon, camera);
 	object1->SetModel(fbxmodel);
 	/*audio = new Audio();
 	audio->Initialize();
@@ -177,7 +177,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	tyutorial->Update(enemy);
 
 	//FBXモデルの更新
-	object1->Updata(TRUE);
+	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 
 
 	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time);

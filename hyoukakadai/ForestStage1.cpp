@@ -264,7 +264,7 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 
 	//FBXモデルの生成
 	object1 = new f_Object3d();
-	object1->Initialize();
+	object1->Initialize(dxCommon, camera);
 	object1->SetModel(fbxmodel);
 	/*audio = new Audio();
 	audio->Initialize();
@@ -319,7 +319,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 
 	//FBXモデルの更新
-	object1->Updata(TRUE);
+	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += moveSpeed;
 	}
