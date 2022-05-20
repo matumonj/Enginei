@@ -302,7 +302,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	spotLightpos[2] = 0;
 
 	if (Line::GetInstance()->Gettriggerflag() != true||Line::GetInstance()->Getboundflag() == true) {
-		player->PlayerMoves(Player_Pos, moveSpeed,jumpFlag,grav,time);
+		player->PlayerMoves(Player_Pos, moveSpeed,jumpFlag,grav,time,Player_Rot);
 	}
 
 	///////// コントローラー //////////
@@ -317,16 +317,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Rot.y += 1.1f;
-	}
-	
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Rot.y -= 1.1f;
-	}
-
-	
+		
 
 	///これより上に入力処理をかけ
 	////当たり判定

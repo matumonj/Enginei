@@ -303,7 +303,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
-		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time);
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
 	}
 
 	///////// コントローラー //////////
