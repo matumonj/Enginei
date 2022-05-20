@@ -246,7 +246,7 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
 	// 3Dオブジェクトにカメラをセット
-	//Object3d::SetCamera(camera);
+	Object3d::SetCamera(camera);
 
 	effects->Initialize(dxCommon, camera);
 	attackeffects->Initialize(dxCommon, camera);
@@ -301,7 +301,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	LONG u_r = 32768;
 	LONG a = 30000;
 
-	object1->Setpos({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
+	object1->Setpos({ Player_Pos.x ,Player_Pos.y,Player_Pos.z });
 
 
 	if (Line::GetInstance()->Gettriggerflag() != true||Line::GetInstance()->Getboundflag() == true) {
