@@ -124,7 +124,7 @@ void ForestStage1::ModelCreate()
 	attackeffects = std::make_unique<Effects>();;
 
 	//Player_Pos = player->GetPosition();
-	Player_Rot = player->GetRotation();
+	//Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
 	//Fader::SetFeedSprite();
 }
@@ -171,6 +171,9 @@ void ForestStage1::SetPrm()
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
+
+	object1->Setpos({ Player_Pos });
+	object1->SetRot({ Player_Rot });
 }
 #pragma endregion
 
@@ -298,12 +301,6 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
 
-	LONG u_r = 32768;
-	LONG a = 30000;
-
-	object1->Setpos({ Player_Pos.x ,Player_Pos.y,Player_Pos.z });
-
-
 	if (Line::GetInstance()->Gettriggerflag() != true||Line::GetInstance()->Getboundflag() == true) {
 		player->PlayerMoves(Player_Pos, moveSpeed,jumpFlag,grav,time);
 	}
@@ -320,15 +317,16 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 	//FBXƒ‚ƒfƒ‹‚ÌXV
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += moveSpeed;
-	}
+	
 	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= moveSpeed;
+		Player_Rot.y += 1.1f;
+	}
+	
+	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
+		Player_Rot.y -= 1.1f;
 	}
 
 	
-
 
 	///‚±‚ê‚æ‚èã‚É“ü—Íˆ—‚ð‚©‚¯
 	////“–‚½‚è”»’è
@@ -541,9 +539,9 @@ void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
 
-	player->PreDraw();
+	/*player->PreDraw();
 	player->Draw();
-	player->PostDraw();
+	player->PostDraw();*/
 
 
 	world->PreDraw();
