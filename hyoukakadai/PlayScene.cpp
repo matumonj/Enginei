@@ -165,15 +165,15 @@ void PlayScene::Initialize(DirectXCommon* dxCommon)
 	enemy[9] = std::make_unique<BossEnemy>();
 	//enemy[6] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
-	enemy[9]->Setposition({ 940,-4.2,0 });
+	enemy[9]->Setposition({ 940,-4.2f,0 });
 	//enemy[6]->Setposition({ 270,-18.2,0 });
-	enemy[8]->Setposition({ 270,-18.2,0 });
-	enemy[7]->Setposition({ 270,-18.2,0 });
-	enemy[6]->Setposition({ 270,-18.2,0 });
-	enemy[5]->Setposition({ 170,-18.2,0 });
-	enemy[4]->Setposition({ 20,-14.2,0 });
-	enemy[3]->Setposition({ 80,-4.2,0 });
-	enemy[2]->Setposition({ 20,-4.2,0 });
+	enemy[8]->Setposition({ 270.0f,-18.2f,0.0f });
+	enemy[7]->Setposition({ 270.0f,-18.2f,0.0f });
+	enemy[6]->Setposition({ 270.0f,-18.2f,0.0f });
+	enemy[5]->Setposition({ 170.0f,-18.2f,0.0f });
+	enemy[4]->Setposition({ 20,-14.2f,0 });
+	enemy[3]->Setposition({ 80,-4.2f,0 });
+	enemy[2]->Setposition({ 20,-4.2f,0 });
 	enemy[1]->Setposition({ 350, -18, 0 });
 	enemy[0]->Setposition({ 200, -7, 0 });
 	for (int i = 0; i < emax; i++) {
@@ -250,7 +250,6 @@ void PlayScene::Update(DirectXCommon* dxCommon)
 	///これより上に入力処理をかけ
 	////当たり判定
 
-	float disl;
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
 			if (map[j][i] == 1 || map[j][i] == 2) {

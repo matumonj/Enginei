@@ -89,13 +89,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	linex = player->GetPosition().x;//線の始点をプレイヤー位置に
 	liney = player->GetPosition().y;
 
-	if (stopflag == true) {
-		if (Input::GetInstance()->Pushkey(DIK_1)&& !boundflag) {
-			lineangle += 5.0f;//移動方向の指定
-			subradius = Startsubradius;//飛ぶ方向の矢印みたいなの長さの初期値設定(後で置き換え.どうせ別のオブジェするでしょ)
-			needlerot.z += 5;
-		}
-	}
+
 
 	//コントローラー
 	LONG u_r = 32768;
@@ -248,7 +242,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	}
 
 	if (stopflag == false) {
-		timer += 0.15;
+		timer += 0.15f;
 		if (timer >= 10) {
 			returnflag = true;
 		}

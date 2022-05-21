@@ -17,8 +17,8 @@ nTexture* GameUI::TargetTexture = nullptr;
 
 XMFLOAT2 GameUI::lpos, GameUI::loutpos;//座標
 XMFLOAT2 GameUI::lscl, GameUI::loutscl;//スケール
-XMFLOAT3 GameUI::Alowpos, GameUI::Alowrot, GameUI::Alowscl = { 1,0.5,10 };
-XMFLOAT3 GameUI::Targetpos, GameUI::Targetrot, GameUI::Targetscl = { 0.8,0.8,1 };
+XMFLOAT3 GameUI::Alowpos, GameUI::Alowrot, GameUI::Alowscl = { 1,0.5f,10 };
+XMFLOAT3 GameUI::Targetpos, GameUI::Targetrot, GameUI::Targetscl = { 0.8f,0.8f,1 };
 XMFLOAT2 GameUI::playerHPPos, GameUI::playerHPScl; //座標
 XMFLOAT2 GameUI::BossHPpos, GameUI::BossHPscl;
 
@@ -215,7 +215,7 @@ void GameUI::PlayerUISet()
 void GameUI::PlayerUIUpdate(Player* player)
 {
 
-	playerHPScl.x = player->getHp() * 5;
+	playerHPScl.x = (float)(player->getHp() * 5);
 	PlayerHP->SetSize(playerHPScl);
 	PlayerHP->SetPosition(playerHPPos);
 	PlayerHP->setcolor({ 1,1,1,1 });

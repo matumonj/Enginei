@@ -44,7 +44,7 @@ void ThrowEnemy::Initialize()
 	//パラメータのセット
 	//SearchActionInit();
 	nTexture::LoadTexture(130, L"Resources/Sertch.png");
-	searchTexture = nTexture::Create(130, { 0,-50,50 }, { 0.3,0.3,0.3 }, { 1,1,1,1 });
+	searchTexture = nTexture::Create(130, { 0,-50,50 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
 
 	searchTexture->CreateNormalTexture();
 }
@@ -147,7 +147,7 @@ void ThrowEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3
 			//searchCount = 0;
 		}
 	}
-	searchTexture->SetScale({ 0.3,0.3,0.3 });
+	searchTexture->SetScale({ 0.3f,0.3f,0.3f });
 	searchTexture->SetColor({ 1,1,1,1 });
 	searchTexture->SetPosition({ Position.x, Position.y+2, Position.z });
 	searchTexture->Update(matview, matprojection);
@@ -186,7 +186,7 @@ void ThrowEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 
 				} else {
 					movespeed = 0.1f;
-					grav = 0.03;
+					grav = 0.03f;
 				}
 
 				//プレイヤーの左辺
@@ -325,7 +325,7 @@ void ThrowEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 
 				} else {
 					movespeed = 0.1f;
-					grav = 0.03;
+					grav = 0.03f;
 				}
 
 				//プレイヤーの左辺

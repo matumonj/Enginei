@@ -190,7 +190,6 @@ void Effects::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(200, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("cameraposition")) {
-		float cy;
 		ImGui::SliderFloat("cy", &b_Effect_Rot.y, 200, -200);
 		ImGui::TreePop();
 	}
@@ -207,7 +206,7 @@ void Effects::Updateo(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Pl
 				efk->SetPosition(enemy->GetPosition().x, enemy->GetPosition().y, enemy->GetPosition().z);
 				efk->Load_Effect();
 				efk->SetScale( 3,3,3 );
-				efk->SetColor(1, 0, 0.2);
+				efk->SetColor(1, 0, 0.2f);
 				deathf = false;
 			}
 		}
@@ -242,7 +241,7 @@ void Effects::BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera, bool 
 {
 	b_Effect_Pos =bpos;
 	if (stay == true) {
-		b_Effect_SCl = { 0.5,0.5,0.01 };
+		b_Effect_SCl = { 0.5f,0.5f,0.01f };
 	}
 	else {
 		b_Effect_SCl = { 1,2.5,10 };

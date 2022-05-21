@@ -182,14 +182,14 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 	enemy[9] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
 	enemy[9]->Setposition({ 3850, -18, 0 });
-	enemy[8]->Setposition({ 3820,-14.2,0 });
-	enemy[7]->Setposition({ 2780,-18.2,0 });
+	enemy[8]->Setposition({ 3820,-14.2f,0 });
+	enemy[7]->Setposition({ 2780,-18.2f,0 });
 	enemy[6]->Setposition ({ 350, -18, 0 });
-	enemy[5]->Setposition ({ 320,-14.2,0 });
-	enemy[4]->Setposition ({ 270,-18.2,0 });
-	enemy[3]->Setposition ({ 250,-4.2,0 });
-	enemy[2]->Setposition ({ 170,-18.2,0 });
-	enemy[1]->Setposition({ 80,-4.2,0 });
+	enemy[5]->Setposition ({ 320,-14.2f,0 });
+	enemy[4]->Setposition ({ 270,-18.2f,0 });
+	enemy[3]->Setposition ({ 250,-4.2f,0 });
+	enemy[2]->Setposition ({ 170,-18.2f,0 });
+	enemy[1]->Setposition({ 80,-4.2f,0 });
 	enemy[0]->Setposition({ 50, -15, 0 });
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
@@ -295,7 +295,6 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	///‚±‚ê‚æ‚èã‚É“ü—Íˆ—‚ğ‚©‚¯
 	////“–‚½‚è”»’è
 
-	float disl;
 
 	//“ü—Íˆ—‚æ‚èŒã‚É“–‚½‚è”»’è‚ğ•`‚¯
 	//aaaaaaa
@@ -347,7 +346,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 				}
 				else {
 					moveSpeed = 0.2f;
-					grav = 0.03;
+					grav = 0.03f;
 				}
 
 				//ƒvƒŒƒCƒ„[‚Ì¶•Ó

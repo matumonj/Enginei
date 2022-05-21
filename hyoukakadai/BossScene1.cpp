@@ -182,7 +182,7 @@ void BossScene1::Initialize(DirectXCommon* dxCommon)
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	//camerapositionx = 46.94f;
 	camerapositiony = -4.5f;
-	camerapositionz = -40.51;
+	camerapositionz = -40.51f;
 bossenemy->Setposition({ 40,-4,0 });
 }
 #pragma endregion
@@ -242,8 +242,7 @@ void BossScene1::Update(DirectXCommon* dxCommon)
 	//“ü—Íˆ—‚æ‚èŒã‚É“–‚½‚è”»’è‚ğ•`‚¯
 	
 	GameUI::BossUIUpdate(bossenemy.get());
-	
-	float disl;
+
 	//‚±‚ê‚ÍˆÚ‚·
 	
 	

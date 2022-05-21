@@ -428,7 +428,7 @@ void ForestBoss::appearance(float& camerapos,float position)
 		}
 	} else {
 		oldpos = camerapos;
-		startcount += 0.01;
+		startcount += 0.01f;
 	}
 
 	if (returnCamera) {
@@ -640,8 +640,8 @@ void ForestBoss::NormalAttacks(Player* player)
 
 				BulAngle[i] = sqrtf(x[i] * x[i] + y[i] * y[i]);
 
-				Xspeed[i] = ( 0.1 * x[i] / BulAngle[i]);
-				Yspeed[i] = ( 0.1 * y[i] / BulAngle[i]);
+				Xspeed[i] = ( 0.1f * x[i] / BulAngle[i]);
+				Yspeed[i] = ( 0.1f * y[i] / BulAngle[i]);
 				break;
 			}
 
@@ -690,7 +690,7 @@ void ForestBoss::NormalAttacks(Player* player)
 	}
 	if (ChangeAttack) {
 		if (Barrel_Scl.y >= 0) {
-			Barrel_Scl.y -= 0.05;
+			Barrel_Scl.y -= 0.05f;
 		}
 		else {
 			bossAction = ArmAttacks;
@@ -740,13 +740,13 @@ void ForestBoss::DeathMotion()
 			Rotation.y += 50;
 		}
 		else if(deathcount>200&&deathcount<230){
-			Position.y += 0.3;
+			Position.y += 0.3f;
 		}
 		else if (deathcount > 233) {
 			if (Rotation.x < -180) {
 				Rotation.x -= 5;
 			}
-			Position.y -= 0.001*deathcount*2;
+			Position.y -= 0.001f*deathcount*2;
 		}
 	}
 }
