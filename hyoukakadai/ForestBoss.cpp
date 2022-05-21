@@ -18,6 +18,7 @@ bool ForestBoss::woodatkflag = false;
 float ForestBoss::woodatkCount = 0;
 float ForestBoss::woodatkCount2 = 0;
 float ForestBoss::woodatkCount3 = 0;
+XMFLOAT3 ForestBoss::Nuclear_Pos;
 // Sphere ForestBoss::playersphere;
 ForestBoss::ForestBoss()
 {
@@ -60,6 +61,9 @@ void ForestBoss::Attack(Player* player)
 //初期化処理
 void ForestBoss::Initialize()
 {
+	NuclearModel= Model::CreateFromOBJ("zako1");
+	NuclearObj = Object3d::Create();
+	NuclearObj->SetModel(NuclearModel);
 	//モデルの読込
 	BossModel = Model::CreateFromOBJ("boss1");
 	//モデル割り当て
@@ -130,10 +134,16 @@ void ForestBoss::Update(XMFLOAT3 position)
 	} else {
 		enemyState = State::ALIVE;
 	}
+
+	Rot_Nuclear++;
 	BossObject->Update({ 1,1,1,1 });
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i]->Update({ 1,1,1,1 });
 	}
+	NuclearObj->SetPosition(Nuclear_Pos);
+	NuclearObj->SetRotation({ 0,Rot_Nuclear,0 });
+	NuclearObj->SetScale({ 2,2,2 });
+	NuclearObj->Update({ 1,1,1,1 });
 	Arm_Pos[0] = Position;
 	Arm_Pos[1] = Position;
 									 //Arm_Rot[1].z = rotfollow  ;//60=角度調整用 180=反転
@@ -145,15 +155,17 @@ void ForestBoss::Update(XMFLOAT3 position)
 		BossArmObj[i]->Update({1,1,1,1});
 	}
 	for (int i = 0; i < 3; i++) {
-		ShotObj[i]->SetPosition(Shot_Pos[i]);
-		ShotObj[i]->SetRotation({0,0,0});
-		ShotObj[i]->SetScale({1,1,1});
-		ShotObj[i]->Update({ 1,1,1,1 });
+		if (ShotObj[i] != nullptr) {
+			ShotObj[i]->SetPosition(Shot_Pos[i]);
+			ShotObj[i]->SetRotation({ 0,0,0 });
+			ShotObj[i]->SetScale({ 1,1,1 });
+			ShotObj[i]->Update({ 1,1,1,1 });
+		}
 	}
 	
 	GetDamage();
 	//モブ
-	Rotation.x = 0;
+	Rotation.x = 30;
 	Position.x = 20;
 	Position.z = 0;
 	UpDownMove(position);
@@ -195,13 +207,12 @@ void ForestBoss::SkewersAttack(int map[130][20], std::unique_ptr<Object3d> tst[1
 					}
 				}
 				//break;
-			
+				if (map[j][i] == 30) {
+					Nuclear_Pos = { tst[j][i]->GetPosition().x - 5,tst[j][i]->GetPosition().y,tst[j][i]->GetPosition().z };
+			}
 		}
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_O)) {
-		woodatkflag = true;
-
-	}
+	
 	if (woodatkflag) {
 		if (Skewers_Scl[0].y <= 8) {
 			woodatkCount += 0.05f;
@@ -240,13 +251,20 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 		SkewersObject[i]->PostDraw();
 	}
 	for (int i = 0; i < 3; i++) {
-		ShotObj[i]->PreDraw();
-		ShotObj[i]->Draw();
-		ShotObj[i]->PostDraw();
+		if (ShotObj[i] != nullptr) {
+			ShotObj[i]->PreDraw();
+			ShotObj[i]->Draw();
+			ShotObj[i]->PostDraw();
+		}
 	}
 	BarrelObj->PreDraw();
 	BarrelObj->Draw();
 	BarrelObj->PostDraw();
+
+	NuclearObj->PreDraw();
+	NuclearObj->Draw();
+	NuclearObj->PostDraw();
+
 	ImGui::Begin("scl");
 	
 	ImGui::SliderFloat("scly",&Arm_Scl[0].y, 20.0f, 20.0f);
@@ -268,6 +286,12 @@ void ForestBoss::Motion(Player* player)
 	lene = Collision::GetLen(Arm_Pos[0], player->GetPosition());
 
 	const float dis = 0.5f;
+	if (Position.y > 180) {
+		woodatkflag = true;
+	}
+	if (Position.y > 120) {
+
+	}
 	switch (bossAction)
 	{
 	case KeepPos:
@@ -328,6 +352,8 @@ void ForestBoss::Motion(Player* player)
 
 	case NormalAttack:
 		NormalAttacks(player);
+		armreturn = true;
+		Sec_armreturn = true;
 		break;
 	case StartBattle:
 		if (startcount > 2.0f) {
@@ -481,7 +507,7 @@ void ForestBoss::ArmAytack(Player*player)
 		ArmAttackflag = true;
 	}
 	if (ArmAttackflag) {
-		armattacktime += 0.03f;
+		armattacktime += 0.05f;
 		Arm_Scl[0].y = Easing::EaseOut(armattacktime, OldArm_Scl[0].y, OldArm_Scl[0].y+5);
 		if (Collision::GetLen({ OldArm_Scl[0].x,OldArm_Scl[0].y+10,OldArm_Scl[0].z }, Arm_Scl[0]) < 1) {
 			ArmAttackflag = false;
@@ -493,7 +519,7 @@ void ForestBoss::ArmAytack(Player*player)
 		OldArm_Scl[0] = Arm_Scl[0];
 	}
 	if (armreturn) {
-		armattacktime2 += 0.01f;
+		armattacktime2 += 0.05f;
 		Arm_Scl[0].y = Easing::EaseOut(armattacktime2, Arm_Scl[0].y, 0);
 		if (Collision::GetLenY(Arm_Scl[0], { 0,0,0 }) < 1) {
 			armreturn = false;
@@ -515,7 +541,12 @@ void ForestBoss::ArmAytack(Player*player)
 
 void ForestBoss::ArmAttack_Left(Player* player)
 {
-
+	if (Position.y > 120) {
+		attackcount2++;
+		if (attackcount2 % 500 == 0) {
+			Sec_ArmAttackflag = true;
+		}
+	}
 	if (Input::GetInstance()->TriggerKey(DIK_B)) {
 		Sec_ArmAttackflag = true;
 	}
@@ -524,7 +555,7 @@ void ForestBoss::ArmAttack_Left(Player* player)
 		ArmAttackflag = true;
 	}
 	if (Sec_ArmAttackflag) {
-		Sec_armattacktime += 0.03f;
+		Sec_armattacktime += 0.05f;
 		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime, OldArm_Scl[1].y, OldArm_Scl[1].y + 5);
 		if (Collision::GetLen({ OldArm_Scl[1].x,OldArm_Scl[1].y + 10,OldArm_Scl[1].z }, Arm_Scl[1]) < 1) {
 			Sec_ArmAttackflag = false;
@@ -535,7 +566,7 @@ void ForestBoss::ArmAttack_Left(Player* player)
 		OldArm_Scl[1] = Arm_Scl[1];
 	}
 	if (Sec_armreturn) {
-		Sec_armattacktime2 += 0.01f;
+		Sec_armattacktime2 += 0.05f;
 		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime2, Arm_Scl[1].y, 0);
 		if (Collision::GetLenY(Arm_Scl[1], { 0,0,0 }) < 1) {
 			Sec_armreturn = false;
@@ -565,12 +596,16 @@ void ForestBoss::NormalAttacks(Player* player)
 	for (int i = 0; i < 3; i++) {
 		if (attackcount % 100 == 0) {
 			BarrelFolflag = false;
-			if (!shotf[i]&&!BarrelFolflag) {
+			if (!shotf[i]) {
 				//shotf[i] = true;
 				//if (Input::GetInstance()->TriggerKey(DIK_S)) {
 				if (!ChangeAttack) {
 					shotf[i] = true;
 					BarrelRec = true;
+				}
+				else {
+					delete ShotObj[i];
+					ShotObj[i] = nullptr;
 				}
 				//}
 
@@ -580,8 +615,8 @@ void ForestBoss::NormalAttacks(Player* player)
 
 				BulAngle[i] = sqrtf(x[i] * x[i] + y[i] * y[i]);
 
-				Xspeed[i] = ( 0.2 * x[i] / BulAngle[i]);
-				Yspeed[i] = ( 0.2 * y[i] / BulAngle[i]);
+				Xspeed[i] = ( 0.1 * x[i] / BulAngle[i]);
+				Yspeed[i] = ( 0.1 * y[i] / BulAngle[i]);
 				break;
 			}
 
@@ -591,7 +626,7 @@ void ForestBoss::NormalAttacks(Player* player)
 					BarrelFolflag = true;
 				}
 			}
-		if(shotf[i]) {
+		if(shotf[i]&&ShotObj[i]!=nullptr) {
 			Shot_Pos[i].x += Xspeed[i];
 			Shot_Pos[i].y += Yspeed[i];
 			if (Collision::GetLen(Shot_Pos[i], player->GetPosition()) < 1) {
@@ -643,7 +678,6 @@ void ForestBoss::NormalAttacks(Player* player)
 		//プレイヤーと敵のベクトルの長さ(差)を求める
 		XMVECTOR SubVector = DirectX::XMVectorSubtract(positionB, positionA);// positionA - positionB;
 		BarrelRotFollow = atan2f(SubVector.m128_f32[0], SubVector.m128_f32[1]);
-		Rotation.y = BarrelRotFollow * 60 + 180;
 		if (BarrelFolflag) {
 		
 			Barrel_Rot.z = BarrelRotFollow * 60 + 180;//60=角度調整用 180=反転
@@ -654,8 +688,39 @@ void ForestBoss::UpDownMove(XMFLOAT3 position)
 {
 	countUpDownMove++;
 	const float moveCycle = 120.0f;
+	if (!NuclearDeayh) {
+		Position.y = (position.y + 17) + sin(PI * 2 / moveCycle * countUpDownMove) * 2;
+		Rotation.y = BarrelRotFollow * 60 + 180;
 
-	Position.y = (position.y+17)+ sin(PI * 2 / moveCycle * countUpDownMove) * 2;
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_N)) {
+		NuclearDeayh = true;
+	}
+	DeathMotion();
+	if (NuclearDeayh&&Position.y<position.y-20) {
+		SetHP(0);
+		//SetDead(true);
+		//enemyState = State::DEAD;
+	}
+}
 
-
+void ForestBoss::DeathMotion()
+{
+	if (NuclearDeayh) {
+		
+		deathcount++;
+		if (deathcount < 200) {
+			Rotation.x = 20;
+			Rotation.y += 50;
+		}
+		else if(deathcount>200&&deathcount<230){
+			Position.y += 0.3;
+		}
+		else if (deathcount > 233) {
+			if (Rotation.x < -180) {
+				Rotation.x -= 5;
+			}
+			Position.y -= 0.001*deathcount*2;
+		}
+	}
 }

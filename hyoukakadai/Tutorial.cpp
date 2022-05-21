@@ -294,7 +294,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 					Destroy(enemy);
 				}
 			}
-			effect->Update(dxCommon, camera, enemy, player);
+			effect->Updateo(dxCommon, camera, enemy, player);
 		GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 			Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 		GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());

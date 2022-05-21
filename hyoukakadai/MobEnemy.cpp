@@ -225,7 +225,7 @@ void MobEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20]
 	Old_Pos = Position;
 	//time-time
 	//movespeed-movespeed
-	float height;//
+	float height;
 	float width;
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	for (int i = 0; i < X; i++) {

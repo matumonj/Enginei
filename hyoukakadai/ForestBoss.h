@@ -30,7 +30,11 @@ private:
     Object3d* BossObject = nullptr;
     //モデルのインスタンス
     Model* BossModel = nullptr;
-
+    Model* NuclearModel;
+    Object3d* NuclearObj;
+    static XMFLOAT3 Nuclear_Pos;
+    float Rot_Nuclear;
+    bool NuclearDeayh;
     Object3d* BossArmObj[2] = { nullptr };
     Object3d* BarrelObj = nullptr;
     Model* BarrelModel;
@@ -67,6 +71,7 @@ private:
     float Yspeed[3];
     float BulAngle[3];
     int attackcount;
+    int attackcount2;
 private:
     bool BarrelFolflag;
     bool BarrelRec;
@@ -165,6 +170,7 @@ public:
     void ArmAttack_Left(Player* player);
     void GetDamage();
     void UpDownMove(XMFLOAT3 position);
+    void DeathMotion();
 private:
     int countUpDownMove;
     float lene;
@@ -223,7 +229,9 @@ private:
     Phase Bossphase = StartFloor;
     BossAction bossAction = StartBattle;
     static bool stayflag;
+    int deathcount;
 public:
     bool GetAltStay() { return stayflag; }
+    bool GetNucclear() { return NuclearDeayh; }
 };
 

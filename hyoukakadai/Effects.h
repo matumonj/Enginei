@@ -46,13 +46,15 @@ public:
 	XMFLOAT3 b_Effect_Pos = {  };
 	XMFLOAT3 b_Effect_Rot =  {0.0f,-174.277f,0.0f};
 	XMFLOAT3 b_Effect_SCl;
+
+	bool deathf;
 public:
 	void BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera,bool stay, bool altAttack, XMFLOAT3 bpos);
 	void Initialize(DirectXCommon* dxcomn, DebugCamera* camera);
 	void Update(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[],Player*player);
-	void Update(DirectXCommon* dxcomn, DebugCamera* camera, Enemy*enemy, Player* player);
+	void Updateo(DirectXCommon* dxcomn, DebugCamera* camera, Enemy*enemy, Player* player);
 	void Update2(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[], Player* player);
-
+	void BossDeath(XMFLOAT3 position,bool f);
 	void HealEffect(bool heal, bool healfs);
 	void HealEffects(bool heal);
 	void HealEffect2(bool heal);
