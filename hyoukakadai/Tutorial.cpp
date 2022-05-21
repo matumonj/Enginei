@@ -180,7 +180,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 
 
-	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time);
+	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
 
 	if (Input::GetInstance()->GetCMove().lY < u_r - a)
 	{

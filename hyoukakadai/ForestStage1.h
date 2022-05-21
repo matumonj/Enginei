@@ -87,10 +87,7 @@ private:
 private:
 	//Plyer
 	XMFLOAT3 Player_Pos = { 10,-18,0 };// = player->GetPosition();
-						  //10, -18, 0
-
-
-	XMFLOAT3 Player_Rot;// = player->GetRotation();
+	XMFLOAT3 Player_Rot={0,-90,0};// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;
 	float moveSpeed = 0.1f;
