@@ -375,9 +375,10 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	player->SetRotation(Player_Rot);
 	player->SetScale(Player_Scl);
 	player->CollisionAttack1(bossenemy.get(), Player_Pos);
-	player->CollisionAttack(enemycolony1, Player_Pos);
-	player->CollisionAttack(enemycolony2, Player_Pos);
 	player->Attack(Player_Pos);
+	player->CollisionAttack(enemycolony1, Player_Pos);
+	
+	player->CollisionAttack(enemycolony2, Player_Pos);
 
 	SetPrm();//パラメータのセット
 

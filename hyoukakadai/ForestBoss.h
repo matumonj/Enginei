@@ -35,6 +35,8 @@ private:
     static XMFLOAT3 Nuclear_Pos;
     float Rot_Nuclear;
     bool NuclearDeayh;
+    int NuclearHP=10;
+    XMFLOAT4 nuclearcolor;
     Object3d* BossArmObj[2] = { nullptr };
     Object3d* BarrelObj = nullptr;
     Model* BarrelModel;

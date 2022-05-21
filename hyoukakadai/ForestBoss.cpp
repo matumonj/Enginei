@@ -135,6 +135,30 @@ void ForestBoss::Update(XMFLOAT3 position)
 		enemyState = State::ALIVE;
 	}
 
+	if (Collision::GetLen(position, NuclearObj->GetPosition()) < 10) {
+		if (Input::GetInstance()->TriggerButtonA()) {
+			
+			if (NuclearHP >= 2) {
+				NuclearHP--;
+			}
+		}
+	}
+	if (NuclearHP == 10) {
+		OldHP = NuclearHP - 1;
+	}
+	if (NuclearHP == OldHP && !damageRec) {
+		damageRec = true;
+		OldHP--;
+	}
+	if (damageRec) {
+		r = 1.0f; g = 0.2f; b = 0.0f;
+		damageRec = false;
+	} else {
+		if (r > 0.0f)r -= 0.1f;
+		if (g < 1.0f)g += 0.1f;
+		if (b < 1.0f)b += 0.1f;
+	}
+	SetHP(NuclearHP);
 	Rot_Nuclear++;
 	BossObject->Update({ 1,1,1,1 });
 	for (int i = 0; i < max; i++) {
@@ -143,7 +167,7 @@ void ForestBoss::Update(XMFLOAT3 position)
 	NuclearObj->SetPosition(Nuclear_Pos);
 	NuclearObj->SetRotation({ 0,Rot_Nuclear,0 });
 	NuclearObj->SetScale({ 2,2,2 });
-	NuclearObj->Update({ 1,1,1,1 });
+	NuclearObj->Update({ r,g,b,1 });
 	Arm_Pos[0] = Position;
 	Arm_Pos[1] = Position;
 									 //Arm_Rot[1].z = rotfollow  ;//60=äpìxí≤êÆóp 180=îΩì]
@@ -448,7 +472,8 @@ void ForestBoss::GetDamage()
 		if (b < 1.0f)b += 0.1f;
 		//BossObject->SetColor({ 1,1.0f,1.0f,1 });
 	}
-	BossObject->SetColor({ r,g,b,1.0f });
+	NuclearObj->SetColor({ r,g,b,1.0f });
+	//BossObject->SetColor({ r,g,b,1.0f });
 }
 void ForestBoss::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
 
@@ -693,7 +718,8 @@ void ForestBoss::UpDownMove(XMFLOAT3 position)
 		Rotation.y = BarrelRotFollow * 60 + 180;
 
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_N)) {
+	if (NuclearHP==1) {
+		
 		NuclearDeayh = true;
 	}
 	DeathMotion();
