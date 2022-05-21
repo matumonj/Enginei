@@ -76,6 +76,7 @@
     <ClCompile Include="SeaScene1.cpp" />
     <ClCompile Include="OBBCollision.cpp" />
     <ClCompile Include="BossScene3.cpp" />
+    <ClCompile Include="LastStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="OBB.h" />
     <ClInclude Include="OBBCollision.h" />
     <ClInclude Include="BossScene3.h" />
+    <ClInclude Include="LastStage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />
