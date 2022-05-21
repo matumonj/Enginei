@@ -196,46 +196,23 @@ void Effects::ImGuiDraw()
 	}
 	ImGui::End();
 }
-void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Player* player)
+void Effects::Updateo(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Player* player)
 {
 	//for (int i = 0; i < 4; i++) {
 		if (enemy != nullptr) {
-			if (enemy->GetState_DEAD() == true) {
-				df = true;
+			if (enemy->GetHP()==0) {
+				deathf = true;
 			}
-			if (df == true) {
+			if (deathf == true) {
 				efk->SetPosition(enemy->GetPosition().x, enemy->GetPosition().y, enemy->GetPosition().z);
 				efk->Load_Effect();
-				df = false;
+				efk->SetScale( 3,3,3 );
+				efk->SetColor(1, 0, 0.2);
+				deathf = false;
 			}
 		}
-		Healefk->SetPosition(player->GetPosition().x - 2, player->GetPosition().y, player->GetPosition().z);
-		Healefk->Load_Effect();
-
-	if (player->GetRot_Left()==true) {
-		attackefk->SetPosition(player->GetPosition().x - 2, player->GetPosition().y, player->GetPosition().z);
-		attackefk->SetRotation(1, 180, 0);
-	} else if (player->GetRot_Right()==true) {
-		attackefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
-		attackefk->SetRotation(1, 90, 0);
-		//Effect_Rot = { 0,0,0 };
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_A)) {
-		attack = true;
-	}
-
-	//コントローラー
-	if ((Input::GetInstance()->TriggerButtonA()||Input::GetInstance()->TriggerKey(DIK_A))||player->GetFlyAttack()==true) {
-		//攻撃処理
-		attack = true;
-	}
-	if (player->GetFlyAttack() == true) {
-		attack = true;
-	}
-	if (attack) {
-		attackefk->Load_Effect();
-		attack = false;
-	}
+		
+	
 	//エフェクトのパラメータセット
 	/*efk->SetPosition(Effect_Pos.x, Effect_Pos.y, Effect_Pos.z);
 	efk->SetRotation(0, 0, 0);
@@ -255,8 +232,8 @@ void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Pla
 
 	//view,projection行列をエフェクトのテクスチャにかける
 	efk->EffekseerUpdate(dxcomn, camera);
-	attackefk->EffekseerUpdate(dxcomn, camera);
-	bossattackefk->EffekseerUpdate(dxcomn, camera);
+	//attackefk->EffekseerUpdate(dxcomn, camera);
+	//bossattackefk->EffekseerUpdate(dxcomn, camera);
 
 	//efk1->EffekseerUpdate(dxcomn, camera);
 
@@ -298,4 +275,17 @@ void Effects::Draw(DirectXCommon*dxcomn)
 	attackefk->EffekseerDraw(dxcomn->GetCmdList());
 	bossattackefk->EffekseerDraw(dxcomn->GetCmdList());
 	//efk1->EffekseerDraw(dxcomn->GetCmdList());
+}
+
+void Effects::BossDeath(XMFLOAT3 position, bool f)
+{
+	if (f) {
+		deathf = true;
+	}
+	if (deathf) {
+		efk->SetPosition(position.x, position.y+10, position.z);
+		efk->Load_Effect();
+		deathf = false;
+		//f = false;
+	}
 }

@@ -49,7 +49,7 @@ void GameUI::UISpriteSet()
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
 	loutpos = { 50,200 };
-	loutscl = { 500,50 };
+	loutscl = { 5000,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
 	Attention[0]->SetSize({ 1500,800 });

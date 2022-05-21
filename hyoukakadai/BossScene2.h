@@ -82,7 +82,7 @@ private:
 	//Effects* effects;
 private:
 	//Plyer
-	XMFLOAT3 Player_Pos = { 20,168,0 };// = player->GetPosition();
+	XMFLOAT3 Player_Pos = { 20,128,0 };// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;
@@ -111,6 +111,7 @@ private:
 	float dz;
 	float xx;
 	bool startSet;
+	int deathcount;
 	//map
 	int blockSize = 2;
 	int map[130][20] = {
@@ -123,7 +124,7 @@ private:
 		{2,2,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,2,2},
 		{2,2,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,2,2},
 		{2,2,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,2,2},
-		{2,2,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,2,2},
+		{2,2,1,1,1,1,1,0,0,30,0,1,0,0,0,0,0,0,2,2},
 		{2,2,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,2,2},
 		{2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2},
 		{2,2,0,0,0,0,0,0,0,0,0,4,4,4,4,4,4,5,2,2},

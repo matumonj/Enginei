@@ -692,4 +692,3 @@ void ForestStage1::Finalize()
 	//delete efk,efk1;
 
 }
-#pragma endreg

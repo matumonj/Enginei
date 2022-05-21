@@ -375,16 +375,18 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	player->SetRotation(Player_Rot);
 	player->SetScale(Player_Scl);
 	player->CollisionAttack1(bossenemy.get(), Player_Pos);
-	player->CollisionAttack(enemycolony1, Player_Pos);
-	player->CollisionAttack(enemycolony2, Player_Pos);
 	player->Attack(Player_Pos);
+	player->CollisionAttack(enemycolony1, Player_Pos);
+	
+	player->CollisionAttack(enemycolony2, Player_Pos);
 
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
+
 	effects->Update(dxCommon, camera, enemycolony1, player);
 	effects->Update2(dxCommon, camera, enemycolony2, player);
-	//effects2->Update(dxCommon, camera, enemycolony2, player);
+	effects->Updateo(dxCommon, camera, bossenemy.get(), player);
 
 	//effects->Update(dxCommon, camera, &bossenemy, player);
 
@@ -403,6 +405,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 			Destroy_unique(bossenemy);
 		}
 	}
+	//effects->BossDeath(bossenemy->GetPosition(), ForestBoss::GetInstance()->GetNucclear());
+
 	float len[10];
 	for (int i = 0; i < 10; i++) {
 		//Collision::GetLen(enemycolony1[i]->GetPosition(),Player_Pos)
@@ -446,7 +450,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	//item->Update(&bossenemy);
 	item->Update(enemycolony1);
 	item2->Update(enemycolony2);
-	Fader::FeedSpriteUpdate();
+	//Fader::FeedSpriteUpdate();
 
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());

@@ -101,8 +101,8 @@ void Player::Attack(XMFLOAT3 playerpos)
 }
 void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 {
-	damageArea.Area_s = { position.x- Area_X_s,position.y - 8 };
-	damageArea.Area_e = { position.x + Area_X_e ,position.y + 5 };
+	damageArea.Area_s = { position.x- Area_X_s,position.y - 3 };
+	damageArea.Area_e = { position.x + Area_X_e ,position.y + 3 };
 
 	//当たり判定
 
@@ -110,7 +110,7 @@ void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 	for (int i = 0; i < 10; i++)
 	{
 		if (enemy[i] != nullptr) {
-			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy[i]->GetPosition().x - 1,enemy[i]->GetPosition().y - 1 }, { enemy[i]->GetPosition().x + 1,enemy[i]->GetPosition().y + 1 }) == true) {
+			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy[i]->GetPosition().x,enemy[i]->GetPosition().y - 1 }, { enemy[i]->GetPosition().x ,enemy[i]->GetPosition().y + 1 }) == true) {
 				enemy[i]->SetDead(true);
 			}
 		}
