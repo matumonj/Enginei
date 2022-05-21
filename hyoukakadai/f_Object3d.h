@@ -102,8 +102,8 @@ protected:
 	bool isPlay = false;
 
 public:
-	void Setpos(XMFLOAT3 pos) { position = pos; }
-	void SetRot(XMFLOAT3 rot) { rotation = rot; }
+	void SetPosition(XMFLOAT3 pos) { position = pos; }
+	void SetRotation(XMFLOAT3 rot) { rotation = rot; }
 
 	//É{Å[ÉìÇÃç≈ëÂêî
 	static const int MAX_BONES = 50;

@@ -78,6 +78,7 @@
     <ClCompile Include="BossScene3.cpp" />
     <ClCompile Include="LastStage.cpp" />
     <ClCompile Include="LastBossScene.cpp" />
+    <ClCompile Include="SeaBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="BossScene3.h" />
     <ClInclude Include="LastStage.h" />
     <ClInclude Include="LastBossScene.h" />
+    <ClInclude Include="SeaBoss.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />

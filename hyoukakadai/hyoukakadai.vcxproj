@@ -215,6 +215,7 @@
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SeaBoss.cpp" />
     <ClCompile Include="SeaScene1.cpp" />
     <ClCompile Include="SecondBoss.cpp" />
     <ClCompile Include="SecondBossScene.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="RaycastHit.h" />
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SeaBoss.h" />
     <ClInclude Include="SeaScene1.h" />
     <ClInclude Include="SecondBoss.h" />
     <ClInclude Include="SecondBossScene.h" />

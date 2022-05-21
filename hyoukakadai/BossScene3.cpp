@@ -11,7 +11,7 @@
 #include"Destroy.h"
 #include"Fader.h"
 #include"BossScene1.h"
-
+#include"SeaBoss.h"
 #include"FirstBossScene.h"
 #include"GamOver.h"
 //コメントアウト
@@ -203,6 +203,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
+	enemy[0] = std::make_unique<SeaBoss>();
 	enemy[0] = std::make_unique<ThrowEnemy>();
 	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[2] = std::make_unique<ThrowEnemy>();
@@ -228,9 +229,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[6]->Initialize();
 
 	mapcol = new Collision();
-	c_postEffect = Default;
-
-	collision = new Collision();
+	
 	SpriteCreate();//
 	ModelCreate();//
 
@@ -245,6 +244,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("player");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -257,6 +257,10 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	object1 = new f_Object3d();
 	object1->Initialize(dxCommon, camera);
 	object1->SetModel(fbxmodel);
+
+	object2 = new f_Object3d();
+	object2->Initialize(dxCommon, camera);
+	object2->SetModel(fbxmodel2);
 	/*audio = new Audio();
 	audio->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
@@ -277,7 +281,8 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	LONG u_r = 32768;
 	LONG a = 30000;
 
-	object1->Setpos({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
+	object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
+	//object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
 
 
 	//左
@@ -295,6 +300,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	object2->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += moveSpeed;
 	}
@@ -342,6 +348,8 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 		}
 	}
 
+	float width;
+	float height;
 	for (int i = 0; i < MAX_X; i++) {
 		for (int j = 0; j < MAX_Y; j++) {
 			if (map[j][i] == 1 || (map[j][i] == 2 && OnFlag == true)) {
@@ -426,11 +434,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 
 	//頂点座標の更新
-	mech->CreateLineTexture(linex, linex2, liney, liney2);
-
-	hari_Pos.x = Line::GetInstance()->getpos().x;
-	hari_Pos.y = Line::GetInstance()->getpos().y;
-
+	
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -453,7 +457,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
 	}
-
+	object2->PlayAnimation();
 
 
 	//}
@@ -527,14 +531,6 @@ void BossScene3::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->PostDraw();
 
 
-	world->PreDraw();
-	//world->Draw();
-	world->PostDraw();
-
-	block->PreDraw();
-	block->Draw();
-	block->PostDraw();
-
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -589,6 +585,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	effects->Draw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
+	object2->Draw(dxcomn->GetCmdList());
 
 }
 #pragma endregion
@@ -596,31 +593,11 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 #pragma region
 void BossScene3::Draw(DirectXCommon* dxcomn)
 {
-	//ポストエフェクトの場合わけ(Bでぼかし Dがデフォルト)
-	switch (c_postEffect)
-	{
-	case Blur://ぼかし　描画準違うだけ
-		postEffect->PreDrawScene(dxcomn->GetCmdList());
-		MyGameDraw(dxcomn);
-		postEffect->PostDrawScene(dxcomn->GetCmdList());
 
-		dxcomn->BeginDraw();
-		postEffect->Draw(dxcomn->GetCmdList());
-		ImGuiDraw();//imguiは最後の方入れとく
-		dxcomn->EndDraw();
-		break;
-
-	case Default://普通のやつ特に何もかかっていない
-		postEffect->PreDrawScene(dxcomn->GetCmdList());
-		postEffect->Draw(dxcomn->GetCmdList());
-		postEffect->PostDrawScene(dxcomn->GetCmdList());
-
-		dxcomn->BeginDraw();
-		MyGameDraw(dxcomn);
-		ImGuiDraw();
-		dxcomn->EndDraw();
-		break;
-	}
+	dxcomn->BeginDraw();
+	MyGameDraw(dxcomn);
+	ImGuiDraw();
+	dxcomn->EndDraw();
 }
 #pragma endregion
 
@@ -654,10 +631,8 @@ void BossScene3::ImGuiDraw()
 		float rf2 = enemy[0]->GetPosition().y;
 		float rrr = player->getdis();
 		//float rf3 = enemy->GetPosition().z;
-		ImGui::SliderInt("positionX", &co, -100, 100);
 		ImGui::SliderFloat("positionY", &rf2, -100, 100);
 		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-		ImGui::SliderInt("positionX", &co, -200, 200);
 		ImGui::SliderFloat("positionY", &rf2, -200, 200);
 		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
 		ImGui::TreePop();
@@ -706,14 +681,7 @@ void BossScene3::ImGuiDraw()
 
 	ImGui::End();
 
-	ImGui::Begin("postEffect");
-	if (ImGui::RadioButton("Blur", &c_postEffect)) {
-		c_postEffect = Blur;
-	}
-	if (ImGui::RadioButton("Default", &c_postEffect)) {
-		c_postEffect = Default;
-	}
-
+	
 	ImGui::End();
 
 }

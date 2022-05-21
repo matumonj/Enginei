@@ -251,7 +251,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	LONG u_r = 32768;
 	LONG a = 30000;
 
-	object1->Setpos({ Player_Pos.x+4.0f,Player_Pos.y,Player_Pos.z });
+	object1->SetPosition({ Player_Pos.x+4.0f,Player_Pos.y,Player_Pos.z });
 
 
 	//ç∂

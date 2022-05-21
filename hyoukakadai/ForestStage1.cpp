@@ -172,8 +172,8 @@ void ForestStage1::SetPrm()
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
 
-	object1->Setpos({ Player_Pos });
-	object1->SetRot({ Player_Rot });
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 }
 #pragma endregion
 

@@ -52,6 +52,7 @@ private:
 	Sprite* setumei = nullptr;
 
 	DebugTxt* debugText;
+	std::unique_ptr<Enemy>bossenemy;
 	std::unique_ptr<Enemy>enemy[10];
 	//Enemy* enemy[2];
 	std::unique_ptr <Effects> effects;
@@ -163,26 +164,8 @@ private:
 	float mapx[20][200];
 	float mapy[20][200];
 
-	float width;
-	float height;
-	float FollowangleX, FollowangleZ, FollowangleR;
-	float FollowSpeed = 1.0f;
-	//float Limit = 0;
-
 	bool jumpFlag = false;
 
-
-	float debuga;
-	float tempx, tempy;
-	float linex, linex2, liney, liney2;
-	float lineangle = 0;
-	float subradius = 0;
-	float Startsubradius = 2.0f;
-	float olddistance = 0;
-	const float LengThenSpeed = 3.0f;
-	const float MaxLen = 30.0f;
-	const float MinLen = 0.0f;
-	bool lengthserchf = false;
 
 
 	bool colf = false;
@@ -242,14 +225,13 @@ public:
 	f_Model* fbxmodel = nullptr;
 	f_Object3d* object1 = nullptr;
 
+	f_Model* fbxmodel2 = nullptr;
+	f_Object3d* object2 = nullptr;
+
 	int c_postEffect;
 
 
 private:
-	int co = 0;
-	enum {
-		Blur,
-		Default,
-	};
+	
 };
 
