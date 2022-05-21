@@ -176,7 +176,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	//camerapositionx = 46.94f;
 	camerapositiony = -4.5f;
-	camerapositionz = -40.51;
+	camerapositionz = -40.51f;
 	bossenemy = std::make_unique<ForestBoss>();
 	enemycolony1[0] = std::make_unique<MobEnemy>();
 	enemycolony1[1] = std::make_unique<MobEnemy>();
@@ -309,7 +309,6 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	GameUI::BossUIUpdate(bossenemy.get());
 
-	float disl;
 	//‚±‚ê‚ÍˆÚ‚·
 
 
@@ -407,7 +406,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	}
 	//effects->BossDeath(bossenemy->GetPosition(), ForestBoss::GetInstance()->GetNucclear());
 
-	float len[10];
+
 	for (int i = 0; i < 10; i++) {
 		//Collision::GetLen(enemycolony1[i]->GetPosition(),Player_Pos)
 			if (enemycolony1[i] != nullptr) {

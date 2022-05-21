@@ -185,7 +185,7 @@ private:
 
 	bool colf = false;
 	float grav = 0.05f;
-	float time = 0.1;
+	float time = 0.1f;
 	//float botttomy = 0;
 private://“_ŒõŒ¹
 	LightGroup* lightGroup = nullptr;

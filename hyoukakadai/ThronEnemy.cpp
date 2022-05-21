@@ -90,7 +90,7 @@ void ThronEnemy::EnemySearchPlayer(Player* player)
 
 void ThronEnemy::Follow(Player* player)
 {
-	float angleX, angleZ, angleR;
+	float angleX,  angleR;
 	float centerSpeed = 0.1f;
 	angleX = (player->GetPosition().x - Position.x);
 	//angleZ = (player->GetPosition().y - Position.y);
@@ -164,7 +164,7 @@ void ThronEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 
 				} else {
 					movespeed = 0.1f;
-					grav = 0.03;
+					grav = 0.03f;
 				}
 
 				//ÉvÉåÉCÉÑÅ[ÇÃç∂ï”

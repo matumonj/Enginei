@@ -220,7 +220,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//‚±‚Ì‚â‚è•ûŒã‚Å’¼‚·
 	
-		float disl;
 		//“ü—Íˆ—‚æ‚èŒã‚É“–‚½‚è”»’è‚ð•`‚¯
 			//“ü—Íˆ—‚æ‚èŒã‚É“–‚½‚è”»’è‚ð•`‚¯
 		Collision::ColMap1(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);

@@ -211,11 +211,11 @@ void SeaScene1::Initialize(DirectXCommon* dxCommon)
 	enemy[6] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
 
-	enemy[6]->Setposition({ 270,-18.2,0 });
-	enemy[5]->Setposition({ 170,-18.2,0 });
-	enemy[4]->Setposition({ 320,-14.2,0 });
-	enemy[3]->Setposition({ 80,-4.2,0 });
-	enemy[2]->Setposition({ 250,-4.2,0 });
+	enemy[6]->Setposition({ 270.0f,-18.2f,0.0f });
+	enemy[5]->Setposition({ 170.0f,-18.2f,0.0f });
+	enemy[4]->Setposition({ 320.0f,-14.2f,0.0f });
+	enemy[3]->Setposition({ 80.0f,-4.2f,0.0f });
+	enemy[2]->Setposition({ 250.0f,-4.2f,0.0f });
 	enemy[1]->Setposition({ 350, -18, 0 });
 	enemy[0]->Setposition({ 50, -15, 0 });
 	enemy[0]->Initialize();
@@ -320,10 +320,6 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 	///‚±‚ê‚æ‚èã‚É“ü—Íˆ—‚ğ‚©‚¯
 	////“–‚½‚è”»’è
 
-	float disl;
-
-	//“ü—Íˆ—‚æ‚èŒã‚É“–‚½‚è”»’è‚ğ•`‚¯
-	//aaaaaaa
 
 	
 
@@ -358,7 +354,7 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 				}
 				else {
 					moveSpeed = 0.2f;
-					grav = 0.03;
+					grav = 0.03f;
 				}
 
 				//ƒvƒŒƒCƒ„[‚Ì¶•Ó

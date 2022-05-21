@@ -271,7 +271,7 @@ private:
 	float camerapositionz;
 	bool colf = false;
 	float grav = 0.03f;
-	float time = 0.1;
+	float time = 0.1f;
 	OBB pobb;// = nullptr;
 	
 	int Ontime = 300;

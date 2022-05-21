@@ -146,7 +146,7 @@ void FirstBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200]
 
 				} else {
 					bossmovespeed = 0.2f;
-					bossgrav = 0.03;
+					bossgrav = 0.03f;
 				}
 
 				//ƒvƒŒƒCƒ„[‚Ì¶•Ó
@@ -312,9 +312,9 @@ void FirstBoss::RushAttack(Player* player)
 void FirstBoss::RushAttackStay(Player* player)
 {
 	if (shaketime != 0) {
-		oshake = rand() % 7 - 14;
-		oshakex = rand() % 7 - 14;
-		oshakey = rand() % 7 - 14;
+		oshake = (float)(rand() % 7 - 14);
+		oshakex = (float)(rand() % 7 - 14);
+		oshakey = (float)(rand() % 7 - 14);
 
 		shakex = oshakex * 0.05f;
 		shakey = oshakey * 0.05f;
@@ -396,7 +396,7 @@ void FirstBoss::appearance(float& camerapos)
 		camerapos = Easing::EaseOut(cameratime, camerapos, 35.37f);
 		//bossAction = None;
 	} else {
-		startcount += 0.01;
+		startcount += 0.01f;
 		camerapos = 67.235f;
 		bossjumpflag = true;
 		if (startcount > 2.0f) {

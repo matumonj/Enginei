@@ -79,7 +79,7 @@ protected:
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuffTransform;
 	//スケール
-	XMFLOAT3 scale = { 0.01,0.01,0.01 };
+	XMFLOAT3 scale = { 0.01f,0.01f,0.01f };
 	//回転
 	XMFLOAT3 rotation = { 0, 0, 0 };
 	//座標

@@ -127,7 +127,7 @@ void SecondBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 
 				} else {
 					bossmovespeed = 0.2f;
-					bossgrav = 0.03;
+					bossgrav = 0.03f;
 				}
 
 				//ƒvƒŒƒCƒ„[‚Ì¶•Ó
