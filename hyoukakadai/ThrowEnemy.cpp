@@ -52,7 +52,7 @@ void ThrowEnemy::Initialize()
 void ThrowEnemy::Update(XMFLOAT3 position)
 {
 	if (jumpflag == true) {
-		Position.y += 0.2f;
+	//	Position.y += 0.2f;
 		time += 0.02f;
 	}
 	if (HP <= 0) {
@@ -110,7 +110,7 @@ void ThrowEnemy::Attack(Player* player)
 		}
 	}
 	//bi-mu
-	Motion(player);
+	//Motion(player);
 }
 
 void ThrowEnemy::Draw(DirectXCommon* dxcomn)
@@ -153,38 +153,103 @@ void ThrowEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3
 	searchTexture->Update(matview, matprojection);
 };
 void ThrowEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)
-{}
-void ThrowEnemy::Motion(Player* player)
 {
-	if (!followf) {
-		jumpcount++;
-		if (jumpcount % 200 == 0) {
-			jumpflag = true;
-			jumpcount = 0;
-		}
-		//movement++;
-		if (!jumpflag) {
-			Position.x += pmmove * movespeed;
-		}
-		if (movement > 20) {
-			pmmove = -1;
-			movereturn = true;
-		}
-		if (movereturn) {
-			movement--;
-			if (movement < -200) {
-				pmmove = 1;
-				movereturn = false;
-			}
-		} else {
-			movement++;
-			if (movement > 100) {
-				pmmove = -1;
-				movereturn = true;
+	//grav-grav
+	Old_Pos = Position;
+	//time-time
+	//movespeed-movespeed
+	float height;
+	float width;
+	XMFLOAT3 Player_Scl = { 1,1,1 };
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			if (map[j][i] == 1 || map[j][i] == 2) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+
+				if ((Position.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Position.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
+					if (Old_Pos.y > mapy[j][i] && Position.y - Player_Scl.y < mapy[j][i] + height) {
+						Position.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						jumpflag = false;
+						//	Line::GetInstance()->SetBondflag(false);
+						break;
+					} else if (Old_Pos.y <mapy[j][i] && Position.y + Player_Scl.y>mapy[j][i] - height) {
+						Position.y = mapy[j][i] - (Player_Scl.y + height);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+
+				} else {
+					movespeed = 0.1f;
+					grav = 0.03;
+				}
+
+				//プレイヤーの左辺
+				if ((Position.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Position.y + Player_Scl.y)) {
+					if (Position.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						//bossjumpflag = true;
+						Position.y = Position.y + 0.001f;
+						Position.x = width + mapx[j][i] + Player_Scl.x;
+
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Position.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+						//bossjumpflag = true;
+
+						Position.x = mapx[j][i] - (Player_Scl.x + width);
+						//Line::GetInstance()->SetBondflag(false);
+						break;
+					}
+				} else {
+					movespeed = 0.1f;
+				}
 			}
 		}
 	}
+
+	time += 0.04f;
+	Position.y -= grav; //;* time * time;
 }
+void ThrowEnemy::Motion(Player* player)
+{
+	if (Collision::GetLen(player->GetPosition(), Position) < 10) {
+		if (!followf) {
+			jumpcount++;
+			if (jumpcount % 200 == 0) {
+				jumpflag = true;
+				jumpcount = 0;
+			}
+			//movement++;
+			if (!jumpflag) {
+				Position.x += pmmove * movespeed;
+			}
+			if (movement > 20|| Collision::GetLen_X(player->GetPosition().x, Position.x) < 3) {
+				pmmove = -1;
+				movereturn = true;
+			}
+			if (movereturn) {
+				movement--;
+				if (movement < -200|| Collision::GetLen_X(player->GetPosition().x, Position.x) < 3) {
+					pmmove = 1;
+					movereturn = false;
+				}
+			} else {
+				movement++;
+				if (movement > 100|| Collision::GetLen_X(player->GetPosition().x, Position.x) < 3) {
+					pmmove = -1;
+					movereturn = true;
+				}
+			}
+		}
+	}
+	}
 void ThrowEnemy::EnemySearchPlayer(Player* time)
 {
 

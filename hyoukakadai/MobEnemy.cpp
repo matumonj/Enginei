@@ -282,7 +282,7 @@ void MobEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20]
 	}
 
 	time += 0.04f;
-	Position.y -= grav; //;* time * time;
+	Position.y -= grav;// *time* time;
 }
 
 void MobEnemy::enemyappearance(TyutorialSprite* sprite)

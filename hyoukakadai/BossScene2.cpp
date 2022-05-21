@@ -181,11 +181,11 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	enemycolony1[0] = std::make_unique<MobEnemy>();
 	enemycolony1[1] = std::make_unique<MobEnemy>();
 	enemycolony1[2] = std::make_unique<MobEnemy>();
-	enemycolony1[3] = std::make_unique<MobEnemy>();
-	enemycolony1[4] = std::make_unique<MobEnemy>();
+	enemycolony1[3] = std::make_unique<ThrowEnemy>();
+	enemycolony1[4] = std::make_unique<ThrowEnemy>();
 	enemycolony1[5] = std::make_unique<MobEnemy>();
 	enemycolony1[6] = std::make_unique<MobEnemy>();
-	enemycolony1[7] = std::make_unique<MobEnemy>();
+	enemycolony1[7] = std::make_unique<ThrowEnemy>();
 	enemycolony1[8] = std::make_unique<MobEnemy>();
 	enemycolony1[9] = std::make_unique<MobEnemy>();
 
@@ -411,7 +411,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < 10; i++) {
 		//Collision::GetLen(enemycolony1[i]->GetPosition(),Player_Pos)
 			if (enemycolony1[i] != nullptr) {
-				//if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
+				if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
 
 				enemycolony1[i]->Motion(player);
 				enemycolony1[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
@@ -421,7 +421,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 				//‚à‚µ“G‚ªŽ€‚ñ‚¾‚ç”jŠü
 				if (enemycolony1[i]->GetState_DEAD() == true) {
 					Destroy_unique(enemycolony1[i]);
-				///}
+				}
 			}
 		}
 		if (enemycolony2[i] != nullptr) {
