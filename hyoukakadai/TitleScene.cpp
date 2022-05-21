@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include"Input.h"
 #include"PlayScene.h"
+#include"StageSelect.h"
 #include"DesertField.h"
 #include"Tutorial.h"
 #include"SceneManager.h"
@@ -29,7 +30,7 @@ void TitleScene::Update(DirectXCommon* dxCommon)
 	//ENTERで次のシーンへ
 	if (Input::GetInstance()->TriggerButtonA()) {//押されたら
 		Fader::feedIn(1.0,0.05f);
-		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 	//if (Input::GetInstance()->TriggerKey(DIK_F))

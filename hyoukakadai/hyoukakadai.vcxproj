@@ -193,6 +193,7 @@
     <ClCompile Include="GamOver.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="LastStage.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="GamOver.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="LastStage.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
