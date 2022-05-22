@@ -12,7 +12,7 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 	//Scene = new TitleScene();
 	//初期シーン
 
-	BaseScene*scene_ = new BossScene2(sceneManger);
+	BaseScene*scene_ = new BossScene3(sceneManger);
 
 	sceneManger->SetnextScene(scene_);
 
@@ -42,3 +42,4 @@ void MyGame::Finalize()
 {
 	Framework::Finalize();
 }
+

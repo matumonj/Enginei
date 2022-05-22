@@ -426,6 +426,19 @@ void FirstBoss::GetDamage()
 		//BossObject->SetColor({ 1,1.0f,1.0f,1 });
 	}
 	BossObject->SetColor({ r,g,b,1.0f });
+
+	if (HP == 1) {
+		BossObject->SetColor({ 1,0,0,1.0f });
+
+		dtime++;
+		if (Rotation.z > -180) {
+			Rotation.z - 5*dtime;
+		}
+		else {
+			SetHP(0);
+			dtime = 0;
+		}
+	}
 }
 void FirstBoss::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
 	

@@ -52,6 +52,7 @@ class FirstBoss :
         int time2 = 0;
         float rottime = 0;
       static float startcount;
+      int dtime;
     public:
         static FirstBoss* GetInstance();
 

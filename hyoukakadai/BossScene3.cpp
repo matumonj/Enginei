@@ -35,18 +35,29 @@ void BossScene3::SpriteCreate()
 	GameUI::AllowUISet();
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
-	Texture::LoadTexture(1, L"Resources/background.png");
+	Sprite::LoadTexture(51, L"Resources/waterground.png");
 	Sprite::LoadTexture(1, L"Resources/haikei2.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
+	nTexture::LoadTexture(50, L"Resources/Buble.png");
 
 	mech = std::make_unique<Texture>();
 	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	zukki = std::make_unique<Texture>();
 	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
+	for (int i = 0; i < 8; i++) {
+		BubbleSprite[i] = nTexture::Create(50, { 0.0f,0.0f,0 }, { 200,200,0 }, {1,1,1,0.4});
+		BublePos[i].x = Player_Pos.x+30;
+		randPosY[i] = rand() %30-30;
+		RandAngle[i] = (rand() % 50 + 10)*0.05f;
+		BublemoveX[i] = rand() % 10 + 4;
+		BublemoveX[i] * 0.01f;
+		cycleMove[i] = rand() % 250 + 10;
+	}
+	background[0] = Sprite::Create(51, { 0.0f,0.0f });
+	background[1] = Sprite::Create(51, { 1920.0f,0.0f });
 
-	background = Sprite::Create(1, { 0.0f,0.0f });
-	setumei = Sprite::Create(2, { 0.0f,0.0f });
+	//setumei = Sprite::Create(2, { 0.0f,0.0f });
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -123,16 +134,23 @@ void BossScene3::ModelCreate()
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
 	//Fader::SetFeedSprite();
+	BckGrnd[0] = 0;
+	BckGrnd[1] = 1900;
 }
 #pragma endregion
 
 #pragma region 各パラメータのセット
 void BossScene3::SetPrm()
 {
-	setumei->SetPosition({ 0, 400 });
-	setumei->SetSize({ 500,300 });
-	setumei->setcolor({ 1,1,1,1 });
+	//setumei->SetPosition({ 0, 400 });
+	//setumei->SetSize({ 500,300 });
+	//setumei->setcolor({ 1,1,1,1 });
 
+	for (int i = 0; i < 8; i++) {
+		BubbleSprite[i]->SetPosition({ BublePos[i].x,BublePos[i].y,5 });
+		BubbleSprite[i]->SetScale({ 1,1,0 });
+		BubbleSprite[i]->SetColor({ 1,1,1,0.4 });
+	}
 	hari->SetPosition({ hari_Pos.x + 2.0f,hari_Pos.y,hari_Pos.z });
 
 	half_height = player->GetScale().y;
@@ -159,10 +177,11 @@ void BossScene3::SetPrm()
 	world->SetScale({ 1,1,1 });
 
 	sentan->SetPosition({ sentan_Pos });
-
-	background->SetPosition({ 0, 0 });
-	background->SetSize({ WinApp::window_width,WinApp::window_height });
-	background->setcolor({ 1,1,1,1 });
+	for (int i = 0; i < 2; i++) {
+		background[i]->SetPosition({ BckGrnd[i],0});
+		background[i]->SetSize({ WinApp::window_width,WinApp::window_height });
+		background[i]->setcolor({ 1,1,1,0.2 });
+	}
 }
 #pragma endregion
 
@@ -240,8 +259,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 
 	effects->Initialize(dxCommon, camera);
 	attackeffects->Initialize(dxCommon, camera);
-
-
+	
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
 	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("player");
@@ -296,8 +314,15 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 
 
-
-
+	BckGrnd[0] -= 10;
+	BckGrnd[1] -= 10;
+	if (BckGrnd[0] <= -1900) {
+		BckGrnd[0] = 1900;
+	}
+	if (BckGrnd[1] <= -1900) {
+		BckGrnd[1] = 1900;
+	}
+	BubleMove();
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 	object2->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
@@ -479,6 +504,10 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 	SetPrm();//パラメータのセット
 
+	for (int i = 0; i < 8; i++) {
+	
+		BubbleSprite[i]->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
+	}
 	objUpdate();//オブジェクトの更新処理
 	effects->HealEffects(item->ColItem());
 	effects->Update(dxCommon, camera, enemy, player);
@@ -554,13 +583,7 @@ void BossScene3::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 {
 
-	Sprite::PreDraw(dxcomn->GetCmdList());
-	background->Draw();
-	//setumei->Draw();
-	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
-	Sprite::PostDraw(dxcomn->GetCmdList());
-
-
+	
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
 
@@ -582,8 +605,23 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
 	//FBXの描画
-	object1->Draw(dxcomn->GetCmdList());
-	object2->Draw(dxcomn->GetCmdList());
+	//object1->Draw(dxcomn->GetCmdList());
+	//object2->Draw(dxcomn->GetCmdList());
+	nTexture::PreDraw(dxcomn->GetCmdList());
+	for (int i = 0; i < 8; i++) {
+		BubbleSprite[i]->Draw();
+	}
+	//dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	background[0]->Draw();
+	background[1]->Draw();
+
+	//setumei->Draw();
+	//dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
+
+	nTexture::PostDraw();
 
 }
 #pragma endregion
@@ -639,8 +677,8 @@ void BossScene3::ImGuiDraw()
 	float liney = Line::GetInstance()->getpos().y;
 	float rr = player->GetPosition().x;
 	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -200, 200);
-		ImGui::SliderFloat("positionY", &liney, -200, 200);
+		ImGui::SliderFloat("positionX", &BublePos[0].x, -200, 200);
+		ImGui::SliderFloat("positionY", &BublePos[0].y, -200, 200);
 		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
 		ImGui::SliderFloat("grav", &grav, -200, 200);
 		ImGui::SliderFloat("time", &time, -200, 200);
@@ -690,5 +728,21 @@ void BossScene3::Finalize()
 
 	//delete efk,efk1;
 
+}
+
+void BossScene3::BubleMove()
+{
+	float PI = 3.14;
+	for (int i = 0; i < 8; i++) {
+		//RandAngle[i] * 0.01f;
+		countMove[i]++;
+		const float moveCycle = 120.0f;
+			BublePos[i].y = (randPosY[i] ) + sin(PI * 2 / moveCycle * countMove[i]) * RandAngle[i];
+			BublePos[i].x -= BublemoveX[i]*0.01f;
+
+			if (BublePos[i].x < Player_Pos.x-30) {
+				BublePos[i].x = Player_Pos.x + 30;
+			}
+		}
 }
 #pragma endregion

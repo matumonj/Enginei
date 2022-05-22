@@ -193,6 +193,7 @@
     <ClCompile Include="GamOver.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="LastBossScene.cpp" />
     <ClCompile Include="LastStage.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="GamOver.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="LastBoss.h" />
     <ClInclude Include="LastBossScene.h" />
     <ClInclude Include="LastStage.h" />
     <ClInclude Include="Line.h" />

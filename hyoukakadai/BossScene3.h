@@ -47,10 +47,9 @@ private:
 	const int MAX_Y = 20;
 private:
 	DirectXCommon* dxcomn;
-	Sprite* background = nullptr;
-
-	Sprite* setumei = nullptr;
-
+	Sprite* background[2] = { nullptr };
+	float BckGrnd[2];
+	
 	DebugTxt* debugText;
 	std::unique_ptr<Enemy>bossenemy;
 	std::unique_ptr<Enemy>enemy[10];
@@ -61,6 +60,8 @@ private:
 
 	std::unique_ptr <Texture>mech = nullptr;
 	std::unique_ptr <Texture>zukki = nullptr;
+
+	nTexture* BubbleSprite[8];
 
 	Player* player;
 	//std::unique_ptr<Object3d>player[10];
@@ -229,8 +230,15 @@ public:
 	f_Object3d* object2 = nullptr;
 
 	int c_postEffect;
-
-
+	void BubleMove();
+	private:
+	float cycleY[8];
+	float BublemoveX[8];
+	XMFLOAT2 BublePos[8];
+	int countMove[8];
+	float randPosY[8];
+	float RandAngle[8];
+	float cycleMove[8];
 private:
 	
 };
