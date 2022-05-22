@@ -71,8 +71,10 @@ void StageSelect::ModelCreate()
 	obj_Rot = { 0,0,0 };
 	for (int i = 0; i < 6; i++) {
 		StageSprite[i]->SetAnchorPoint({ 0.5,0.5 });
+		StageSprite[i]->SetPosition({ -300,-300 });
 	}
 	TargetSprite->SetAnchorPoint({ 0.5,0.5 });
+	TargetSprite->SetPosition({ -300,-300 });
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -193,7 +195,7 @@ void StageSelect::Draw(DirectXCommon* dxcomn)
 
 void StageSelect::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
+	/*ImGui::Begin("Obj1");
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("light_position")) {
@@ -211,7 +213,7 @@ void StageSelect::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-	ImGui::End();
+	ImGui::End();*/
 
 }
 #pragma region 解放部分
