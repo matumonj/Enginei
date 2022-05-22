@@ -180,7 +180,7 @@ void BossScene3::SetPrm()
 	for (int i = 0; i < 2; i++) {
 		background[i]->SetPosition({ BckGrnd[i],0});
 		background[i]->SetSize({ WinApp::window_width,WinApp::window_height });
-		background[i]->setcolor({ 1,1,1,0.2 });
+		background[i]->setcolor({ 1,1,1,0.4 });
 	}
 }
 #pragma endregion
@@ -293,7 +293,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 {
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y + 10;
+	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
 	LONG u_r = 32768;
