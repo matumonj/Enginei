@@ -50,7 +50,7 @@ void SeaBoss::Attack(Player* player)
 //èâä˙âªèàóù
 void SeaBoss::Initialize()
 {
-	Position = { 67,-4,0 };
+	//Position = { 67,-4,0 };
 	Boss_Scl = { 2,2,2 };
 	Boss_Rot = { 0,-180,0 };
 	Rotation = { 0,0,0 };
@@ -66,24 +66,26 @@ void SeaBoss::Update(XMFLOAT3 position)
 	
 	Old_Pos = Position;
 
+	Rotation.z += 50;
+	Rotation.y = 90;
 	
 	if (HP <= 0) {
 		enemyState = State::DEAD;
 	} else {
 		enemyState = State::ALIVE;
 	}
-
+	Position = { position.x - 10, position.y, position.z };
 	
 	//Arm_Rot[1].z = rotfollow  ;//60=äpìxí≤êÆóp 180=îΩì]
 	GetDamage();
 	//ÉÇÉu
 	//Rotation.x = 30;
-	Position.x = 20;
+	//Position.x = 20;
 	Position.z = 0;
 	UpDownMove(position);
-	BossObject->SetPosition(Position);
+	//BossObject->SetPosition(Position);
 	//BossObject->SetScale({ 2,2,2 });
-	BossObject->SetRotation(Rotation);
+	//BossObject->SetRotation(Rotation);
 	
 }
 
@@ -102,7 +104,17 @@ void SeaBoss::Finalize()
 
 }
 void SeaBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y)
-{}
+{
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 200; j++) {
+			if (map[i][j] == 1) {
+				if (Collision::GetLen(Position, tst[i][j]->GetPosition()) < 13) {
+					map[i][j] = 0;
+				}
+			}
+		}
+	}
+}
 
 void SeaBoss::Motion(Player* player)
 {
@@ -171,6 +183,12 @@ void SeaBoss::Motion(Player* player)
 	default:
 		break;
 	}
+	if (Rotation.z < -80) {
+		RotMove = 1;
+	} else if (Rotation.z > -20) {
+		RotMove = -1;
+	}
+
 
 }
 

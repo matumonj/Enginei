@@ -175,9 +175,10 @@
         BossAction bossAction = StartBattle;
         static bool stayflag;
         int deathcount;
+        int RotMove=1;
     public:
         bool GetAltStay() { return stayflag; }
-       
+        XMFLOAT3 Getrotation() { return Rotation; }
     };
 
 

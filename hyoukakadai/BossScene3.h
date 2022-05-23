@@ -57,7 +57,9 @@ private:
 	std::unique_ptr <Effects> effects;
 	std::unique_ptr <Effects> attackeffects;
 	Collision* collision = nullptr;
-
+	float RotMove=1;
+	XMFLOAT3 BRotation;
+	float v = 0;
 	std::unique_ptr <Texture>mech = nullptr;
 	std::unique_ptr <Texture>zukki = nullptr;
 

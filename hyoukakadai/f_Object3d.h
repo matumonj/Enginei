@@ -100,8 +100,10 @@ protected:
 	FbxTime currentTime;
 	//アニメーション再生中
 	bool isPlay = false;
-
+	int ctime = 1;
 public:
+
+	void setcounter(int time) { ctime = time; }
 	void SetPosition(XMFLOAT3 pos) { position = pos; }
 	void SetRotation(XMFLOAT3 rot) { rotation = rot; }
 	void SetScale(XMFLOAT3 scl) { scale = scl; }

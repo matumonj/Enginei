@@ -224,7 +224,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
 	enemy[0] = std::make_unique<SeaBoss>();
-	enemy[0] = std::make_unique<ThrowEnemy>();
+	//enemy[0] = std::make_unique<ThrowEnemy>();
 	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[2] = std::make_unique<ThrowEnemy>();
 	enemy[3] = std::make_unique<ThrowEnemy>();
@@ -239,7 +239,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[3]->Setposition({ 80,-4.2f,0 });
 	enemy[2]->Setposition({ 250,-4.2f,0 });
 	enemy[1]->Setposition({ 350, -18, 0 });
-	enemy[0]->Setposition({ 50, -15, 0 });
+	//enemy[0]->Setposition({ 50, -15, 0 });
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
 	enemy[2]->Initialize();
@@ -481,9 +481,10 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object2->PlayAnimation();
 	}
-	object2->SetRotation({ 0,-90,-50 });
-	object2->SetPosition({ Player_Pos.x - 10,Player_Pos.y,Player_Pos.z });
-	object2->SetScale({ 0.1,0.1,0.1 });
+	//FbxTime time = 0.1f;
+	object2->setcounter(2);
+	//zrot += 1;
+	
 	//}
 	//ƒJƒƒ‰ŠÖŒW‚Ìˆ—
 	if (Player_Pos.x <= 27.0f) {
@@ -551,6 +552,18 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
+	
+	if (BRotation.z < -90) {
+		RotMove = 1;
+	} else if (BRotation.z > 0) {
+		RotMove = -1;
+	}
+	
+	BRotation.y = -90;
+	BRotation.z += RotMove * 1;
+	object2->SetRotation(BRotation);
+	object2->SetPosition(enemy[0]->GetPosition());
+	object2->SetScale({ 0.11,0.13,0.11 });
 	//Player_Pos.y+=moves
 	item->HealEfficasy(player);
 	item->Update(enemy);
