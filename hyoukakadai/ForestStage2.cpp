@@ -296,116 +296,17 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
-	LONG u_r = 32768;
-	LONG a = 30000;
 
 	object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
-
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
 		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
 	}
 
-	///////// コントローラー //////////
-	// スティックの方向判定
-	// 無反応範囲
-
-
-
-
-
-
-	//FBXモデルの更新
-	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= moveSpeed;
-	}
-
-	if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-
-		jumpFlag = true;
-		// 左に傾けた
-		//Player_Pos.x -= moveSpeed;
-
-	}
-
-
-	if (jumpFlag == true) {
-		Player_Pos.y += 0.12f;
-		time += 0.02f;
-	}
-
-
-	///これより上に入力処理をかけ
-	////当たり判定
-
-
-
 	//入力処理より後に当たり判定を描け
-	//aaaaaaa
-
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 	Collision::CollisionMap(map, reef, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
 
-	//for (int i = 0; i < MAX_X; i++) {
-	//	for (int j = 0; j < MAX_Y; j++) {
-	//		if (map[j][i] == 1 || (map[j][i] == 2 )) {
-	//			mapx[j][i] = tst[j][i]->GetPosition().x;
-	//			mapy[j][i] = tst[j][i]->GetPosition().y;
-	//			height = tst[j][i]->GetScale().y;
-	//			width = tst[j][i]->GetScale().x;
-	//			if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-	//				if (Line::GetInstance()->Gettriggerflag() == true) {
-	//					Line::GetInstance()->Setmapcol(true);
-	//					Line::GetInstance()->Setelf(true);
-	//				}
-	//			}
-	//			if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-	//				if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-	//					Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-	//					//moveSpeed = 0;
-	//					grav = 0.0f;
-	//					time = 0;
-	//					jumpFlag = false;
-	//					break;
-	//				}
-	//				else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-	//					Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-	//					break;
-	//				}
-	//			}
-	//			else {
-	//				moveSpeed = 0.2f;
-	//				grav = 0.03;
-	//			}
-	//			//プレイヤーの左辺
-	//			if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-	//				if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-	//					Player_Pos.y = Player_Pos.y + 0.001f;
-	//					Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-	//					//grav = 0.0f;
-	//					//time = 0;
-	//					break;
-	//				}
-	//				//プレイヤーの右辺
-	//				else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-	//					Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-	//					//grav = 0.0f;
-	//					//time = 0;
-	//					//moveSpeed = 0;
-	//					break;
-	//				}
-	//			}
-	//			else {
-	//				moveSpeed = 0.2f;
-	//			}
-	//		}
-	//	}
-	//}
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
 		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
@@ -418,10 +319,15 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	}
 
 #pragma region 線の処理
+	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
+		//grav = 0.0f;
+	}
+	else {
+		grav = 0.03f;
+	}
 
 
-
-	time += 0.01f;
+	time += 0.04f;
 	Player_Pos.y -= grav * time * time;
 
 
