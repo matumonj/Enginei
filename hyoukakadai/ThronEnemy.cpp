@@ -64,7 +64,7 @@ void ThronEnemy::Update(XMFLOAT3 position)
 	ThronObject->SetScale({ 0.5,0.5,0.5 });
 	ThronObject->SetRotation({ 0,180,0 });
 
-	//Follow(position);
+	
 	ThronObject->Update({ 1,1,1,1 });
 	ThronObject->SetPosition(Position);
 
@@ -90,10 +90,12 @@ void ThronEnemy::EnemySearchPlayer(Player* player)
 
 void ThronEnemy::Follow(Player* player)
 {
-	float angleX,  angleR;
+	frame++;
+
+	float angleX, angleY, angleR;
 	float centerSpeed = 0.1f;
 	angleX = (player->GetPosition().x - Position.x);
-	//angleZ = (player->GetPosition().y - Position.y);
+	angleY = (player->GetPosition().y - Position.y);
 	angleR = sqrtf((Position.x - player->GetPosition().x) * (Position.x - player->GetPosition().x));
 	if (angleR < 2) {
 		
@@ -103,6 +105,7 @@ void ThronEnemy::Follow(Player* player)
 	}
 	if (followf) {
 		Position.x += (angleX / angleR) * movespeed;
+		Position.y += (angleX / angleR) * movespeed;
 	}
 	//Position.x =player.x;
 	//Position.y =player.y;
@@ -118,6 +121,7 @@ void ThronEnemy::Follow(Player* player)
 
 void ThronEnemy::Motion(Player* player)
 {
+	Follow(player);
 	if (!followf) {
 		jumpcount++;
 		if (jumpcount % 50 == 0) {
@@ -132,68 +136,7 @@ void ThronEnemy::Attack(Player* player)
 }
 void ThronEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y)
 {
-	//grav-grav
-	Old_Pos = Position;
-	//time-time
-	//movespeed-movespeed
-	float height;//
-	float width;
-	XMFLOAT3 Player_Scl = { 1,1,1 };
-	for (int i = 0; i < X; i++) {
-		for (int j = 0; j < Y; j++) {
-			if (map[j][i] == 1) {
-				mapx[j][i] = tst[j][i]->GetPosition().x;
-				mapy[j][i] = tst[j][i]->GetPosition().y;
-				height = tst[j][i]->GetScale().y;
-				width = tst[j][i]->GetScale().x;
-
-				if ((Position.x + Player_Scl.x > mapx[j][i] - (width - movespeed) && Position.x - Player_Scl.x < mapx[j][i] + (width - movespeed))) {
-					if (Old_Pos.y > mapy[j][i] && Position.y - Player_Scl.y < mapy[j][i] + height) {
-						Position.y = height + mapy[j][i] + Player_Scl.y;
-						//moveSpeed = 0;
-						grav = 0.0f;
-						time = 0;
-						jumpflag = false;
-						//	Line::GetInstance()->SetBondflag(false);
-						break;
-					} else if (Old_Pos.y <mapy[j][i] && Position.y + Player_Scl.y>mapy[j][i] - height) {
-						Position.y = mapy[j][i] - (Player_Scl.y + height);
-						//Line::GetInstance()->SetBondflag(false);
-						break;
-					}
-
-				} else {
-					movespeed = 0.1f;
-					grav = 0.03f;
-				}
-
-				//プレイヤーの左辺
-				if ((Position.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Position.y + Player_Scl.y)) {
-					if (Position.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-						//jumpflag = true;
-						Position.y = Position.y + 0.001f;
-						Position.x = width + mapx[j][i] + Player_Scl.x;
-
-						//Line::GetInstance()->SetBondflag(false);
-						break;
-					}
-					//プレイヤーの右辺
-					else if (Position.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-						//jumpflag = true;
-
-						Position.x = mapx[j][i] - (Player_Scl.x + width);
-						//Line::GetInstance()->SetBondflag(false);
-						break;
-					}
-				} else {
-					movespeed = 0.1f;
-				}
-			}
-		}
-	}
-
-	time += 0.04f;
-	Position.y -= grav * time * time;
+	
 }
 
 void ThronEnemy::enemyappearance(TyutorialSprite* sprite)

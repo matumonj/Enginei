@@ -20,6 +20,7 @@ class ThronEnemy :
         ~ThronEnemy();
 
     private:
+        float frame;
         nTexture* searchTexture;
         int searchCount = 0;
         bool searchFlag;

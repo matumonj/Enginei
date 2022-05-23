@@ -77,7 +77,7 @@ void SeaBoss::Update(XMFLOAT3 position)
 	//Arm_Rot[1].z = rotfollow  ;//60=äpìxí≤êÆóp 180=îΩì]
 	GetDamage();
 	//ÉÇÉu
-	Rotation.x = 30;
+	//Rotation.x = 30;
 	Position.x = 20;
 	Position.z = 0;
 	UpDownMove(position);

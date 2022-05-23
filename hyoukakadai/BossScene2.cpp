@@ -7,6 +7,7 @@
 #include"MobEnemy.h"
 #include"BossEnemy.h"
 #include"ThrowEnemy.h"
+#include"ThronEnemy.h"
 #include"Line.h"
 #include"ForestBoss.h"
 #include"Destroy.h"
@@ -178,7 +179,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	camerapositiony = -4.5f;
 	camerapositionz = -40.51f;
 	bossenemy = std::make_unique<ForestBoss>();
-	enemycolony1[0] = std::make_unique<MobEnemy>();
+	enemycolony1[0] = std::make_unique<ThronEnemy>();
 	enemycolony1[1] = std::make_unique<MobEnemy>();
 	enemycolony1[2] = std::make_unique<MobEnemy>();
 	enemycolony1[3] = std::make_unique<ThrowEnemy>();

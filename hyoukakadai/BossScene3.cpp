@@ -7,6 +7,7 @@
 #include"MobEnemy.h"
 #include"BossEnemy.h"
 #include"ThrowEnemy.h"
+#include"ThronEnemy.h"
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
@@ -148,7 +149,7 @@ void BossScene3::SetPrm()
 
 	for (int i = 0; i < 8; i++) {
 		BubbleSprite[i]->SetPosition({ BublePos[i].x,BublePos[i].y,5 });
-		BubbleSprite[i]->SetScale({ 1,1,0 });
+		BubbleSprite[i]->SetScale({ 0.5,0.5,0 });
 		BubbleSprite[i]->SetColor({ 1,1,1,0.4 });
 	}
 	hari->SetPosition({ hari_Pos.x + 2.0f,hari_Pos.y,hari_Pos.z });
@@ -262,7 +263,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
-	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("shark");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -324,8 +325,6 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	}
 	BubleMove();
 	//FBXモデルの更新
-	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	object2->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 		Player_Pos.x += moveSpeed;
 	}
@@ -394,23 +393,25 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 						grav = 0.0f;
 						time = 0;
 						jumpFlag = false;
+						Player_Pos.y = Player_Pos.y - 0.011f;
+
 						break;
 					}
 					else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
 						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+
 						break;
 					}
 
 				}
 				else {
 					moveSpeed = 0.2f;
-					grav = 0.03f;
+					grav = -0.01f;
 				}
 
 				//プレイヤーの左辺
 				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
 					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-						Player_Pos.y = Player_Pos.y + 0.001f;
 						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
 						//grav = 0.0f;
 						//time = 0;
@@ -449,11 +450,11 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 		//grav = 0.0f;
 	}
 	else {
-		grav = 0.03f;
+		grav = -0.01f;
 	}
 
 	time += 0.04f;
-	Player_Pos.y -= grav * time * time;
+	Player_Pos.y -= grav;// *time* time;
 
 
 	//頂点座標の更新
@@ -478,11 +479,11 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		object1->PlayAnimation();
+		object2->PlayAnimation();
 	}
-	object2->PlayAnimation();
-
-
+	object2->SetRotation({ 0,-90,-50 });
+	object2->SetPosition({ Player_Pos.x - 10,Player_Pos.y,Player_Pos.z });
+	object2->SetScale({ 0.1,0.1,0.1 });
 	//}
 	//カメラ関係の処理
 	camera->SetTarget({ 0,1,0 });//注視点
@@ -503,6 +504,10 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	player->CollisionAttack(enemy, Player_Pos);
 
 	SetPrm();//パラメータのセット
+	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	object2->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	//object2->PlayAnimation();
+
 
 	for (int i = 0; i < 8; i++) {
 	
@@ -531,6 +536,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
+	//Player_Pos.y+=moves
 	item->HealEfficasy(player);
 	item->Update(enemy);
 	//Fader::FeedSpriteUpdate();
@@ -606,7 +612,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	effects->Draw(dxcomn);
 	//FBXの描画
 	//object1->Draw(dxcomn->GetCmdList());
-	//object2->Draw(dxcomn->GetCmdList());
+	object2->Draw(dxcomn->GetCmdList());
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	for (int i = 0; i < 8; i++) {
 		BubbleSprite[i]->Draw();
@@ -738,7 +744,7 @@ void BossScene3::BubleMove()
 		countMove[i]++;
 		const float moveCycle = 120.0f;
 			BublePos[i].y = (randPosY[i] ) + sin(PI * 2 / moveCycle * countMove[i]) * RandAngle[i];
-			BublePos[i].x -= BublemoveX[i]*0.01f;
+			BublePos[i].x -= BublemoveX[i]*0.05f;
 
 			if (BublePos[i].x < Player_Pos.x-30) {
 				BublePos[i].x = Player_Pos.x + 30;

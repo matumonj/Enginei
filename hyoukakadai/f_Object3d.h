@@ -104,7 +104,7 @@ protected:
 public:
 	void SetPosition(XMFLOAT3 pos) { position = pos; }
 	void SetRotation(XMFLOAT3 rot) { rotation = rot; }
-
+	void SetScale(XMFLOAT3 scl) { scale = scl; }
 	//É{Å[ÉìÇÃç≈ëÂêî
 	static const int MAX_BONES = 50;
 	XMFLOAT3 GetPosition() { return position; }
