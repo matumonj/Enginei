@@ -165,6 +165,7 @@ private:
 	//float Limit = 0;
 	
 	bool jumpFlag = false;
+	bool Anim = false;
 
 	int Ontime = 300;
 	bool OnFlag = false;

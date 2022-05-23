@@ -170,6 +170,9 @@ void ForestStage2::SetPrm()
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
+
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 }
 #pragma endregion
 
@@ -252,7 +255,7 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -296,8 +299,8 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
-
-	object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
+	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	//object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
 		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
@@ -442,7 +445,7 @@ void ForestStage2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 
 
 	player->PreDraw();
-	player->Draw();
+	//player->Draw();
 	player->PostDraw();
 
 
@@ -552,95 +555,95 @@ void ForestStage2::Draw(DirectXCommon* dxcomn)
 
 void ForestStage2::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 300));
-	if (ImGui::TreeNode("light_position")) {
-		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
-		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
-		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
-		if (ImGui::Button("spotlight ON")) {
-			lightGroup->SetSpotLightActive(0, true);
-		}
-		if (ImGui::Button("spotlight OFF")) {
-			lightGroup->SetSpotLightActive(0, false);
-		}
-		ImGui::ColorPicker3("light_color", spotLightColor);
-		ImGui::TreePop();
-	}
+	//ImGui::Begin("Obj1");
+	//ImGui::SetWindowPos(ImVec2(0, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 300));
+	//if (ImGui::TreeNode("light_position")) {
+	//	//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
+	//	///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
+	//	///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
+	//	if (ImGui::Button("spotlight ON")) {
+	//		lightGroup->SetSpotLightActive(0, true);
+	//	}
+	//	if (ImGui::Button("spotlight OFF")) {
+	//		lightGroup->SetSpotLightActive(0, false);
+	//	}
+	//	ImGui::ColorPicker3("light_color", spotLightColor);
+	//	ImGui::TreePop();
+	//}
 
-	if (ImGui::TreeNode("Effect_position")) {
-		//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
-		//ImGui::SliderFloat("positionY", &debuga, -200, 200);
-		//ImGui::SliderInt("positionZ", &elf, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("enemy_position")) {
-		float rf = enemy[0]->GetPosition().x;
-		float rf2 = enemy[0]->GetPosition().y;
-		float rrr = player->getdis();
-		//float rf3 = enemy->GetPosition().z;
-		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &rf2, -100, 100);
-		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-		ImGui::SliderInt("positionX", &co, -200, 200);
-		ImGui::SliderFloat("positionY", &rf2, -200, 200);
-		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
-		ImGui::TreePop();
-	}
-	float linex = Line::GetInstance()->getpos().x;
-	float liney = Line::GetInstance()->getpos().y;
-	float rr = player->GetPosition().x;
-	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -200, 200);
-		ImGui::SliderFloat("positionY", &liney, -200, 200);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
-		ImGui::SliderFloat("grav", &grav, -200, 200);
-		ImGui::SliderFloat("time", &time, -200, 200);
-		ImGui::TreePop();
-	}
-	float sx = player->GetArea_S().x;
-	float sy = player->GetArea_S().y;
+	//if (ImGui::TreeNode("Effect_position")) {
+	//	//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
+	//	//ImGui::SliderFloat("positionY", &debuga, -200, 200);
+	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("enemy_position")) {
+	//	float rf = enemy[0]->GetPosition().x;
+	//	float rf2 = enemy[0]->GetPosition().y;
+	//	float rrr = player->getdis();
+	//	//float rf3 = enemy->GetPosition().z;
+	//	ImGui::SliderInt("positionX", &co, -100, 100);
+	//	ImGui::SliderFloat("positionY", &rf2, -100, 100);
+	//	ImGui::SliderFloat("positionZ", &rrr, -100, 100);
+	//	ImGui::SliderInt("positionX", &co, -200, 200);
+	//	ImGui::SliderFloat("positionY", &rf2, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &rrr, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//float linex = Line::GetInstance()->getpos().x;
+	//float liney = Line::GetInstance()->getpos().y;
+	//float rr = player->GetPosition().x;
+	//if (ImGui::TreeNode("Player_position")) {
+	//	ImGui::SliderFloat("positionX", &linex, -200, 200);
+	//	ImGui::SliderFloat("positionY", &liney, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+	//	ImGui::SliderFloat("grav", &grav, -200, 200);
+	//	ImGui::SliderFloat("time", &time, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//float sx = player->GetArea_S().x;
+	//float sy = player->GetArea_S().y;
 
-	float ex = player->GetArea_e().x;
-	float ey = player->GetArea_e().y;
+	//float ex = player->GetArea_e().x;
+	//float ey = player->GetArea_e().y;
 
-	if (ImGui::TreeNode("half")) {
-		ImGui::SliderFloat("sx", &sx, -200, 200);
-		ImGui::SliderFloat("sy", &sy, -200, 200);
-		ImGui::SliderFloat("ex", &ex, -200, 200);
-		ImGui::SliderFloat("ey", &ey, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
-		ImGui::TreePop();
-	}
-
-
-	/*if (ImGui::TreeNode("1")) {
-		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("+_height", &half_height, -200, 200);
-		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("-_height", &half_height, -200, 200);
-		ImGui::SliderFloat("map_1_width", &width, -200, 200);
-		ImGui::SliderFloat("map_1_height", &height, -200, 200);
-		ImGui::TreePop();
-	}*/
+	//if (ImGui::TreeNode("half")) {
+	//	ImGui::SliderFloat("sx", &sx, -200, 200);
+	//	ImGui::SliderFloat("sy", &sy, -200, 200);
+	//	ImGui::SliderFloat("ex", &ex, -200, 200);
+	//	ImGui::SliderFloat("ey", &ey, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("Old")) {
+	//	ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+	//	ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
 
-	ImGui::End();
+	///*if (ImGui::TreeNode("1")) {
+	//	ImGui::SliderFloat("+_width", &half_Width, -200, 200);
+	//	ImGui::SliderFloat("+_height", &half_height, -200, 200);
+	//	ImGui::SliderFloat("-_width", &half_Width, -200, 200);
+	//	ImGui::SliderFloat("-_height", &half_height, -200, 200);
+	//	ImGui::SliderFloat("map_1_width", &width, -200, 200);
+	//	ImGui::SliderFloat("map_1_height", &height, -200, 200);
+	//	ImGui::TreePop();
+	//}*/
 
-	ImGui::Begin("postEffect");
-	if (ImGui::RadioButton("Blur", &c_postEffect)) {
-		c_postEffect = Blur;
-	}
-	if (ImGui::RadioButton("Default", &c_postEffect)) {
-		c_postEffect = Default;
-	}
 
-	ImGui::End();
+	//ImGui::End();
+
+	//ImGui::Begin("postEffect");
+	//if (ImGui::RadioButton("Blur", &c_postEffect)) {
+	//	c_postEffect = Blur;
+	//}
+	//if (ImGui::RadioButton("Default", &c_postEffect)) {
+	//	c_postEffect = Default;
+	//}
+
+	//ImGui::End();
 
 }
 #pragma region 解放部分

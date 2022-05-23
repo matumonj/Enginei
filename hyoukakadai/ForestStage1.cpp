@@ -254,7 +254,7 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("shark");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -301,9 +301,11 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 	if (Line::GetInstance()->Gettriggerflag() != true||Line::GetInstance()->Getboundflag() == true) {
 		player->PlayerMoves(Player_Pos, moveSpeed,jumpFlag,grav,time,Player_Rot);
+		
 	}
-
-
+	if(Input::GetInstance()->Pushkey(DIK_0)){
+	object1->PlayAnimation();
+	}
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 		
@@ -361,9 +363,9 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	Line::CollisionEnemy(enemy->get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
-	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		object1->PlayAnimation();
-	}
+	//if (Input::GetInstance()->Pushkey(DIK_0)) {
+		
+	//}
 
 
 

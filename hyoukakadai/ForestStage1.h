@@ -182,7 +182,7 @@ private:
 	const float MinLen = 0.0f;
 	bool lengthserchf = false;
 
-
+	bool Anim = false;
 	bool colf = false;
 	float grav = 0.05f;
 	float time = 0.1f;
