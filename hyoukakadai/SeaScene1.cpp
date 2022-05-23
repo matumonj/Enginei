@@ -10,8 +10,7 @@
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
-#include"BossScene1.h"
-#include"FirstBossScene.h"
+#include"StageSelect.h"
 #include"GamOver.h"
 //コメントアウト
 
@@ -268,122 +267,36 @@ void SeaScene1::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void SeaScene1::Update(DirectXCommon* dxCommon)
 {
+	if (Collision::GetInstance()->Gethit() == true) {
+		loadf = false;
+		Fader::feedOut(0.0f, 0.1f);
+		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+			//::GetInstance()->SetHit(false);
+		}
+	}
+	else {
+		loadf = true;
+	}
+	GameUI::NowLoadUpdate(loadf);
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
 
-	LONG u_r = 32768;
-	LONG a = 30000;
-
-	object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
-
-
-	//左
-	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
-
-
-	///////// コントローラー //////////
-	// スティックの方向判定
-	// 無反応範囲
-
-
-
-
+	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
+	}
 
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= moveSpeed;
-	}
-
-	if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-
-		jumpFlag = true;
-		// 左に傾けた
-		//Player_Pos.x -= moveSpeed;
-
-	}
 
 
-	if (jumpFlag == true) {
-		Player_Pos.y += 0.12f;
-		time += 0.02f;
-	}
+	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
-
-	///これより上に入力処理をかけ
-	////当たり判定
-
-
-	
-
-	for (int i = 0; i < MAX_X; i++) {
-		for (int j = 0; j < MAX_Y; j++) {
-			if (map[j][i] == 1 || map[j][i] == 2) {
-				mapx[j][i] = tst[j][i]->GetPosition().x;
-				mapy[j][i] = tst[j][i]->GetPosition().y;
-				height = tst[j][i]->GetScale().y;
-				width = tst[j][i]->GetScale().x;
-				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-					if (Line::GetInstance()->Gettriggerflag() == true) {
-						Line::GetInstance()->Setmapcol(true);
-						Line::GetInstance()->Setelf(true);
-					}
-				}
-
-				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						//moveSpeed = 0;
-						grav = 0.0f;
-						time = 0;
-						jumpFlag = false;
-						break;
-					}
-					else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-						break;
-					}
-
-				}
-				else {
-					moveSpeed = 0.2f;
-					grav = 0.03f;
-				}
-
-				//プレイヤーの左辺
-				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-						Player_Pos.y = Player_Pos.y + 0.001f;
-						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-						//grav = 0.0f;
-						//time = 0;
-						break;
-					}
-					//プレイヤーの右辺
-					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-						//grav = 0.0f;
-						//time = 0;
-						//moveSpeed = 0;
-						break;
-					}
-				}
-				else {
-					moveSpeed = 0.2f;
-				}
-			}
-		}
-	}
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
@@ -439,7 +352,6 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 
 	//}
 	//カメラ関係の処理
-	
 	if (Player_Pos.x <= 27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
@@ -460,7 +372,8 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	}
 
-	
+
+
 	camera->Update();
 
 	player->SetPosition(Player_Pos);
@@ -476,21 +389,18 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
-	effects->HealEffects(item->ColItem());
+
 	effects->Update(dxCommon, camera, enemy, player);
 
 	//enemyにnullptr代入するときは敵が死んだら
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
-			//enemy[0]->Motion(player);
-			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Attack(player);
+			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
 
 			enemy[i]->EnemySearchPlayer(player);
-			enemy[i]->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
-
 			//もし敵が死んだら破棄
 			if (enemy[i]->GetState_DEAD() == true) {
 				Destroy_unique(enemy[i]);
@@ -500,7 +410,7 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 	}
 	item->HealEfficasy(player);
 	item->Update(enemy);
-	//Fader::FeedSpriteUpdate();
+	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -624,95 +534,95 @@ void SeaScene1::Draw(DirectXCommon* dxcomn)
 
 void SeaScene1::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 300));
-	if (ImGui::TreeNode("light_position")) {
-		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
-		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
-		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
-		if (ImGui::Button("spotlight ON")) {
-			lightGroup->SetSpotLightActive(0, true);
-		}
-		if (ImGui::Button("spotlight OFF")) {
-			lightGroup->SetSpotLightActive(0, false);
-		}
-		ImGui::ColorPicker3("light_color", spotLightColor);
-		ImGui::TreePop();
-	}
+	//ImGui::Begin("Obj1");
+	//ImGui::SetWindowPos(ImVec2(0, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 300));
+	//if (ImGui::TreeNode("light_position")) {
+	//	//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
+	//	///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
+	//	///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
+	//	if (ImGui::Button("spotlight ON")) {
+	//		lightGroup->SetSpotLightActive(0, true);
+	//	}
+	//	if (ImGui::Button("spotlight OFF")) {
+	//		lightGroup->SetSpotLightActive(0, false);
+	//	}
+	//	ImGui::ColorPicker3("light_color", spotLightColor);
+	//	ImGui::TreePop();
+	//}
 
-	if (ImGui::TreeNode("Effect_position")) {
-		//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
-		//ImGui::SliderFloat("positionY", &debuga, -200, 200);
-		//ImGui::SliderInt("positionZ", &elf, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("enemy_position")) {
-		float rf = enemy[0]->GetPosition().x;
-		float rf2 = enemy[0]->GetPosition().y;
-		float rrr = player->getdis();
-		//float rf3 = enemy->GetPosition().z;
-		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &rf2, -100, 100);
-		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-		ImGui::SliderInt("positionX", &co, -200, 200);
-		ImGui::SliderFloat("positionY", &rf2, -200, 200);
-		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
-		ImGui::TreePop();
-	}
-	float linex = Line::GetInstance()->getpos().x;
-	float liney = Line::GetInstance()->getpos().y;
-	float rr = player->GetPosition().x;
-	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -200, 200);
-		ImGui::SliderFloat("positionY", &liney, -200, 200);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
-		ImGui::SliderFloat("grav", &grav, -200, 200);
-		ImGui::SliderFloat("time", &time, -200, 200);
-		ImGui::TreePop();
-	}
-	float sx = player->GetArea_S().x;
-	float sy = player->GetArea_S().y;
+	//if (ImGui::TreeNode("Effect_position")) {
+	//	//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
+	//	//ImGui::SliderFloat("positionY", &debuga, -200, 200);
+	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("enemy_position")) {
+	//	float rf = enemy[0]->GetPosition().x;
+	//	float rf2 = enemy[0]->GetPosition().y;
+	//	float rrr = player->getdis();
+	//	//float rf3 = enemy->GetPosition().z;
+	//	ImGui::SliderInt("positionX", &co, -100, 100);
+	//	ImGui::SliderFloat("positionY", &rf2, -100, 100);
+	//	ImGui::SliderFloat("positionZ", &rrr, -100, 100);
+	//	ImGui::SliderInt("positionX", &co, -200, 200);
+	//	ImGui::SliderFloat("positionY", &rf2, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &rrr, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//float linex = Line::GetInstance()->getpos().x;
+	//float liney = Line::GetInstance()->getpos().y;
+	//float rr = player->GetPosition().x;
+	//if (ImGui::TreeNode("Player_position")) {
+	//	ImGui::SliderFloat("positionX", &linex, -200, 200);
+	//	ImGui::SliderFloat("positionY", &liney, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+	//	ImGui::SliderFloat("grav", &grav, -200, 200);
+	//	ImGui::SliderFloat("time", &time, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//float sx = player->GetArea_S().x;
+	//float sy = player->GetArea_S().y;
 
-	float ex = player->GetArea_e().x;
-	float ey = player->GetArea_e().y;
+	//float ex = player->GetArea_e().x;
+	//float ey = player->GetArea_e().y;
 
-	if (ImGui::TreeNode("half")) {
-		ImGui::SliderFloat("sx", &sx, -200, 200);
-		ImGui::SliderFloat("sy", &sy, -200, 200);
-		ImGui::SliderFloat("ex", &ex, -200, 200);
-		ImGui::SliderFloat("ey", &ey, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
-		ImGui::TreePop();
-	}
-
-
-	/*if (ImGui::TreeNode("1")) {
-		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("+_height", &half_height, -200, 200);
-		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("-_height", &half_height, -200, 200);
-		ImGui::SliderFloat("map_1_width", &width, -200, 200);
-		ImGui::SliderFloat("map_1_height", &height, -200, 200);
-		ImGui::TreePop();
-	}*/
+	//if (ImGui::TreeNode("half")) {
+	//	ImGui::SliderFloat("sx", &sx, -200, 200);
+	//	ImGui::SliderFloat("sy", &sy, -200, 200);
+	//	ImGui::SliderFloat("ex", &ex, -200, 200);
+	//	ImGui::SliderFloat("ey", &ey, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("Old")) {
+	//	ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+	//	ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
 
-	ImGui::End();
+	///*if (ImGui::TreeNode("1")) {
+	//	ImGui::SliderFloat("+_width", &half_Width, -200, 200);
+	//	ImGui::SliderFloat("+_height", &half_height, -200, 200);
+	//	ImGui::SliderFloat("-_width", &half_Width, -200, 200);
+	//	ImGui::SliderFloat("-_height", &half_height, -200, 200);
+	//	ImGui::SliderFloat("map_1_width", &width, -200, 200);
+	//	ImGui::SliderFloat("map_1_height", &height, -200, 200);
+	//	ImGui::TreePop();
+	//}*/
 
-	ImGui::Begin("postEffect");
-	if (ImGui::RadioButton("Blur", &c_postEffect)) {
-		c_postEffect = Blur;
-	}
-	if (ImGui::RadioButton("Default", &c_postEffect)) {
-		c_postEffect = Default;
-	}
 
-	ImGui::End();
+	//ImGui::End();
+
+	//ImGui::Begin("postEffect");
+	//if (ImGui::RadioButton("Blur", &c_postEffect)) {
+	//	c_postEffect = Blur;
+	//}
+	//if (ImGui::RadioButton("Default", &c_postEffect)) {
+	//	c_postEffect = Default;
+	//}
+
+	//ImGui::End();
 
 }
 #pragma region 解放部分

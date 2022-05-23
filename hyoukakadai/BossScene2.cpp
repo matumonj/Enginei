@@ -336,6 +336,9 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 		grav = 0.03f;
 	}
 
+	time += 0.04f;
+	Player_Pos.y -= grav * time * time;
+
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -542,50 +545,50 @@ void BossScene2::Draw(DirectXCommon* dxcomn)
 
 void BossScene2::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 300));
-	if (ImGui::TreeNode("light_position")) {
-		if (ImGui::Button("spotlight ON")) {
-			lightGroup->SetSpotLightActive(0, true);
-		}
-		if (ImGui::Button("spotlight OFF")) {
-			lightGroup->SetSpotLightActive(0, false);
-		}
-		ImGui::ColorPicker3("light_color", spotLightColor);
-		ImGui::TreePop();
-	}
-	//int x= bossenemy->GetHP();
-	if (ImGui::TreeNode("Effect_position")) {
-		//ImGui::SliderInt("positionX", &x, -200, 200);
-		ImGui::SliderFloat("positionY", &camerapositiony, -200, 200);
-		ImGui::SliderFloat("positionz", &camerapositionz, -200, 200);
-		//ImGui::SliderInt("positionZ", &elf, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("enemy_position")) {
+	//ImGui::Begin("Obj1");
+	//ImGui::SetWindowPos(ImVec2(0, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 300));
+	//if (ImGui::TreeNode("light_position")) {
+	//	if (ImGui::Button("spotlight ON")) {
+	//		lightGroup->SetSpotLightActive(0, true);
+	//	}
+	//	if (ImGui::Button("spotlight OFF")) {
+	//		lightGroup->SetSpotLightActive(0, false);
+	//	}
+	//	ImGui::ColorPicker3("light_color", spotLightColor);
+	//	ImGui::TreePop();
+	//}
+	////int x= bossenemy->GetHP();
+	//if (ImGui::TreeNode("Effect_position")) {
+	//	//ImGui::SliderInt("positionX", &x, -200, 200);
+	//	ImGui::SliderFloat("positionY", &camerapositiony, -200, 200);
+	//	ImGui::SliderFloat("positionz", &camerapositionz, -200, 200);
+	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("enemy_position")) {
 
-		ImGui::TreePop();
-	}
-	float linex = Line::GetInstance()->getpos().x;
-	float liney = Line::GetInstance()->getpos().y;
-	float rr = enemycolony1[9]->GetPosition().y;
-	if (ImGui::TreeNode("Player_position")) {
-		//ImGui::SliderFloat("positionX", &Player_Pos.x, -200, 200);
-		ImGui::SliderFloat("positionY", &Player_Pos.y, -200, 200);
-		//ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
-		ImGui::SliderFloat("grav", &grav, -200, 200);
-		ImGui::SliderFloat("time", &time, -200, 200);
-		ImGui::TreePop();
-	}
+	//	ImGui::TreePop();
+	//}
+	//float linex = Line::GetInstance()->getpos().x;
+	//float liney = Line::GetInstance()->getpos().y;
+	//float rr = enemycolony1[9]->GetPosition().y;
+	//if (ImGui::TreeNode("Player_position")) {
+	//	//ImGui::SliderFloat("positionX", &Player_Pos.x, -200, 200);
+	//	ImGui::SliderFloat("positionY", &Player_Pos.y, -200, 200);
+	//	//ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+	//	ImGui::SliderFloat("grav", &grav, -200, 200);
+	//	ImGui::SliderFloat("time", &time, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
-	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
-		ImGui::TreePop();
-	}
+	//if (ImGui::TreeNode("Old")) {
+	//	ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+	//	ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
-	ImGui::End();
+	//ImGui::End();
 
 }
 #pragma region 解放部分
