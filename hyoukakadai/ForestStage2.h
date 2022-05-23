@@ -220,7 +220,6 @@ public:
 	void MyGameDraw(DirectXCommon* dxcomn);
 	void SetPrm();
 	void objUpdate();
-
 public:
 	XMFLOAT3 texpo = { 0,0,0 };
 	void Initialize(DirectXCommon* dxCommon)override;

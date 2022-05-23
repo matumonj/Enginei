@@ -9,6 +9,10 @@
 #include"ForestStage2.h"
 #include"FirstBossScene.h"
 #include"BossScene2.h"
+#include"BossScene3.h"
+#include"SeaScene1.h"
+#include"LastStage.h"
+#include"LastBossScene.h"
 #include"mHelper.h"
 #include"imgui.h"
 #include"Fader.h"
@@ -195,7 +199,7 @@ void StageSelect::Draw(DirectXCommon* dxcomn)
 
 void StageSelect::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
+	/*ImGui::Begin("Obj1");
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("light_position")) {
@@ -213,7 +217,7 @@ void StageSelect::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-	ImGui::End();
+	ImGui::End();*/
 
 }
 #pragma region 解放部分
@@ -263,8 +267,11 @@ void StageSelect::Select()
 				break;
 			case Stage2_1:
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-					BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
-					sceneManager_->SetnextScene(scene);//シーンのセット
+					nextScene = true;
+				}
+				if (nextScene) {
+					stageSpriteScene = Sea;
+
 				}
 				break;
 			case Stage2_2:
@@ -394,20 +401,51 @@ void StageSelect::SpriteUpdate()
 			for (int i = 0; i < 3; i++) {
 				SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 300);
 				SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 300);
-				for (int j = 3; j < 6; j++) {
-					
 
-					StageSprite[3]->SetPosition(SpritePosition[0]);
-					StageSprite[4]->SetPosition(SpritePosition[1]);
-					StageSprite[5]->SetPosition(SpritePosition[2]);//StageSprite[j]->SetPosition(SpritePosition[i]);
-					StageSprite[j]->SetSize(SpriteScale[i]);
-				}
+				StageSprite[i]->SetPosition(SpritePosition[i]);
+				StageSprite[i]->SetSize(SpriteScale[i]);
 			}
 			if (Input::GetInstance()->TriggerButtonB()) {
 				stime = 0;
 				stageSpriteScene = Stay;
 			}
 			SelectStageofStage();
+			//
+			if (SpriteScale[0].x >= 300 && Input::GetInstance()->TriggerButtonA()) {//押されたら
+				if (TargetNum == 0) {
+					Loadf = true;
+					J_stagechanges[0] = true;
+				}
+				else if (TargetNum == 1) {
+					Loadf = true;
+					J_stagechanges[1] = true;
+				}
+				else if (TargetNum == 2) {
+					Loadf = true;
+					J_stagechanges[2] = true;
+				}
+			}
+			if (J_stagechanges[0] == true) {
+				Fader::feedIn(1.0f, 0.1f);
+				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
+					BaseScene* scene = new SeaScene1(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
+			else if (J_stagechanges[1] == true) {
+				Fader::feedIn(1.0f, 0.1f);
+				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
+					BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
+			else if (J_stagechanges[2] == true) {
+				Fader::feedIn(1.0f, 0.1f);
+				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
+					BaseScene* scene = new BossScene3(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
 			break;
 		case Stay:
 			Fader::feedOut(0.0f, 0.1f);

@@ -107,6 +107,8 @@ private:
 		Etc,
 		Stay,
 		None,
+		Casle,
+		Home,
 	};
 	enum whSelect {
 		Stage_JorS,
