@@ -449,21 +449,21 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	if (Player_Pos.x <=  27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 27.0f,Player_Pos.y+CamCon,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 27.0f,Player_Pos.y+CamCon ,Player_Pos.z });
+		camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
 	}
 
 	else if (Player_Pos.x >= 368.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 368.0f,Player_Pos.y+CamCon,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 368.0f,Player_Pos.y+CamCon ,Player_Pos.z });
+		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 368.0f,Player_Pos.y ,Player_Pos.z });
 	}
 	else {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ Player_Pos.x,Player_Pos.y+CamCon,Player_Pos.z - 27.0f });
-		camera->SetTarget({ Player_Pos.x,Player_Pos.y+CamCon ,Player_Pos.z });
+		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	}
 
 	if (Player_Pos.y >= -13) {
@@ -517,7 +517,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}

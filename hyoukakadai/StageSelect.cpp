@@ -71,8 +71,10 @@ void StageSelect::ModelCreate()
 	obj_Rot = { 0,0,0 };
 	for (int i = 0; i < 6; i++) {
 		StageSprite[i]->SetAnchorPoint({ 0.5,0.5 });
+		StageSprite[i]->SetPosition({ -300,-300 });
 	}
 	TargetSprite->SetAnchorPoint({ 0.5,0.5 });
+	TargetSprite->SetPosition({ -300,-300 });
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -314,10 +316,16 @@ void StageSelect::SelectMove()
 			}
 		}
 	}
+	if (SelectNum == -1 ) {
+		SelectNum = 3;
+	}
+	else if (SelectNum == 4) {
+		SelectNum = 0;
+	}
 	const int MinStage = -1;
 	const int MaxStage = 5;
-	obj_Rot.y = max(obj_Rot.y, 0);
-	obj_Rot.y = min(obj_Rot.y, 360);
+	obj_Rot.y = max(obj_Rot.y, -360*100);
+	obj_Rot.y = min(obj_Rot.y, 360*100);
 	SelectNum = max(SelectNum, 0);
 	SelectNum = min(SelectNum, 4);
 }
