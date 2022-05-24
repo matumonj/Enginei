@@ -222,8 +222,6 @@ void BossScene3::objUpdate()
 #pragma region 初期化
 void BossScene3::Initialize(DirectXCommon* dxCommon)
 {
-	//
-
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
@@ -274,7 +272,7 @@ enemy[9] = std::make_unique<ThrowEnemy>();
 	attackeffects->Initialize(dxCommon, camera);
 	
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
 	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("shark");
 
 	//デバイスをセット
@@ -298,6 +296,7 @@ enemy[9] = std::make_unique<ThrowEnemy>();
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 	object2->PlayAnimation();
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -312,7 +311,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	LONG u_r = 32768;
 	LONG a = 30000;
 
-	object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
+	object1->SetPosition({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	//object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
 
 
@@ -514,9 +513,9 @@ void BossScene3::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
 
-	player->PreDraw();
+	/*player->PreDraw();
 	player->Draw();
-	player->PostDraw();
+	player->PostDraw();*/
 
 
 	item->Draw();
@@ -567,7 +566,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
 	//FBXの描画
-	//object1->Draw(dxcomn->GetCmdList());
+	object1->Draw(dxcomn->GetCmdList());
 	object2->Draw(dxcomn->GetCmdList());
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	for (int i = 0; i < 8; i++) {

@@ -64,7 +64,7 @@ void DesertField::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("sea");
 	//worldmodel = Model::CreateFromOBJ("skydome");
 	//harimodel = Model::CreateFromOBJ("hari");
-	goalmodel = Model::CreateFromOBJ("goalmo");
+	goalmodel = Model::CreateFromOBJ("goal");
 
 
 	item = new Item();
@@ -128,9 +128,14 @@ void DesertField::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
+
+			if (map[j][i] == 3) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,120,0 });
+				goal->SetScale({ tst_Scl });
+			}
 		}
 	}
-	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
 
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
@@ -222,7 +227,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -240,7 +245,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	postEffect = new PostEffect();
 	postEffect->Initialize();
-
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -282,8 +287,9 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
 	
-	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
+	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3))
+	{
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
@@ -328,9 +334,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	Line::CollisionEnemy(enemy->get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
-	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		object1->PlayAnimation();
-	}
+
 
 
 
@@ -423,18 +427,22 @@ void DesertField::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1 || (map[j][i] == 2 && OnFlag == true)) {
+			if (map[j][i] == 1 ) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
+			}
+
+			if (map[j][i] == 3) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
 			}
 		}
 	}
 
 
-	goal->PreDraw();
-	goal->Draw();
-	goal->PostDraw();
+	
 
 }
 //sプライと以外の描画
