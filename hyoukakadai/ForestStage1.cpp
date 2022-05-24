@@ -58,8 +58,9 @@ void ForestStage1::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("wood");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
-	goalmodel = Model::CreateFromOBJ("goalmo");
+	goalmodel = Model::CreateFromOBJ("goal");
 	reefmodel = Model::CreateFromOBJ("reef");
+
 
 	item = new Item();
 	item->Initialize();
@@ -76,6 +77,11 @@ void ForestStage1::ModelCreate()
 			reef[j][i]->SetModel(reefmodel);
 		}
 	}
+
+	goal = std::make_unique<Object3d>();
+	goal->Initialize();
+	goal->SetModel(goalmodel);
+
 	block = std::make_unique<Object3d>();
 	block->Initialize();// = Object3d::Create();
 	block->SetModel(tstmodel);
@@ -92,13 +98,9 @@ void ForestStage1::ModelCreate()
 	hari->Initialize();
 	hari->SetModel(harimodel);
 
-	goal = std::make_unique<Object3d>();
-	goal->Initialize();
-	goal->SetModel(goalmodel);
+
 
 	
-
-
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -153,9 +155,14 @@ void ForestStage1::SetPrm()
 			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			reef[j][i]->SetRotation({ tst_Rot });
 			reef[j][i]->SetScale({ tst_Scl });
+			if (map[j][i] == 3) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,120,0 });
+				goal->SetScale({ tst_Scl });
+			}
 		}
 	}
-	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
+	
 
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
@@ -195,11 +202,12 @@ void ForestStage1::objUpdate()
 		}
 	}
 
+	goal->Update({ 1,1,1,1 });
 	world->Update({ 1,1,1,1 });
 	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
 	
-	goal->Update({ 1,1,1,1 });
+	
 
 }
 #pragma endregion
@@ -272,6 +280,7 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -303,7 +312,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 		
 	}
 	if(Input::GetInstance()->Pushkey(DIK_0)){
-	object1->PlayAnimation();
+	
 	}
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
@@ -312,11 +321,12 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 	Collision::CollisionMap(map, reef, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
 	
-
-	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
+	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3))
+	{
 		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
+
 
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -477,12 +487,16 @@ void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				reef[j][i]->Draw();
 				reef[j][i]->PostDraw();
 			}
+
+			if (map[j][i] == 3) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
+			}
 		}
 	}
 
-	goal->PreDraw();
-	goal->Draw();
-	goal->PostDraw();
+	
 
 	/*hari->PreDraw();
 	hari->Draw();
