@@ -58,11 +58,11 @@ void SeaScene1::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("block");
+	tstmodel = Model::CreateFromOBJ("sand");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
-	goalmodel = Model::CreateFromOBJ("goalmo");
-
+	goalmodel = Model::CreateFromOBJ("goal");
+	seamodel = Model::CreateFromOBJ("sea");
 
 	item = new Item();
 	item->Initialize();
@@ -73,6 +73,10 @@ void SeaScene1::ModelCreate()
 			tst[j][i] = std::make_unique<Object3d>();
 			tst[j][i]->Initialize();// Object3d::Create();
 			tst[j][i]->SetModel(tstmodel);
+
+			seablock[j][i] = std::make_unique<Object3d>();
+			seablock[j][i]->Initialize();
+			seablock[j][i]->SetModel(seamodel);
 		}
 	}
 	block = std::make_unique<Object3d>();
@@ -146,9 +150,19 @@ void SeaScene1::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
+
+			seablock[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			seablock[j][i]->SetRotation({ tst_Rot });
+			seablock[j][i]->SetScale({ tst_Scl });
+
+			if (map[j][i] == 3) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,120,0 });
+				goal->SetScale({ tst_Scl });
+			}
 		}
 	}
-	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
+
 
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
@@ -184,6 +198,7 @@ void SeaScene1::objUpdate()
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->Update({ 1,1,1,1 });
+			seablock[j][i]->Update({ 1,1,1,1 });
 		}
 	}
 
@@ -264,6 +279,7 @@ void SeaScene1::Initialize(DirectXCommon* dxCommon)
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -286,19 +302,18 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
 
-	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
-		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
-	}
-
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 
+	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 
+	}
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
-
-
-	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
+	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
+	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3))
+	{
 		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
@@ -346,11 +361,6 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 
 	Line::CollisionEnemy(enemy->get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
-	//FBXのアニメーション再生
-	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		object1->PlayAnimation();
-	}
-
 
 
 	//}
@@ -401,6 +411,7 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 			//プレイヤーの検知
 			enemy[i]->Attack(player);
 			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
+			enemy[i]->ColMap(map, seablock, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
 
 			enemy[i]->EnemySearchPlayer(player);
@@ -454,13 +465,23 @@ void SeaScene1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
 			}
+
+			if (map[j][i] == 2) {
+				seablock[j][i]->PreDraw();
+				seablock[j][i]->Draw();
+				seablock[j][i]->PostDraw();
+			}
+
+			if (map[j][i] == 3) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
+			}
 		}
 	}
 
 
-	goal->PreDraw();
-	goal->Draw();
-	goal->PostDraw();
+	
 
 	/*hari->PreDraw();
 	hari->Draw();

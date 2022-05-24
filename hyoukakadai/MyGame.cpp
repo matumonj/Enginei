@@ -12,7 +12,14 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 	//Scene = new TitleScene();
 	//初期シーン
 
+<<<<<<< HEAD
 	BaseScene*scene_ = new Tutorial(sceneManger);
+=======
+
+	BaseScene*scene_ = new StageSelect(sceneManger);
+
+
+>>>>>>> 19c248283056ed42e5838276a053b2541633877a
 	sceneManger->SetnextScene(scene_);
 
 	//Scene->Initialize();
