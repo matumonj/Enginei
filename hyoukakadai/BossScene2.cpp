@@ -287,6 +287,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 
 
+
 	//player->PlayerMoves(Player_Pos, moveSpeed);
 
 	//FBXƒ‚ƒfƒ‹‚ÌXV
