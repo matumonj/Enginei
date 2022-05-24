@@ -225,6 +225,10 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	GameUI::PlayerUISet();
 	enemy[0] = std::make_unique<SeaBoss>();
 	//enemy[0] = std::make_unique<ThrowEnemy>();
+enemy[9] = std::make_unique<ThrowEnemy>();
+	enemy[8] = std::make_unique<ThrowEnemy>();
+	enemy[7] = std::make_unique<ThrowEnemy>();
+
 	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[2] = std::make_unique<ThrowEnemy>();
 	enemy[3] = std::make_unique<ThrowEnemy>();
@@ -232,13 +236,15 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[5] = std::make_unique<ThrowEnemy>();
 	enemy[6] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
-
-	enemy[6]->Setposition({ 270,-18.2f,0 });
-	enemy[5]->Setposition({ 170,-18.2f,0 });
-	enemy[4]->Setposition({ 320,-14.2f,0 });
+	enemy[9]->Setposition({ 1070,-18.2f,0 });
+	enemy[8]->Setposition({ 3200,-14.2f,0 });
+	enemy[7]->Setposition({ 800,-4.2f,0 });
+	enemy[6]->Setposition({ 2700,-18.2f,0 });
+	enemy[5]->Setposition({ 1700,-18.2f,0 });
+	enemy[4]->Setposition({ 3200,-14.2f,0 });
 	enemy[3]->Setposition({ 80,-4.2f,0 });
-	enemy[2]->Setposition({ 250,-4.2f,0 });
-	enemy[1]->Setposition({ 350, -18, 0 });
+	enemy[2]->Setposition({ 2500,-4.2f,0 });
+	enemy[1]->Setposition({ 3500, -18, 0 });
 	//enemy[0]->Setposition({ 50, -15, 0 });
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
@@ -247,7 +253,9 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[4]->Initialize();
 	enemy[5]->Initialize();
 	enemy[6]->Initialize();
-
+	enemy[7]->Initialize();
+	enemy[8]->Initialize();
+	enemy[9]->Initialize();
 	mapcol = new Collision();
 	
 	SpriteCreate();//
@@ -393,7 +401,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 						grav = 0.0f;
 						time = 0;
 						jumpFlag = false;
-						Player_Pos.y = Player_Pos.y - 0.011f;
+						//Player_Pos.y = Player_Pos.y - 0.01f;
 
 						break;
 					}
@@ -406,13 +414,16 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 				}
 				else {
 					moveSpeed = 0.2f;
-					grav = -0.01f;
+					grav = 0.03f;
 				}
 
 				//プレイヤーの左辺
 				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
 					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						Player_Pos.y = Player_Pos.y + 0.001f;
+						
 						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+						
 						//grav = 0.0f;
 						//time = 0;
 						break;
@@ -454,7 +465,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	}
 
 	time += 0.04f;
-	Player_Pos.y -= grav;// *time* time;
+	Player_Pos.y -= grav *time* time;
 
 
 	//頂点座標の更新
@@ -530,14 +541,26 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 		BubbleSprite[i]->Update(camera->GetViewMatrix(), camera->GetProjectionMatrix());
 	}
 	objUpdate();//オブジェクトの更新処理
+	for (int i = 1; i < 10; i++) {
+		if (enemy[i] != nullptr) {
+
+			if (Collision::GetLen(enemy[0]->GetPosition(), enemy[i]->GetPosition()) < 13) {
+				enemy[i]->SetHP(0);
+				enemy[i]->SetDead(true);
+			}
+		}
+	}
 	effects->HealEffects(item->ColItem());
 	effects->Update(dxCommon, camera, enemy, player);
 
 	//enemyにnullptr代入するときは敵が死んだら
+
+	//SeaBoss::GetInstance()->EatEnemy(enemy);
+
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
-			//enemy[0]->Motion(player);
+			enemy[i]->Motion(player);
 			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Attack(player);
 			enemy[i]->Update(Player_Pos);
@@ -552,15 +575,17 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
-	
-	if (BRotation.z < -90) {
-		RotMove = 1;
-	} else if (BRotation.z > 0) {
-		RotMove = -1;
+
+	if (!SeaBoss::GetInstance()->Getdeathf()) {
+		if (BRotation.z < -90) {
+			RotMove = 1;
+		} else if (BRotation.z > 0) {
+			RotMove = -1;
+		}
+
+		BRotation.y = -90;
+		BRotation.z += RotMove * 1;
 	}
-	
-	BRotation.y = -90;
-	BRotation.z += RotMove * 1;
 	object2->SetRotation(BRotation);
 	object2->SetPosition(enemy[0]->GetPosition());
 	object2->SetScale({ 0.11,0.13,0.11 });

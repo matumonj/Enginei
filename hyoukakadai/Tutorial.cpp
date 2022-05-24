@@ -218,8 +218,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
-	if (Fader::GetInstance()->GetAlpha() <= 0.1) {//このやり方後で直す
-	
 		//入力処理より後に当たり判定を描け
 			//入力処理より後に当たり判定を描け
 		Collision::ColMap1(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
@@ -298,7 +296,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 			Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 		GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 		GameUI::PlayerUIUpdate(player);
-	}
 
 	//シーンチェンジ
 	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonA() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら

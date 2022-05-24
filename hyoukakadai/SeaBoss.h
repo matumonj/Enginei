@@ -110,6 +110,7 @@
         void Finalize()override;
         void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
     public:
+        void EatEnemy(std::unique_ptr<Enemy>enemy[]);
         //埋め込み回避用
         void MoveBlockJump();
        //プレイヤー検知
@@ -176,7 +177,9 @@
         static bool stayflag;
         int deathcount;
         int RotMove=1;
+        bool deathf;
     public:
+        bool Getdeathf() { return deathf; }
         bool GetAltStay() { return stayflag; }
         XMFLOAT3 Getrotation() { return Rotation; }
     };

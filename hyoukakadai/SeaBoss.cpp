@@ -66,15 +66,13 @@ void SeaBoss::Update(XMFLOAT3 position)
 	
 	Old_Pos = Position;
 
-	Rotation.z += 50;
-	Rotation.y = 90;
 	
 	if (HP <= 0) {
 		enemyState = State::DEAD;
 	} else {
 		enemyState = State::ALIVE;
 	}
-	Position = { position.x - 10, position.y, position.z };
+	Position.y= position.y;
 	
 	//Arm_Rot[1].z = rotfollow  ;//60=Šp“x’²®—p 180=”½“]
 	GetDamage();
@@ -82,6 +80,15 @@ void SeaBoss::Update(XMFLOAT3 position)
 	//Rotation.x = 30;
 	//Position.x = 20;
 	Position.z = 0;
+	if (Rotation.z < -90) {
+		RotMove = 1;
+	} else if (Rotation.z > 0) {
+		RotMove = -1;
+	}
+
+
+	Rotation.y = -90;
+	Rotation.z +=  1;
 	UpDownMove(position);
 	//BossObject->SetPosition(Position);
 	//BossObject->SetScale({ 2,2,2 });
@@ -116,6 +123,16 @@ void SeaBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], 
 	}
 }
 
+void SeaBoss::EatEnemy(std::unique_ptr<Enemy>enemy[])
+{
+	//for (int i = 1; i < 10; i++) {
+		if (enemy[3] != nullptr) {
+			if (Collision::GetLen(Position, enemy[3]->GetPosition()) < 13) {
+			//	enemy[3]->SetDead(true);
+			}
+		}
+	//}
+}
 void SeaBoss::Motion(Player* player)
 {
 	NormalAttacks(player);
@@ -183,12 +200,8 @@ void SeaBoss::Motion(Player* player)
 	default:
 		break;
 	}
-	if (Rotation.z < -80) {
-		RotMove = 1;
-	} else if (Rotation.z > -20) {
-		RotMove = -1;
-	}
 
+	Follow(player->GetPosition());
 
 }
 
@@ -201,11 +214,10 @@ void SeaBoss::Follow(XMFLOAT3 position)
 	float angleX, angleZ, angleR;
 	float centerSpeed = 0.1f;
 	angleX = (position.x - Position.x);
-	angleZ = (position.y - Position.y);
-	angleR = sqrtf((Position.x - position.x) * (Position.x - position.x)
-		+ (Position.y - position.y) * (Position.y - position.y));
+	//angleZ = (position.y - Position.y);
+	angleR = sqrtf((Position.x - position.x) * (Position.x - position.x));
 
-	Position.x += (angleX / angleR) * (bossmovespeed / 2);
+	Position.x += (angleX / angleR) * (bossmovespeed/2 );
 
 }
 

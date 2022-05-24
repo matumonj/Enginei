@@ -45,6 +45,7 @@
 #include"SeaScene1.h"
 #include"DesertField.h"
 #include"BossScene3.h"
+#include"Tutorial.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
