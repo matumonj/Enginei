@@ -287,21 +287,12 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 
 
+
 	//player->PlayerMoves(Player_Pos, moveSpeed);
 
 	//FBXƒ‚ƒfƒ‹‚ÌXV
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= moveSpeed;
-	}
 
-	if (jumpFlag == true) {
-		Player_Pos.y += 0.1f;
-		time += 0.02f;
-	}
 
 	///‚±‚ê‚æ‚èã‚É“ü—Íˆ—‚ğ‚©‚¯
 	////“–‚½‚è”»’è
