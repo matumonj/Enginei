@@ -30,7 +30,7 @@ void GamOver::Update(DirectXCommon* dxCommon)
 {
 	//ENTERで次のシーンへ
 	if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-		BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 	//if (Input::GetInstance()->TriggerKey(DIK_F))

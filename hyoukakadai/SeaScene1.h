@@ -166,7 +166,7 @@ private:
 	//float Limit = 0;
 
 	bool jumpFlag = false;
-
+	bool Anim = false;
 
 	float debuga;
 	float tempx, tempy;

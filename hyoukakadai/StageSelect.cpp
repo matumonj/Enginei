@@ -243,26 +243,23 @@ void StageSelect::Select()
 			{
 			case TutorialStage:
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+					BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			case Stage1_1:
+				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+					BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+
+			case Stage1_2:
+		
+				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
 					nextScene = true;
 				}
 				if (nextScene) {
 					stageSpriteScene = Jungle;
-					
-				}
-				break;
-			case Stage1_1:
-				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-					nextScene = true;
-				}
-				if (nextScene) {
-					stageSpriteScene = Sea;
-					
-				}
-				break;
-			case Stage1_2:
-				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-					BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
-					sceneManager_->SetnextScene(scene);//シーンのセット
+
 				}
 				break;
 			case Stage2_1:

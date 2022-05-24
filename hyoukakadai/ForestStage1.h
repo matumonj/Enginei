@@ -107,26 +107,10 @@ private:
 
 	XMFLOAT3 goal_pos = { 390,3,0 };
 
-	XMFLOAT3 old_Scl = { 1,1,1 };
-
 	float distance = 30;
 
-	float dy;
-	float dx;
-	float dz;
-
-	float zanzouSpeed = 0;
-
-	float CamCon = 10;
 	int Line = 0;
-	float Limit = 10;
-	float Limitsave = 0;
-	float speed = 1.0f;
-	float vec_x = 0.0f;
-	float vec_y = 0.0f;
-	float length = 0.0f;
-	float normal_x;
-	float rot = 0;
+
 	//map
 	int blockSize = 2;
 	int map[20][200] = {
@@ -160,33 +144,14 @@ private:
 	float mapx[20][200];
 	float mapy[20][200];
 
-	float width;
-	float height;
-	float FollowangleX, FollowangleZ, FollowangleR;
-	float FollowSpeed = 1.0f;
-	//float Limit = 0;
-
 	bool jumpFlag = false;
-
-
-
 	float debuga;
-	float tempx, tempy;
 	float linex, linex2, liney, liney2;
-	float lineangle = 0;
-	float subradius = 0;
-	float Startsubradius = 2.0f;
-	float olddistance = 0;
-	const float LengThenSpeed = 3.0f;
-	const float MaxLen = 30.0f;
-	const float MinLen = 0.0f;
-	bool lengthserchf = false;
-
 
 	bool colf = false;
 	float grav = 0.05f;
 	float time = 0.1f;
-	//float botttomy = 0;
+
 private://“_ŒõŒ¹
 	LightGroup* lightGroup = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
@@ -224,10 +189,7 @@ public:
 	void Initialize(DirectXCommon* dxCommon)override;
 	void Update(DirectXCommon* dxCommon)override;
 	void Draw(DirectXCommon* dxcomn)override;
-	void PreBackGround(ID3D12GraphicsCommandList* cmdList);
-	void BackGround(ID3D12GraphicsCommandList* cmdList);
 
-	void PostBackGround(ID3D12GraphicsCommandList* cmdList);
 	void SpriteDraw(ID3D12GraphicsCommandList* cmdList);
 	void ImGuiDraw();
 	void Finalize()override;

@@ -14,6 +14,7 @@
 #include"FirstBossScene.h"
 #include"BossScene2.h"
 #include"GamOver.h"
+#include"StageSelect.h"
 //コメントアウト
 
 
@@ -134,6 +135,9 @@ void DesertField::SetPrm()
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
+
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 }
 #pragma endregion
 
@@ -218,7 +222,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -243,17 +247,24 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void DesertField::Update(DirectXCommon* dxCommon)
 {
+	if (Collision::GetInstance()->Gethit() == true) {
+		loadf = false;
+		Fader::feedOut(0.0f, 0.1f);
+		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+			//::GetInstance()->SetHit(false);
+		}
+	}
+	else {
+		loadf = true;
+	}
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
 	spotLightpos[2] = 0;
 
-	object1->SetPosition({ Player_Pos.x+4.0f,Player_Pos.y,Player_Pos.z });
-
-
-	//左
-	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
-
+	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
+	}
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
@@ -267,81 +278,10 @@ void DesertField::Update(DirectXCommon* dxCommon)
 
 	//入力処理より後に当たり判定を描け
 
-	if (OnFlag == true) {
-		if (Ontime >= 0) {
-			Ontime--;
-		}
-		else if (Ontime <= 0) {
-			OnFlag = false;
-		}
-	}
 
-	if (OnFlag == false) {
-		Ontime++;
-		if (Ontime >= 300) {
-			OnFlag = true;
-		}
-	}
+	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
-	for (int i = 0; i < MAX_X; i++) {
-		for (int j = 0; j < MAX_Y; j++) {
-			if (map[j][i] == 1 || (map[j][i] == 2 && OnFlag == true)) {
-				mapx[j][i] = tst[j][i]->GetPosition().x;
-				mapy[j][i] = tst[j][i]->GetPosition().y;
-				height = tst[j][i]->GetScale().y;
-				width = tst[j][i]->GetScale().x;
-				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-					if ( Line::GetInstance()->Gettriggerflag() == true) {
-						Line::GetInstance()->Setmapcol(true);
-						Line::GetInstance()->Setelf(true);
-					}
-				}
-
-				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						//moveSpeed = 0;
-						grav = 0.0f;
-						time = 0;
-						jumpFlag = false;
-						break;
-					}
-					else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-						break;
-					}
-
-				}
-				else {
-					moveSpeed = 0.2f;
-					grav = 0.03f;
-				}
-
-				//プレイヤーの左辺
-				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-						Player_Pos.y = Player_Pos.y + 0.001f;
-						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-						//grav = 0.0f;
-						//time = 0;
-						break;
-					}
-					//プレイヤーの右辺
-					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-						//grav = 0.0f;
-						//time = 0;
-						//moveSpeed = 0;
-						break;
-					}
-				}
-				else {
-					moveSpeed = 0.2f;
-				}
-			}
-		}
-	}
-
+	
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
 		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
@@ -462,7 +402,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
@@ -476,7 +416,7 @@ void DesertField::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 
 
 	player->PreDraw();
-	player->Draw();
+	//player->Draw();
 	player->PostDraw();
 
 
@@ -537,31 +477,31 @@ void DesertField::MyGameDraw(DirectXCommon* dxcomn)
 #pragma region
 void DesertField::Draw(DirectXCommon* dxcomn)
 {
-	//ポストエフェクトの場合わけ(Bでぼかし Dがデフォルト)
-	switch (c_postEffect)
-	{
-	case Blur://ぼかし　描画準違うだけ
-		postEffect->PreDrawScene(dxcomn->GetCmdList());
-		MyGameDraw(dxcomn);
-		postEffect->PostDrawScene(dxcomn->GetCmdList());
+	////ポストエフェクトの場合わけ(Bでぼかし Dがデフォルト)
+	//switch (c_postEffect)
+	//{
+	//case Blur://ぼかし　描画準違うだけ
+	//	postEffect->PreDrawScene(dxcomn->GetCmdList());
+	//	MyGameDraw(dxcomn);
+	//	postEffect->PostDrawScene(dxcomn->GetCmdList());
 
-		dxcomn->BeginDraw();
-		postEffect->Draw(dxcomn->GetCmdList());
-		ImGuiDraw();//imguiは最後の方入れとく
-		dxcomn->EndDraw();
-		break;
+	//	dxcomn->BeginDraw();
+	//	postEffect->Draw(dxcomn->GetCmdList());
+	//	ImGuiDraw();//imguiは最後の方入れとく
+	//	dxcomn->EndDraw();
+	//	break;
 
-	case Default://普通のやつ特に何もかかっていない
-		postEffect->PreDrawScene(dxcomn->GetCmdList());
-		postEffect->Draw(dxcomn->GetCmdList());
-		postEffect->PostDrawScene(dxcomn->GetCmdList());
+	//case Default://普通のやつ特に何もかかっていない
+	//	postEffect->PreDrawScene(dxcomn->GetCmdList());
+	//	postEffect->Draw(dxcomn->GetCmdList());
+	//	postEffect->PostDrawScene(dxcomn->GetCmdList());
 
-		dxcomn->BeginDraw();
-		MyGameDraw(dxcomn);
-		ImGuiDraw();
-		dxcomn->EndDraw();
-		break;
-	}
+	//	dxcomn->BeginDraw();
+	//	MyGameDraw(dxcomn);
+	//	ImGuiDraw();
+	//	dxcomn->EndDraw();
+	//	break;
+	//}
 }
 #pragma endregion
 

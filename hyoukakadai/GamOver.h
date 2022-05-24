@@ -13,6 +13,7 @@
 #include"DebugCamera.h"
 #include"DirectXCommon.h"
 #include"Fader.h"
+#include"StageSelect.h"
 #pragma once
 class GamOver:public BaseScene
 {

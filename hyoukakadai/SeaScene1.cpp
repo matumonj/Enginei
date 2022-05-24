@@ -161,6 +161,9 @@ void SeaScene1::SetPrm()
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
+
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 }
 #pragma endregion
 
@@ -242,7 +245,7 @@ void SeaScene1::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -431,7 +434,7 @@ void SeaScene1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 
 
 	player->PreDraw();
-	player->Draw();
+	//player->Draw();
 	player->PostDraw();
 
 
@@ -488,10 +491,10 @@ void SeaScene1::MyGameDraw(DirectXCommon* dxcomn)
 	Line::Draw(dxcomn);
 
 	//weffect->Draw(dxcomn);
-	GameUI::AllowUIDraw(dxcomn);
+	/*GameUI::AllowUIDraw(dxcomn);
 	GameUI::TargetUIDraw(dxcomn);
 	GameUI::UIDraw(dxcomn);
-	GameUI::PlayerUIDraw(dxcomn);
+	GameUI::PlayerUIDraw(dxcomn);*/
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
