@@ -178,40 +178,13 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	//object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
 
-
-	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
-
-	if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-
-		jumpFlag = true;
-		// 左に傾けた
-		//Player_Pos.x -= moveSpeed;
-
+	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 	}
 
-
-	if (jumpFlag == true) {
-		Player_Pos.y += 0.12f;
-		time += 0.02f;
-	}
-
-
-	//if (Input::GetInstance()->GetCMove().lX < u_r - a)
-	if (Input::GetInstance()->Pushkey(DIK_LEFT))
-	{
-		if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-			// 左に傾けた
-			Player_Pos.x -= moveSpeed;
-		}
-	} //else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-	else if(Input::GetInstance()->Pushkey(DIK_RIGHT))
-	{
-		if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
-			Player_Pos.x += moveSpeed;
-		}
-	}
+	
 
 	if (Input::GetInstance()->TriggerButonY()) {
 		BaseScene* scene = new  TitleScene(sceneManager_);//次のシーンのインスタンス生成
@@ -222,7 +195,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	
 		//入力処理より後に当たり判定を描け
 			//入力処理より後に当たり判定を描け
-		Collision::ColMap1(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
+		Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 #pragma region 線の処理
 
 		if (Line::GetInstance()->Getboundflag() == true) {
@@ -262,14 +235,27 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		}
 
 		//カメラ関係の処理
-		camera->SetTarget({ 0,1,0 });//注視点
-		camera->SetEye({ Player_Pos.x,-2,Player_Pos.z - 23 });
-		camera->SetTarget({ Player_Pos.x,-2 ,Player_Pos.z });
-		camera->Update();
+		if (Player_Pos.x <= 27.0f) {
+			camera->SetTarget({ 0,1,0 });//注視点
+			camera->SetDistance(distance);//
+			camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+			camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
+		}
 
-		player->SetPosition(Player_Pos);
-		player->SetRotation(Player_Rot);
-		player->SetScale(Player_Scl);
+		else if (Player_Pos.x >= 368.0f) {
+			camera->SetTarget({ 0,1,0 });//注視点
+			camera->SetDistance(distance);//
+			camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+			camera->SetTarget({ 368.0f,Player_Pos.y ,Player_Pos.z });
+		}
+		else {
+			camera->SetTarget({ 0,1,0 });//注視点
+			camera->SetDistance(distance);//
+			camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
+			camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
+		}
+
+		camera->Update();
 
 		player->Attack(Player_Pos);
 		player->FlyingAttack(enemy);
