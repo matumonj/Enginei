@@ -15,7 +15,7 @@ void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 	//efk1 = new mEffekseer();
 
 	//エフェクトのセット(3引き数に)
-	attackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/newattack.efk", (const EFK_CHAR*)L"effect/10");
+	attackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/oaa.efk", (const EFK_CHAR*)L"effect/10");
 	efk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/deadef.efk", (const EFK_CHAR*)L"effect/10");
 	bossattackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/laser.efk", (const EFK_CHAR*)L"effect/10");
 	Healefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/Heal.efk", (const EFK_CHAR*)L"effect/10");
@@ -137,17 +137,17 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 		attackefk->SetPosition(player->GetPosition().x-2, player->GetPosition().y, player->GetPosition().z);
 		//attackefk->SetRotation(zrot, 180, 30);
 		//attackefk->SetScale(2,2,2 );
-		attackefk->SetRotation(-55.068, 74.521,0); //-4.651);
+		attackefk->SetRotation(0, zrot,0); //-4.651);
 
 	}
 	else if(player->GetRot_Right()==true){
 		attackefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z+2);
 		//Effect_Rot = { 0,0,0 };
-		attackefk->SetRotation(-55.068, -85.297, 0); //-4.651);
+		attackefk->SetRotation(zrot,/*-55.068*/ -85.297, 0); //-4.651);
 
 	}
 	
-	attackefk->SetScale(0.5,2.326,0.05);
+	attackefk->SetScale(0.15,0.326,0.05);
 	if (Input::GetInstance()->TriggerKey(DIK_A)) {
 		attack = true;
 	}
