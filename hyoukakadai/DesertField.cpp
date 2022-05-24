@@ -61,7 +61,7 @@ void DesertField::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("block");
+	tstmodel = Model::CreateFromOBJ("sea");
 	//worldmodel = Model::CreateFromOBJ("skydome");
 	//harimodel = Model::CreateFromOBJ("hari");
 	goalmodel = Model::CreateFromOBJ("goalmo");
