@@ -156,7 +156,7 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 	if (Input::GetInstance()->TriggerButtonA()) {
 		//UŒ‚ˆ—
 		attack = true;
-	}
+	}//
 	if (player->GetFlyAttack()==true) {
 		attack = true;
 	}
