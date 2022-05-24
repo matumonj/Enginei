@@ -248,7 +248,7 @@ void StageSelect::Select()
 				}
 			case Stage1_1:
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-					BaseScene* scene = new TitleScene(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 

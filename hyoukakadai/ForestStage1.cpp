@@ -140,7 +140,6 @@ void ForestStage1::SetPrm()
 	half_height = player->GetScale().y;
 	half_Width = player->GetScale().x;
 
-
 	player->SetPosition({ Player_Pos });
 	player->SetScale({ Player_Scl });
 	player->SetRotation({ Player_Rot });
@@ -391,19 +390,11 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	}
 
-	if (Player_Pos.y >= -13) {
-		CamCon = 0;
-	}
-	else {
-		CamCon = 10;
-	}
+
 
 	camera->Update();
 
-	player->SetPosition(Player_Pos);
-	player->SetRotation(Player_Rot);
-
-	player->SetScale(Player_Scl);
+	
 
 
 	player->Attack(Player_Pos);
