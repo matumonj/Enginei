@@ -45,8 +45,9 @@ public:
 	float getdis() { return dis[0]; }
 	int getHp() { return HP; }
 	void SetHp(int Hp) { HP = Hp; }
-	bool GetRot_Left() { if (playerRot==State::Left) return true; }
-	bool GetRot_Right() { if (playerRot == State::Right) return true; }
+	bool GetRot_Left() { if (playerRot == State::Left) { return true; } else { return false; } }
+	bool GetRot_Right() { if (playerRot == State::Right) {return true; } else { return false; }
+	}
 	void Finalize();
 private:
 	int HP = 100;

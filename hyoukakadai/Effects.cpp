@@ -15,7 +15,7 @@ void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 	//efk1 = new mEffekseer();
 
 	//エフェクトのセット(3引き数に)
-	attackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/attack - コピー.efk", (const EFK_CHAR*)L"effect/10");
+	attackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/newattack.efk", (const EFK_CHAR*)L"effect/10");
 	efk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/deadef.efk", (const EFK_CHAR*)L"effect/10");
 	bossattackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/laser.efk", (const EFK_CHAR*)L"effect/10");
 	Healefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/Heal.efk", (const EFK_CHAR*)L"effect/10");
@@ -133,15 +133,21 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 			}
 		}
 	}
-	if (player->GetRot_Left()) {
+	if (player->GetRot_Left()==true) {
 		attackefk->SetPosition(player->GetPosition().x-2, player->GetPosition().y, player->GetPosition().z);
-		attackefk->SetRotation(1, 180, 0);
+		//attackefk->SetRotation(zrot, 180, 30);
+		//attackefk->SetScale(2,2,2 );
+		attackefk->SetRotation(-55.068, 74.521,0); //-4.651);
+
 	}
-	else if(player->GetRot_Right()){
-		attackefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
-		attackefk->SetRotation(1, 90, 0);
+	else if(player->GetRot_Right()==true){
+		attackefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z+2);
 		//Effect_Rot = { 0,0,0 };
+		attackefk->SetRotation(-55.068, -85.297, 0); //-4.651);
+
 	}
+	
+	attackefk->SetScale(0.5,2.326,0.05);
 	if (Input::GetInstance()->TriggerKey(DIK_A)) {
 		attack = true;
 	}
@@ -274,6 +280,10 @@ void Effects::Draw(DirectXCommon*dxcomn)
 	attackefk->EffekseerDraw(dxcomn->GetCmdList());
 	bossattackefk->EffekseerDraw(dxcomn->GetCmdList());
 	//efk1->EffekseerDraw(dxcomn->GetCmdList());
+	ImGui::Begin("ddd");
+	ImGui::SliderFloat("y", &yrot, 180, -180);
+	ImGui::SliderFloat("z", &zrot, 180, -170);
+	ImGui::End();
 }
 
 void Effects::BossDeath(XMFLOAT3 position, bool f)

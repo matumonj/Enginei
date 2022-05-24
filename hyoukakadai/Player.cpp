@@ -165,7 +165,7 @@ void Player::PlayerMoves(XMFLOAT3& move, float moveSpeed, bool& JumpFlag, float&
 				moveSpeed = 0;
 			}
 			else {
-				playerRot = State::Left;
+			//	playerRot = State::Left;
 				move.x -= moveSpeed;
 				rot.y = 90;
 			}
@@ -175,7 +175,7 @@ void Player::PlayerMoves(XMFLOAT3& move, float moveSpeed, bool& JumpFlag, float&
 		{
 			//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
 				// 右に傾けた
-			playerRot = State::Right;
+		//	playerRot = State::Right;
 			move.x += moveSpeed;
 			//}
 			rot.y = -90;
@@ -194,7 +194,14 @@ void Player::PlayerMoves(XMFLOAT3& move, float moveSpeed, bool& JumpFlag, float&
 		time += 0.02f;
 	}
 
-	
+	if (Input::GetInstance()->GetCMove().lX < u_r - a)
+	{
+			playerRot = State::Left;
+	} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
+	{
+	// 右に傾けた
+		playerRot = State::Right;
+	}
 
 }
 

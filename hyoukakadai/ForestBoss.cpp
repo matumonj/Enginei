@@ -205,6 +205,7 @@ void ForestBoss::Update(XMFLOAT3 position)
 	BarrelObj->SetPosition(Position);
 	BarrelObj->SetScale(Barrel_Scl);
 	BarrelObj->SetRotation(Barrel_Rot);
+	BarrelObj->SetColor({ 0.3,0.3,0.3,1 });
 	//BarrelObj->SetScale({1,5,1});
 	BarrelObj->Update({ 1,1,1,1 });
 }
