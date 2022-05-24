@@ -12,11 +12,9 @@ void MyGame::Initialize(DirectXCommon* dxCommon)
 	//Scene = new TitleScene();
 	//初期シーン
 
-<<<<<<< HEAD
-	BaseScene*scene_ = new BossScene3(sceneManger);
-=======
+
 	BaseScene*scene_ = new StageSelect(sceneManger);
->>>>>>> 2050b2dfd6151df9625af8e2520be2b3e52a9e79
+
 
 	sceneManger->SetnextScene(scene_);
 
