@@ -293,7 +293,7 @@ enemy[9] = std::make_unique<ThrowEnemy>();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	postEffect = new PostEffect();
 	postEffect->Initialize();
-
+	object2->PlayAnimation();
 }
 #pragma endregion
 
@@ -489,9 +489,9 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	Line::CollisionEnemy(enemy->get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
-	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		object2->PlayAnimation();
-	}
+	//if (Input::GetInstance()->Pushkey(DIK_0)) {
+///object2->PlayAnimation();
+	//}
 	//FbxTime time = 0.1f;
 	object2->setcounter(2);
 	//zrot += 1;
@@ -532,8 +532,12 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 	SetPrm();//パラメータのセット
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	//if (enemy[0]->GetHP() ==20) {
+		//if (Input::GetInstance()->TriggerKey(DIK_0)) {
+			
+		//}
+	//}
 	object2->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	//object2->PlayAnimation();
 
 
 	for (int i = 0; i < 8; i++) {

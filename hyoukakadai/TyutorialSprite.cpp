@@ -20,7 +20,7 @@ TyutorialSprite::~TyutorialSprite()
 void TyutorialSprite::Initialize()
 {
 	Sprite::LoadTexture(30, L"Resources/tutorial.png");
-	Sprite::LoadTexture(31, L"Resources/move.png");
+	Sprite::LoadTexture(90, L"Resources/move.png");
 	Sprite::LoadTexture(32, L"Resources/lineshot.png");
 	Sprite::LoadTexture(33, L"Resources/lineope.png");
 	Sprite::LoadTexture(34, L"Resources/attack.png");
@@ -41,7 +41,7 @@ void TyutorialSprite::Initialize()
 	//全てクリア
 	Sprite::LoadTexture(43, L"Resources/cleartutorial.png");//攻撃+プレイヤーの体力
 	sprite[0] = Sprite::Create(30, { 200,50 });//開始
-	sprite[1] = Sprite::Create(31, { 500,50 });//移動
+	sprite[1] = Sprite::Create(90, { 500,50 });//移動
 	sprite[2] = Sprite::Create(32, { 500,50 });//糸出し
 	sprite[3] = Sprite::Create(33, { 500,50 });//回収とひっつき
 	sprite[4] = Sprite::Create(34, { 500,50 });//攻撃
@@ -96,7 +96,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 		if (startposition > 1450) {
 			startposition -= 20;
 		}
-		
+		Line::GetInstance()->SetTrigger(false);
 		if (Input::GetInstance()->TriggerButtonB()|| Input::GetInstance()->TriggerKey(DIK_SPACE)&& Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
@@ -111,11 +111,12 @@ void TyutorialSprite::Update(Enemy* enemy)
 			
 			//左
 			// 方向だけを調べる方法
-			// if (Input::GetInstance()->GetCMove().lX < u_r - a || Input::GetInstance()->GetCMove().lX > u_r + a) {
-				if(Input::GetInstance()->Pushkey(DIK_LEFT)|| Input::GetInstance()->Pushkey(DIK_RIGHT)){
+			if (Input::GetInstance()->GetCMove().lX < u_r - a || Input::GetInstance()->GetCMove().lX > u_r + a) {
+				//if (Input::GetInstance()->Pushkey(DIK_LEFT) || Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 					//Input::GetInstance()->TriggerKey(DIK_SPACE)
-				nextphaseflag_move++;
-			}
+					nextphaseflag_move++;
+				}
+			//}
 			if (nextphaseflag_move >= 100) {//一定距離歩いたら次のフェーズへ
 				phase = Phase::LineShot;
 				nextphaseflag_move = 0;
@@ -145,7 +146,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 
 		if (OK_flag_2nd && alpha[5] <= 0.0f) {
 			if (Line::GetInstance()->Getelf() == true) {
-				phase = Phase::LineOperation;
+				phase = Phase::Attack;
 				OK_flag = false;
 				Destroy(sprite[2]);
 				Destroy(sprite[5]);
@@ -153,33 +154,7 @@ void TyutorialSprite::Update(Enemy* enemy)
 			}
 		}
 		break;
-	case TyutorialSprite::Phase::LineOperation:
-		if (Input::GetInstance()->TriggerButtonB() || Input::GetInstance()->TriggerKey(DIK_SPACE) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
-			OK_flag = true;
-		}
-		if (!OK_flag) {
-			alpha[3] = 0.9f;
-		} else {
-			alpha[3] = 0.0f;
-		}
-		Fader::feedInOut_f(0.7f, 0.0f, OK_flag, NormalinoutSpeed);
-		if (OK_flag && alpha[3] <= 0.0f) {
-			if (Line::GetInstance()->Getboundflag() == true) {
-				nextphaseflag_bond = true;
-			}
-			
-			if (nextphaseflag_bond) {
-				task = Clear::LineBond;
-				//Line::GetInstance()->SetReturnflag(false);
-			}
 
-			if (nextphaseflag_bond && nextphaseflag_return) {
-				phase = Phase::Attack;
-				OK_flag = false;
-				Destroy(sprite[3]);
-			}
-		}
-		break;
 	case TyutorialSprite::Phase::Attack:
 		if (Input::GetInstance()->TriggerButtonB() || Input::GetInstance()->TriggerKey(DIK_SPACE) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
@@ -206,7 +181,12 @@ void TyutorialSprite::Update(Enemy* enemy)
 		if (Input::GetInstance()->TriggerButtonB() || Input::GetInstance()->TriggerKey(DIK_SPACE) && Fader::GetInstance()->GetAlpha() >= 0.6f) {
 			OK_flag = true;
 		}
-		Fader::feedIn(0.7f, NormalfeedSpeed);
+		if (OK_flag) {
+			Fader::feedOut(0.0f, NormalfeedSpeed);
+		}
+		else {
+			Fader::feedIn(0.7f, NormalfeedSpeed);
+		}
 		Fader::feedInOutf_f_a(alpha[15], 0.8f, 0.0f, OK_flag, NormalinoutSpeed);
 		//alpha[15] = 1.0f;
 		for (int i = 9; i < 15; i++) {
@@ -239,11 +219,17 @@ void TyutorialSprite::Update(Enemy* enemy)
 	}
 	sprite[15]->SetSize({1920, 1080
 });
+	Fader::FeedSpriteUpdate();
 	sprite[15]->setcolor({ 1,1,1,alpha[15] });
 }
 
 void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 {
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	Fader::FeedSpriteDraw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
+
 	//	for (int i = 0; i < Max; i++) {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	switch (phase)
@@ -258,9 +244,6 @@ void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 		sprite[2]->Draw();
 		sprite[5]->Draw();
 		break;
-	case Phase::LineOperation:
-		sprite[3]->Draw();
-		break;
 	case Phase::Attack:
 		sprite[4]->Draw();
 		break;
@@ -271,40 +254,11 @@ void TyutorialSprite::Draw(DirectXCommon* dxcomn)
 		break;
 	}
 	if (phase != Phase::End) {
-		switch (task)
-		{
-		case TyutorialSprite::Clear::None:
-			sprite[9]->Draw();
-			break;
-		case TyutorialSprite::Clear::Move:
-			sprite[10]->Draw();
-			Destroy(sprite[9]);
-			break;
-		case TyutorialSprite::Clear::LineShot:
-			sprite[11]->Draw();
-			Destroy(sprite[10]);
-			break;
-		case TyutorialSprite::Clear::LineBond:
-			sprite[12]->Draw();
-			if (nextphaseflag_return) {
-				task = Clear::LineCol;
-			}
-			Destroy(sprite[11]);
-			break;
-		case TyutorialSprite::Clear::LineCol:
-			sprite[13]->Draw();
-			Destroy(sprite[12]);
-			break;
-		case TyutorialSprite::Clear::Attack:
-			sprite[14]->Draw();
-			Destroy(sprite[13]);
-			break;
-		default:
-			break;
-		}
+	
 	}
 	Sprite::PostDraw(dxcomn->GetCmdList());
 	//}
+	
 }
 
 void TyutorialSprite::Finalize()

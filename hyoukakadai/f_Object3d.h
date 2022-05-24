@@ -99,7 +99,7 @@ protected:
 	//現在時間
 	FbxTime currentTime;
 	//アニメーション再生中
-	bool isPlay = false;
+	bool isPlay = true;
 	int ctime = 1;
 public:
 

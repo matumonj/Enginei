@@ -11,7 +11,7 @@
 #include"Destroy.h"
 #include"Fader.h"
 #include"DesertField.h"
-
+#include"FirstBossScene.h"
 //コメントアウト
 //シーンのコンストラクタ
 Tutorial::Tutorial(SceneManager* sceneManager)
@@ -124,8 +124,10 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 	GameUI::PlayerUISet();
 
 	//enemy[0] = new MobEnemy();
-	enemy = new MobEnemy();
-	enemy->Setposition({ 24, 10, 0 });
+	enemy= std::make_unique<MobEnemy>();
+	//std::make_unique()
+	//enemy = new MobEnemy();
+	enemy->Setposition({ 110.6, 3, 0 });
 	enemy->Initialize();
 
 	mapcol = new Collision();
@@ -171,10 +173,10 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y + 10;
+	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
-	tyutorial->Update(enemy);
+	tyutorial->Update(enemy.get());
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
@@ -225,7 +227,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 		Line::GetInstance()->SetColf(colf);
 		Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
-		Line::CollisionEnemy(enemy);
+		Line::CollisionEnemy(enemy.get());
 		//FBXのアニメーション再生
 		if (Input::GetInstance()->Pushkey(DIK_0)) {
 			object1->PlayAnimation();
@@ -256,8 +258,8 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		camera->Update();
 
 		player->Attack(Player_Pos);
-		player->FlyingAttack(enemy);
-		player->CollisionAttack1(enemy, Player_Pos);
+		player->FlyingAttack(enemy.get());
+		player->CollisionAttack(&enemy, Player_Pos);
 
 		SetPrm();//パラメータのセット
 
@@ -265,6 +267,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 		//enemyにnullptr代入するときは敵が死んだら
 			if (enemy != nullptr) {
+				//Player_Pos.x+10;
 				enemy->enemyappearance(tyutorial);
 				//プレイヤーの検知
 				enemy->Attack(player);
@@ -274,18 +277,18 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 				enemy->EnemySearchPlayer(player);
 				//もし敵が死んだら破棄
 				if (enemy->GetState_DEAD() == true) {
-					Destroy(enemy);
+					Destroy_unique(enemy);
 				}
 			}
-			effect->Updateo(dxCommon, camera, enemy, player);
+			effect->Update(dxCommon, camera, &enemy, player);
 		GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 			Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 		GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 		GameUI::PlayerUIUpdate(player);
 
 	//シーンチェンジ
-	if (tyutorial->getPhase_End()==true&& Input::GetInstance()->TriggerButtonA() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
-		BaseScene* scene = new  DesertField(sceneManager_);//次のシーンのインスタンス生成
+	if (tyutorial->Gethh()&& Input::GetInstance()->TriggerButtonA() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
+		BaseScene* scene = new  FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
@@ -333,9 +336,6 @@ void Tutorial::MyGameDraw(DirectXCommon* dxcomn)
 	GameUI::PlayerUIDraw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
-	Sprite::PreDraw(dxcomn->GetCmdList());
-	Fader::FeedSpriteDraw();
-	Sprite::PostDraw(dxcomn->GetCmdList());
 	tyutorial->Draw(dxcomn);
 }
 #pragma endregion
@@ -358,7 +358,7 @@ void Tutorial::ImGuiDraw()
 	if (ImGui::TreeNode("cameraposition")) {
 		float cx = camera->GetEye().x;
 		float cy = camera->GetEye().y;
-		ImGui::SliderFloat("cx", &cx, 200, -200);
+		ImGui::SliderFloat("cx", &Player_Pos.x, 200, -200);
 		ImGui::SliderFloat("cy", &cy, 200, -200);
 		ImGui::TreePop();
 	}

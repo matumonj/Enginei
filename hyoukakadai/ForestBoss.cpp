@@ -732,6 +732,9 @@ void ForestBoss::UpDownMove(XMFLOAT3 position)
 
 void ForestBoss::DeathMotion()
 {
+	if (Input::GetInstance()->TriggerKey(DIK_D)) {
+		NuclearDeayh=true;
+	}
 	if (NuclearDeayh) {
 		
 		deathcount++;
