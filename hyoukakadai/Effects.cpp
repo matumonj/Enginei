@@ -134,14 +134,14 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 		}
 	}
 	if (player->GetRot_Left()==true) {
-		attackefk->SetPosition(player->GetPosition().x-2, player->GetPosition().y, player->GetPosition().z);
+		attackefk->SetPosition(player->GetPosition().x-6, player->GetPosition().y, player->GetPosition().z);
 		//attackefk->SetRotation(zrot, 180, 30);
 		//attackefk->SetScale(2,2,2 );
 		attackefk->SetRotation(0, zrot,0); //-4.651);
 
 	}
 	else if(player->GetRot_Right()==true){
-		attackefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z+2);
+		attackefk->SetPosition(player->GetPosition().x+6, player->GetPosition().y, player->GetPosition().z+2);
 		//Effect_Rot = { 0,0,0 };
 		attackefk->SetRotation(zrot,/*-55.068*/ -85.297, 0); //-4.651);
 

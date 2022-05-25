@@ -445,10 +445,18 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	}
 
 	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
-		sceneManager_->SetnextScene(scene);//シーンのセット
+		gf = true;
+		
 	}
-
+	if (gf) {
+		Player_Pos = goal_pos;
+		grav = 0;
+		time = 0;
+		if (enemy[0]->GetPosition().x > 450) {
+			BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+		}
+	}
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
 		time = 0;
@@ -702,7 +710,7 @@ void BossScene3::Draw(DirectXCommon* dxcomn)
 
 void BossScene3::ImGuiDraw()
 {
-	//ImGui::Begin("Obj1");
+	ImGui::Begin("Obj1");
 	//ImGui::SetWindowPos(ImVec2(0, 0));
 	//ImGui::SetWindowSize(ImVec2(500, 300));
 	//if (ImGui::TreeNode("light_position")) {
@@ -742,7 +750,7 @@ void BossScene3::ImGuiDraw()
 	//if (ImGui::TreeNode("Player_position")) {
 	//	ImGui::SliderFloat("positionX", &BublePos[0].x, -200, 200);
 	//	ImGui::SliderFloat("positionY", &BublePos[0].y, -200, 200);
-	//	ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+		ImGui::SliderFloat("positionZ", &Player_Pos.x, -200, 200);
 	//	ImGui::SliderFloat("grav", &grav, -200, 200);
 	//	ImGui::SliderFloat("time", &time, -200, 200);
 	//	ImGui::TreePop();
@@ -778,7 +786,7 @@ void BossScene3::ImGuiDraw()
 	//}*/
 
 
-	//ImGui::End();
+	ImGui::End();
 
 	//
 	//ImGui::End();

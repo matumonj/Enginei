@@ -114,7 +114,7 @@ private:
 	XMFLOAT3 old_Scl = { 1,1,1 };
 
 	float distance = 30;
-
+	bool gf;
 	int Ontime = 300;
 	bool OnFlag = false;
 

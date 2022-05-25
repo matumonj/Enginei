@@ -57,7 +57,7 @@ void SeaBoss::Initialize()
 	//ƒ‚ƒfƒ‹‚Ì“Çž
 	//Rotation.z = 0;
 	HP = MaxHP;
-	
+	Position = { -30,0,0 };
 }//
 
 //XVˆ—
@@ -216,9 +216,32 @@ void SeaBoss::Follow(XMFLOAT3 position)
 	angleX = (position.x - Position.x);
 	//angleZ = (position.y - Position.y);
 	angleR = sqrtf((Position.x - position.x) * (Position.x - position.x));
+	if (position.x > 30) {
+		if (!aperf && Collision::GetInstance()->GetLen_X(Position.x, position.x) > 30) {
+			bossmovespeed = 0.35f;
+		} else {
+			aperf = true;
+		}
+	}
+	
+		if (Collision::GetLen({ 390,3,0 }, position) < 1) {
+			bossmovespeed = 0.5f;
+		}
+		else {
+			if (aperf) {
+				if (position.x > 30 && position.x < 234) {
+					bossmovespeed = 0.13f;
+				} else if (position.x >= 234 && position.x < 310) {
+					bossmovespeed = 0.18f;
+				} else if (position.x >= 310 && position.x < 500) {
+					bossmovespeed = 0.25f;
+				}
+			}
+		}
+		Position.x +=bossmovespeed/1.5;
 
-	Position.x += (angleX / angleR) * (bossmovespeed/2 );
-
+	
+	
 }
 
 

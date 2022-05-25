@@ -65,6 +65,7 @@
         const int MaxHP = 20;//‘Ì—Í‚Ì‰Šú’l
 
         bool bossjumpflag2 = false;
+        bool aperf;
     private:
         // bool woodatkflag;
         XMFLOAT3 Old_Pos;
