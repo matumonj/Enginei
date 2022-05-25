@@ -169,6 +169,9 @@ private:
 
 	bool jumpFlag = false;
 
+	float goalSpeed = 0;
+	float goaltime = 0;
+	bool goalflag = false;
 
 
 	bool colf = false;

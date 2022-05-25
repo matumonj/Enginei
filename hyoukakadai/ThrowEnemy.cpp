@@ -21,7 +21,7 @@ void ThrowEnemy::Initialize()
 {
 
 	//ƒ‚ƒfƒ‹‚Ì“Ç
-	EnemyModel = Model::CreateFromOBJ("subenemy");
+	EnemyModel = Model::CreateFromOBJ("enemy2");
 	//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 	//MobObject = new Object3d();
 	EnemyObj = Object3d::Create();

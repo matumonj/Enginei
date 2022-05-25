@@ -187,6 +187,9 @@ void BossScene3::SetPrm()
 		background[i]->SetSize({ WinApp::window_width,WinApp::window_height });
 		background[i]->setcolor({ 1,1,1,0.4 });
 	}
+
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 }
 #pragma endregion
 
@@ -308,22 +311,12 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
-	LONG u_r = 32768;
-	LONG a = 30000;
-
 	object1->SetPosition({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	//object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
 
-
-	//左
-	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
-
-
-	///////// コントローラー //////////
-	// スティックの方向判定
-	// 無反応範囲
-
-
+	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
+	}
 
 
 	BckGrnd[0] -= 10;
@@ -339,87 +332,24 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	////当たり判定
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
-	//入力処理より後に当たり判定を描け
-	//aaaaaaa
-
-	if (OnFlag == true) {
-		if (Ontime >= 0) {
-			Ontime--;
-		}
-		else if (Ontime <= 0) {
-			OnFlag = false;
-		}
-	}
-
-	if (OnFlag == false) {
-		Ontime++;
-		if (Ontime >= 300) {
-			OnFlag = true;
-		}
-	}
-
-	float width;
-	float height;
-	for (int i = 0; i < MAX_X; i++) {
-		for (int j = 0; j < MAX_Y; j++) {
-			if (map[j][i] == 1 || (map[j][i] == 2 && OnFlag == true)) {
-				mapx[j][i] = tst[j][i]->GetPosition().x;
-				mapy[j][i] = tst[j][i]->GetPosition().y;
-				height = tst[j][i]->GetScale().y;
-				width = tst[j][i]->GetScale().x;
-				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
-					if (Line::GetInstance()->Gettriggerflag() == true) {
-						Line::GetInstance()->Setmapcol(true);
-						Line::GetInstance()->Setelf(true);
-					}
-				}
-
-				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
-					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
-						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
-						//moveSpeed = 0;
-						grav = 0.0f;
-						time = 0;
-						jumpFlag = false;
-						//Player_Pos.y = Player_Pos.y - 0.01f;
-
-						break;
-					}
-					else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
-						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
-
-						break;
-					}
-
-				}
-				else {
-					moveSpeed = 0.2f;
-					grav = 0.03f;
-				}
-
-				//プレイヤーの左辺
-				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
-					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
-						Player_Pos.y = Player_Pos.y + 0.001f;
-						
-						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
-						
-						//grav = 0.0f;
-						//time = 0;
-						break;
-					}
-					//プレイヤーの右辺
-					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
-						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
-						//grav = 0.0f;
-						//time = 0;
-						//moveSpeed = 0;
-						break;
-					}
-				}
-				else {
-					moveSpeed = 0.2f;
-				}
+	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3) == true)
+	{
+		goalflag = true;
+		jumpFlag = false;
+		moveSpeed = 0;
+		goaltime += 0.01f;
+		goalSpeed = 0.01f;
+		Player_Pos.x += goalSpeed;
+		if (goaltime >= 1) {
+			goaltime = 1;
+			Player_Pos.z += 0.01f;
+			Player_Rot.y--;
+			if (Player_Rot.y <= 0) {
+				Player_Rot.y = 0;
+			}
+			if (Player_Pos.z >= 1) {
+				BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
+				sceneManager_->SetnextScene(scene);//シーンのセット
 			}
 		}
 	}
