@@ -248,8 +248,11 @@ void StageSelect::Select()
 				}
 			case Stage1_1:
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
-					BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
-					sceneManager_->SetnextScene(scene);//シーンのセット
+					nextScene = true;
+				}
+				if (nextScene) {
+					stageSpriteScene = Casle;
+
 				}
 
 			case Stage1_2:
@@ -470,6 +473,53 @@ void StageSelect::SpriteUpdate()
 			}
 			TargetSprite->SetSize({ 0,0 });
 
+			break;
+		case Casle:
+			nextScene = false;
+			Fader::feedIn(0.5f, 1);
+			stime += 0.01f;
+			for (int i = 0; i < 3; i++) {
+				SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 300);
+				SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 300);
+
+				StageSprite[i]->SetPosition(SpritePosition[i]);
+				StageSprite[i]->SetSize(SpriteScale[i]);
+			}
+			if (Input::GetInstance()->TriggerButtonB()) {
+				stime = 0;
+				stageSpriteScene = Stay;
+			}
+			SelectStageofStage();
+			//
+			if (SpriteScale[0].x >= 300 && Input::GetInstance()->TriggerButtonA()) {//押されたら
+				if (TargetNum == 0) {
+					Loadf = true;
+					J_stagechanges[0] = true;
+				}
+				else if (TargetNum == 1) {
+					Loadf = true;
+					J_stagechanges[1] = true;
+				}
+				else if (TargetNum == 2) {
+					Loadf = true;
+					J_stagechanges[2] = true;
+				}
+			}
+			if (J_stagechanges[0] == true) {
+				Fader::feedIn(1.0f, 0.1f);
+				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
+					BaseScene* scene = new LastStage(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
+		
+			else if (J_stagechanges[1] == true) {
+				Fader::feedIn(1.0f, 0.1f);
+				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
+					BaseScene* scene = new LastBossScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
 			break;
 		case None:
 			stime = 0;

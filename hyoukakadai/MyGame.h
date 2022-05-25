@@ -46,6 +46,8 @@
 #include"DesertField.h"
 #include"BossScene3.h"
 #include"Tutorial.h"
+#include"LastStage.h"
+#include"LastBossScene.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
 

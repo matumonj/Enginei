@@ -72,10 +72,10 @@ void BossScene3::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("block");
+	tstmodel = Model::CreateFromOBJ("sea");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
-	goalmodel = Model::CreateFromOBJ("goalmo");
+	goalmodel = Model::CreateFromOBJ("goal");
 
 
 	item = new Item();
@@ -167,9 +167,13 @@ void BossScene3::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
+			if (map[j][i] == 3) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,120,0 });
+				goal->SetScale({ tst_Scl });
+			}
 		}
 	}
-	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
 
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
@@ -218,8 +222,6 @@ void BossScene3::objUpdate()
 #pragma region 初期化
 void BossScene3::Initialize(DirectXCommon* dxCommon)
 {
-	//
-
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
@@ -270,7 +272,7 @@ enemy[9] = std::make_unique<ThrowEnemy>();
 	attackeffects->Initialize(dxCommon, camera);
 	
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
 	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("shark");
 
 	//デバイスをセット
@@ -294,6 +296,7 @@ enemy[9] = std::make_unique<ThrowEnemy>();
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 	object2->PlayAnimation();
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -308,7 +311,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	LONG u_r = 32768;
 	LONG a = 30000;
 
-	object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
+	object1->SetPosition({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	//object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
 
 
@@ -332,33 +335,11 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 		BckGrnd[1] = 1900;
 	}
 	BubleMove();
-	//FBXモデルの更新
-	if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-		Player_Pos.x += moveSpeed;
-	}
-	if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-		Player_Pos.x -= moveSpeed;
-	}
 
-	if (Input::GetInstance()->GetCMove().lY < u_r - a)
-	{
-
-		jumpFlag = true;
-		// 左に傾けた
-		//Player_Pos.x -= moveSpeed;
-
-	}
-
-
-	if (jumpFlag == true) {
-		Player_Pos.y += 0.12f;
-		time += 0.02f;
-	}
-
-
-	///これより上に入力処理をかけ
 	////当たり判定
+	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
+<<<<<<< HEAD
 	//入力処理より後に当たり判定を描け
 	//aaaaaaa
 
@@ -456,6 +437,13 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 			BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
 		}
+=======
+	
+	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3))
+	{
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
+		sceneManager_->SetnextScene(scene);//シーンのセット
+>>>>>>> 30ac9d6d2f379f5c9a963990f2a160cec833276d
 	}
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -624,26 +612,27 @@ void BossScene3::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
 
-	player->PreDraw();
+	/*player->PreDraw();
 	player->Draw();
-	player->PostDraw();
+	player->PostDraw();*/
 
 
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1 || (map[j][i] == 2 && OnFlag == true)) {
+			if (map[j][i] == 1 ) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
 			}
+			if (map[j][i] == 3) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
+			}
 		}
 	}
 
-
-	goal->PreDraw();
-	goal->Draw();
-	goal->PostDraw();
 
 	/*hari->PreDraw();
 	hari->Draw();
@@ -676,7 +665,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
 	//FBXの描画
-	//object1->Draw(dxcomn->GetCmdList());
+	object1->Draw(dxcomn->GetCmdList());
 	object2->Draw(dxcomn->GetCmdList());
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	for (int i = 0; i < 8; i++) {
