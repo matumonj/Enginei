@@ -48,6 +48,8 @@ public:
 	XMFLOAT3 b_Effect_SCl;
 
 	bool deathf;
+	float zrot;
+	float yrot;
 public:
 	void BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera,bool stay, bool altAttack, XMFLOAT3 bpos);
 	void Initialize(DirectXCommon* dxcomn, DebugCamera* camera);
