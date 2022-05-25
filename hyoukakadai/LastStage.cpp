@@ -285,25 +285,25 @@ void LastStage::ThInitialize()
 #pragma region 更新処理
 void LastStage::Update(DirectXCommon* dxCommon)
 {
-	if (Collision::GetInstance()->Gethit() == true) {
-		loadf = false;
-		Fader::feedOut(0.0f, 0.1f);
-		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
-			//::GetInstance()->SetHit(false);
-		}
-	}
-	else {
-		loadf = true;
-	}
-	GameUI::NowLoadUpdate(loadf);
-	Old_Pos = Player_Pos;
-	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y + 10;
-	spotLightpos[2] = 0;
+	//if (Collision::GetInstance()->Gethit() == true) {
+	//	loadf = false;
+	//	Fader::feedOut(0.0f, 0.1f);
+	//	if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+	//		//::GetInstance()->SetHit(false);
+	//	}
+	//}
+	//else {
+	//	loadf = true;
+	//}
+	//GameUI::NowLoadUpdate(loadf);
+	//Old_Pos = Player_Pos;
+	//spotLightpos[0] = Player_Pos.x;
+	//spotLightpos[1] = Player_Pos.y + 10;
+	//spotLightpos[2] = 0;
 
-	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
+//	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
 		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
-	}
+//	}
 
 	///////// コントローラー //////////
 	// スティックの方向判定
@@ -509,7 +509,7 @@ void LastStage::Update(DirectXCommon* dxCommon)
 	}
 	item->HealEfficasy(player);
 	item->Update(enemy);
-	Fader::FeedSpriteUpdate();
+//	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -602,10 +602,10 @@ void LastStage::MyGameDraw(DirectXCommon* dxcomn)
 	object1->Draw(dxcomn->GetCmdList());
 
 	Sprite::PreDraw(dxcomn->GetCmdList());
-	Fader::FeedSpriteDraw();
+	//Fader::FeedSpriteDraw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
-	GameUI::NowLoadDraw(dxcomn);
+//	GameUI::NowLoadDraw(dxcomn);
 }
 #pragma endregion
 //↓に入る

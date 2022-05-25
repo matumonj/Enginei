@@ -152,6 +152,8 @@ private:
 	float grav = 0.05f;
 	float time = 0.1f;
 
+	float cameramove = 8.0f;
+
 private://“_ŒõŒ¹
 	LightGroup* lightGroup = nullptr;
 	float ambientColor0[3] = { 1,1,1 };

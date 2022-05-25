@@ -59,7 +59,7 @@ void ForestStage2::ModelCreate()
 	tstmodel = Model::CreateFromOBJ("wood");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
-	goalmodel = Model::CreateFromOBJ("goalmo");
+	goalmodel = Model::CreateFromOBJ("goal");
 	reefmodel = Model::CreateFromOBJ("reef");
 
 
@@ -155,9 +155,14 @@ void ForestStage2::SetPrm()
 			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			reef[j][i]->SetRotation({ tst_Rot });
 			reef[j][i]->SetScale({ tst_Scl });
+
+			if (map[j][i] == 3) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,120,0 });
+				goal->SetScale({ tst_Scl });
+			}
 		}
 	}
-	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
 
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
@@ -255,7 +260,7 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -273,7 +278,7 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	postEffect = new PostEffect();
 	postEffect->Initialize();
-
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -303,7 +308,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	//object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
-		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 	}
 
 	//入力処理より後に当たり判定を描け
@@ -311,8 +316,9 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	Collision::CollisionMap(map, reef, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
 
 
-	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
+	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3))
+	{
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
@@ -475,12 +481,16 @@ void ForestStage2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				reef[j][i]->Draw();
 				reef[j][i]->PostDraw();
 			}
+			if (map[j][i] == 3) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
+			}
+
 		}
 	}
 
-	goal->PreDraw();
-	goal->Draw();
-	goal->PostDraw();
+	
 
 	/*hari->PreDraw();
 	hari->Draw();

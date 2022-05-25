@@ -31,7 +31,7 @@ void ForestStage1::SpriteCreate()
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
-	Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	Sprite::LoadTexture(1, L"Resources/forest.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
 	mech = std::make_unique<Texture>();
@@ -376,6 +376,18 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 		
 	//}
 
+	if (Player_Pos.y >= -11) {
+		cameramove-=0.1f;
+		if (cameramove <= 6) {
+			cameramove = 6;
+		}
+	}
+	else {
+		cameramove+=0.1f;
+		if (cameramove >= 9) {
+			cameramove = 9;
+		}
+	}
 
 
 	//}
@@ -383,21 +395,21 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	if (Player_Pos.x <=  27.0f) {
 		camera->SetTarget({ 0,1,0 });//’Ž‹“_
 		camera->SetDistance(distance);//
-		camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
+		camera->SetEye({ 27.0f,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 27.0f,Player_Pos.y+cameramove,Player_Pos.z });
 	}
 
 	else if (Player_Pos.x >= 368.0f) {
 		camera->SetTarget({ 0,1,0 });//’Ž‹“_
 		camera->SetDistance(distance);//
-		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 368.0f,Player_Pos.y ,Player_Pos.z });
+		camera->SetEye({ 368.0f,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 368.0f,Player_Pos.y+cameramove ,Player_Pos.z });
 	}
 	else {
 		camera->SetTarget({ 0,1,0 });//’Ž‹“_
 		camera->SetDistance(distance);//
-		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
+		camera->SetEye({ Player_Pos.x,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
+		camera->SetTarget({ Player_Pos.x,Player_Pos.y+cameramove,Player_Pos.z });
 	}
 
 
@@ -573,45 +585,45 @@ void ForestStage1::Draw(DirectXCommon* dxcomn)
 
 void ForestStage1::ImGuiDraw()
 {
-	//ImGui::Begin("Obj1");
-	//ImGui::SetWindowPos(ImVec2(0, 0));
-	//ImGui::SetWindowSize(ImVec2(500, 300));
-	//if (ImGui::TreeNode("light_position")) {
-	//	//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
-	//	///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
-	//	///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
-	//	if (ImGui::Button("spotlight ON")) {
-	//		lightGroup->SetSpotLightActive(0, true);
-	//	}
-	//	if (ImGui::Button("spotlight OFF")) {
-	//		lightGroup->SetSpotLightActive(0, false);
-	//	}
-	//	ImGui::ColorPicker3("light_color", spotLightColor);
-	//	ImGui::TreePop();
-	//}
+	ImGui::Begin("Obj1");
+	ImGui::SetWindowPos(ImVec2(0, 0));
+	ImGui::SetWindowSize(ImVec2(500, 300));
+	if (ImGui::TreeNode("light_position")) {
+		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
+		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
+		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
+		if (ImGui::Button("spotlight ON")) {
+			lightGroup->SetSpotLightActive(0, true);
+		}
+		if (ImGui::Button("spotlight OFF")) {
+			lightGroup->SetSpotLightActive(0, false);
+		}
+		ImGui::ColorPicker3("light_color", spotLightColor);
+		ImGui::TreePop();
+	}
 
-	//if (ImGui::TreeNode("Effect_position")) {
-	//	//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
-	//	//ImGui::SliderFloat("positionY", &debuga, -200, 200);
-	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
-	//	ImGui::TreePop();
-	//}
-	//if (ImGui::TreeNode("enemy_position")) {
-	//	float rf = enemy[0]->GetPosition().x;
-	//	float rf2 = enemy[0]->GetPosition().y;
-	//	float rrr = player->getdis();
-	//	//float rf3 = enemy->GetPosition().z;
-	//	ImGui::SliderInt("positionX", &co, -100, 100);
-	//	ImGui::SliderFloat("positionY", &Player_Pos.y, -100, 100);
-	//	ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-	//	ImGui::SliderInt("positionX", &co, -200, 200);
-	//	ImGui::SliderFloat("positionY", &rf2, -200, 200);
-	//	ImGui::SliderFloat("positionZ", &rrr, -200, 200);
-	//	ImGui::TreePop();
-	//}
+	if (ImGui::TreeNode("Effect_position")) {
+		//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
+		//ImGui::SliderFloat("positionY", &debuga, -200, 200);
+		//ImGui::SliderInt("positionZ", &elf, -200, 200);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("enemy_position")) {
+		float rf = enemy[0]->GetPosition().x;
+		float rf2 = enemy[0]->GetPosition().y;
+		float rrr = player->getdis();
+		//float rf3 = enemy->GetPosition().z;
+		ImGui::SliderInt("positionX", &co, -100, 100);
+		ImGui::SliderFloat("positionY", &Player_Pos.y, -100, 100);
+		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
+		ImGui::SliderInt("positionX", &co, -200, 200);
+		ImGui::SliderFloat("positionY", &rf2, -200, 200);
+		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
+		ImGui::TreePop();
+	}
 
 
-	//ImGui::End();
+	ImGui::End();
 
 }
 #pragma region ‰ð•ú•”•ª
