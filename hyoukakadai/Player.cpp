@@ -82,12 +82,12 @@ void Player::Attack(XMFLOAT3 playerpos)
 		switch (playerRot)
 		{
 		case State::Left:
-			Area_X_s = 5;
+			Area_X_s = 8;
 			Area_X_e = 0;
 			break;
 
 		case State::Right:
-			Area_X_e = 4;
+			Area_X_e = 8;
 			Area_X_s = 0;
 			break;
 		}
@@ -101,8 +101,8 @@ void Player::Attack(XMFLOAT3 playerpos)
 }
 void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 {
-	damageArea.Area_s = { position.x- Area_X_s,position.y - 3 };
-	damageArea.Area_e = { position.x + Area_X_e ,position.y + 3 };
+	damageArea.Area_s = { position.x- Area_X_s,position.y - 1};
+	damageArea.Area_e = { position.x + Area_X_e ,position.y + 1 };
 
 	//当たり判定
 

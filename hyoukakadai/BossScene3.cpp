@@ -134,7 +134,7 @@ void BossScene3::ModelCreate()
 	//Player_Pos = player->GetPosition();
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
-	//Fader::SetFeedSprite();
+	Fader::SetFeedSprite();
 	BckGrnd[0] = 0;
 	BckGrnd[1] = 1900;
 }
@@ -339,13 +339,107 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	////当たり判定
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
-	
-	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3))
-	{
-		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
-		sceneManager_->SetnextScene(scene);//シーンのセット
+	//入力処理より後に当たり判定を描け
+	//aaaaaaa
+
+	if (OnFlag == true) {
+		if (Ontime >= 0) {
+			Ontime--;
+		}
+		else if (Ontime <= 0) {
+			OnFlag = false;
+		}
 	}
 
+	if (OnFlag == false) {
+		Ontime++;
+		if (Ontime >= 300) {
+			OnFlag = true;
+		}
+	}
+
+	float width;
+	float height;
+	for (int i = 0; i < MAX_X; i++) {
+		for (int j = 0; j < MAX_Y; j++) {
+			if (map[j][i] == 1 || (map[j][i] == 2 && OnFlag == true)) {
+				mapx[j][i] = tst[j][i]->GetPosition().x;
+				mapy[j][i] = tst[j][i]->GetPosition().y;
+				height = tst[j][i]->GetScale().y;
+				width = tst[j][i]->GetScale().x;
+				if ((Line::GetInstance()->getpos().x + 1.0f > mapx[j][i] - (width) && Line::GetInstance()->getpos().x - 1.0f < mapx[j][i] + (width)) && Line::GetInstance()->getpos().y + 1.0f > mapy[j][i] - height && Line::GetInstance()->getpos().y - 1.0f < mapy[j][i] + height) {
+					if (Line::GetInstance()->Gettriggerflag() == true) {
+						Line::GetInstance()->Setmapcol(true);
+						Line::GetInstance()->Setelf(true);
+					}
+				}
+
+				if ((Player_Pos.x + Player_Scl.x > mapx[j][i] - (width - moveSpeed) && Player_Pos.x - Player_Scl.x < mapx[j][i] + (width - moveSpeed))) {
+					if (Old_Pos.y > mapy[j][i] && Player_Pos.y - Player_Scl.y < mapy[j][i] + height) {
+						Player_Pos.y = height + mapy[j][i] + Player_Scl.y;
+						//moveSpeed = 0;
+						grav = 0.0f;
+						time = 0;
+						jumpFlag = false;
+						//Player_Pos.y = Player_Pos.y - 0.01f;
+
+						break;
+					}
+					else if (Old_Pos.y <mapy[j][i] && Player_Pos.y + Player_Scl.y>mapy[j][i] - height) {
+						Player_Pos.y = mapy[j][i] - (Player_Scl.y + height);
+
+						break;
+					}
+
+				}
+				else {
+					moveSpeed = 0.2f;
+					grav = 0.03f;
+				}
+
+				//プレイヤーの左辺
+				if ((Player_Pos.y - Player_Scl.y < mapy[j][i] + height && mapy[j][i] - height < Player_Pos.y + Player_Scl.y)) {
+					if (Player_Pos.x - Player_Scl.x < mapx[j][i] + width && mapx[j][i] < Old_Pos.x) {
+						Player_Pos.y = Player_Pos.y + 0.001f;
+						
+						Player_Pos.x = width + mapx[j][i] + Player_Scl.x;
+						
+						//grav = 0.0f;
+						//time = 0;
+						break;
+					}
+					//プレイヤーの右辺
+					else if (Player_Pos.x + Player_Scl.x > mapx[j][i] - width && mapx[j][i] > Old_Pos.x) {
+						Player_Pos.x = mapx[j][i] - (Player_Scl.x + width);
+						//grav = 0.0f;
+						//time = 0;
+						//moveSpeed = 0;
+						break;
+					}
+				}
+				else {
+					moveSpeed = 0.2f;
+				}
+			}
+		}
+	}
+
+	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
+		gf = true;
+		
+	}
+	if (gf) {
+		Player_Pos = goal_pos;
+		grav = 0;
+		time = 0;
+		if (enemy[0]->GetPosition().x > 400) {
+			Fader::feedIn(1.0f, 0.1f);
+			if (Fader::GetInstance()->GetAlpha() >= 1.0f) {
+				BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
+				sceneManager_->SetnextScene(scene);//シーンのセット
+			}
+		}
+	}
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
 		time = 0;
@@ -493,7 +587,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	//Player_Pos.y+=moves
 	item->HealEfficasy(player);
 	item->Update(enemy);
-	//Fader::FeedSpriteUpdate();
+	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -579,6 +673,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 
 	//setumei->Draw();
 	//dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	Fader::FeedSpriteDraw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
 
@@ -600,7 +695,7 @@ void BossScene3::Draw(DirectXCommon* dxcomn)
 
 void BossScene3::ImGuiDraw()
 {
-	//ImGui::Begin("Obj1");
+	ImGui::Begin("Obj1");
 	//ImGui::SetWindowPos(ImVec2(0, 0));
 	//ImGui::SetWindowSize(ImVec2(500, 300));
 	//if (ImGui::TreeNode("light_position")) {
@@ -640,7 +735,7 @@ void BossScene3::ImGuiDraw()
 	//if (ImGui::TreeNode("Player_position")) {
 	//	ImGui::SliderFloat("positionX", &BublePos[0].x, -200, 200);
 	//	ImGui::SliderFloat("positionY", &BublePos[0].y, -200, 200);
-	//	ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+		ImGui::SliderFloat("positionZ", &Player_Pos.x, -200, 200);
 	//	ImGui::SliderFloat("grav", &grav, -200, 200);
 	//	ImGui::SliderFloat("time", &time, -200, 200);
 	//	ImGui::TreePop();
@@ -676,7 +771,7 @@ void BossScene3::ImGuiDraw()
 	//}*/
 
 
-	//ImGui::End();
+	ImGui::End();
 
 	//
 	//ImGui::End();
