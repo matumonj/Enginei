@@ -38,7 +38,7 @@ void Tutorial::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("box1");
+	tstmodel = Model::CreateFromOBJ("homeblock");
 	harimodel = Model::CreateFromOBJ("hari");
 
 	collision = new Collision();
@@ -86,6 +86,9 @@ void Tutorial::SetPrm()
 			tst[j][i]->SetScale({ tst_Scl });
 		}
 	}
+
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 
 }
 #pragma endregion
@@ -142,7 +145,7 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 	Object3d::SetCamera(camera);
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -161,6 +164,8 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 	audio->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	Fader::SetFeedSprite();
+	//FBXのアニメーション再生
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -228,11 +233,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		Line::GetInstance()->SetColf(colf);
 		Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 		Line::CollisionEnemy(enemy.get());
-		//FBXのアニメーション再生
-		if (Input::GetInstance()->Pushkey(DIK_0)) {
-			object1->PlayAnimation();
-			grav = 0;
-		}
 
 		//カメラ関係の処理
 		if (Player_Pos.x <= 27.0f) {
@@ -258,7 +258,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		camera->Update();
 
 		player->Attack(Player_Pos);
-		player->FlyingAttack(enemy.get());
+	//	player->FlyingAttack(enemy.get());
 		player->CollisionAttack(&enemy, Player_Pos);
 
 		SetPrm();//パラメータのセット
@@ -299,9 +299,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void Tutorial::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	player->PreDraw();
-	player->Draw();
-	player->PostDraw();
 
 	
 	for (int j = 0; j < MAX_Y; j++) {

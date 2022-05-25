@@ -227,7 +227,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	GameUI::PlayerUISet();
 	enemy[0] = std::make_unique<SeaBoss>();
 	//enemy[0] = std::make_unique<ThrowEnemy>();
-enemy[9] = std::make_unique<ThrowEnemy>();
+	enemy[9] = std::make_unique<ThrowEnemy>();
 	enemy[8] = std::make_unique<ThrowEnemy>();
 	enemy[7] = std::make_unique<ThrowEnemy>();
 
