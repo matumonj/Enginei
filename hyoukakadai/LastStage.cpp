@@ -399,13 +399,7 @@ void LastStage::Update(DirectXCommon* dxCommon)
 		camera->SetTarget({ Player_Pos.x,Player_Pos.y + CamCon ,Player_Pos.z });
 	}
 
-	if (Player_Pos.y >= -13) {
-		CamCon = 0;
-	}
-	else {
-		CamCon = 10;
-	}
-
+	
 	camera->Update();
 
 	player->SetPosition(Player_Pos);

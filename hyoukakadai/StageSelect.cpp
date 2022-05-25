@@ -247,6 +247,7 @@ void StageSelect::Select()
 					BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
+				break;
 			case Stage1_1:
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
 					nextScene = true;
@@ -255,7 +256,7 @@ void StageSelect::Select()
 					stageSpriteScene = Casle;
 
 				}
-
+				break;
 			case Stage1_2:
 		
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
