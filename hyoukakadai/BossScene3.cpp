@@ -134,7 +134,7 @@ void BossScene3::ModelCreate()
 	//Player_Pos = player->GetPosition();
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
-	//Fader::SetFeedSprite();
+	Fader::SetFeedSprite();
 	BckGrnd[0] = 0;
 	BckGrnd[1] = 1900;
 }
@@ -339,7 +339,6 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	////当たり判定
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
-<<<<<<< HEAD
 	//入力処理より後に当たり判定を描け
 	//aaaaaaa
 
@@ -433,17 +432,13 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 		Player_Pos = goal_pos;
 		grav = 0;
 		time = 0;
-		if (enemy[0]->GetPosition().x > 450) {
-			BaseScene* scene = new FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
-			sceneManager_->SetnextScene(scene);//シーンのセット
+		if (enemy[0]->GetPosition().x > 400) {
+			Fader::feedIn(1.0f, 0.1f);
+			if (Fader::GetInstance()->GetAlpha() >= 1.0f) {
+				BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
+				sceneManager_->SetnextScene(scene);//シーンのセット
+			}
 		}
-=======
-	
-	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3))
-	{
-		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
-		sceneManager_->SetnextScene(scene);//シーンのセット
->>>>>>> 30ac9d6d2f379f5c9a963990f2a160cec833276d
 	}
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -592,7 +587,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	//Player_Pos.y+=moves
 	item->HealEfficasy(player);
 	item->Update(enemy);
-	//Fader::FeedSpriteUpdate();
+	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
@@ -678,6 +673,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 
 	//setumei->Draw();
 	//dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	Fader::FeedSpriteDraw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
 
