@@ -148,6 +148,10 @@ private:
 	float debuga;
 	float linex, linex2, liney, liney2;
 
+	float goalSpeed = 0;
+	float goaltime = 0;
+	bool goalflag = false;
+
 	bool colf = false;
 	float grav = 0.05f;
 	float time = 0.1f;

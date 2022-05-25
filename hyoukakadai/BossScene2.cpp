@@ -46,7 +46,7 @@ void BossScene2::ModelCreate()
 	player = Player::Create(playermodel);
 	player->Initialize();
 	tstmodel = Model::CreateFromOBJ("block");
-	goalmodel = Model::CreateFromOBJ("goalmo");
+
 
 	item = new Item();
 	item->Initialize();
@@ -61,10 +61,6 @@ void BossScene2::ModelCreate()
 			tst[j][i]->SetModel(tstmodel);
 		}
 	}
-
-	goal = std::make_unique<Object3d>();
-	goal->Initialize();
-	goal->SetModel(goalmodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -103,7 +99,6 @@ void BossScene2::SetPrm()
 	player->SetScale({ Player_Scl });
 	player->SetRotation({ Player_Rot });
 
-	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
 
 }
 #pragma endregion
@@ -128,7 +123,7 @@ void BossScene2::objUpdate()
 		}
 	}
 
-	goal->Update({ 1,1,1,1 });
+
 
 }
 #pragma endregion
@@ -159,7 +154,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	attackeffects->Initialize(dxCommon, camera);
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -296,10 +291,6 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
 
-	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
-		sceneManager_->SetnextScene(scene);//シーンのセット
-	}
 
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -456,9 +447,6 @@ void BossScene2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 
-	goal->PreDraw();
-	goal->Draw();
-	goal->PostDraw();
 
 }
 //sプライと以外の描画
