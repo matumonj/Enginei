@@ -500,10 +500,6 @@ void StageSelect::SpriteUpdate()
 					Loadf = true;
 					J_stagechanges[1] = true;
 				}
-				else if (TargetNum == 2) {
-					Loadf = true;
-					J_stagechanges[2] = true;
-				}
 			}
 			if (J_stagechanges[0] == true) {
 				Fader::feedIn(1.0f, 0.1f);

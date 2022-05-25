@@ -32,7 +32,6 @@ void ForestStage1::SpriteCreate()
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
 	Sprite::LoadTexture(1, L"Resources/forest.png");
-	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
 	mech = std::make_unique<Texture>();
 	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
@@ -41,7 +40,7 @@ void ForestStage1::SpriteCreate()
 	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	background = Sprite::Create(1, { 0.0f,0.0f });
-	setumei = Sprite::Create(2, { 0.0f,0.0f });
+
 	// デバッグテキスト初期化
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
@@ -56,7 +55,6 @@ void ForestStage1::ModelCreate()
 	player = Player::Create(playermodel);
 	player->Initialize();
 	tstmodel = Model::CreateFromOBJ("wood");
-	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
 	goalmodel = Model::CreateFromOBJ("goal");
 	reefmodel = Model::CreateFromOBJ("reef");
@@ -86,19 +84,9 @@ void ForestStage1::ModelCreate()
 	block->Initialize();// = Object3d::Create();
 	block->SetModel(tstmodel);
 
-	sentan = std::make_unique<Object3d>();
-	sentan->Initialize();// = Object3d::Create();
-	sentan->SetModel(tstmodel);
-
-	world = std::make_unique<Object3d>();
-	world->Initialize();// = Object3d::Create();
-	world->SetModel(worldmodel);
-
 	hari = std::make_unique<Object3d>();
 	hari->Initialize();
 	hari->SetModel(harimodel);
-
-
 
 	
 	// ライト生成
@@ -110,37 +98,20 @@ void ForestStage1::ModelCreate()
 	lightGroup->SetDirLightActive(1, false);
 	lightGroup->SetDirLightActive(2, false);
 	lightGroup->SetPointLightActive(0, true);
-	//pointLightPos[0] = 0.0f;
-	//pointLightPos[1] = 1.0f;
-	//pointLightPos[2] = 0.0f;
-	lightGroup->SetPointLightActive(0, false);
-	lightGroup->SetPointLightActive(1, false);
-	lightGroup->SetPointLightActive(2, false);
-	lightGroup->SetSpotLightActive(0, true);
-
 
 	effects = std::make_unique<Effects>();;
 
 	attackeffects = std::make_unique<Effects>();;
 
-	//Player_Pos = player->GetPosition();
-	//Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
-	//Fader::SetFeedSprite();
 }
 #pragma endregion
 
 #pragma region 各パラメータのセット
 void ForestStage1::SetPrm()
 {
-	setumei->SetPosition({ 0, 400 });
-	setumei->SetSize({ 500,300 });
-	setumei->setcolor({ 1,1,1,1 });
 
 	hari->SetPosition({ hari_Pos.x + 2.0f,hari_Pos.y,hari_Pos.z });
-
-	half_height = player->GetScale().y;
-	half_Width = player->GetScale().x;
 
 	player->SetPosition({ Player_Pos });
 	player->SetScale({ Player_Scl });
@@ -160,17 +131,25 @@ void ForestStage1::SetPrm()
 				goal->SetRotation({ 0,120,0 });
 				goal->SetScale({ tst_Scl });
 			}
+
+			if (map[j][i] == 4) {
+				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
 		}
 	}
 	
 
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
-
-	world->SetPosition({ 0,0,0 });
-	world->SetScale({ 1,1,1 });
-
-	sentan->SetPosition({ sentan_Pos });
 
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
@@ -203,20 +182,14 @@ void ForestStage1::objUpdate()
 	}
 
 	goal->Update({ 1,1,1,1 });
-	world->Update({ 1,1,1,1 });
 	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
-	
-	
-
 }
 #pragma endregion
 
 #pragma region 初期化
 void ForestStage1::Initialize(DirectXCommon* dxCommon)
 {
-	//
-
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
@@ -227,15 +200,11 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	enemy[4] = std::make_unique<ThrowEnemy>();
 	enemy[5] = std::make_unique<ThrowEnemy>();
 	enemy[6] = std::make_unique<ThrowEnemy>();
-	//enemy[0] = new MobEnemy();
+	enemy[7] = std::make_unique<ThrowEnemy>();
+	enemy[8] = std::make_unique<ThrowEnemy>();
+	enemy[9] = std::make_unique<ThrowEnemy>();
 
-	enemy[6]->Setposition({ 270,-18.2f,0 });
-	enemy[5]->Setposition({ 170,-18.2f,0 });
-	enemy[4]->Setposition({ 320,-14.2f,0 });
-	enemy[3]->Setposition({ 80,-4.2f,0 });
-	enemy[2]->Setposition({ 250,-4.2f,0 });
-	enemy[1]->Setposition({ 350, -18, 0 });
-	enemy[0]->Setposition({ 200, -7, 0 });
+
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
 	enemy[2]->Initialize();
@@ -243,6 +212,9 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	enemy[4]->Initialize();
 	enemy[5]->Initialize();
 	enemy[6]->Initialize();
+	enemy[7]->Initialize();
+	enemy[8]->Initialize();
+	enemy[9]->Initialize();
 
 	mapcol = new Collision();
 	c_postEffect = Default;
@@ -262,7 +234,6 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
-
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
 	//カメラをセット
@@ -274,6 +245,7 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	object1 = new f_Object3d();
 	object1->Initialize(dxCommon, camera);
 	object1->SetModel(fbxmodel);
+	//Audioの生成
 	/*audio = new Audio();
 	audio->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
@@ -467,20 +439,6 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
-
-	/*player->PreDraw();
-	player->Draw();
-	player->PostDraw();*/
-
-
-	world->PreDraw();
-	//world->Draw();
-	world->PostDraw();
-	/*for (int i = 0; i < 10; i++) {
-		if (enemy[i] != nullptr) {
-			enemy[i]->Draw(dxcomn);
-		}
-	}*/
 	block->PreDraw();
 	block->Draw();
 	block->PostDraw();
@@ -518,6 +476,13 @@ void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 //sプライと以外の描画
 void ForestStage1::MyGameDraw(DirectXCommon* dxcomn)
 {
+
+	for (int i = 0; i < 10; i++) {
+		if (enemy[i] != nullptr) {
+			enemy[i]->Draw(dxcomn);
+			enemy[i]->SearchActionDraw(dxcomn);
+		}
+	}
 
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	background->Draw();
