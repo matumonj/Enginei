@@ -45,7 +45,8 @@ void BossScene2::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("block");
+	tstmodel = Model::CreateFromOBJ("wood");
+	reefmodel = Model::CreateFromOBJ("reef");
 
 
 	item = new Item();
@@ -59,6 +60,10 @@ void BossScene2::ModelCreate()
 			tst[j][i] = std::make_unique<Object3d>();
 			tst[j][i]->Initialize();// Object3d::Create();
 			tst[j][i]->SetModel(tstmodel);
+
+			reef[j][i] = std::make_unique<Object3d>();
+			reef[j][i]->Initialize();
+			reef[j][i]->SetModel(reefmodel);
 		}
 	}
 
@@ -99,7 +104,8 @@ void BossScene2::SetPrm()
 	player->SetScale({ Player_Scl });
 	player->SetRotation({ Player_Rot });
 
-
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 }
 #pragma endregion
 
@@ -120,6 +126,7 @@ void BossScene2::objUpdate()
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->Update({ 1,1,1,1 });
+			reef[j][i]->Update({ 1,1,1,1 });
 		}
 	}
 
@@ -209,6 +216,10 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
+
+			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			reef[j][i]->SetRotation({ tst_Rot });
+			reef[j][i]->SetScale({ tst_Scl });
 		}
 	}
 	bossenemy->Initialize();
@@ -257,7 +268,8 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 		}
 	}
 	//168,48
-Player_Pos={ 20,38,0 };
+Player_Pos={ 20,10,0 };
+object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -289,8 +301,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	GameUI::BossUIUpdate(bossenemy.get());
 
-	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
-
+	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos,Player_Scl, Old_Pos,1);
+	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
 
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -326,7 +338,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		object1->PlayAnimation();
+		
 	}
 	XMFLOAT3 bpos;
 	if (bossenemy != nullptr) {
@@ -367,7 +379,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 		bossenemy->Motion(player);
 		bossenemy->Attack(player);
 		bossenemy->ColMap1(map, tst, mapx, mapy, 20, 130);
-
+		bossenemy->ColMap1(map, reef, mapx, mapy, 20, 130);
 		bossenemy->Update(Player_Pos);
 		ForestBoss::GetInstance()->SkewersAttack(map, tst);
 
@@ -384,6 +396,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 				enemycolony1[i]->Motion(player);
 				enemycolony1[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
+				enemycolony1[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
 				enemycolony1[i]->Attack(player);
 				enemycolony1[i]->Update(Player_Pos);
 				enemycolony1[i]->EnemySearchPlayer(player);
@@ -397,6 +410,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 			//if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
 				enemycolony2[i]->Motion(player);
 				enemycolony2[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
+				enemycolony2[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
 				enemycolony2[i]->Attack(player);
 				enemycolony2[i]->Update(Player_Pos);
 				enemycolony2[i]->EnemySearchPlayer(player);
@@ -433,18 +447,23 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void BossScene2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	player->PreDraw();
+	/*player->PreDraw();
 	player->Draw();
-	player->PostDraw();
+	player->PostDraw();*/
 
 	item->Draw();
 	item2->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1 || map[j][i] == 2) {
+			if (map[j][i] == 2) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
+			}
+			if (map[j][i] == 1) {
+				reef[j][i]->PreDraw();
+				reef[j][i]->Draw();
+				reef[j][i]->PostDraw();
 			}
 		}
 	}

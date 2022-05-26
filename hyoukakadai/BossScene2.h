@@ -68,7 +68,7 @@ private:
 	Player* player;
 	//std::unique_ptr<Object3d>player[10];
 	std::unique_ptr<Object3d>tst[130][20];
-
+	std::unique_ptr<Object3d>reef[130][20];
 	std::unique_ptr<Object3d>goal = nullptr;
 
 	Collision* mapcol;
@@ -76,13 +76,14 @@ private:
 	Model* playermodel = nullptr;
 	Model* tstmodel = nullptr;
 	Model* goalmodel = nullptr;
+	Model* reefmodel = nullptr;
 	DebugCamera* camera;
 	Item* item = nullptr;
 	Item* item2 = nullptr;
 	//Effects* effects;
 private:
 	//Plyer
-	XMFLOAT3 Player_Pos = { 20,128,0 };// = player->GetPosition();
+	XMFLOAT3 Player_Pos = { 20,-10,0 };// = player->GetPosition();
 	XMFLOAT3 Player_Rot;// = player->GetRotation();
 	XMFLOAT3 Player_Scl = { 1,1,1 };
 	XMFLOAT3 Old_Pos;
