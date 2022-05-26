@@ -226,7 +226,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 
 	bossenemy->Setposition({ 40,-4,0 });
 	if (startSet == false) {
-		
+
 		for (int i = 0; i < 130; i++) {
 			for (int j = 0; j < 20; j++) {
 				if (map[i][j] == 10) {
@@ -260,7 +260,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 					//enemycolony1[8]->Setposition(tst[i][j]->GetPosition());
 				} else if (map[i][j] == 19) {
 					enemycolony1[9]->Setposition(tst[i][j]->GetPosition());
-					xx = tst[i][j]->GetPosition().x;
+					//xx = tst[i][j]->GetPosition().x;
 					//break;
 					//break;
 				}
@@ -268,8 +268,8 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 		}
 	}
 	//168,48
-Player_Pos={ 20,10,0 };
-object1->PlayAnimation();
+	Player_Pos = { 20,10,0 };
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -293,7 +293,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
-	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
+	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
@@ -301,7 +301,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	GameUI::BossUIUpdate(bossenemy.get());
 
-	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos,Player_Scl, Old_Pos,1);
+	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
 
 	if (Line::GetInstance()->Getboundflag() == true) {
@@ -313,8 +313,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 		//grav = 0.0f;
-	}
-	else {
+	} else {
 		grav = 0.03f;
 	}
 
@@ -338,18 +337,18 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		
+
 	}
 	XMFLOAT3 bpos;
 	if (bossenemy != nullptr) {
 		bpos = bossenemy->GetPosition();
 	}
 	//カメラ関係の処理
-	ForestBoss::GetInstance()->appearance(camerapositiony,Player_Pos.y);
+	ForestBoss::GetInstance()->appearance(camerapositiony, Player_Pos.y);
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,camerapositiony+5,Player_Pos.z - 35.0f });
-	camera->SetTarget({ Player_Pos.x,camerapositiony+3 ,Player_Pos.z });
+	camera->SetEye({ Player_Pos.x,camerapositiony + 5,Player_Pos.z - 35.0f });
+	camera->SetTarget({ Player_Pos.x,camerapositiony + 3 ,Player_Pos.z });
 
 	camera->Update();
 
@@ -360,7 +359,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	player->CollisionAttack1(bossenemy.get(), Player_Pos);
 	player->Attack(Player_Pos);
 	player->CollisionAttack(enemycolony1, Player_Pos);
-	
+
 	player->CollisionAttack(enemycolony2, Player_Pos);
 
 	SetPrm();//パラメータのセット
@@ -391,12 +390,12 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	}
 
 	for (int i = 0; i < 10; i++) {
-			if (enemycolony1[i] != nullptr) {
-				if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
+		if (enemycolony1[i] != nullptr) {
+			//if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
 
 				enemycolony1[i]->Motion(player);
 				enemycolony1[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
-				enemycolony1[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
+				//enemycolony1[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
 				enemycolony1[i]->Attack(player);
 				enemycolony1[i]->Update(Player_Pos);
 				enemycolony1[i]->EnemySearchPlayer(player);
@@ -404,22 +403,22 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 				if (enemycolony1[i]->GetState_DEAD() == true) {
 					Destroy_unique(enemycolony1[i]);
 				}
-			}
+			//}
 		}
 		if (enemycolony2[i] != nullptr) {
 			//if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
-				enemycolony2[i]->Motion(player);
-				enemycolony2[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
-				enemycolony2[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
-				enemycolony2[i]->Attack(player);
-				enemycolony2[i]->Update(Player_Pos);
-				enemycolony2[i]->EnemySearchPlayer(player);
-				//もし敵が死んだら破棄
-				if (enemycolony2[i]->GetState_DEAD() == true) {
-					Destroy_unique(enemycolony2[i]);
-				}
+			enemycolony2[i]->Motion(player);
+			enemycolony2[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
+			enemycolony2[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
+			enemycolony2[i]->Attack(player);
+			enemycolony2[i]->Update(Player_Pos);
+			enemycolony2[i]->EnemySearchPlayer(player);
+			//もし敵が死んだら破棄
+			if (enemycolony2[i]->GetState_DEAD() == true) {
+				Destroy_unique(enemycolony2[i]);
 			}
 		}
+	}
 
 	atb = BossEnemy::GetInstance()->GetaltAttack();
 
@@ -522,7 +521,10 @@ void BossScene2::Draw(DirectXCommon* dxcomn)
 
 void BossScene2::ImGuiDraw()
 {
-	
+	ImGui::Begin("ww");
+	int index = Line::GetInstance()->Getindex();
+	ImGui::SliderInt("index", &index, 200, -200);
+	ImGui::End();
 
 }
 #pragma region 解放部分

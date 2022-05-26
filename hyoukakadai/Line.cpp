@@ -199,6 +199,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			subradius = 0;//線の長さを0に
 			stopflag = true;
 			notdoubletuch = true;
+			
 		} 
 
 	}
@@ -293,20 +294,19 @@ void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 			if (dis[i] <= 2 && trigger && !elf) {
 				elf = true;
 				index = i;//あたった敵の要素番号を割り当て
+				break;
 			}
 		}
-
+		
 		//衝突時
 		if (elf && !mapcol) {
 			if (position[index] != nullptr) {
-				linex2 = position[index]->GetPosition().x;
-				liney2 = position[index]->GetPosition().y;
-			}
-			else {
-				if (index2 == -1) {
-					returnflag = true;
+				if (index != -1) {
+					linex2 = position[index]->GetPosition().x;
+					liney2 = position[index]->GetPosition().y;
 				}
 			}
+		
 		}
 	}
 	if (mapcol) {
@@ -321,6 +321,7 @@ void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 	if ( colf) {
 		elf = false;
 		mapcol = false;
+		index = -1;
 	}
 }
 //
@@ -348,10 +349,14 @@ void Line::CollisionEnemys2group(std::unique_ptr<Enemy>position[])
 		//衝突時
 		if (elf && !mapcol) {
 			if (position[index2] != nullptr) {
-				linex2 = position[index2]->GetPosition().x;
-				liney2 = position[index2]->GetPosition().y;
-			} else {
-				if (index == -1) {
+				if (index2 != -1) {
+					linex2 = position[index2]->GetPosition().x;
+					liney2 = position[index2]->GetPosition().y;
+				}
+				
+			}
+				else {
+				if (index2 == -1) {
 					returnflag = true;
 				}
 				}
