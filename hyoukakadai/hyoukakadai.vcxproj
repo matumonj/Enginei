@@ -183,6 +183,7 @@
     <ClCompile Include="FbxLoader.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="FirstBossScene.cpp" />
+    <ClCompile Include="FishEnemy.cpp" />
     <ClCompile Include="ForestBoss.cpp" />
     <ClCompile Include="ForestStage1.cpp" />
     <ClCompile Include="ForestStage2.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="FbxLoader.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FirstBossScene.h" />
+    <ClInclude Include="FishEnemy.h" />
     <ClInclude Include="ForestBoss.h" />
     <ClInclude Include="ForestStage1.h" />
     <ClInclude Include="ForestStage2.h" />

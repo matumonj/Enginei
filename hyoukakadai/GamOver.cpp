@@ -27,6 +27,7 @@ void GamOver::Initialize(DirectXCommon* dxCommon)
 {
 	titlesprite->LoadTexture(3, L"Resources/gameover.png");
 	titlesprite = Sprite::Create(3, { 0.0f,0.0f });
+	Fader::SetFeedSprite();
 }
 
 /// <summary>

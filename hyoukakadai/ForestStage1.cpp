@@ -203,49 +203,49 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[i][j] == 4) {
-				enemy[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[0]->Setposition({ tst_Pos.x ,tst_Pos.y ,tst_Pos.z });
 
 				//	break;
 			}
 			else if (map[i][j] == 5) {
-				enemy[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[1]->Setposition({ tst_Pos.x,tst_Pos.y,tst_Pos.z });
 				//break;
 			}
 			else if (map[i][j] == 6) {
-				enemy[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[2]->Setposition({ tst_Pos.x ,tst_Pos.y ,tst_Pos.z });
 				//	break;
 			}
 			else if (map[i][j] == 7) {
-				enemy[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[3]->Setposition({ tst_Pos.x,tst_Pos.y ,tst_Pos.z });
 			}
 			else if (map[i][j] == 8) {
-				enemy[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[4]->Setposition({ tst_Pos.x ,tst_Pos.y ,tst_Pos.z });
 
 				//break;
 			}
 			else if (map[i][j] == 9) {
-				enemy[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[5]->Setposition({ tst_Pos.x ,tst_Pos.y  ,tst_Pos.z });
 
 				//break;
 			}
 			else if (map[i][j] == 10) {
-				enemy[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[6]->Setposition({ tst_Pos.x ,tst_Pos.y  ,tst_Pos.z });
 
 				//	break;
 			}
 			else if (map[i][j] == 11) {
-				enemy[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[7]->Setposition({ tst_Pos.x,tst_Pos.y ,tst_Pos.z });
 
 				//	break;
 			}
 			else if (map[i][j] == 12) {
-				enemy[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[8]->Setposition({ tst_Pos.x ,tst_Pos.y  ,tst_Pos.z });
 
 				//break;
 				//enemy[8]->Setposition(tst[i][j]->GetPosition());
 			}
 			else if (map[i][j] == 13) {
-				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[9]->Setposition({ tst_Pos.x ,tst_Pos.y ,tst_Pos.z });
 
 				//break;
 				//break;
@@ -458,12 +458,14 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
-			enemy[i]->Attack(player);
+			enemy[i]->Motion(player);
 			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
-			enemy[i]->ColMap(map, reef, mapx, mapy, MAX_X, MAX_Y);
+			enemy[i]->Attack(player);
 			enemy[i]->Update(Player_Pos);
 
 			enemy[i]->EnemySearchPlayer(player);
+			enemy[i]->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
+
 			//もし敵が死んだら破棄
 			if (enemy[i]->GetState_DEAD() == true) {
 				Destroy_unique(enemy[i]);
@@ -471,6 +473,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
+
 	item->HealEfficasy(player);
 	item->Update(enemy);
 	Fader::FeedSpriteUpdate();
@@ -498,6 +501,8 @@ void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	block->PostDraw();
 
 	item->Draw();
+
+	
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1 ) {
@@ -531,15 +536,6 @@ void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 void ForestStage1::MyGameDraw(DirectXCommon* dxcomn)
 {
 
-	for (int i = 0; i < 10; i++) {
-		if (enemy[i] != nullptr) {
-			enemy[i]->Draw(dxcomn);
-			enemy[i]->SearchActionDraw(dxcomn);
-		}
-		if (enemy[i] != nullptr) {
-			enemy[i]->Draw(dxcomn);
-		}
-	}
 
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	background->Draw();
@@ -550,7 +546,12 @@ void ForestStage1::MyGameDraw(DirectXCommon* dxcomn)
 
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
-
+	for (int i = 0; i < 10; i++) {
+		if (enemy[i] != nullptr) {
+			enemy[i]->Draw(dxcomn);
+			enemy[i]->SearchActionDraw(dxcomn);
+		}
+	}
 
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);

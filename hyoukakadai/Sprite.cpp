@@ -426,7 +426,7 @@ void Sprite::SetRotation(float rotation)
 
 void Sprite::SetPosition(XMFLOAT2 position)
 {
-	this->position = position;
+	;	this->position = position;
 
 	// 頂点バッファへのデータ転送
 	TransferVertices();

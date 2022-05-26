@@ -15,6 +15,8 @@
 #include"SeaBoss.h"
 #include"FirstBossScene.h"
 #include"GamOver.h"
+#include"FishEnemy.h"
+#include"Retry.h"
 //コメントアウト
 
 
@@ -231,7 +233,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[0] = std::make_unique<SeaBoss>();
 	//enemy[0] = std::make_unique<ThrowEnemy>();
 	enemy[9] = std::make_unique<ThrowEnemy>();
-	enemy[8] = std::make_unique<ThrowEnemy>();
+	enemy[8] = std::make_unique<FishEnemy>();
 	enemy[7] = std::make_unique<ThrowEnemy>();
 
 	enemy[1] = std::make_unique<MobEnemy>();
@@ -242,7 +244,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[6] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
 	enemy[9]->Setposition({ 1070,-18.2f,0 });
-	enemy[8]->Setposition({ 3200,-14.2f,0 });
+	enemy[8]->Setposition({ 80,-12.2f,0 });
 	enemy[7]->Setposition({ 800,-4.2f,0 });
 	enemy[6]->Setposition({ 2700,-18.2f,0 });
 	enemy[5]->Setposition({ 1700,-18.2f,0 });
@@ -469,7 +471,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	for (int i = 1; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 
-			if (Collision::GetLen(enemy[0]->GetPosition(), enemy[i]->GetPosition()) < 13) {
+			if (Collision::GetLen(enemy[0]->GetPosition(), enemy[i]->GetPosition()) < 15) {
 				enemy[i]->SetHP(0);
 				enemy[i]->SetDead(true);
 			}
@@ -524,6 +526,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+		Retry::SetStage(Sea_1_3);
 		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
