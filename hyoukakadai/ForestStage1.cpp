@@ -63,6 +63,8 @@ void ForestStage1::ModelCreate()
 
 	item = new Item();
 	item->Initialize();
+	item1 = new Item();
+	item1->Initialize();
 	collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
@@ -196,8 +198,20 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	enemy[8] = std::make_unique<ThrowEnemy>();
 	enemy[9] = std::make_unique<ThrowEnemy>();
 
+	enemy1[0] = std::make_unique<MobEnemy>();
+	enemy1[1] = std::make_unique<MobEnemy>();
+	enemy1[2] = std::make_unique<ThrowEnemy>();
+	enemy1[3] = std::make_unique<ThrowEnemy>();
+	enemy1[4] = std::make_unique<ThrowEnemy>();
+	enemy1[5] = std::make_unique<ThrowEnemy>();
+	enemy1[6] = std::make_unique<ThrowEnemy>();
+	enemy1[7] = std::make_unique<ThrowEnemy>();
+	enemy1[8] = std::make_unique<ThrowEnemy>();
+	enemy1[9] = std::make_unique<ThrowEnemy>();
+
 	for (int i = 0; i < 10; i++) {
 		enemy[i]->Initialize();
+		enemy1[i]->Initialize();
 	}
 	
 	
@@ -206,53 +220,65 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[i][j] == 4) {
-				enemy[0]->Setposition({ tst_Pos.x ,tst_Pos.y ,tst_Pos.z });
-
-				//	break;
+			if (map[j][i] == 4) {
+				enemy[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 5) {
-				enemy[1]->Setposition({ tst_Pos.x,tst_Pos.y,tst_Pos.z });
-				//break;
+			else if (map[j][i] == 5) {
+				enemy[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 6) {
-				enemy[2]->Setposition({ tst_Pos.x ,tst_Pos.y ,tst_Pos.z });
-				//	break;
+			else if (map[j][i] == 6) {
+				enemy[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 7) {
-				enemy[3]->Setposition({ tst_Pos.x,tst_Pos.y ,tst_Pos.z });
+			else if (map[j][i] == 7) {
+				enemy[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 8) {
-				enemy[4]->Setposition({ tst_Pos.x ,tst_Pos.y ,tst_Pos.z });
-
-				//break;
+			else if (map[j][i] == 8) {
+				enemy[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 9) {
-				enemy[5]->Setposition({ tst_Pos.x ,tst_Pos.y  ,tst_Pos.z });
-
-				//break;
+			else if (map[j][i] == 9) {
+				enemy[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 10) {
-				enemy[6]->Setposition({ tst_Pos.x ,tst_Pos.y  ,tst_Pos.z });
-
-				//	break;
+			else if (map[j][i] == 10) {
+				enemy[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 11) {
-				enemy[7]->Setposition({ tst_Pos.x,tst_Pos.y ,tst_Pos.z });
-
-				//	break;
+			else if (map[j][i] == 11) {
+				enemy[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 12) {
-				enemy[8]->Setposition({ tst_Pos.x ,tst_Pos.y  ,tst_Pos.z });
-
-				//break;
-				//enemy[8]->Setposition(tst[i][j]->GetPosition());
+			else if (map[j][i] == 12) {
+				enemy[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[i][j] == 13) {
-				enemy[9]->Setposition({ tst_Pos.x ,tst_Pos.y ,tst_Pos.z });
-
-				//break;
-				//break;
+			else if (map[j][i] == 13) {
+				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 14) {
+				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 15) {
+				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 16) {
+				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 17) {
+				enemy1[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 18) {
+				enemy1[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 19) {
+				enemy1[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 20) {
+				enemy1[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 21) {
+				enemy1[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 22) {
+				enemy1[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 23) {
+				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 		}
 	}
@@ -398,25 +424,15 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemy(enemy->get());
+	Line::CollisionEnemys(enemy);
+	Line::CollisionEnemys2group(enemy1);
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	//if (Input::GetInstance()->Pushkey(DIK_0)) {
 		
 	//}
 
-	if (Player_Pos.y >= -11) {
-		cameramove-=0.1f;
-		if (cameramove <= 6) {
-			cameramove = 6;
-		}
-	}
-	else {
-		cameramove+=0.1f;
-		if (cameramove >= 9) {
-			cameramove = 9;
-		}
-	}
+	
 
 
 	//}
@@ -424,21 +440,21 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	if (Player_Pos.x <=  27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 27.0f,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 27.0f,Player_Pos.y+cameramove,Player_Pos.z });
+		camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
 	}
 
 	else if (Player_Pos.x >= 368.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 368.0f,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 368.0f,Player_Pos.y+cameramove ,Player_Pos.z });
+		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 368.0f,Player_Pos.y ,Player_Pos.z });
 	}
 	else {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ Player_Pos.x,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ Player_Pos.x,Player_Pos.y+cameramove,Player_Pos.z });
+		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	}
 
 
@@ -451,13 +467,13 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
 	player->CollisionAttack(enemy, Player_Pos);
-
+	player->CollisionAttack(enemy1, Player_Pos);
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
 
 	effects->Update(dxCommon, camera, enemy, player);
-
+	effects->Update(dxCommon, camera, enemy1, player);
 	//enemyにnullptr代入するときは敵が死んだら
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
@@ -476,10 +492,28 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 			}
 		}
+		if (enemy1[i] != nullptr) {
+			//プレイヤーの検知
+			enemy1[i]->Motion(player);
+			enemy1[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
+			enemy1[i]->Attack(player);
+			enemy1[i]->Update(Player_Pos);
+
+			enemy1[i]->EnemySearchPlayer(player);
+			enemy1[i]->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
+
+			//もし敵が死んだら破棄
+			if (enemy1[i]->GetState_DEAD() == true) {
+				Destroy_unique(enemy1[i]);
+
+			}
+		}
 	}
 
 	item->HealEfficasy(player);
+	item1->HealEfficasy(player);
 	item->Update(enemy);
+	item1->Update(enemy1);
 	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
@@ -505,7 +539,7 @@ void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	block->PostDraw();
 
 	item->Draw();
-
+	item1->Draw();
 	
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
@@ -554,6 +588,10 @@ void ForestStage1::MyGameDraw(DirectXCommon* dxcomn)
 		if (enemy[i] != nullptr) {
 			enemy[i]->Draw(dxcomn);
 			enemy[i]->SearchActionDraw(dxcomn);
+		}
+		if (enemy1[i] != nullptr) {
+			enemy1[i]->Draw(dxcomn);
+			enemy1[i]->SearchActionDraw(dxcomn);
 		}
 	}
 

@@ -227,8 +227,8 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	bossenemy->Setposition({ 40,-4,0 });
 	if (startSet == false) {
 
-		for (int i = 0; i < 130; i++) {
-			for (int j = 0; j < 20; j++) {
+		for (int i = 0; i < MAX_Y; i++) {
+			for (int j = 0; j < MAX_X; j++) {
 				if (map[i][j] == 10) {
 					enemycolony1[0]->Setposition(tst[i][j]->GetPosition());
 
