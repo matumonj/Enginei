@@ -243,6 +243,7 @@ void StageSelect::Select()
 			{
 			case TutorialStage:
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+
 					BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
@@ -428,21 +429,21 @@ void StageSelect::SpriteUpdate()
 			if (J_stagechanges[0] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
-					BaseScene* scene = new SeaScene1(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new ForestStage1(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
 			else if (J_stagechanges[1] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
-					BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new ForestStage2(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
 			else if (J_stagechanges[2] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
-					BaseScene* scene = new BossScene3(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
@@ -499,10 +500,6 @@ void StageSelect::SpriteUpdate()
 				else if (TargetNum == 1) {
 					Loadf = true;
 					J_stagechanges[1] = true;
-				}
-				else if (TargetNum == 2) {
-					Loadf = true;
-					J_stagechanges[2] = true;
 				}
 			}
 			if (J_stagechanges[0] == true) {

@@ -163,6 +163,10 @@ private:
 	float mapx[20][200];
 	float mapy[20][200];
 
+	float goalSpeed = 0;
+	float goaltime = 0;
+	bool goalflag = false;
+
 	float width;
 	float height;
 	float FollowangleX, FollowangleZ, FollowangleR;

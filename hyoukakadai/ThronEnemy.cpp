@@ -20,7 +20,7 @@ ThronEnemy::~ThronEnemy()
 void ThronEnemy::Initialize()
 {
 	//ƒ‚ƒfƒ‹‚Ì“Ç
-	ThronModel = Model::CreateFromOBJ("bossenemy");
+	ThronModel = Model::CreateFromOBJ("enemy2");
 	//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 	//ThronObject = new Object3d();
 	ThronObject = Object3d::Create();

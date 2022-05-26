@@ -46,7 +46,7 @@ void BossScene2::ModelCreate()
 	player = Player::Create(playermodel);
 	player->Initialize();
 	tstmodel = Model::CreateFromOBJ("block");
-	goalmodel = Model::CreateFromOBJ("goalmo");
+
 
 	item = new Item();
 	item->Initialize();
@@ -61,10 +61,6 @@ void BossScene2::ModelCreate()
 			tst[j][i]->SetModel(tstmodel);
 		}
 	}
-
-	goal = std::make_unique<Object3d>();
-	goal->Initialize();
-	goal->SetModel(goalmodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -103,7 +99,6 @@ void BossScene2::SetPrm()
 	player->SetScale({ Player_Scl });
 	player->SetRotation({ Player_Rot });
 
-	goal->SetPosition({ goal_pos.x,goal_pos.y,goal_pos.z });
 
 }
 #pragma endregion
@@ -128,7 +123,7 @@ void BossScene2::objUpdate()
 		}
 	}
 
-	goal->Update({ 1,1,1,1 });
+
 
 }
 #pragma endregion
@@ -159,7 +154,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 	attackeffects->Initialize(dxCommon, camera);
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -269,49 +264,33 @@ Player_Pos={ 20,38,0 };
 #pragma region 更新処理
 void BossScene2::Update(DirectXCommon* dxCommon)
 {
-
+	//if (Collision::GetInstance()->Gethit() == true) {
+	//	loadf = false;
+	//	Fader::feedOut(0.0f, 0.1f);
+	//	if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+	//		//::GetInstance()->SetHit(false);
+	//	}
+	//}
+	//else {
+	//	loadf = true;
+	//}
+	//GameUI::NowLoadUpdate(loadf);
 	camerapositionx = Player_Pos.x;
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
-	LONG u_r = 32768;
-	LONG a = 30000;
-
-	//左
 	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
-	///////// コントローラー //////////
-	// スティックの方向判定
-	// 無反応範囲
-
-
-
-
-	//player->PlayerMoves(Player_Pos, moveSpeed);
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 
 
-	///これより上に入力処理をかけ
-	////当たり判定
-
-	//入力処理より後に当たり判定を描け
-
 	GameUI::BossUIUpdate(bossenemy.get());
-
-	//これは移す
-
 
 	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos);
 
-	//これ別んところ移すの相当めんどいから据え置き
-	
-	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
-		sceneManager_->SetnextScene(scene);//シーンのセット
-	}
 
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -344,9 +323,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 	Line::GetInstance()->CollisionEnemys(enemycolony1);
 	Line::GetInstance()->CollisionEnemys2group(enemycolony2);
-	//Line::CollisionEnemys2group(enemycolony1, enemycolony2);
-	//Line::CollisionEnemy(bossenemy.get());
-	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
+
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 		object1->PlayAnimation();
@@ -400,11 +377,8 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 			Destroy_unique(bossenemy);
 		}
 	}
-	//effects->BossDeath(bossenemy->GetPosition(), ForestBoss::GetInstance()->GetNucclear());
-
 
 	for (int i = 0; i < 10; i++) {
-		//Collision::GetLen(enemycolony1[i]->GetPosition(),Player_Pos)
 			if (enemycolony1[i] != nullptr) {
 				if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
 
@@ -432,20 +406,15 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 				}
 			}
 		}
-	//BossPos = bossenemy->GetPosition();
 
-//bossenemy[3]->Update(Player_Pos);
 	atb = BossEnemy::GetInstance()->GetaltAttack();
 
 	item->HealEfficasy(player);
 	item2->HealEfficasy(player);
 
 	effects->HealEffect(item->ColItem(), item2->ColItem());
-	//effects->HealEffect2(item2->ColItem());
-	//item->Update(&bossenemy);
 	item->Update(enemycolony1);
 	item2->Update(enemycolony2);
-	//Fader::FeedSpriteUpdate();
 
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
@@ -455,7 +424,6 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
 		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
-		//delete scene;
 	}
 }
 #pragma endregion 
@@ -480,9 +448,6 @@ void BossScene2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 		}
 	}
 
-	goal->PreDraw();
-	goal->Draw();
-	goal->PostDraw();
 
 }
 //sプライと以外の描画

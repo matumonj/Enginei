@@ -12,6 +12,7 @@
 #include"Fader.h"
 #include"DesertField.h"
 #include"FirstBossScene.h"
+#include"StageSelect.h"
 //コメントアウト
 //シーンのコンストラクタ
 Tutorial::Tutorial(SceneManager* sceneManager)
@@ -38,8 +39,9 @@ void Tutorial::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("box1");
+	tstmodel = Model::CreateFromOBJ("homeblock");
 	harimodel = Model::CreateFromOBJ("hari");
+	goalmodel = Model::CreateFromOBJ("goal");
 
 	collision = new Collision();
 
@@ -53,6 +55,11 @@ void Tutorial::ModelCreate()
 	hari = Object3d::Create();
 	hari->Initialize();
 	hari->SetModel(harimodel);
+
+	goal = std::make_unique<Object3d>();
+	goal->Initialize();
+	goal->SetModel(goalmodel);
+
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -84,8 +91,17 @@ void Tutorial::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
+
+			if (map[j][i] == 3) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,120,0 });
+				goal->SetScale({ tst_Scl.x,tst_Scl.y-0.1f,tst_Scl.z });
+			}
 		}
 	}
+
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 
 }
 #pragma endregion
@@ -110,6 +126,7 @@ void Tutorial::objUpdate()
 		}
 	}
 	hari->Update({ 1,1,1,1 });
+	goal->Update({ 1,1,1,1 });
 }
 #pragma endregion
 
@@ -142,7 +159,7 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 	Object3d::SetCamera(camera);
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -161,16 +178,14 @@ void Tutorial::Initialize(DirectXCommon* dxCommon)
 	audio->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	Fader::SetFeedSprite();
+	//FBXのアニメーション再生
+	object1->PlayAnimation();
 }
 #pragma endregion
 
 #pragma region 更新処理
 void Tutorial::Update(DirectXCommon* dxCommon)
 {
-	LONG u_r = 32768;
-	LONG a = 30000;
-	//向いてる方向に移動
-
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 1000;
@@ -182,7 +197,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 	//object1->SetPosition({ Player_Pos.x + 4.0f,Player_Pos.y,Player_Pos.z });
 
-	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
+	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true && goalflag == false) {
 		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 	}
 
@@ -197,6 +212,29 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 			//入力処理より後に当たり判定を描け
 		Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 #pragma region 線の処理
+
+		if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3)==true)
+		{
+			goalflag = true;
+			jumpFlag = false;
+			moveSpeed = 0;
+			goaltime += 0.01f;
+			goalSpeed = 0.01f;
+			Player_Pos.x += goalSpeed;
+			if (goaltime >= 1) {
+				goaltime = 1;
+				Player_Pos.z += 0.01f;
+				Player_Rot.y--;
+				if (Player_Rot.y <= 0) {
+					Player_Rot.y = 0;
+				}
+				if (Player_Pos.z >= 1) {
+					BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
+		}
+
 
 		if (Line::GetInstance()->Getboundflag() == true) {
 			grav = 0;
@@ -228,11 +266,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		Line::GetInstance()->SetColf(colf);
 		Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 		Line::CollisionEnemy(enemy.get());
-		//FBXのアニメーション再生
-		if (Input::GetInstance()->Pushkey(DIK_0)) {
-			object1->PlayAnimation();
-			grav = 0;
-		}
 
 		//カメラ関係の処理
 		if (Player_Pos.x <= 27.0f) {
@@ -258,7 +291,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		camera->Update();
 
 		player->Attack(Player_Pos);
-		player->FlyingAttack(enemy.get());
+	//	player->FlyingAttack(enemy.get());
 		player->CollisionAttack(&enemy, Player_Pos);
 
 		SetPrm();//パラメータのセット
@@ -299,17 +332,20 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void Tutorial::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	player->PreDraw();
-	player->Draw();
-	player->PostDraw();
 
 	
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			if (map[j][i] == 1|| map[j][i] == 2) {
+			if (map[j][i] == 1) {
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
+			}
+
+			if (map[j][i] == 3) {
+				goal->PreDraw();
+				goal->Draw();
+				goal->PostDraw();
 			}
 		}
 	}
