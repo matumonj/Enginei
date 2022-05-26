@@ -370,42 +370,37 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	//}
 
-	/*if (Player_Pos.y >= -11) {
-		 -= 0.1f;
-		if ( <= 6) {
-			 = 6;
-		}
-	}
-	else {
-		 += 0.1f;
-		if ( >= 9) {
-			 = 9;
-		}
-	}*/
-
 
 	//}
 	//カメラ関係の処理
 	if (Player_Pos.x <= 27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
+		camera->SetEye({ 27.0f,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 27.0f,Player_Pos.y+cameramove,Player_Pos.z });
 	}
 
-	else if (Player_Pos.x >= 368.0f) {
+	else if (Player_Pos.x >= 70.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 368.0f,Player_Pos.y,Player_Pos.z });
+		camera->SetEye({ 70.0f,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 70.0f,Player_Pos.y+cameramove,Player_Pos.z });
 	}
 	else {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
+		camera->SetEye({ Player_Pos.x,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
+		camera->SetTarget({ Player_Pos.x,Player_Pos.y+cameramove,Player_Pos.z });
 	}
 
+
+	if (Player_Pos.y >= 58) {
+		cameramove = 0;
+	}
+
+	else {
+		cameramove = 8;
+	}
 
 
 	camera->Update();
@@ -448,7 +443,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
 		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
@@ -608,7 +603,7 @@ void LastBossScene::ImGuiDraw()
 		float rrr = player->getdis();
 		//float rf3 = enemy->GetPosition().z;
 		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &Player_Pos.y, -100, 100);
+		ImGui::SliderFloat("positionY", &Player_Pos.x, -100, 100);
 		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
 		ImGui::SliderInt("positionX", &co, -200, 200);
 		ImGui::SliderFloat("positionY", &rf2, -200, 200);

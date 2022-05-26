@@ -99,6 +99,10 @@ void ForestStage1::ModelCreate()
 	lightGroup->SetDirLightActive(1, false);
 	lightGroup->SetDirLightActive(2, false);
 	lightGroup->SetPointLightActive(0, true);
+	lightGroup->SetPointLightActive(0, false);
+	lightGroup->SetPointLightActive(1, false);
+	lightGroup->SetPointLightActive(2, false);
+	lightGroup->SetSpotLightActive(0, true);
 
 	effects = std::make_unique<Effects>();;
 

@@ -250,11 +250,12 @@ void StageSelect::Select()
 				}
 				break;
 			case Stage1_1:
+		
 				if (Input::GetInstance()->TriggerButtonA()) {//‰Ÿ‚³‚ê‚½‚ç
 					nextScene = true;
 				}
 				if (nextScene) {
-					stageSpriteScene = Casle;
+					stageSpriteScene = Sea;
 
 				}
 				break;
@@ -273,7 +274,7 @@ void StageSelect::Select()
 					nextScene = true;
 				}
 				if (nextScene) {
-					stageSpriteScene = Sea;
+					stageSpriteScene = Casle;
 
 				}
 				break;
