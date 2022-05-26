@@ -69,10 +69,10 @@ void ForestBoss::Initialize()
 	//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 	BossObject = Object3d::Create();
 	BossObject->SetModel(BossModel);
-	BarrelModel= Model::CreateFromOBJ("arm");
-	SkewersBossModel= Model::CreateFromOBJ("arm");
+	BarrelModel= Model::CreateFromOBJ("enemy2");
+	SkewersBossModel= Model::CreateFromOBJ("enemy2");
 	ShotModel = Model::CreateFromOBJ("sphere");
-	BossArmModel = Model::CreateFromOBJ("arm");
+	BossArmModel = Model::CreateFromOBJ("enemy2");
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i] = Object3d::Create();
 		SkewersObject[i]->SetModel(SkewersBossModel);
