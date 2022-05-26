@@ -13,6 +13,7 @@
 #include"ForestStage2.h"
 #include"SeaScene1.h"
 #include"BossScene2.h"
+#include"Fader.h"
 GamOver::GamOver(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
@@ -33,40 +34,39 @@ void GamOver::Initialize(DirectXCommon* dxCommon)
 /// </summary>
 void GamOver::Update(DirectXCommon* dxCommon)
 {
-	if (Retry::getStage() ==Sea_1_1) {
-		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+	if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+		faderflag = true;
+		loadf=true;
+	}
+	if (faderflag) {
+		Fader::feedIn(1.0f, 0.1f);
+	}
+
+	if (Fader::GetInstance()->GetAlpha() >= 1.0f) {
+		if (Retry::getStage() == Sea_1_1) {
 			BaseScene* scene = new SeaScene1(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
 		}
-	}
-	if (Retry::getStage() == Sea_1_2) {
-		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+		if (Retry::getStage() == Sea_1_2) {
 			BaseScene* scene = new BossScene3(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
 		}
-	}
-	if (Retry::getStage() == Sea_1_3) {
-		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+		if (Retry::getStage() == Sea_1_3) {
 			BaseScene* scene = new BossScene3(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
 		}
-	}
-	if (Retry::getStage() == Jungle_1_1) {
-		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+		if (Retry::getStage() == Jungle_1_1) {
 			BaseScene* scene = new ForestStage1(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
 		}
-	}
-	if (Retry::getStage() == Jungle_1_2) {
-		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+		if (Retry::getStage() == Jungle_1_2) {
 			BaseScene* scene = new ForestStage2(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
 		}
-	}
-	if (Retry::getStage() == Jungle_1_3) {
-		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+		if (Retry::getStage() == Jungle_1_3) {
 			BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
+
 		}
 	}
 	//ENTERで次のシーンへ
@@ -103,9 +103,11 @@ void GamOver::Update(DirectXCommon* dxCommon)
 	//Helper::Update(alpha);
 	alpha = min(alpha, 1.1f);
 	alpha = max(alpha, 0.0f);
-
+	Fader::FeedSpriteUpdate();
 	titlesprite->setcolor({ 1,1,1,alpha });
 	//titlesprite->SpriteUpdate();
+	GameUI::NowLoadUpdate(loadf);
+
 	titlesprite->SetSize({ WinApp::window_width,WinApp::window_height });
 }
 
@@ -117,6 +119,7 @@ void GamOver::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	Sprite::PreDraw(cmdList);
 	titlesprite->Draw();
+	Fader::FeedSpriteDraw();
 	Sprite::PostDraw(cmdList);
 }
 
@@ -129,7 +132,7 @@ void GamOver::Draw(DirectXCommon* dxcomn)
 	//ポストエフェクトの描画
 	dxcomn->BeginDraw();//描画コマンドの上らへんに
 	SpriteDraw(dxcomn->GetCmdList());
-
+	GameUI::NowLoadDraw(dxcomn);
 	ImGui::Begin("Obj1");
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));

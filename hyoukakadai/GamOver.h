@@ -22,6 +22,8 @@ private:
 public:
 	GamOver(SceneManager* sceneManager);
 private:
+	bool loadf;
+	bool faderflag;
 	Fader* feed;
 	float alpha = 1;
 	Sprite* titlesprite;
