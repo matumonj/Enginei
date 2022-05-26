@@ -138,16 +138,17 @@ void Effects::Update(DirectXCommon*dxcomn,DebugCamera*camera,  std::unique_ptr<E
 		//attackefk->SetRotation(zrot, 180, 30);
 		//attackefk->SetScale(2,2,2 );
 		attackefk->SetRotation(0, zrot,0); //-4.651);
+		attackefk->SetScale(0.15, 0.326, 0.05);
 
 	}
 	else if(player->GetRot_Right()==true){
-		attackefk->SetPosition(player->GetPosition().x+6, player->GetPosition().y, player->GetPosition().z+2);
+		attackefk->SetPosition(player->GetPosition().x+6, player->GetPosition().y, player->GetPosition().z);
 		//Effect_Rot = { 0,0,0 };
-		attackefk->SetRotation(zrot,/*-55.068*/ -85.297, 0); //-4.651);
+		attackefk->SetRotation(0,/*-55.068*/ zrot, 0); //-4.651);
+		attackefk->SetScale(-0.15, 0.326, 0.05);
 
 	}
 	
-	attackefk->SetScale(0.15,0.326,0.05);
 	if (Input::GetInstance()->TriggerKey(DIK_A)) {
 		attack = true;
 	}
@@ -196,7 +197,7 @@ void Effects::ImGuiDraw()
 	ImGui::SetWindowPos(ImVec2(200, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("cameraposition")) {
-		ImGui::SliderFloat("cy", &b_Effect_Rot.y, 200, -200);
+		ImGui::SliderFloat("cy", &zrot, 200, -200);
 		ImGui::TreePop();
 	}
 	ImGui::End();

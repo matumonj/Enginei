@@ -399,6 +399,20 @@ void ForestBoss::Motion(Player* player)
 void ForestBoss::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)
 {
 
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			for (int k = 0; k < 3; k++) {
+				if (map[j][i] == 1|| map[j][i] == 2) {
+					if(Collision::GetLen(tst[j][i]->GetPosition(),Shot_Pos[k])<2){
+					shotf[k]= false;
+						hitcol[k] = true;
+						break;
+					}
+					
+				}
+			}
+		}
+	}
 }
 void ForestBoss::Follow(XMFLOAT3 position)
 {
@@ -620,7 +634,7 @@ void ForestBoss::NormalAttacks(Player* player)
 		BarrelRec = true;
 	}
 	for (int i = 0; i < 3; i++) {
-		if (attackcount % 100 == 0) {
+		if (attackcount % 400 == 0) {
 			BarrelFolflag = false;
 			if (!shotf[i]) {
 				//shotf[i] = true;
@@ -640,18 +654,14 @@ void ForestBoss::NormalAttacks(Player* player)
 				y[i] = player->GetPosition().y - Shot_Pos[i].y;
 
 				BulAngle[i] = sqrtf(x[i] * x[i] + y[i] * y[i]);
-
-				Xspeed[i] = ( 0.1f * x[i] / BulAngle[i]);
-				Yspeed[i] = ( 0.1f * y[i] / BulAngle[i]);
+				rt[i] += 0.05f;
+				Xspeed[i] = ( (0.5f-rt[i]) * x[i] / BulAngle[i]);
+				Yspeed[i] = ( (0.5f-rt[i]) * y[i] / BulAngle[i]);
 				break;
 			}
 
 		}
-			if (BarrelRec) {
-				if (Barrel_Scl.y <= 2) {
-					BarrelFolflag = true;
-				}
-			}
+			
 		if(shotf[i]&&ShotObj[i]!=nullptr) {
 			Shot_Pos[i].x += Xspeed[i];
 			Shot_Pos[i].y += Yspeed[i];
@@ -703,11 +713,22 @@ void ForestBoss::NormalAttacks(Player* player)
 		XMVECTOR positionB = { Position.x,Position.y,Position.z };
 		//ƒvƒŒƒCƒ„[‚Æ“G‚ÌƒxƒNƒgƒ‹‚Ì’·‚³(·)‚ð‹‚ß‚é
 		XMVECTOR SubVector = DirectX::XMVectorSubtract(positionB, positionA);// positionA - positionB;
+
 		BarrelRotFollow = atan2f(SubVector.m128_f32[0], SubVector.m128_f32[1]);
+
+		if (shotf[0] == true || shotf[1] == true || shotf[2] == true) {
+			BarrelFolflag = false;
+			oldrot = positionB;
+		}
+		else {
+			BarrelFolflag = true;
+		}
 		if (BarrelFolflag) {
-		
-			Barrel_Rot.z = BarrelRotFollow * 60 + 180;//60=Šp“x’²®—p 180=”½“]
-	}
+		} else {
+			positionB = oldrot;
+		}
+
+		Barrel_Rot.z = BarrelRotFollow * 60 + 180;//60=Šp“x’²®—p 180=”½“]
 	}
 
 void ForestBoss::UpDownMove(XMFLOAT3 position)

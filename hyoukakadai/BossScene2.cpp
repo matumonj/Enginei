@@ -387,9 +387,10 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	//bossenemyにnullptr代入するときは敵が死んだら
 	if (bossenemy != nullptr) {
 		//プレイヤーの検知
-
 		bossenemy->Motion(player);
 		bossenemy->Attack(player);
+		bossenemy->ColMap1(map, tst, mapx, mapy, 20, 130);
+
 		bossenemy->Update(Player_Pos);
 		ForestBoss::GetInstance()->SkewersAttack(map, tst);
 

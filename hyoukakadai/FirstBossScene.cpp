@@ -287,7 +287,7 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 
 	objUpdate();//オブジェクトの更新処理
 
-	effects->Updateo(dxCommon, camera, bossenemy.get(), player);
+	effects->Update(dxCommon, camera, &bossenemy, player);
 
 	//bossenemyにnullptr代入するときは敵が死んだら
 	if (bossenemy != nullptr) {

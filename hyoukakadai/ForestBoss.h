@@ -222,7 +222,10 @@ private:
         ArmAttacks,
         StartBattle
     };
-
+    bool hitcol[3];
+    DirectX::XMVECTOR oldrot;
+    DirectX::XMVECTOR positionB;
+    float rt[3];
     enum Phase {
         StartFloor,
         SecondFloor,
