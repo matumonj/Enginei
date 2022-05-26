@@ -370,18 +370,18 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	//}
 
-	if (Player_Pos.y >= -11) {
-		cameramove -= 0.1f;
-		if (cameramove <= 6) {
-			cameramove = 6;
+	/*if (Player_Pos.y >= -11) {
+		 -= 0.1f;
+		if ( <= 6) {
+			 = 6;
 		}
 	}
 	else {
-		cameramove += 0.1f;
-		if (cameramove >= 9) {
-			cameramove = 9;
+		 += 0.1f;
+		if ( >= 9) {
+			 = 9;
 		}
-	}
+	}*/
 
 
 	//}
@@ -389,21 +389,21 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 	if (Player_Pos.x <= 27.0f) {
 		camera->SetTarget({ 0,1,0 });//’Ž‹“_
 		camera->SetDistance(distance);//
-		camera->SetEye({ 27.0f,Player_Pos.y + cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 27.0f,Player_Pos.y + cameramove,Player_Pos.z });
+		camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
 	}
 
 	else if (Player_Pos.x >= 368.0f) {
 		camera->SetTarget({ 0,1,0 });//’Ž‹“_
 		camera->SetDistance(distance);//
-		camera->SetEye({ 368.0f,Player_Pos.y + cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 368.0f,Player_Pos.y + cameramove ,Player_Pos.z });
+		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 368.0f,Player_Pos.y,Player_Pos.z });
 	}
 	else {
 		camera->SetTarget({ 0,1,0 });//’Ž‹“_
 		camera->SetDistance(distance);//
-		camera->SetEye({ Player_Pos.x,Player_Pos.y + cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ Player_Pos.x,Player_Pos.y + cameramove,Player_Pos.z });
+		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	}
 
 

@@ -105,7 +105,7 @@ void GamOver::Update(DirectXCommon* dxCommon)
 	alpha = max(alpha, 0.0f);
 
 	titlesprite->setcolor({ 1,1,1,alpha });
-	//titlesprite->SpriteUpdate()
+	//titlesprite->SpriteUpdate();
 	titlesprite->SetSize({ WinApp::window_width,WinApp::window_height });
 }
 
