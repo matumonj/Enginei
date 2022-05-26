@@ -374,6 +374,7 @@ void Line::CollisionEnemys2group(std::unique_ptr<Enemy>position[])
 	if (colf) {
 		elf = false;
 		mapcol = false;
+		index2 = -1;
 	}
 }
 
