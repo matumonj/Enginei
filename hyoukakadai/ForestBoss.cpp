@@ -6,6 +6,7 @@
 #include<random>
 #define PI 3.14
 #include"imgui.h"
+
 int ForestBoss::StayCount = 0;
 float ForestBoss::startcount = 0;
 bool ForestBoss::stayflag;

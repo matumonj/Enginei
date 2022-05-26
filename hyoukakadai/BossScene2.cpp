@@ -13,7 +13,7 @@
 #include"Destroy.h"
 #include"Fader.h"
 #include"CollisionPrimitive.h"
-
+#include"Retry.h"
 //シーンのコンストラクタ
 BossScene2::BossScene2(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
@@ -422,6 +422,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+		Retry::SetStage(Jungle_1_3);
 		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}

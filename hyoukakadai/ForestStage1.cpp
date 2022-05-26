@@ -13,6 +13,7 @@
 #include<thread>
 #include"GamOver.h"
 #include"StageSelect.h"
+#include"Retry.h"
 ForestStage1::ForestStage1(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
@@ -443,6 +444,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+		Retry::SetStage(Jungle_1_1);
 		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;

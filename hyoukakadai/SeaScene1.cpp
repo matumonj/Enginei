@@ -12,6 +12,7 @@
 #include"Fader.h"
 #include"StageSelect.h"
 #include"GamOver.h"
+#include"Retry.h"
 //コメントアウト
 
 
@@ -441,13 +442,14 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 	}
 	item->HealEfficasy(player);
 	item->Update(enemy);
-	Fader::FeedSpriteUpdate();
+	//Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+		Retry::SetStage(Sea_1_1);
 		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;

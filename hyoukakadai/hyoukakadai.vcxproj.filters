@@ -80,6 +80,7 @@
     <ClCompile Include="LastBossScene.cpp" />
     <ClCompile Include="SeaBoss.cpp" />
     <ClCompile Include="LastBoss.cpp" />
+    <ClCompile Include="Retry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="LastBossScene.h" />
     <ClInclude Include="SeaBoss.h" />
     <ClInclude Include="LastBoss.h" />
+    <ClInclude Include="Retry.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />

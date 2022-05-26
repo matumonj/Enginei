@@ -7,7 +7,12 @@
 #include"SceneManager.h"
 #include"imgui.h"
 #include"Helper.h"
-
+#include"BossScene3.h"
+#include"Retry.h"
+#include"ForestStage1.h"
+#include"ForestStage2.h"
+#include"SeaScene1.h"
+#include"BossScene2.h"
 GamOver::GamOver(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
@@ -28,6 +33,42 @@ void GamOver::Initialize(DirectXCommon* dxCommon)
 /// </summary>
 void GamOver::Update(DirectXCommon* dxCommon)
 {
+	if (Retry::getStage() ==Sea_1_1) {
+		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+			BaseScene* scene = new SeaScene1(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+		}
+	}
+	if (Retry::getStage() == Sea_1_2) {
+		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+			BaseScene* scene = new BossScene3(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+		}
+	}
+	if (Retry::getStage() == Sea_1_3) {
+		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+			BaseScene* scene = new BossScene3(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+		}
+	}
+	if (Retry::getStage() == Jungle_1_1) {
+		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+			BaseScene* scene = new ForestStage1(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+		}
+	}
+	if (Retry::getStage() == Jungle_1_2) {
+		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+			BaseScene* scene = new ForestStage2(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+		}
+	}
+	if (Retry::getStage() == Jungle_1_3) {
+		if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+			BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+		}
+	}
 	//ENTERで次のシーンへ
 	if (Input::GetInstance()->TriggerButtonA()) {//押されたら
 		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成

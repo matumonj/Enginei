@@ -214,6 +214,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PostEffect.cpp" />
+    <ClCompile Include="Retry.cpp" />
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SeaBoss.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RaycastHit.h" />
+    <ClInclude Include="Retry.h" />
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SeaBoss.h" />
