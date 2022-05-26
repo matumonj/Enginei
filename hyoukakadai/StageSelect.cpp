@@ -72,6 +72,7 @@ void StageSelect::ModelCreate()
 	Skydome->SetPosition({ 0,0,0 });
 	SelectStageObj->SetPosition({ 0,0,0 });
 	SelectStageObj->SetScale({ 8,8,8 });
+	SelectStageObj->SetRotation({ 0,0,0 });
 	obj_Rot = { 0,0,0 };
 	for (int i = 0; i < 6; i++) {
 		StageSprite[i]->SetAnchorPoint({ 0.5,0.5 });
@@ -430,21 +431,21 @@ void StageSelect::SpriteUpdate()
 			if (J_stagechanges[0] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
-					BaseScene* scene = new ForestStage1(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new SeaScene1(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
 			else if (J_stagechanges[1] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
-					BaseScene* scene = new ForestStage2(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
 			else if (J_stagechanges[2] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
-					BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new BossScene3(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}

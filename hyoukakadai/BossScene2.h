@@ -252,7 +252,6 @@ private:
 		};
 
 		std::unique_ptr<Enemy>enemycolony1[10];
-		XMFLOAT3 colony1Pos[10];
 		std::unique_ptr<Enemy>enemycolony2[10];
 	float posX = 0;
 	float posY = 0;
