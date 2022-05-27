@@ -350,9 +350,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 		player->PlayerMoves(Player_Pos, moveSpeed,jumpFlag,grav,time,Player_Rot);
 		
 	}
-	if(Input::GetInstance()->Pushkey(DIK_0)){
-	
-	}
+
 	//FBXƒ‚ƒfƒ‹‚ÌXV
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 		
@@ -419,9 +417,6 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 		Line::GetInstance()->Getolddistance());//
 
 	Line::GetInstance()->SetColf(colf);
-
-	//needlepos = Line::GetInstance()->getpos();
-
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
 	Line::CollisionEnemys(enemy);
