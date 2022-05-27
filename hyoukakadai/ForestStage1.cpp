@@ -426,16 +426,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 
 	Line::CollisionEnemys(enemy);
 	Line::CollisionEnemys2group(enemy1);
-	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
-	//FBXのアニメーション再生
-	//if (Input::GetInstance()->Pushkey(DIK_0)) {
-		
-	//}
 
-	
-
-
-	//}
 	//カメラ関係の処理
 	if (Player_Pos.x <=  27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
@@ -457,12 +448,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	}
 
-
-
 	camera->Update();
-
-	
-
 
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
