@@ -42,6 +42,12 @@ private:
 	static XMFLOAT3 Espos, Esscl, Esrot;//ç¿ïW
 	static XMFLOAT2 playerHPPos, playerHPScl;//ç¿ïW 
 	static float Targetalpha;
+	static Sprite* HintSea;
+	static Sprite* HintForest;
+	static float HintSeaAlpha;
+	static float HintForestAlpha;
+	static float seatimer;
+	static float foretimer;
 public:
 	static void BossUIUpdate(Enemy* enemy);
 	float Getsclx() { return loutscl.x; }
@@ -76,5 +82,16 @@ public:
 	static void NowLoadUpdate(bool onf);
 
 	static void NowLoadDraw(DirectXCommon* dxcomn);
+
+	static void HintSeaBossSet();
+
+	static void HintSeaBossUpdate(bool onf);
+
+	static void HintSeaBossDraw(DirectXCommon* dxcomn);
+	static void HintForeBossSet();
+
+	static void HintForeBossUpdate(bool onf);
+
+	static void HintForeBossDraw(DirectXCommon* dxcomn);
 };
 

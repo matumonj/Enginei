@@ -136,7 +136,7 @@ void BossScene3::ModelCreate()
 	//Player_Pos = player->GetPosition();
 	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
-	Fader::SetFeedSprite();
+	//Fader::SetFeedSprite();
 	BckGrnd[0] = 0;
 	BckGrnd[1] = 1900;
 }
@@ -319,7 +319,22 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
 		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 	}
+	if (enemy[0]->GetPosition().x < 400) {
+		if (Collision::GetInstance()->Gethit() == true) {
+			loadf = false;
+			hintload = false;
 
+			Fader::feedOut(0.0f, 0.1f);
+			if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+				//::GetInstance()->SetHit(false);
+			}
+		} else {
+			hintload = true;
+			loadf = true;
+		}
+	}
+	GameUI::HintSeaBossUpdate(hintload);
+	GameUI::NowLoadUpdate(loadf);
 
 	BckGrnd[0] -= 10;
 	BckGrnd[1] -= 10;
@@ -585,10 +600,10 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	Line::Draw(dxcomn);
 
 	//weffect->Draw(dxcomn);
-	GameUI::AllowUIDraw(dxcomn);
-	GameUI::TargetUIDraw(dxcomn);
-	GameUI::UIDraw(dxcomn);
-	GameUI::PlayerUIDraw(dxcomn);
+	//GameUI::AllowUIDraw(dxcomn);
+	//GameUI::TargetUIDraw(dxcomn);
+	//GameUI::UIDraw(dxcomn);
+	//GameUI::PlayerUIDraw(dxcomn);
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
@@ -612,6 +627,8 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 
 	nTexture::PostDraw();
 
+	GameUI::NowLoadDraw(dxcomn);
+	GameUI::HintSeaBossDraw(dxcomn);
 }
 #pragma endregion
 //Å´Ç…ì¸ÇÈ

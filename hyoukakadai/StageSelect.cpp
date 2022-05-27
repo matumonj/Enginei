@@ -32,6 +32,8 @@ StageSelect::StageSelect(SceneManager* sceneManager)
 void StageSelect::SpriteCreate()
 {
 	GameUI::NowLoadSet();
+	GameUI::HintSeaBossSet();
+	GameUI::HintForeBossSet();
 	//注意
 	Sprite::LoadTexture(100, L"Resources/mori1.png");
 	Sprite::LoadTexture(101, L"Resources/mori2.png");
@@ -157,6 +159,8 @@ void StageSelect::Update(DirectXCommon* dxCommon)
 	SpriteUpdate();
 	Fader::FeedSpriteUpdate();
 	GameUI::NowLoadUpdate(Loadf);
+	GameUI::HintSeaBossUpdate(hintsea);
+	GameUI::HintForeBossUpdate(hintforest);
 	//シーンチェンジ
 //	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
 	//	BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
@@ -192,17 +196,21 @@ void StageSelect::Draw(DirectXCommon* dxcomn)
 
 	dxcomn->BeginDraw();
 	MyGameDraw(dxcomn);
+	
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	TargetSprite->Draw();
 	Fader::FeedSpriteDraw();
 	
 	
+	if (!Loadf) {
 		for (int i = 0; i < 8; i++) {
 			StageSprite[i]->Draw();
 		}
+	}
 	
 	Sprite::PostDraw(dxcomn->GetCmdList());
-
+	GameUI::HintSeaBossDraw(dxcomn);
+	GameUI::HintForeBossDraw(dxcomn);
 	GameUI::NowLoadDraw(dxcomn);
 	ImGuiDraw();
 	dxcomn->EndDraw();
@@ -384,6 +392,7 @@ void StageSelect::SpriteUpdate()
 				}
 				else if (TargetNum == 2) {
 					Loadf = true;
+					hintforest = true;
 					J_stagechanges[2] = true;
 				}
 			}
@@ -441,6 +450,7 @@ void StageSelect::SpriteUpdate()
 				}
 				else if (TargetNum == 2) {
 					Loadf = true;
+					hintsea = true;
 					S_stagechanges[2] = true;
 				}
 			}

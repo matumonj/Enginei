@@ -70,7 +70,7 @@ void ForestBoss::Initialize()
 	//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 	BossObject = Object3d::Create();
 	BossObject->SetModel(BossModel);
-	BarrelModel= Model::CreateFromOBJ("enemy2");
+	BarrelModel= Model::CreateFromOBJ("arm");
 	SkewersBossModel= Model::CreateFromOBJ("enemy2");
 	ShotModel = Model::CreateFromOBJ("sphere");
 	BossArmModel = Model::CreateFromOBJ("enemy2");
@@ -264,7 +264,7 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 {
 	for (int i = 0; i < 2; i++) {
 		BossArmObj[i]->PreDraw();
-		BossArmObj[i]->Draw();
+		// BossArmObj[i]->Draw();
 		BossArmObj[i]->PostDraw();
 	}
 	

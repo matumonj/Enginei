@@ -114,6 +114,7 @@ private:
 	bool startSet;
 	int deathcount;
 	//map
+	bool hintload;
 	int blockSize = 2;
 	int map[130][20] = {
 		//マップチップ振り分け

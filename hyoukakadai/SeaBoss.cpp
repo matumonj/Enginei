@@ -238,7 +238,7 @@ void SeaBoss::Follow(XMFLOAT3 position)
 				}
 			}
 		}
-		Position.x +=bossmovespeed/3.5;
+		Position.x +=bossmovespeed/2.0;
 
 	
 	

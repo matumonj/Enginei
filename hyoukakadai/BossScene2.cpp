@@ -276,17 +276,20 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 #pragma region XVˆ—
 void BossScene2::Update(DirectXCommon* dxCommon)
 {
-	//if (Collision::GetInstance()->Gethit() == true) {
-	//	loadf = false;
-	//	Fader::feedOut(0.0f, 0.1f);
-	//	if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
-	//		//::GetInstance()->SetHit(false);
-	//	}
-	//}
-	//else {
-	//	loadf = true;
-	//}
-	//GameUI::NowLoadUpdate(loadf);
+	if (Collision::GetInstance()->Gethit() == true) {
+		loadf = false;
+		hintload = false;
+		Fader::feedOut(0.0f, 0.1f);
+		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+			//::GetInstance()->SetHit(false);
+		}
+	}
+	else {
+		hintload = true;
+		loadf = true;
+	}
+	GameUI::NowLoadUpdate(loadf);
+	GameUI::HintForeBossUpdate(hintload);
 	camerapositionx = Player_Pos.x;
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
@@ -419,6 +422,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
+	Fader::FeedSpriteUpdate();
 
 	atb = BossEnemy::GetInstance()->GetaltAttack();
 
@@ -505,6 +509,14 @@ void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 	//effects2->Draw(dxcomn);
 	//FBX‚Ì•`‰æ
 	object1->Draw(dxcomn->GetCmdList());
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	//setumei->Draw();
+	//dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	Fader::FeedSpriteDraw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
+	GameUI::NowLoadDraw(dxcomn);
+	GameUI::HintForeBossDraw(dxcomn);
 }
 #pragma endregion
 //«‚É“ü‚é

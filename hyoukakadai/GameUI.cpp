@@ -5,6 +5,7 @@
 #include"Destroy.h"
 #include"Line.h"
 #include"BossEnemy.h"
+#include"mHelper.h"
 //糸にかかわるUI
 using namespace DirectX;
 Sprite* GameUI::LineLength = nullptr;
@@ -26,7 +27,13 @@ float GameUI::alpha = 0.5, GameUI::walpha = 0, GameUI::Targetalpha = 0;
 float GameUI::tempx = 0;
 float GameUI::lsclMax;
 Sprite* GameUI::NowLoad;
+Sprite* GameUI::HintSea;
+Sprite* GameUI::HintForest;
 float GameUI::LoadAlpha=0;
+float GameUI::HintSeaAlpha = 0;
+float GameUI::HintForestAlpha = 0;
+float GameUI::seatimer = 0;
+float GameUI::foretimer = 0;
 GameUI* GameUI::GetInstance()
 {
 	static GameUI instance;
@@ -265,7 +272,7 @@ void GameUI::NowLoadSet()
 void GameUI::NowLoadUpdate(bool onf)
 {
 	NowLoad->SetPosition({ 1500,600 });
-	NowLoad->SetPosition({ 200,200 });
+	//NowLoad->SetPosition({ 200,200 });
 	if (onf) {
 		LoadAlpha = 1.0f;
 	}
@@ -279,5 +286,67 @@ void GameUI::NowLoadDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	NowLoad->Draw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+}
+
+
+void GameUI::HintSeaBossSet()
+{
+	Sprite::LoadTexture(43, L"Resources/forestj のコピー - コピー.png");
+	HintSea = Sprite::Create(43, { 0.0f,-200.0f });
+
+	HintSeaAlpha = 0;
+}
+
+void GameUI::HintSeaBossUpdate(bool onf)
+{
+	HintSea->SetPosition({400,100 });
+	HintSea->SetSize({ 1200,780 });
+	if (onf) {
+		//seatimer += 0.1f;
+		//HintSeaAlpha = Easing::EaseOut(seatimer, 0, 1);
+		HintSeaAlpha = 0.8f;
+	} else {
+		HintSeaAlpha = 0.0f;
+		//seatimer = 0;
+	}
+	HintSea->setcolor({ 1,1,1,HintSeaAlpha });
+
+}
+void GameUI::HintSeaBossDraw(DirectXCommon* dxcomn)
+{
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	HintSea->Draw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+}
+
+
+void GameUI::HintForeBossSet()
+{
+	Sprite::LoadTexture(44, L"Resources/forestj のコピー - コピー.png");
+	HintForest= Sprite::Create(44, { 0.0f,-200.0f });
+
+	HintForestAlpha = 0;
+}
+
+void GameUI::HintForeBossUpdate(bool onf)
+{
+	HintForest->SetPosition({ 400,100 });
+	HintForest->SetSize({ 1200,780 });
+	if (onf) {
+		//seatimer += 0.1f;
+		//HintSeaAlpha = Easing::EaseOut(seatimer, 0, 1);
+		HintForestAlpha = 0.8f;
+	} else {
+		HintForestAlpha = 0.0f;
+		//seatimer = 0;
+	}
+	HintForest->setcolor({ 1,1,1,HintForestAlpha });
+
+}
+void GameUI::HintForeBossDraw(DirectXCommon* dxcomn)
+{
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	HintForest->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
