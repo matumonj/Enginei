@@ -33,12 +33,15 @@ void StageSelect::SpriteCreate()
 {
 	GameUI::NowLoadSet();
 	//注意
-	Sprite::LoadTexture(100, L"Resources/Stage1-1.png");
-	Sprite::LoadTexture(101, L"Resources/Stage1-1.png");
-	Sprite::LoadTexture(102, L"Resources/Stage1-1.png");
-	Sprite::LoadTexture(103, L"Resources/Stage1-1.png");
-	Sprite::LoadTexture(104, L"Resources/Stage1-1.png");
-	Sprite::LoadTexture(105, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(100, L"Resources/mori1.png");
+	Sprite::LoadTexture(101, L"Resources/mori2.png");
+	Sprite::LoadTexture(102, L"Resources/mori3.png");
+	Sprite::LoadTexture(103, L"Resources/umi1.png");
+	Sprite::LoadTexture(104, L"Resources/umi2.png");
+	Sprite::LoadTexture(105, L"Resources/umi3.png");
+	Sprite::LoadTexture(107, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(108, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(109, L"Resources/Stage1-1.png");
 	Sprite::LoadTexture(106, L"Resources/targetSprite.png");
 
 	StageSprite[0] = Sprite::Create(100, { 200,0 });
@@ -47,6 +50,11 @@ void StageSelect::SpriteCreate()
 	StageSprite[3] = Sprite::Create(103, { 200,0 });
 	StageSprite[4] = Sprite::Create(104, { 200,0 });
 	StageSprite[5] = Sprite::Create(105, { 200,0 });
+	StageSprite[6] = Sprite::Create(107, { 200,0 });
+	StageSprite[7] = Sprite::Create(108, { 200,0 });
+	StageSprite[8] = Sprite::Create(109, { 200,0 });
+	//StageSprite[9] = Sprite::Create(103, { 200,0 });
+	
 	TargetSprite= Sprite::Create(106, { 200,0 });
 	
 	SpritePosition[0] = { 480,480 };
@@ -74,7 +82,7 @@ void StageSelect::ModelCreate()
 	SelectStageObj->SetScale({ 8,8,8 });
 	SelectStageObj->SetRotation({ 0,0,0 });
 	obj_Rot = { 0,0,0 };
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 9; i++) {
 		StageSprite[i]->SetAnchorPoint({ 0.5,0.5 });
 		StageSprite[i]->SetPosition({ -300,-300 });
 	}
@@ -187,9 +195,12 @@ void StageSelect::Draw(DirectXCommon* dxcomn)
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	TargetSprite->Draw();
 	Fader::FeedSpriteDraw();
-	for (int i = 0; i < 6; i++) {
-		StageSprite[i]->Draw();
-	}
+	
+	
+		for (int i = 0; i < 8; i++) {
+			StageSprite[i]->Draw();
+		}
+	
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
 	GameUI::NowLoadDraw(dxcomn);
@@ -227,7 +238,7 @@ void StageSelect::Finalize()
 	//delete sceneManager_;
 	delete camera;
 	delete SelectStageModel, SelectStageObj;
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 9; i++) {
 		delete StageSprite[i];
 	}
 	delete TargetSprite;
@@ -255,7 +266,7 @@ void StageSelect::Select()
 					nextScene = true;
 				}
 				if (nextScene) {
-					stageSpriteScene = Sea;
+					stageSpriteScene = Jungle;
 
 				}
 				break;
@@ -265,7 +276,7 @@ void StageSelect::Select()
 					nextScene = true;
 				}
 				if (nextScene) {
-					stageSpriteScene = Jungle;
+					stageSpriteScene = Sea;
 
 				}
 				break;
@@ -358,7 +369,7 @@ void StageSelect::SpriteUpdate()
 			}
 			if (Input::GetInstance()->TriggerButtonB()) {
 				stime = 0;
-				stageSpriteScene =Stay;
+				stageSpriteScene =Stay_J;
 			}
 			SelectStageofStage();
 			//
@@ -406,52 +417,109 @@ void StageSelect::SpriteUpdate()
 				SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 300);
 				SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 300);
 
-				StageSprite[i]->SetPosition(SpritePosition[i]);
-				StageSprite[i]->SetSize(SpriteScale[i]);
+			}
+			for (int i = 3; i < 6; i++) {
+				//for (int j = 0; j < 3; j++) {
+					StageSprite[i]->SetPosition(SpritePosition[i-3]);
+					StageSprite[i]->SetSize(SpriteScale[i-3]);
+				//}
 			}
 			if (Input::GetInstance()->TriggerButtonB()) {
 				stime = 0;
-				stageSpriteScene = Stay;
+				stageSpriteScene = Stay_S;
 			}
 			SelectStageofStage();
 			//
 			if (SpriteScale[0].x >= 300 && Input::GetInstance()->TriggerButtonA()) {//押されたら
 				if (TargetNum == 0) {
 					Loadf = true;
-					J_stagechanges[0] = true;
+					S_stagechanges[0] = true;
 				}
 				else if (TargetNum == 1) {
 					Loadf = true;
-					J_stagechanges[1] = true;
+					S_stagechanges[1] = true;
 				}
 				else if (TargetNum == 2) {
 					Loadf = true;
-					J_stagechanges[2] = true;
+					S_stagechanges[2] = true;
 				}
 			}
-			if (J_stagechanges[0] == true) {
+			if (S_stagechanges[0] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
 					BaseScene* scene = new SeaScene1(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
-			else if (J_stagechanges[1] == true) {
+			else if (S_stagechanges[1] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
 					BaseScene* scene = new DesertField(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
-			else if (J_stagechanges[2] == true) {
+			else if (S_stagechanges[2] == true) {
 				Fader::feedIn(1.0f, 0.1f);
 				if (Fader::GetInstance()->GetAlpha() >= 0.99) {
 					BaseScene* scene = new BossScene3(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
+			for (int i = 0; i < 3; i++) {
+				StageSprite[i]->SetSize({ 0,0 });
+			}
 			break;
-		case Stay:
+		case Stay_J:
+			Fader::feedOut(0.0f, 0.1f);
+			if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+				stageSpriteScene = None;
+			}
+			stime += 0.01f;
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					if (SpriteScale[i].x >= 0) {
+						SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 0);
+					}
+					if (SpriteScale[i].y >= 0) {
+						SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 0);
+					}
+				}
+			}
+			for (int i = 0; i < 3; i++) {
+				StageSprite[i]->SetPosition(SpritePosition[i]);
+					StageSprite[i]->SetSize(SpriteScale[i]);
+			}
+			
+			TargetSprite->SetSize({ 0,0 });
+
+			break;
+		case Stay_S:
+			Fader::feedOut(0.0f, 0.1f);
+			if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+				stageSpriteScene = None;
+			}
+			stime += 0.01f;
+			for (int i = 0; i < 3; i++) {
+					if (SpriteScale[i].x >= 0) {
+						SpriteScale[i].x = Easing::EaseOut(stime, SpriteScale[i].x, 0);
+					}
+					if (SpriteScale[i].y >= 0) {
+						SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 0);
+					}
+				
+			}
+			for (int i = 3; i < 6; i++) {
+			
+					StageSprite[i]->SetPosition(SpritePosition[i-3]);
+					StageSprite[i]->SetSize(SpriteScale[i-3]);
+				
+			}
+
+			TargetSprite->SetSize({ 0,0 });
+
+			break;
+
+		case Stay_C:
 			Fader::feedOut(0.0f, 0.1f);
 			if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
 				stageSpriteScene = None;
@@ -464,17 +532,15 @@ void StageSelect::SpriteUpdate()
 				if (SpriteScale[i].y >= 0) {
 					SpriteScale[i].y = Easing::EaseOut(stime, SpriteScale[i].y, 0);
 				}
+
 			}
-			for (int i = 0; i < 3; i++) {
-				StageSprite[i]->SetPosition(SpritePosition[i]);
-					StageSprite[i]->SetSize(SpriteScale[i]);
+			for (int i = 6; i < 8; i++) {
+
+				StageSprite[i]->SetPosition(SpritePosition[i - 6]);
+				StageSprite[i]->SetSize(SpriteScale[i - 6]);
+
 			}
-			for (int i = 3; i < 6; i++) {
-				for (int j = 0; j < 3; j++) {
-					StageSprite[i]->SetPosition(SpritePosition[j]);
-					StageSprite[i]->SetSize(SpriteScale[j]);
-				}
-			}
+
 			TargetSprite->SetSize({ 0,0 });
 
 			break;
@@ -491,7 +557,7 @@ void StageSelect::SpriteUpdate()
 			}
 			if (Input::GetInstance()->TriggerButtonB()) {
 				stime = 0;
-				stageSpriteScene = Stay;
+				stageSpriteScene = Stay_C;
 			}
 			SelectStageofStage();
 			//

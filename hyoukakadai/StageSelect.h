@@ -26,7 +26,7 @@ private:
 	Model* SelectStageModel;
 	Object3d* Skydome;
 	Model* DomeModel;
-	Sprite* StageSprite[6];
+	Sprite* StageSprite[9];
 	Sprite* TargetSprite;
 	XMFLOAT2 TargetSpritePos[3];
 	XMFLOAT2 SpritePosition[3];
@@ -105,7 +105,9 @@ private:
 		Jungle,
 		Sea,
 		Etc,
-		Stay,
+		Stay_J,
+		Stay_S,
+		Stay_C,
 		None,
 		Casle,
 		Home,

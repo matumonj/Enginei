@@ -115,4 +115,5 @@ protected:
 
 		void TransferVertices();
 		float GetSize_x() { return size.x; }
+		float GetSize_y() { return size.y; }
 };
