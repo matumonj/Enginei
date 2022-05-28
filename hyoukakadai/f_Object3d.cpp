@@ -255,7 +255,7 @@ void f_Object3d::Updata(XMFLOAT4 color, DirectXCommon* dxcomn, DebugCamera* came
 
 	//アニメーション
 	if (isPlay) {
-		currentTime += frameTime/ctime;
+		currentTime += frameTime / ctime;
 		//最後まで再生したら先頭に戻す
 		if (currentTime > endTime) {
 			if (animeloop == TRUE) {

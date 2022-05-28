@@ -23,10 +23,10 @@ const float Line::LengThenSpeed = 1.0f;
 const float Line::MaxLen = 30.0f;
 const float Line::MinLen = 0.0f;
 float Line::timer = 0.0;
-float Line::LimitGauge,Line::necolor=1,Line::twcolor=1;
+float Line::LimitGauge, Line::necolor = 1, Line::twcolor = 1;
 bool Line::lengthserchf = false;
 bool Line::goflag = false;
-bool Line::colf = false,Line::colfsub=false;
+bool Line::colf = false, Line::colfsub = false;
 float Line::grav = 0.05f;
 float Line::MoveSpeed = 0;
 Object3d* Line::NeedleObj = nullptr;
@@ -179,7 +179,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 		}
 
 	} else if (!trigger && subradius > 0) {//フラグ切られて線の長さがまだある時
-		
+
 		if (goflag == true && elf) {
 			boundflag = true;//線の終点へ吸い付くフラグ
 			timer = 0;
@@ -199,8 +199,8 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			subradius = 0;//線の長さを0に
 			stopflag = true;
 			notdoubletuch = true;
-			
-		} 
+
+		}
 
 	}
 	//先の長さが最大超えた、またはブロックあたったらその時点のプレイヤーと線の距離を求める（その距離分ゲージ減らす）
@@ -254,7 +254,7 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 	Twine->CreateLineTexture(linex, linex2, liney, liney2);
 	Twine->SetPosition(po);
 	Twine->Update(matview, matprojection);
-	
+
 
 	NeedleObj->SetPosition({ linex2,liney2,Player_Pos.z });
 	//needlerot = player->GetRotation();
@@ -294,19 +294,19 @@ void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 			if (dis[i] <= 2 && trigger && !elf) {
 				elf = true;
 				index = i;//あたった敵の要素番号を割り当て
-				break;
+				//break;
 			}
 		}
-		
+
 		//衝突時
 		if (elf && !mapcol) {
 			if (position[index] != nullptr) {
-				if (index != -1&&index2==-1) {
+				if (index != -1) {
 					linex2 = position[index]->GetPosition().x;
 					liney2 = position[index]->GetPosition().y;
 				}
 			}
-		
+
 		}
 	}
 	if (mapcol) {
@@ -318,7 +318,7 @@ void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 		}
 	}
 
-	if ( colf) {
+	if (colf) {
 		elf = false;
 		mapcol = false;
 		index = -1;
@@ -343,7 +343,6 @@ void Line::CollisionEnemys2group(std::unique_ptr<Enemy>position[])
 			if (dis[i] <= 2 && trigger && !elf) {
 				elf = true;
 				index2 = i;//あたった敵の要素番号を割り当て
-				break;
 			}
 		}
 
@@ -353,20 +352,13 @@ void Line::CollisionEnemys2group(std::unique_ptr<Enemy>position[])
 				if (index2 != -1) {
 					linex2 = position[index2]->GetPosition().x;
 					liney2 = position[index2]->GetPosition().y;
-					//break;
+				}
+
+			} else {
+				if (index2 == -1) {
+					returnflag = true;
 				}
 			}
-	
-				else {
-				//break;
-				//index2 = -1;
-				if (index2 == -1) {
-					//elf = false;
-					//mapcol = false;
-					returnflag = true;
-					//index2 = -1;
-				}
-				}
 		}
 	}
 	if (mapcol) {
@@ -410,23 +402,22 @@ void Line::CollisionEnemy(Enemy* position)
 		if (position != nullptr) {
 			linex2 = position->GetPosition().x;
 			liney2 = position->GetPosition().y;
-		} 
-		else {
+		} else {
 			returnflag = true;
 		}
 	}
 	if (mapcol) {
 		oldlinex = linex2;
 		oldliney = liney2;
-		
+
 		if (elf) {
 			linex2 = oldlinex;
 			liney2 = oldliney;
-			
+
 		}
 	}
 
-	if ( colf) {
+	if (colf) {
 		elf = false;
 		//boundflag = false;
 		mapcol = false;

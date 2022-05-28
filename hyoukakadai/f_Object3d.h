@@ -76,6 +76,7 @@ public:
 	void PlayAnimation();
 
 protected:
+	bool animep;
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuffTransform;
 	//スケール
