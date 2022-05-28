@@ -2,19 +2,15 @@
 #include"Input.h"
 #include"DirectXCommon.h"
 #include"ClearScene.h"
-#include"TitleScene.h"
 #include"SceneManager.h"
 #include"MobEnemy.h"
-#include"BossEnemy.h"
 #include"ThrowEnemy.h"
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
-#include"BossScene1.h"
-#include"FirstBossScene.h"
-#include"BossScene2.h"
 #include"GamOver.h"
 #include"StageSelect.h"
+#include"Retry.h"
 //コメントアウト
 
 
@@ -227,7 +223,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -262,6 +258,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	else {
 		loadf = true;
 	}
+	GameUI::NowLoadUpdate(loadf);
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 10;
@@ -269,19 +266,11 @@ void DesertField::Update(DirectXCommon* dxCommon)
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
 		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
+
 	}
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-
-
-
-
-	///これより上に入力処理をかけ
-	////当たり判定
-
-
-	//入力処理より後に当たり判定を描け
 
 
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
@@ -307,6 +296,8 @@ void DesertField::Update(DirectXCommon* dxCommon)
 			}
 		}
 	}
+
+
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
 		time = 0;
@@ -329,6 +320,9 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	//頂点座標の更新
 	mech->CreateLineTexture(linex, linex2, liney, liney2);
 
+	hari_Pos.x = Line::GetInstance()->getpos().x;
+	hari_Pos.y = Line::GetInstance()->getpos().y;
+
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -340,19 +334,11 @@ void DesertField::Update(DirectXCommon* dxCommon)
 		Line::GetInstance()->Getolddistance());//
 
 	Line::GetInstance()->SetColf(colf);
-
-	//needlepos = Line::GetInstance()->getpos();
-
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemy(enemy->get());
-	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
-	//FBXのアニメーション再生
+	Line::CollisionEnemys(enemy);
 
 
-
-
-	//}
 	//カメラ関係の処理
 	if (Player_Pos.x <= 27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
@@ -376,28 +362,20 @@ void DesertField::Update(DirectXCommon* dxCommon)
 
 	camera->Update();
 
-	player->SetPosition(Player_Pos);
-	player->SetRotation(Player_Rot);
-
-	player->SetScale(Player_Scl);
-
-
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
 	player->CollisionAttack(enemy, Player_Pos);
-
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
-	effects->HealEffects(item->ColItem());
-	effects->Update(dxCommon, camera, enemy, player);
 
+	effects->Update(dxCommon, camera, enemy, player);
 	//enemyにnullptr代入するときは敵が死んだら
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
-			//enemy[0]->Motion(player);
-			enemy[i]->ColMap(map, tst, mapx,mapy,MAX_X, MAX_Y);
+			enemy[i]->Motion(player);
+			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Attack(player);
 			enemy[i]->Update(Player_Pos);
 
@@ -410,17 +388,21 @@ void DesertField::Update(DirectXCommon* dxCommon)
 
 			}
 		}
+	
 	}
+
 	item->HealEfficasy(player);
 	item->Update(enemy);
-	//Fader::FeedSpriteUpdate();
+
+	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
 	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
+		Retry::SetStage(Jungle_1_1);
+		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
 	}
@@ -499,125 +481,125 @@ void DesertField::MyGameDraw(DirectXCommon* dxcomn)
 #pragma region
 void DesertField::Draw(DirectXCommon* dxcomn)
 {
-	////ポストエフェクトの場合わけ(Bでぼかし Dがデフォルト)
-	//switch (c_postEffect)
-	//{
-	//case Blur://ぼかし　描画準違うだけ
-	//	postEffect->PreDrawScene(dxcomn->GetCmdList());
-	//	MyGameDraw(dxcomn);
-	//	postEffect->PostDrawScene(dxcomn->GetCmdList());
+	//ポストエフェクトの場合わけ(Bでぼかし Dがデフォルト)
+	switch (c_postEffect)
+	{
+	case Blur://ぼかし　描画準違うだけ
+		postEffect->PreDrawScene(dxcomn->GetCmdList());
+		MyGameDraw(dxcomn);
+		postEffect->PostDrawScene(dxcomn->GetCmdList());
 
-	//	dxcomn->BeginDraw();
-	//	postEffect->Draw(dxcomn->GetCmdList());
-	//	ImGuiDraw();//imguiは最後の方入れとく
-	//	dxcomn->EndDraw();
-	//	break;
+		dxcomn->BeginDraw();
+		postEffect->Draw(dxcomn->GetCmdList());
+		ImGuiDraw();//imguiは最後の方入れとく
+		dxcomn->EndDraw();
+		break;
 
-	//case Default://普通のやつ特に何もかかっていない
-	//	postEffect->PreDrawScene(dxcomn->GetCmdList());
-	//	postEffect->Draw(dxcomn->GetCmdList());
-	//	postEffect->PostDrawScene(dxcomn->GetCmdList());
+	case Default://普通のやつ特に何もかかっていない
+		postEffect->PreDrawScene(dxcomn->GetCmdList());
+		postEffect->Draw(dxcomn->GetCmdList());
+		postEffect->PostDrawScene(dxcomn->GetCmdList());
 
-	//	dxcomn->BeginDraw();
-	//	MyGameDraw(dxcomn);
-	//	ImGuiDraw();
-	//	dxcomn->EndDraw();
-	//	break;
-	//}
+		dxcomn->BeginDraw();
+		MyGameDraw(dxcomn);
+		ImGuiDraw();
+		dxcomn->EndDraw();
+		break;
+	}
 }
 #pragma endregion
 
 void DesertField::ImGuiDraw()
 {
-	//ImGui::Begin("Obj1");
-	//ImGui::SetWindowPos(ImVec2(0, 0));
-	//ImGui::SetWindowSize(ImVec2(500, 300));
-	//if (ImGui::TreeNode("light_position")) {
-	//	//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
-	//	///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
-	//	///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
-	//	if (ImGui::Button("spotlight ON")) {
-	//		lightGroup->SetSpotLightActive(0, true);
-	//	}
-	//	if (ImGui::Button("spotlight OFF")) {
-	//		lightGroup->SetSpotLightActive(0, false);
-	//	}
-	//	ImGui::ColorPicker3("light_color", spotLightColor);
-	//	ImGui::TreePop();
-	//}
+	ImGui::Begin("Obj1");
+	ImGui::SetWindowPos(ImVec2(0, 0));
+	ImGui::SetWindowSize(ImVec2(500, 300));
+	if (ImGui::TreeNode("light_position")) {
+		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
+		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
+		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
+		if (ImGui::Button("spotlight ON")) {
+			lightGroup->SetSpotLightActive(0, true);
+		}
+		if (ImGui::Button("spotlight OFF")) {
+			lightGroup->SetSpotLightActive(0, false);
+		}
+		ImGui::ColorPicker3("light_color", spotLightColor);
+		ImGui::TreePop();
+	}
 
-	//if (ImGui::TreeNode("Effect_position")) {
-	//	//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
-	//	//ImGui::SliderFloat("positionY", &debuga, -200, 200);
-	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
-	//	ImGui::TreePop();
-	//}
-	//if (ImGui::TreeNode("enemy_position")) {
-	//	float rf = enemy[0]->GetPosition().x;
-	//	float rf2 = enemy[0]->GetPosition().y;
-	//	float rrr = player->getdis();
-	//	//float rf3 = enemy->GetPosition().z;
-	//	ImGui::SliderInt("positionX", &co, -100, 100);
-	//	ImGui::SliderFloat("positionY", &rf2, -100, 100);
-	//	ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-	//	ImGui::SliderInt("positionX", &co, -200, 200);
-	//	ImGui::SliderFloat("positionY", &rf2, -200, 200);
-	//	ImGui::SliderFloat("positionZ", &rrr, -200, 200);
-	//	ImGui::TreePop();
-	//}
-	//float linex = Line::GetInstance()->getpos().x;
-	//float liney = Line::GetInstance()->getpos().y;
-	//float rr = player->GetPosition().x;
-	//if (ImGui::TreeNode("Player_position")) {
-	//	ImGui::SliderFloat("positionX", &linex, -200, 200);
-	//	ImGui::SliderFloat("positionY", &liney, -200, 200);
-	//	ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
-	//	ImGui::SliderFloat("grav", &grav, -200, 200);
-	//	ImGui::SliderFloat("time", &time, -200, 200);
-	//	ImGui::TreePop();
-	//}
-	//float sx = player->GetArea_S().x;
-	//float sy = player->GetArea_S().y;
+	if (ImGui::TreeNode("Effect_position")) {
+		//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
+		//ImGui::SliderFloat("positionY", &debuga, -200, 200);
+		//ImGui::SliderInt("positionZ", &elf, -200, 200);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("enemy_position")) {
+		float rf = enemy[0]->GetPosition().x;
+		float rf2 = enemy[0]->GetPosition().y;
+		float rrr = player->getdis();
+		//float rf3 = enemy->GetPosition().z;
+		ImGui::SliderInt("positionX", &co, -100, 100);
+		ImGui::SliderFloat("positionY", &rf2, -100, 100);
+		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
+		ImGui::SliderInt("positionX", &co, -200, 200);
+		ImGui::SliderFloat("positionY", &rf2, -200, 200);
+		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
+		ImGui::TreePop();
+	}
+	float linex = Line::GetInstance()->getpos().x;
+	float liney = Line::GetInstance()->getpos().y;
+	float rr = player->GetPosition().x;
+	if (ImGui::TreeNode("Player_position")) {
+		ImGui::SliderFloat("positionX", &linex, -200, 200);
+		ImGui::SliderFloat("positionY", &liney, -200, 200);
+		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+		ImGui::SliderFloat("grav", &grav, -200, 200);
+		ImGui::SliderFloat("time", &time, -200, 200);
+		ImGui::TreePop();
+	}
+	float sx = player->GetArea_S().x;
+	float sy = player->GetArea_S().y;
 
-	//float ex = player->GetArea_e().x;
-	//float ey = player->GetArea_e().y;
+	float ex = player->GetArea_e().x;
+	float ey = player->GetArea_e().y;
 
-	//if (ImGui::TreeNode("half")) {
-	//	ImGui::SliderFloat("sx", &sx, -200, 200);
-	//	ImGui::SliderFloat("sy", &sy, -200, 200);
-	//	ImGui::SliderFloat("ex", &ex, -200, 200);
-	//	ImGui::SliderFloat("ey", &ey, -200, 200);
-	//	ImGui::TreePop();
-	//}
-	//if (ImGui::TreeNode("Old")) {
-	//	ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
-	//	ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
-	//	ImGui::TreePop();
-	//}
-
-
-	///*if (ImGui::TreeNode("1")) {
-	//	ImGui::SliderFloat("+_width", &half_Width, -200, 200);
-	//	ImGui::SliderFloat("+_height", &half_height, -200, 200);
-	//	ImGui::SliderFloat("-_width", &half_Width, -200, 200);
-	//	ImGui::SliderFloat("-_height", &half_height, -200, 200);
-	//	ImGui::SliderFloat("map_1_width", &width, -200, 200);
-	//	ImGui::SliderFloat("map_1_height", &height, -200, 200);
-	//	ImGui::TreePop();
-	//}*/
+	if (ImGui::TreeNode("half")) {
+		ImGui::SliderFloat("sx", &sx, -200, 200);
+		ImGui::SliderFloat("sy", &sy, -200, 200);
+		ImGui::SliderFloat("ex", &ex, -200, 200);
+		ImGui::SliderFloat("ey", &ey, -200, 200);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Old")) {
+		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
+		ImGui::TreePop();
+	}
 
 
-	//ImGui::End();
+	/*if (ImGui::TreeNode("1")) {
+		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
+		ImGui::SliderFloat("+_height", &half_height, -200, 200);
+		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
+		ImGui::SliderFloat("-_height", &half_height, -200, 200);
+		ImGui::SliderFloat("map_1_width", &width, -200, 200);
+		ImGui::SliderFloat("map_1_height", &height, -200, 200);
+		ImGui::TreePop();
+	}*/
 
-	//ImGui::Begin("postEffect");
-	//if (ImGui::RadioButton("Blur", &c_postEffect)) {
-	//	c_postEffect = Blur;
-	//}
-	//if (ImGui::RadioButton("Default", &c_postEffect)) {
-	//	c_postEffect = Default;
-	//}
 
-	//ImGui::End();
+	ImGui::End();
+
+	ImGui::Begin("postEffect");
+	if (ImGui::RadioButton("Blur", &c_postEffect)) {
+		c_postEffect = Blur;
+	}
+	if (ImGui::RadioButton("Default", &c_postEffect)) {
+		c_postEffect = Default;
+	}
+
+	ImGui::End();
 
 }
 #pragma region 解放部分
