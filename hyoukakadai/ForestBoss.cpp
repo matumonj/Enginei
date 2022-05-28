@@ -62,7 +62,7 @@ void ForestBoss::Attack(Player* player)
 //èâä˙âªèàóù
 void ForestBoss::Initialize()
 {
-	NuclearModel= Model::CreateFromOBJ("zako1");
+	NuclearModel= Model::CreateFromOBJ("boss_weak");
 	NuclearObj = Object3d::Create();
 	NuclearObj->SetModel(NuclearModel);
 	//ÉÇÉfÉãÇÃì«çû
@@ -217,19 +217,24 @@ void ForestBoss::SkewersAttack(int map[130][20], std::unique_ptr<Object3d> tst[1
 			if (map[j][i] == 3) {
 				wpos[0] = { tst[j][i]->GetPosition().x - 5,tst[j][i]->GetPosition().y,tst[j][i]->GetPosition().z };
 				if (woodatkflag) {
-					map[j][i] = 4;
+					map[j][i] = 9;
 				}
 			}
 				if (map[j][i] == 5) {
 					wpos[1] = { tst[j][i]->GetPosition().x + 5,tst[j][i]->GetPosition().y,tst[j][i]->GetPosition().z };
 					if (woodatkflag) {
-						map[j][i] = 4;
+						map[j][i] = 9;
 					}
 				}
 				if (map[j][i] == 6) {
 					wpos[2] = { tst[j][i]->GetPosition().x + 5,tst[j][i]->GetPosition().y,tst[j][i]->GetPosition().z };
 					if (woodatkflag) {
-						map[j][i] = 4;
+						map[j][i] = 9;
+					}
+				}
+				if (woodatkflag) {
+					if (map[j][i] == 4) {
+						map[j][i] = 9;
 					}
 				}
 				//break;
@@ -255,6 +260,7 @@ void ForestBoss::SkewersAttack(int map[130][20], std::unique_ptr<Object3d> tst[1
 		else {
 			woodatkflag = false;
 		}
+		
 	}
 //	wpos ={ 0,0,0 };
 	
@@ -656,8 +662,8 @@ void ForestBoss::NormalAttacks(Player* player)
 
 				BulAngle[i] = sqrtf(x[i] * x[i] + y[i] * y[i]);
 				rt[i] += 0.05f;
-				Xspeed[i] = ( (0.5f-rt[i]) * x[i] / BulAngle[i]);
-				Yspeed[i] = ( (0.5f-rt[i]) * y[i] / BulAngle[i]);
+				Xspeed[i] = ( (0.2f) * x[i] / BulAngle[i]);
+				Yspeed[i] = ( (0.2f) * y[i] / BulAngle[i]);
 				break;
 			}
 

@@ -216,6 +216,24 @@ void ThrowEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 
 	time += 0.04f;
 	Position.y -= grav; //;* time * time;j
+
+
+	//
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			for (int k = 0; k < 3; k++) {
+				if (map[j][i] == 1||map[j][i]==2) {
+					if ((thposition[k].x + 0.5f > mapx[j][i] - 0.5f && thposition[k].x - 0.5f < mapx[j][i] + 0.5f) &&
+						thposition[k].y + 0.5f > mapy[j][i] && thposition[k].y - 0.5f < mapy[j][i] + 0.5f) {
+						throwparam[k].flag = false;
+					}
+					if (throwparam[k].time > 200) {
+						throwparam[k].flag = false;
+					}
+				}
+			}
+		}
+	}
 }
 void ThrowEnemy::Motion(Player* player)
 {

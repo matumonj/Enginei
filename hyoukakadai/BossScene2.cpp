@@ -306,6 +306,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
+	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 9);
 
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -394,32 +395,33 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 
 	for (int i = 0; i < 10; i++) {
 		if (enemycolony1[i] != nullptr) {
-			//if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
-
-				enemycolony1[i]->Motion(player);
 				enemycolony1[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
 				//enemycolony1[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
-				enemycolony1[i]->Attack(player);
+				if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 20) {
+					enemycolony1[i]->Motion(player);
+					enemycolony1[i]->Attack(player);
+				}
 				enemycolony1[i]->Update(Player_Pos);
 				enemycolony1[i]->EnemySearchPlayer(player);
 				//‚à‚µ“G‚ªŽ€‚ñ‚¾‚ç”jŠü
 				if (enemycolony1[i]->GetState_DEAD() == true) {
 					Destroy_unique(enemycolony1[i]);
 				}
-			//}
-		}
-		if (enemycolony2[i] != nullptr) {
-			//if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
-			enemycolony2[i]->Motion(player);
-			enemycolony2[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
-			enemycolony2[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
-			enemycolony2[i]->Attack(player);
-			enemycolony2[i]->Update(Player_Pos);
-			enemycolony2[i]->EnemySearchPlayer(player);
-			//‚à‚µ“G‚ªŽ€‚ñ‚¾‚ç”jŠü
-			if (enemycolony2[i]->GetState_DEAD() == true) {
-				Destroy_unique(enemycolony2[i]);
 			}
+	
+		if (enemycolony2[i] != nullptr) {
+				enemycolony2[i]->ColMap1(map, tst, mapx, mapy, 20, 130);
+				enemycolony2[i]->ColMap1(map, reef, mapx, mapy, 20, 130);
+				if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 20) {
+					enemycolony2[i]->Motion(player);
+					enemycolony2[i]->Attack(player);
+				}
+				enemycolony2[i]->Update(Player_Pos);
+				enemycolony2[i]->EnemySearchPlayer(player);
+				//‚à‚µ“G‚ªŽ€‚ñ‚¾‚ç”jŠü
+				if (enemycolony2[i]->GetState_DEAD() == true) {
+					Destroy_unique(enemycolony2[i]);
+				}
 		}
 	}
 	Fader::FeedSpriteUpdate();
@@ -488,12 +490,12 @@ void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 		bossenemy->Draw(dxcomn);
 	}
 	for (int i = 0; i < 10; i++) {
-		//if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 30) {
+		//if (Collision::GetLen(enemycolony1[i]->GetPosition(), Player_Pos) < 10) {
 		if (enemycolony1[i] != nullptr) {
 			enemycolony1[i]->Draw(dxcomn);
 		}
 		//}
-		//if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 30) {
+	//	if (Collision::GetLen(enemycolony2[i]->GetPosition(), Player_Pos) < 10) {
 		if (enemycolony2[i] != nullptr) {
 			enemycolony2[i]->Draw(dxcomn);
 		}

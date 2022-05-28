@@ -96,7 +96,8 @@ void ThronEnemy::Follow(Player* player)
 	float centerSpeed = 0.1f;
 	angleX = (player->GetPosition().x - Position.x);
 	angleY = (player->GetPosition().y - Position.y);
-	angleR = sqrtf((Position.x - player->GetPosition().x) * (Position.x - player->GetPosition().x));
+	angleR = sqrtf((Position.x - player->GetPosition().x) * (Position.x - player->GetPosition().x)+
+		(Position.y - player->GetPosition().y) * (Position.y - player->GetPosition().y));
 	if (angleR < 2) {
 		
 		followf =true;
@@ -104,8 +105,8 @@ void ThronEnemy::Follow(Player* player)
 		//Position.y += (angleZ / angleR) * centerSpeed;
 	}
 	if (followf) {
-		Position.x += (angleX / angleR) * movespeed;
-		Position.y += (angleX / angleR) * movespeed;
+		Position.x += (angleX / angleR) * movespeed/2;
+		Position.y += (angleY / angleR) * movespeed/2;
 	}
 	//Position.x =player.x;
 	//Position.y =player.y;

@@ -76,6 +76,9 @@ void GameUI::BossUIUpdate(Enemy* enemy) {
 }
 void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 {
+	if (loutscl.x <= 10) {
+		Line::GetInstance()->SetTrigger(false);
+	}
 	lsclMax = 300;// loutscl.x - 30;
 
 	if (flag) {//紐伸ばしたら長さを減らす
@@ -87,10 +90,15 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 		lscl.x++;
 	}
 	if (boundflag) {
-		if (loutscl.x >= 0)
+		if (loutscl.x > 0) {
 			loutscl.x -= 3;//最大値を減らす
-		if (tempx - loutscl.x > movement * 2) {//最大値の減る量(減る前と減ったあとの最大値を計算)
-			boundflag = false;//!boundflag->colf
+			if (tempx - loutscl.x > movement * 2) {//最大値の減る量(減る前と減ったあとの最大値を計算)
+				boundflag = false;//!boundflag->colf
+			}
+		}
+		else if(loutscl.x <=0){
+			
+			boundflag = false;
 		}
 		if (lscl.x >= lsclMax) {//最大値が減ったあと紐の長さがそれ超えるようであれば最大値に合わせる
 			lscl.x = lsclMax;
@@ -98,6 +106,7 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 	} else {
 		//減る前の最大値を保存
 		tempx = loutscl.x;
+		
 	}
 	AttentionUI();
 	loutscl.x += 0.1f;
@@ -292,7 +301,7 @@ void GameUI::NowLoadDraw(DirectXCommon* dxcomn)
 
 void GameUI::HintSeaBossSet()
 {
-	Sprite::LoadTexture(43, L"Resources/forestj のコピー - コピー.png");
+	Sprite::LoadTexture(43, L"Resources/hints のコピー.png");
 	HintSea = Sprite::Create(43, { 0.0f,-200.0f });
 
 	HintSeaAlpha = 0;
