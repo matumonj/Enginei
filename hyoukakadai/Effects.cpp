@@ -59,20 +59,26 @@ void Effects::Update2(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_pt
 				df = true;
 			}
 			if (df == true) {
-				efk->SetPosition(enemy[i]->GetPosition().x, enemy[i]->GetPosition().y, enemy[i]->GetPosition().z);
+				//efk->SetPosition(enemy[i]->GetPosition().x, enemy[i]->GetPosition().y, enemy[i]->GetPosition().z);
 				efk->Load_Effect();
 
 				df = false;
 			}
 		}
 	}
-	if (player->GetRot_Left()) {
-		attackefk->SetPosition(player->GetPosition().x - 2, player->GetPosition().y, player->GetPosition().z);
-		attackefk->SetRotation(1, 180, 0);
-	} else if (player->GetRot_Right()) {
-		attackefk->SetPosition(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
-		attackefk->SetRotation(1, 90, 0);
+	if (player->GetRot_Left() == true) {
+		attackefk->SetPosition(player->GetPosition().x - 6, player->GetPosition().y, player->GetPosition().z);
+		//attackefk->SetRotation(zrot, 180, 30);
+		//attackefk->SetScale(2,2,2 );
+		attackefk->SetRotation(0, zrot, 0); //-4.651);
+		attackefk->SetScale(0.15, 0.326, 0.05);
+
+	} else if (player->GetRot_Right() == true) {
+		attackefk->SetPosition(player->GetPosition().x + 6, player->GetPosition().y, player->GetPosition().z);
 		//Effect_Rot = { 0,0,0 };
+		attackefk->SetRotation(0,/*-55.068*/ zrot, 0); //-4.651);
+		attackefk->SetScale(-0.15, 0.326, 0.05);
+
 	}
 	if (Input::GetInstance()->TriggerKey(DIK_A)) {
 		attack = true;

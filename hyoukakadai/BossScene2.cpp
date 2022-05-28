@@ -343,16 +343,22 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 
 	}
-	if (player->GetNowMove() == false) {
-		movenow = false;
-	}
-	else {
+
+	if (Line::GetInstance()->Getboundflag() == true) {
 		movenow = true;
 	}
-	XMFLOAT3 bpos;
-	if (bossenemy != nullptr) {
-		bpos = bossenemy->GetPosition();
+	else {
+		if (player->GetNowMove() == false) {
+			movenow = false;
+		} else {
+			movenow = true;
+		}
 	}
+		XMFLOAT3 bpos;
+		if (bossenemy != nullptr) {
+			bpos = bossenemy->GetPosition();
+		}
+	
 	//ƒJƒƒ‰ŠÖŒW‚Ìˆ—
 	ForestBoss::GetInstance()->appearance(camerapositiony, Player_Pos.y);
 	camera->SetTarget({ 0,1,0 });//’Ž‹“_
@@ -512,7 +518,7 @@ void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 
 	GameUI::AllDraw(dxcomn);
 
-	attackeffects->Draw(dxcomn);
+	//attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
 	//effects2->Draw(dxcomn);
 	//FBX‚Ì•`‰æ
