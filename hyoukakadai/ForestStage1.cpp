@@ -214,10 +214,6 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 		enemy1[i]->Initialize();
 	}
 	
-	
-
-
-
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 4) {

@@ -35,7 +35,7 @@ void GamOver::Initialize(DirectXCommon* dxCommon)
 /// </summary>
 void GamOver::Update(DirectXCommon* dxCommon)
 {
-	if (Input::GetInstance()->TriggerButtonB()) {//押されたら
+	if (Input::GetInstance()->TriggerButtonA()) {//押されたら
 		faderflag = true;
 		loadf=true;
 	}
@@ -71,7 +71,7 @@ void GamOver::Update(DirectXCommon* dxCommon)
 		}
 	}
 	//ENTERで次のシーンへ
-	if (Input::GetInstance()->TriggerButtonA()) {//押されたら
+	if (Input::GetInstance()->TriggerButtonB()) {//押されたら
 		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}

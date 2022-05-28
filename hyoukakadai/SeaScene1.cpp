@@ -35,7 +35,7 @@ void SeaScene1::SpriteCreate()
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
-	Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	Sprite::LoadTexture(1, L"Resources/hamabe.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
 	mech = std::make_unique<Texture>();
