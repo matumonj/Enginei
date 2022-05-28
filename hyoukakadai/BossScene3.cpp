@@ -18,6 +18,7 @@
 #include"FishEnemy.h"
 #include"Retry.h"
 //コメントアウト
+#include"PorcFish.h"
 
 
 //シーンのコンストラクタ
@@ -82,6 +83,11 @@ void BossScene3::ModelCreate()
 
 	item = new Item();
 	item->Initialize();
+
+
+	item2 = new Item();
+	item2->Initialize();
+
 	collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
@@ -215,6 +221,70 @@ void BossScene3::objUpdate()
 		}
 	}
 
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 200; j++) {
+			if (map[i][j] == 40) {
+				if (enemy[7] != nullptr) {
+					enemy[7]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 41) {
+				if (enemy[9] != nullptr) {
+					enemy[9]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 42) {
+				if (enemy2[0] != nullptr) {
+					enemy2[0]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 43) {
+				if (enemy2[1] != nullptr) {
+					enemy2[1]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 44) {
+				if (enemy2[2] != nullptr) {
+					enemy2[2]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 45) {
+				if (enemy2[3] != nullptr) {
+					enemy2[3]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 46) {
+				if (enemy2[4] != nullptr) {
+					enemy2[4]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 47) {
+				if (enemy2[5] != nullptr) {
+					enemy2[5]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 48) {
+				if (enemy2[6] != nullptr) {
+					enemy2[6]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 49) {
+				if (enemy2[7] != nullptr) {
+					enemy2[7]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 50) {
+				if (enemy2[8] != nullptr) {
+					enemy2[8]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 51) {
+				if (enemy2[9] != nullptr) {
+					enemy2[9]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+		}
+	}
 	world->Update({ 1,1,1,1 });
 	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
@@ -232,9 +302,9 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	GameUI::PlayerUISet();
 	enemy[0] = std::make_unique<SeaBoss>();
 	//enemy[0] = std::make_unique<ThrowEnemy>();
-	enemy[9] = std::make_unique<ThrowEnemy>();
+	enemy[9] = std::make_unique<PorcFish>();
 	enemy[8] = std::make_unique<FishEnemy>();
-	enemy[7] = std::make_unique<ThrowEnemy>();
+	enemy[7] = std::make_unique<PorcFish>();
 
 	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[2] = std::make_unique<ThrowEnemy>();
@@ -243,9 +313,9 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[5] = std::make_unique<ThrowEnemy>();
 	enemy[6] = std::make_unique<ThrowEnemy>();
 	//enemy[0] = new MobEnemy();
-	enemy[9]->Setposition({ 1070,-18.2f,0 });
+	//enemy[9]->Setposition({ 1070,-18.2f,0 });
 	enemy[8]->Setposition({ 80,-12.2f,0 });
-	enemy[7]->Setposition({ 800,-4.2f,0 });
+	//enemy[7]->Setposition({ 800,-4.2f,0 });
 	enemy[6]->Setposition({ 2700,-18.2f,0 });
 	enemy[5]->Setposition({ 1700,-18.2f,0 });
 	enemy[4]->Setposition({ 3200,-14.2f,0 });
@@ -265,6 +335,25 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[9]->Initialize();
 	mapcol = new Collision();
 	
+	//bossenemy->Setposition({ 20, -4, 0 });
+	enemy2[0] = std::make_unique<PorcFish>();
+	enemy2[1] = std::make_unique<PorcFish>();
+	enemy2[2] = std::make_unique<PorcFish>();
+	enemy2[3] = std::make_unique<PorcFish>();
+	enemy2[4] = std::make_unique<PorcFish>();
+	enemy2[5] = std::make_unique<PorcFish>();
+	enemy2[6] = std::make_unique<PorcFish>();
+	enemy2[7] = std::make_unique<PorcFish>();
+	enemy2[8] = std::make_unique<PorcFish>();
+	enemy2[9] = std::make_unique<PorcFish>();
+
+	for (int i = 0; i < 10; i++) {
+		//enemy2[i] = nullptr;
+		//enemycolony1[i]->Initialize();
+		enemy2[i]->Initialize();
+		//enemy2[i]->Setposition({ 1222,1,1 });
+	}
+
 	SpriteCreate();//
 	ModelCreate();//
 
@@ -302,6 +391,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	postEffect->Initialize();
 	object2->PlayAnimation();
 	object1->PlayAnimation();
+
 }
 #pragma endregion
 
@@ -425,6 +515,8 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
 	Line::CollisionEnemy(enemy->get());
+	Line::CollisionEnemys2group(enemy2);
+
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
 	//FBXのアニメーション再生
 	//if (Input::GetInstance()->Pushkey(DIK_0)) {
@@ -460,14 +552,19 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 	player->SetPosition(Player_Pos);
 	player->SetRotation(Player_Rot);
-
 	player->SetScale(Player_Scl);
-
-
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
 	player->CollisionAttack(enemy, Player_Pos);
 
+	player->CollisionAttack(enemy2, Player_Pos);
+
+	SetPrm();//パラメータのセット
+
+	objUpdate();//オブジェクトの更新処理
+
+	effects->Update2(dxCommon, camera, enemy2, player);
+	
 	SetPrm();//パラメータのセット
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 	//if (enemy[0]->GetHP() ==20) {
@@ -493,6 +590,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 		}
 	}
 	effects->HealEffects(item->ColItem());
+	effects->HealEffects(item2->ColItem());
 	effects->Update(dxCommon, camera, enemy, player);
 
 	//enemyにnullptr代入するときは敵が死んだら
@@ -516,8 +614,22 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 			}
 		}
-	}
 
+	if (enemy2[i] != nullptr) {
+		enemy2[i]->ColMap(map, tst, mapx, mapy, 20, 130);
+		enemy2[i]->ColMap(map, tst, mapx, mapy, 20, 130);
+		if (Collision::GetLen(enemy2[i]->GetPosition(), Player_Pos) < 20) {
+			enemy2[i]->Motion(player);
+			enemy2[i]->Attack(player);
+		}
+		enemy2[i]->Update(Player_Pos);
+		enemy2[i]->EnemySearchPlayer(player);
+		//もし敵が死んだら破棄
+		if (enemy2[i]->GetState_DEAD() == true) {
+			Destroy_unique(enemy2[i]);
+		}
+	}
+	}
 	if (!SeaBoss::GetInstance()->Getdeathf()) {
 		if (BRotation.z < -90) {
 			RotMove = 1;
@@ -533,7 +645,10 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	object2->SetScale({ 0.11,0.13,0.11 });
 	//Player_Pos.y+=moves
 	item->HealEfficasy(player);
+	item2->HealEfficasy(player);
 	item->Update(enemy);
+	item2->Update(enemy2);
+
 	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
@@ -561,6 +676,7 @@ void BossScene3::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 
 
 	item->Draw();
+	item2->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1 ) {
@@ -594,6 +710,9 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 		if (enemy[i] != nullptr) {
 			enemy[i]->Draw(dxcomn);
 			enemy[i]->SearchActionDraw(dxcomn);
+		}
+		if (enemy2[i] != nullptr) {
+			enemy2[i]->Draw(dxcomn);
 		}
 	}
 	//普通のテクスチャの描画

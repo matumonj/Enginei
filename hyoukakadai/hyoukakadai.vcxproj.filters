@@ -82,6 +82,7 @@
     <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="Retry.cpp" />
     <ClCompile Include="FishEnemy.cpp" />
+    <ClCompile Include="PorcFish.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="LastBoss.h" />
     <ClInclude Include="Retry.h" />
     <ClInclude Include="FishEnemy.h" />
+    <ClInclude Include="PorcFish.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blur.hlsli" />

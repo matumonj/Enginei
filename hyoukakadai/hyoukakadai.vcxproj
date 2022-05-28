@@ -214,6 +214,7 @@
     <ClCompile Include="pEffect.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="PorcFish.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Retry.cpp" />
     <ClCompile Include="Scene2.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="PorcFish.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RaycastHit.h" />
     <ClInclude Include="Retry.h" />
