@@ -67,6 +67,8 @@ void SeaScene1::ModelCreate()
 
 	item = new Item();
 	item->Initialize();
+	item1 = new Item();
+	item1->Initialize();
 	collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
@@ -220,29 +222,97 @@ void SeaScene1::Initialize(DirectXCommon* dxCommon)
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
-	enemy[0] = std::make_unique<ThrowEnemy>();
+	enemy[0] = std::make_unique<MobEnemy>();
 	enemy[1] = std::make_unique<MobEnemy>();
 	enemy[2] = std::make_unique<ThrowEnemy>();
 	enemy[3] = std::make_unique<ThrowEnemy>();
 	enemy[4] = std::make_unique<ThrowEnemy>();
 	enemy[5] = std::make_unique<ThrowEnemy>();
 	enemy[6] = std::make_unique<ThrowEnemy>();
-	//enemy[0] = new MobEnemy();
+	enemy[7] = std::make_unique<ThrowEnemy>();
+	enemy[8] = std::make_unique<ThrowEnemy>();
+	enemy[9] = std::make_unique<ThrowEnemy>();
 
-	enemy[6]->Setposition({ 270.0f,-18.2f,0.0f });
-	enemy[5]->Setposition({ 170.0f,-18.2f,0.0f });
-	enemy[4]->Setposition({ 320.0f,-14.2f,0.0f });
-	enemy[3]->Setposition({ 80.0f,-4.2f,0.0f });
-	enemy[2]->Setposition({ 250.0f,-4.2f,0.0f });
-	enemy[1]->Setposition({ 350, -18, 0 });
-	enemy[0]->Setposition({ 50, -15, 0 });
-	enemy[0]->Initialize();
-	enemy[1]->Initialize();
-	enemy[2]->Initialize();
-	enemy[3]->Initialize();
-	enemy[4]->Initialize();
-	enemy[5]->Initialize();
-	enemy[6]->Initialize();
+	enemy1[0] = std::make_unique<MobEnemy>();
+	enemy1[1] = std::make_unique<MobEnemy>();
+	enemy1[2] = std::make_unique<ThrowEnemy>();
+	enemy1[3] = std::make_unique<ThrowEnemy>();
+	enemy1[4] = std::make_unique<ThrowEnemy>();
+	enemy1[5] = std::make_unique<ThrowEnemy>();
+	enemy1[6] = std::make_unique<ThrowEnemy>();
+	enemy1[7] = std::make_unique<ThrowEnemy>();
+	enemy1[8] = std::make_unique<ThrowEnemy>();
+	enemy1[9] = std::make_unique<ThrowEnemy>();
+
+	for (int i = 0; i < 10; i++) {
+		enemy[i]->Initialize();
+		enemy1[i]->Initialize();
+	}
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			if (map[j][i] == 4) {
+				enemy[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 5) {
+				enemy[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 6) {
+				enemy[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 7) {
+				enemy[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 8) {
+				enemy[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 9) {
+				enemy[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 10) {
+				enemy[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 11) {
+				enemy[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 12) {
+				enemy[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 13) {
+				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 14) {
+				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 15) {
+				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 16) {
+				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 17) {
+				enemy1[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 18) {
+				enemy1[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 19) {
+				enemy1[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 20) {
+				enemy1[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 21) {
+				enemy1[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 22) {
+				enemy1[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 23) {
+				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+		}
+	}
 
 	mapcol = new Collision();
 	c_postEffect = Default;
@@ -342,8 +412,6 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 	}
 
 #pragma region 線の処理
-
-
 	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 		//grav = 0.0f;
 	}
@@ -353,7 +421,6 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 
 	time += 0.04f;
 	Player_Pos.y -= grav * time * time;
-
 
 	//頂点座標の更新
 	mech->CreateLineTexture(linex, linex2, liney, liney2);
@@ -372,16 +439,11 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 		Line::GetInstance()->Getolddistance());//
 
 	Line::GetInstance()->SetColf(colf);
-
-	//needlepos = Line::GetInstance()->getpos();
-
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemy(enemy->get());
-	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
+	Line::CollisionEnemys(enemy);
+	Line::CollisionEnemys2group(enemy1);
 
-
-	//}
 	//カメラ関係の処理
 	if (Player_Pos.x <= 27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
@@ -403,26 +465,18 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	}
 
-
-
 	camera->Update();
-
-	player->SetPosition(Player_Pos);
-	player->SetRotation(Player_Rot);
-
-	player->SetScale(Player_Scl);
-
 
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
 	player->CollisionAttack(enemy, Player_Pos);
-
+	player->CollisionAttack(enemy1, Player_Pos);
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
 
 	effects->Update(dxCommon, camera, enemy, player);
-
+	effects->Update(dxCommon, camera, enemy1, player);
 	//enemyにnullptr代入するときは敵が死んだら
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
@@ -439,9 +493,26 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 
 			}
 		}
+
+		if (enemy1[i] != nullptr) {
+			//プレイヤーの検知
+			enemy1[i]->Motion(player);
+			enemy1[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
+			enemy1[i]->Attack(player);
+			enemy1[i]->Update(Player_Pos);
+
+			enemy1[i]->EnemySearchPlayer(player);
+			enemy1[i]->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
+
+			//もし敵が死んだら破棄
+			if (enemy1[i]->GetState_DEAD() == true) {
+				Destroy_unique(enemy1[i]);
+			}
+		}
 	}
 	item->HealEfficasy(player);
 	item->Update(enemy);
+	item1->Update(enemy1);
 	//Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
@@ -525,6 +596,10 @@ void SeaScene1::MyGameDraw(DirectXCommon* dxcomn)
 		if (enemy[i] != nullptr) {
 			enemy[i]->Draw(dxcomn);
 			enemy[i]->SearchActionDraw(dxcomn);
+		}
+		if (enemy1[i] != nullptr) {
+			enemy1[i]->Draw(dxcomn);
+			enemy1[i]->SearchActionDraw(dxcomn);
 		}
 	}
 	//普通のテクスチャの描画

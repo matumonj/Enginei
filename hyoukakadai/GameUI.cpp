@@ -109,7 +109,7 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 		
 	}
 	AttentionUI();
-	loutscl.x += 0.1f;
+	loutscl.x += 0.3f;
 	if (loutscl.x >= 500.0f) {
 		loutscl.x = 500.0f;
 	}
