@@ -514,7 +514,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemy(enemy->get());
+	Line::CollisionEnemys(enemy);
 	Line::CollisionEnemys2group(enemy2);
 
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
@@ -617,7 +617,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 
 	if (enemy2[i] != nullptr) {
 		enemy2[i]->ColMap(map, tst, mapx, mapy, 20, 130);
-		enemy2[i]->ColMap(map, tst, mapx, mapy, 20, 130);
+		//enemy2[i]->ColMap(map, tst, mapx, mapy, 20, 130);
 		if (Collision::GetLen(enemy2[i]->GetPosition(), Player_Pos) < 20) {
 			enemy2[i]->Motion(player);
 			enemy2[i]->Attack(player);
@@ -719,16 +719,16 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	Line::Draw(dxcomn);
 
 	//weffect->Draw(dxcomn);
-	//GameUI::AllowUIDraw(dxcomn);
-	//GameUI::TargetUIDraw(dxcomn);
-	//GameUI::UIDraw(dxcomn);
-	//GameUI::PlayerUIDraw(dxcomn);
+	GameUI::AllowUIDraw(dxcomn);
+	GameUI::TargetUIDraw(dxcomn);
+
+	GameUI::PlayerUIDraw(dxcomn);
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
 	//FBX‚Ì•`‰æ
 	object1->Draw(dxcomn->GetCmdList());
-	object2->Draw(dxcomn->GetCmdList());
+	//object2->Draw(dxcomn->GetCmdList());
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	for (int i = 0; i < 8; i++) {
 		BubbleSprite[i]->Draw();
@@ -745,7 +745,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 
 
 	nTexture::PostDraw();
-
+	GameUI::UIDraw(dxcomn);
 	GameUI::NowLoadDraw(dxcomn);
 	GameUI::HintSeaBossDraw(dxcomn);
 }
@@ -803,8 +803,11 @@ void BossScene3::ImGuiDraw()
 	//float rr = player->GetPosition().x;
 	//if (ImGui::TreeNode("Player_position")) {
 	//	ImGui::SliderFloat("positionX", &BublePos[0].x, -200, 200);
+	int xf=Line::GetInstance()->Getindex();
+	int xf2= Line::GetInstance()->Getindex2();
 	//	ImGui::SliderFloat("positionY", &BublePos[0].y, -200, 200);
-		ImGui::SliderFloat("positionZ", &Player_Pos.x, -200, 200);
+		ImGui::SliderInt("positionZ", &xf, -200, 200);
+		ImGui::SliderInt("positionZ", &xf2, -200, 200);
 	//	ImGui::SliderFloat("grav", &grav, -200, 200);
 	//	ImGui::SliderFloat("time", &time, -200, 200);
 	//	ImGui::TreePop();

@@ -67,6 +67,7 @@ public:
 	void setnecolor(float c) { necolor=c; }
 	static void Finalize();
 	static int Getindex() { return index; }
+	static int Getindex2() { return index2; }
 	static Line* GetInstance();
 	static void Initialize();
 	static void Update(XMMATRIX matview, XMMATRIX matprojection,Player*player,XMFLOAT3&Player_Pos,bool& colf,float& moveSpeed);

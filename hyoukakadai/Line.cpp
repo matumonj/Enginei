@@ -301,7 +301,7 @@ void Line::CollisionEnemys(std::unique_ptr<Enemy>position[])
 		//衝突時
 		if (elf && !mapcol) {
 			if (position[index] != nullptr) {
-				if (index != -1) {
+				if (index != -1&&index2==-1) {
 					linex2 = position[index]->GetPosition().x;
 					liney2 = position[index]->GetPosition().y;
 				}
@@ -343,6 +343,7 @@ void Line::CollisionEnemys2group(std::unique_ptr<Enemy>position[])
 			if (dis[i] <= 2 && trigger && !elf) {
 				elf = true;
 				index2 = i;//あたった敵の要素番号を割り当て
+				break;
 			}
 		}
 
@@ -352,12 +353,18 @@ void Line::CollisionEnemys2group(std::unique_ptr<Enemy>position[])
 				if (index2 != -1) {
 					linex2 = position[index2]->GetPosition().x;
 					liney2 = position[index2]->GetPosition().y;
+					//break;
 				}
-				
 			}
+	
 				else {
+				//break;
+				//index2 = -1;
 				if (index2 == -1) {
+					//elf = false;
+					//mapcol = false;
 					returnflag = true;
+					//index2 = -1;
 				}
 				}
 		}

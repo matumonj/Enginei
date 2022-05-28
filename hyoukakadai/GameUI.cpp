@@ -34,6 +34,8 @@ float GameUI::HintSeaAlpha = 0;
 float GameUI::HintForestAlpha = 0;
 float GameUI::seatimer = 0;
 float GameUI::foretimer = 0;
+Sprite* GameUI::HPout;
+Sprite* GameUI::lineOutui;
 GameUI* GameUI::GetInstance()
 {
 	static GameUI instance;
@@ -50,6 +52,12 @@ void GameUI::UISpriteSet()
 	//’ˆÓ
 	Sprite::LoadTexture(12, L"Resources/attention.png");
 
+	//“à˜g
+	Sprite::LoadTexture(110, L"Resources/hp.png");
+	//’ˆÓ
+	Sprite::LoadTexture(120, L"Resources/linemax.png");
+	HPout= Sprite::Create(110, { 0.0f,-200.0f });
+	lineOutui= Sprite::Create(120, { 0.0f,-200.0f });
 	LineLengthout = Sprite::Create(10, { 0.0f,-200.0f });
 	LineLength = Sprite::Create(11, { 0.0f,-200.0f });
 	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
@@ -117,6 +125,13 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 	LineLength->SetSize(lscl);
 	LineLengthout->SetPosition(loutpos);
 	LineLengthout->SetSize(loutscl);
+	lineOutui->SetSize({ 200,150 });
+	HPout->SetSize({ 200,150 });
+	HPout->SetPosition(LineLengthout->GetPosition());
+	lineOutui->SetPosition({ LineLengthout->GetPosition().x,LineLengthout->GetPosition().y + 10 });
+	HPout->setcolor({ 1,1,1,1 });
+	lineOutui->setcolor({ 1,1,1,1 });
+	
 	Attention[0]->setcolor({ walpha,1,1,1 });
 }
 
@@ -127,6 +142,8 @@ void GameUI::UIDraw(DirectXCommon* dxcomn)
 	LineLengthout->Draw();
 	//LineLength->Draw();
 	BossHP->Draw();
+	//HPout->Draw();
+	lineOutui->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
 

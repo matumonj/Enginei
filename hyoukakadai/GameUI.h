@@ -44,6 +44,8 @@ private:
 	static float Targetalpha;
 	static Sprite* HintSea;
 	static Sprite* HintForest;
+	static Sprite* HPout;
+	static Sprite* lineOutui;
 	static float HintSeaAlpha;
 	static float HintForestAlpha;
 	static float seatimer;
