@@ -58,7 +58,7 @@ void Line::Initialize()
 	subradius = 0;
 	lineangle = 0;
 	boundflag = false;
-	returnflag = false;
+	returnflag = true;
 
 	trigger = false;
 	mapcol = false;
@@ -67,6 +67,7 @@ void Line::Initialize()
 	lengthserchf = false;
 	needlerot.z = 0;
 	stopflag = true;
+	notdoubletuch = true;
 	goflag = false;
 }
 

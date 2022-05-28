@@ -85,7 +85,7 @@ void GameUI::BossUIUpdate(Enemy* enemy) {
 void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 {
 	if (loutscl.x <= 10) {
-		Line::GetInstance()->SetTrigger(false);
+		//Line::GetInstance()->SetTrigger(false);
 	}
 	lsclMax = 300;// loutscl.x - 30;
 
