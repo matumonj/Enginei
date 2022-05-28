@@ -156,9 +156,10 @@ void Player::PlayerMoves(XMFLOAT3& move, float moveSpeed, bool& JumpFlag, float&
 		JumpFlag = false;
 	}
 	if (Line::GetInstance()->GetStop() == true) {
-
+		nowmove = false;
 		if (Input::GetInstance()->GetCMove().lX < u_r - a)
 		{
+			nowmove = true;
 			//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
 				// 左に傾けた
 			if (move.x <= 0) {
@@ -173,6 +174,7 @@ void Player::PlayerMoves(XMFLOAT3& move, float moveSpeed, bool& JumpFlag, float&
 		}
 		else if (Input::GetInstance()->GetCMove().lX > u_r + a)
 		{
+			nowmove = true;
 			//if (Fader::GetInstance()->GetAlpha() <= 0.1f) {
 				// 右に傾けた
 		//	playerRot = State::Right;

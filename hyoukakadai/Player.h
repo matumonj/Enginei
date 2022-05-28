@@ -49,7 +49,9 @@ public:
 	bool GetRot_Right() { if (playerRot == State::Right) {return true; } else { return false; }
 	}
 	void Finalize();
+	bool GetNowMove() { return nowmove; }
 private:
+	bool nowmove;
 	int HP = 100;
 	int AttackCoolTime = 10;
 	int index = -1;

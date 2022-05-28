@@ -62,6 +62,9 @@ private:
     float movement = 0;
     int jumpcount = 0;
     bool jumpflag = false;
+    bool servDamage = true;
+    bool stayflg;
+    int redamageCount = 0;
 public:
     void SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position)override;
     void Initialize()override;

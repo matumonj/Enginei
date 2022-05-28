@@ -299,7 +299,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 
 	//FBXモデルの更新
-	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	object1->Updata({ 1,1,1,1 }, dxCommon, camera,movenow);
 
 
 	GameUI::BossUIUpdate(bossenemy.get());
@@ -342,6 +342,12 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 
+	}
+	if (player->GetNowMove() == false) {
+		movenow = false;
+	}
+	else {
+		movenow = true;
 	}
 	XMFLOAT3 bpos;
 	if (bossenemy != nullptr) {

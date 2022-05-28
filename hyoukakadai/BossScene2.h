@@ -114,6 +114,7 @@ private:
 	bool startSet;
 	int deathcount;
 	//map
+	bool movenow;
 	bool hintload;
 	int blockSize = 2;
 	int map[130][20] = {

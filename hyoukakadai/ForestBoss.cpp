@@ -662,8 +662,8 @@ void ForestBoss::NormalAttacks(Player* player)
 
 				BulAngle[i] = sqrtf(x[i] * x[i] + y[i] * y[i]);
 				rt[i] += 0.05f;
-				Xspeed[i] = ( (0.2f) * x[i] / BulAngle[i]);
-				Yspeed[i] = ( (0.2f) * y[i] / BulAngle[i]);
+				Xspeed[i] = ( (0.1f) * x[i] / BulAngle[i]);
+				Yspeed[i] = ( (0.1f) * y[i] / BulAngle[i]);
 				break;
 			}
 

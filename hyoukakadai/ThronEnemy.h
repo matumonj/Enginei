@@ -72,6 +72,9 @@ class ThronEnemy :
         float movement = 0;
         int jumpcount = 0;
         bool jumpflag = false;
+        bool servDamage = true;
+        bool stayflg;
+        int redamageCount = 0;
     public:
         /// <summary>
         /// アクセッサ

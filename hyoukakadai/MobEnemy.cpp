@@ -20,7 +20,7 @@ MobEnemy::~MobEnemy()
 void MobEnemy::Initialize()
 {
 	//ƒ‚ƒfƒ‹‚Ì“Çž
-	MobModel = Model::CreateFromOBJ("enemy2");
+	MobModel = Model::CreateFromOBJ("enemy_tako");
 	//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 	//MobObject = new Object3d();
 	MobObject = Object3d::Create();
@@ -110,8 +110,21 @@ void MobEnemy::Follow(Player*player)
 	dis = sqrtf((player->GetPosition().x - Position.x) * (player->GetPosition().x - Position.x) +
 		(player->GetPosition().y - Position.y) * (player->GetPosition().y - Position.y));
 	if (dis <= 2) {
-		player->SetHp(player->getHp() - 1);
-		//Attack(player);
+		//servDamage = true;
+		if (servDamage) {
+			player->SetHp(player->getHp() - 1);
+			servDamage = false;
+			stayflg = true;
+			//Attack(player);
+		}
+	}
+	if (stayflg) {
+		redamageCount++;
+		if (redamageCount > 30) {
+			servDamage = true;
+			redamageCount = 0;
+			stayflg = false;
+		}
 	}
 	if (player->GetPosition().x >= Position.x) {
 		if (Mob_Rot.y <= 90) {

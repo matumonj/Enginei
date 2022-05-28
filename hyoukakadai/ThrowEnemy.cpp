@@ -21,7 +21,7 @@ void ThrowEnemy::Initialize()
 {
 
 	//ƒ‚ƒfƒ‹‚Ì“Çž
-	EnemyModel = Model::CreateFromOBJ("enemy2");
+	EnemyModel = Model::CreateFromOBJ("enemy_kinoko");
 	//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 	//MobObject = new Object3d();
 	EnemyObj = Object3d::Create();
@@ -107,6 +107,23 @@ void ThrowEnemy::Attack(Player* player)
 				player->SetHp(player->getHp() - Damage);
 				throwparam[i].flag = false;
 			}
+		}
+	}
+	if (dis <= 2) {
+		//servDamage = true;
+		if (servDamage) {
+			player->SetHp(player->getHp() - 1);
+			servDamage = false;
+			stayflg = true;
+			//Attack(player);
+		}
+	}
+	if (stayflg) {
+		redamageCount++;
+		if (redamageCount > 30) {
+			servDamage = true;
+			redamageCount = 0;
+			stayflg = false;
 		}
 	}
 	//bi-mu

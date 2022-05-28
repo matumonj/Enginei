@@ -69,6 +69,9 @@ private:
     float angleXs, angleZs, angleRs;
     float centerSpeed = 0.1f;
     const int AttackDamage = 2;
+    bool servDamage=true;
+    bool stayflg;
+    int redamageCount = 0;
 public:
     /// <summary>
     /// アクセッサ

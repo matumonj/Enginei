@@ -116,7 +116,21 @@ void ThronEnemy::Follow(Player* player)
 	dis = sqrtf((player->GetPosition().x - Position.x) * (player->GetPosition().x - Position.x) +
 		(player->GetPosition().y - Position.y) * (player->GetPosition().y - Position.y));
 	if (dis <= 2) {
-		//Attack(player);
+		//servDamage = true;
+		if (servDamage) {
+			player->SetHp(player->getHp() - 1);
+			servDamage = false;
+			stayflg = true;
+			//Attack(player);
+		}
+	}
+	if (stayflg) {
+		redamageCount++;
+		if (redamageCount > 30) {
+			servDamage = true;
+			redamageCount = 0;
+			stayflg = false;
+		}
 	}
 }
 
