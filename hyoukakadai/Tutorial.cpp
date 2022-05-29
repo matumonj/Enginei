@@ -28,7 +28,10 @@ void Tutorial::SpriteCreate()
 	//普通のテクスチャ(スプライトじゃないよ)
 	Line::Initialize();
 	GameUI::AllowUISet();
+	Sprite::LoadTexture(1, L"Resources/home.png");
 	Texture::LoadTexture(6, L"Resources/gomi.png");
+
+	background = Sprite::Create(1, { 0.0f,0.0f });
 }
 #pragma endregion
 
@@ -99,6 +102,10 @@ void Tutorial::SetPrm()
 			}
 		}
 	}
+
+	background->SetPosition({ 0, 0 });
+	background->SetSize({ WinApp::window_width,WinApp::window_height });
+	background->setcolor({ 1,1,1,1 });
 
 	object1->SetPosition({ Player_Pos });
 	object1->SetRotation({ Player_Rot });
@@ -199,13 +206,6 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true && goalflag == false) {
 		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
-	}
-
-	
-
-	if (Input::GetInstance()->TriggerButonY()) {
-		BaseScene* scene = new  TitleScene(sceneManager_);//次のシーンのインスタンス生成
-		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 
 		//入力処理より後に当たり判定を描け
@@ -354,6 +354,12 @@ void Tutorial::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 //sプライと以外の描画
 void Tutorial::MyGameDraw(DirectXCommon* dxcomn)
 {
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	background->Draw();
+	//setumei->Draw();
+	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
+	//Fader::FeedSpriteDraw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
 
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
