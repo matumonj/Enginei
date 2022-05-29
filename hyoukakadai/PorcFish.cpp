@@ -20,7 +20,7 @@ PorcFish::~PorcFish()
 void PorcFish::Initialize()
 {
 	//ƒ‚ƒfƒ‹‚Ì“Ç
-	ThronModel = Model::CreateFromOBJ("enemy2");
+	ThronModel = Model::CreateFromOBJ("enemy_harisenbon");
 	//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 	//ThronObject = new Object3d();
 	ThronObject = Object3d::Create();

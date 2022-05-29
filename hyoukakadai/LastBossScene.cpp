@@ -1,18 +1,21 @@
-#include "LastBossScene.h"
+#include"LastBossScene.h"
 #include"Input.h"
 #include"DirectXCommon.h"
 #include"ClearScene.h"
-#include"TitleScene.h"
 #include"SceneManager.h"
 #include"MobEnemy.h"
-#include"BossEnemy.h"
 #include"ThrowEnemy.h"
 #include"Line.h"
 #include"Destroy.h"
 #include"Fader.h"
-#include<thread>
 #include"GamOver.h"
 #include"StageSelect.h"
+#include"Retry.h"
+#include"LastBoss.h"
+//コメントアウト
+
+
+//シーンのコンストラクタ
 LastBossScene::LastBossScene(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
@@ -31,21 +34,16 @@ void LastBossScene::SpriteCreate()
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
-	Sprite::LoadTexture(1, L"Resources/forest.png");
+	Sprite::LoadTexture(1, L"Resources/haikei2.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
-	mech = std::make_unique<Texture>();
-	mech->Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });// = Texture::Create(6, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
-
-	zukki = std::make_unique<Texture>();
-	zukki->Create(1, { 0,-20,50 }, { 1,1,1 }, { 1,1,1,1 });
 
 	background = Sprite::Create(1, { 0.0f,0.0f });
 	//setumei = Sprite::Create(2, { 0.0f,0.0f });
 	// デバッグテキスト初期化
-	dxcomn = new DirectXCommon();
-	debugText = new DebugTxt();
-	debugText->Initialize(debugTextTexNumber);
+	//dxcomn = new DirectXCommon();
+	//debugText = new DebugTxt();
+	//debugText->Initialize(debugTextTexNumber);
 }
 #pragma endregion
 
@@ -55,51 +53,26 @@ void LastBossScene::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("wood");
-	worldmodel = Model::CreateFromOBJ("skydome");
-	harimodel = Model::CreateFromOBJ("hari");
+	tstmodel = Model::CreateFromOBJ("sea");
+	//worldmodel = Model::CreateFromOBJ("skydome");
+	//harimodel = Model::CreateFromOBJ("hari");
 	goalmodel = Model::CreateFromOBJ("goal");
-	reefmodel = Model::CreateFromOBJ("reef");
 
 
 	item = new Item();
 	item->Initialize();
-	collision = new Collision();
+	//collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i] = std::make_unique<Object3d>();
 			tst[j][i]->Initialize();// Object3d::Create();
 			tst[j][i]->SetModel(tstmodel);
-
-			reef[j][i] = std::make_unique<Object3d>();
-			reef[j][i]->Initialize();// Object3d::Create();
-			reef[j][i]->SetModel(reefmodel);
 		}
 	}
-
 	goal = std::make_unique<Object3d>();
 	goal->Initialize();
 	goal->SetModel(goalmodel);
-
-	block = std::make_unique<Object3d>();
-	block->Initialize();// = Object3d::Create();
-	block->SetModel(tstmodel);
-
-	sentan = std::make_unique<Object3d>();
-	sentan->Initialize();// = Object3d::Create();
-	sentan->SetModel(tstmodel);
-
-	world = std::make_unique<Object3d>();
-	world->Initialize();// = Object3d::Create();
-	world->SetModel(worldmodel);
-
-	hari = std::make_unique<Object3d>();
-	hari->Initialize();
-	hari->SetModel(harimodel);
-
-
-
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -124,7 +97,7 @@ void LastBossScene::ModelCreate()
 	attackeffects = std::make_unique<Effects>();;
 
 	//Player_Pos = player->GetPosition();
-	//Player_Rot = player->GetRotation();
+	Player_Rot = player->GetRotation();
 	Player_Scl = player->GetScale();
 	//Fader::SetFeedSprite();
 }
@@ -133,14 +106,10 @@ void LastBossScene::ModelCreate()
 #pragma region 各パラメータのセット
 void LastBossScene::SetPrm()
 {
-	/*setumei->SetPosition({ 0, 400 });
-	setumei->SetSize({ 500,300 });
-	setumei->setcolor({ 1,1,1,1 });*/
-
-	hari->SetPosition({ hari_Pos.x + 2.0f,hari_Pos.y,hari_Pos.z });
 
 	half_height = player->GetScale().y;
 	half_Width = player->GetScale().x;
+
 
 	player->SetPosition({ Player_Pos });
 	player->SetScale({ Player_Scl });
@@ -152,9 +121,6 @@ void LastBossScene::SetPrm()
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
 
-			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			reef[j][i]->SetRotation({ tst_Rot });
-			reef[j][i]->SetScale({ tst_Scl });
 			if (map[j][i] == 3) {
 				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 				goal->SetRotation({ 0,120,0 });
@@ -162,15 +128,6 @@ void LastBossScene::SetPrm()
 			}
 		}
 	}
-
-
-	block->SetPosition({ block_pos });
-	block->SetScale({ block_Scl });
-
-	world->SetPosition({ 0,0,0 });
-	world->SetScale({ 1,1,1 });
-
-	sentan->SetPosition({ sentan_Pos });
 
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
@@ -198,16 +155,10 @@ void LastBossScene::objUpdate()
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->Update({ 1,1,1,1 });
-			reef[j][i]->Update({ 1,1,1,1 });
 		}
 	}
 
 	goal->Update({ 1,1,1,1 });
-	world->Update({ 1,1,1,1 });
-	block->Update({ 1,1,1,1 });
-	hari->Update({ 1,1,1,1 });
-
-
 
 }
 #pragma endregion
@@ -220,34 +171,9 @@ void LastBossScene::Initialize(DirectXCommon* dxCommon)
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
-	enemy[0] = std::make_unique<MobEnemy>();
-	enemy[1] = std::make_unique<MobEnemy>();
-	enemy[2] = std::make_unique<ThrowEnemy>();
-	enemy[3] = std::make_unique<ThrowEnemy>();
-	enemy[4] = std::make_unique<ThrowEnemy>();
-	enemy[5] = std::make_unique<ThrowEnemy>();
-	enemy[6] = std::make_unique<ThrowEnemy>();
-	//enemy[0] = new MobEnemy();
-
-	enemy[6]->Setposition({ 270,-18.2f,0 });
-	enemy[5]->Setposition({ 170,-18.2f,0 });
-	enemy[4]->Setposition({ 320,-14.2f,0 });
-	enemy[3]->Setposition({ 80,-4.2f,0 });
-	enemy[2]->Setposition({ 250,-4.2f,0 });
-	enemy[1]->Setposition({ 350, -18, 0 });
-	enemy[0]->Setposition({ 200, -7, 0 });
-	enemy[0]->Initialize();
-	enemy[1]->Initialize();
-	enemy[2]->Initialize();
-	enemy[3]->Initialize();
-	enemy[4]->Initialize();
-	enemy[5]->Initialize();
-	enemy[6]->Initialize();
-
-	mapcol = new Collision();
-	c_postEffect = Default;
-
-	collision = new Collision();
+	bossenemy= std::make_unique<LastBoss>();
+	bossenemy->Initialize();
+	
 	SpriteCreate();//
 	ModelCreate();//
 
@@ -277,17 +203,10 @@ void LastBossScene::Initialize(DirectXCommon* dxCommon)
 	/*audio = new Audio();
 	audio->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
-	postEffect = new PostEffect();
-	postEffect->Initialize();
-
 	object1->PlayAnimation();
 }
 #pragma endregion
 
-void LastBossScene::ThInitialize()
-{
-
-}
 #pragma region 更新処理
 void LastBossScene::Update(DirectXCommon* dxCommon)
 {
@@ -297,8 +216,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
 			//::GetInstance()->SetHit(false);
 		}
-	}
-	else {
+	} else {
 		loadf = true;
 	}
 	GameUI::NowLoadUpdate(loadf);
@@ -311,15 +229,34 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 
 	}
-	if (Input::GetInstance()->Pushkey(DIK_0)) {
 
-	}
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 
 
-	Collision::BossMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
+	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 
+	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3) == true)
+	{
+		goalflag = true;
+		jumpFlag = false;
+		moveSpeed = 0;
+		goaltime += 0.01f;
+		goalSpeed = 0.01f;
+		Player_Pos.x += goalSpeed;
+		if (goaltime >= 1) {
+			goaltime = 1;
+			Player_Pos.z += 0.01f;
+			Player_Rot.y--;
+			if (Player_Rot.y <= 0) {
+				Player_Rot.y = 0;
+			}
+			if (Player_Pos.z >= 1) {
+				BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
+				sceneManager_->SetnextScene(scene);//シーンのセット
+			}
+		}
+	}
 
 
 	if (Line::GetInstance()->Getboundflag() == true) {
@@ -332,20 +269,12 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 		//grav = 0.0f;
-	}
-	else {
+	} else {
 		grav = 0.03f;
 	}
 
 	time += 0.04f;
 	Player_Pos.y -= grav * time * time;
-
-
-	//頂点座標の更新
-	mech->CreateLineTexture(linex, linex2, liney, liney2);
-
-	hari_Pos.x = Line::GetInstance()->getpos().x;
-	hari_Pos.y = Line::GetInstance()->getpos().y;
 
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
@@ -358,92 +287,75 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		Line::GetInstance()->Getolddistance());//
 
 	Line::GetInstance()->SetColf(colf);
-
-	//needlepos = Line::GetInstance()->getpos();
-
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
-	Line::CollisionEnemy(enemy->get());
-	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
-	//FBXのアニメーション再生
-	//if (Input::GetInstance()->Pushkey(DIK_0)) {
-
-	//}
+	Line::CollisionEnemys(&bossenemy);
 
 
-	//}
 	//カメラ関係の処理
 	if (Player_Pos.x <= 27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 27.0f,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 27.0f,Player_Pos.y+cameramove,Player_Pos.z });
+		camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
 	}
 
-	else if (Player_Pos.x >= 70.0f) {
+	else if (Player_Pos.x >= 368.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 70.0f,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 70.0f,Player_Pos.y+cameramove,Player_Pos.z });
-	}
-	else {
+		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ 368.0f,Player_Pos.y ,Player_Pos.z });
+	} else {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ Player_Pos.x,Player_Pos.y+cameramove,Player_Pos.z - 27.0f });
-		camera->SetTarget({ Player_Pos.x,Player_Pos.y+cameramove,Player_Pos.z });
+		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
+		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
 	}
-
-
-	if (Player_Pos.y >= 58) {
-		cameramove = 0;
-	}
-
-	else {
-		cameramove = 8;
-	}
-
 
 	camera->Update();
 
-
-
-
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
-	player->CollisionAttack(enemy, Player_Pos);
-
+	player->CollisionAttack(&bossenemy, Player_Pos);
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
 
-	effects->Update(dxCommon, camera, enemy, player);
-
+	effects->Update(dxCommon, camera, &bossenemy, player);
 	//enemyにnullptr代入するときは敵が死んだら
-	for (int i = 0; i < 10; i++) {
-		if (enemy[i] != nullptr) {
+	//for (int i = 0; i < 10; i++) {
+		if (bossenemy != nullptr) {
 			//プレイヤーの検知
-			enemy[i]->Attack(player);
-			//enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
-			//enemy[i]->ColMap(map, reef, mapx, mapy, MAX_X, MAX_Y);
-			enemy[i]->Update(Player_Pos);
+			bossenemy->Motion(player);
+			bossenemy->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
+			bossenemy->Attack(player);
+			bossenemy->Update(Player_Pos);
 
-			enemy[i]->EnemySearchPlayer(player);
+			bossenemy->EnemySearchPlayer(player);
+			bossenemy->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
+
 			//もし敵が死んだら破棄
-			if (enemy[i]->GetState_DEAD() == true) {
-				Destroy_unique(enemy[i]);
+			if (bossenemy->GetState_DEAD() == true) {
+				Destroy_unique(bossenemy);
 
 			}
+		//	LastBoss::GetInstance()->ZAttackTex(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player);
+
 		}
-	}
+
+		effects->BossAttackEffect(dxCommon, camera, j, LastBoss::GetInstance()->GetAtc(), LastBoss::GetInstance()->Gettexpos());
+
 	item->HealEfficasy(player);
-	item->Update(enemy);
+	item->Update(&bossenemy);
+
 	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R)) {//押されたら
+	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+		Retry::SetStage(Jungle_1_1);
 		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;
@@ -457,22 +369,10 @@ void LastBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
 
-	/*player->PreDraw();
-	player->Draw();
-	player->PostDraw();*/
+	player->PreDraw();
+	//player->Draw();
+	player->PostDraw();
 
-
-	world->PreDraw();
-	//world->Draw();
-	world->PostDraw();
-	/*for (int i = 0; i < 10; i++) {
-		if (enemy[i] != nullptr) {
-			enemy[i]->Draw(dxcomn);
-		}
-	}*/
-	block->PreDraw();
-	block->Draw();
-	block->PostDraw();
 
 	item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
@@ -481,12 +381,6 @@ void LastBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
-			}
-
-			if (map[j][i] == 2) {
-				reef[j][i]->PreDraw();
-				reef[j][i]->Draw();
-				reef[j][i]->PostDraw();
 			}
 
 			if (map[j][i] == 3) {
@@ -499,9 +393,6 @@ void LastBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 
 
 
-	/*hari->PreDraw();
-	hari->Draw();
-	hari->PostDraw();*/
 
 }
 //sプライと以外の描画
@@ -512,13 +403,16 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 	background->Draw();
 	//setumei->Draw();
 	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
-	//Fader::FeedSpriteDraw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
+
 
 	//スプライトの描画
 	SpriteDraw(dxcomn->GetCmdList());
-
-
+	if (bossenemy != nullptr) {
+			bossenemy->Draw(dxcomn);
+			bossenemy->SearchActionDraw(dxcomn);
+		}
+	LastBoss::GetInstance()->Drawtex(dxcomn);
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
 
@@ -533,42 +427,17 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
 
-	Sprite::PreDraw(dxcomn->GetCmdList());
-	Fader::FeedSpriteDraw();
-	Sprite::PostDraw(dxcomn->GetCmdList());
-
-	GameUI::NowLoadDraw(dxcomn);
 }
 #pragma endregion
 //↓に入る
 #pragma region
 void LastBossScene::Draw(DirectXCommon* dxcomn)
 {
-	//ポストエフェクトの場合わけ(Bでぼかし Dがデフォルト)
-	switch (c_postEffect)
-	{
-	case Blur://ぼかし　描画準違うだけ
-		postEffect->PreDrawScene(dxcomn->GetCmdList());
-		MyGameDraw(dxcomn);
-		postEffect->PostDrawScene(dxcomn->GetCmdList());
-
-		dxcomn->BeginDraw();
-		postEffect->Draw(dxcomn->GetCmdList());
-		ImGuiDraw();//imguiは最後の方入れとく
-		dxcomn->EndDraw();
-		break;
-
-	case Default://普通のやつ特に何もかかっていない
-		postEffect->PreDrawScene(dxcomn->GetCmdList());
-		postEffect->Draw(dxcomn->GetCmdList());
-		postEffect->PostDrawScene(dxcomn->GetCmdList());
 
 		dxcomn->BeginDraw();
 		MyGameDraw(dxcomn);
 		ImGuiDraw();
 		dxcomn->EndDraw();
-		break;
-	}
 }
 #pragma endregion
 
@@ -577,6 +446,15 @@ void LastBossScene::ImGuiDraw()
 	ImGui::Begin("Obj1");
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
+	if (ImGui::TreeNode("Old")) {
+		float cx = LastBoss::GetInstance()->Gettexpos().x;
+		float cy = LastBoss::GetInstance()->Gettexpos().y;
+
+		ImGui::SliderFloat("Old_PosX", &cx, -200, 200);
+		ImGui::SliderFloat("old_PosY", &cy, -200, 200);
+		ImGui::TreePop();
+	}
+
 	if (ImGui::TreeNode("light_position")) {
 		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
 		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
@@ -597,21 +475,47 @@ void LastBossScene::ImGuiDraw()
 		//ImGui::SliderInt("positionZ", &elf, -200, 200);
 		ImGui::TreePop();
 	}
-	if (ImGui::TreeNode("enemy_position")) {
-		float rf = enemy[0]->GetPosition().x;
-		float rf2 = enemy[0]->GetPosition().y;
-		float rrr = player->getdis();
-		//float rf3 = enemy->GetPosition().z;
-		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &Player_Pos.x, -100, 100);
-		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-		ImGui::SliderInt("positionX", &co, -200, 200);
-		ImGui::SliderFloat("positionY", &rf2, -200, 200);
-		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
+	
+	float linex = Line::GetInstance()->getpos().x;
+	float liney = Line::GetInstance()->getpos().y;
+	float rr = player->GetPosition().x;
+	if (ImGui::TreeNode("Player_position")) {
+		ImGui::SliderFloat("positionX", &linex, -200, 200);
+		ImGui::SliderFloat("positionY", &liney, -200, 200);
+		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+		ImGui::SliderFloat("grav", &grav, -200, 200);
+		ImGui::SliderFloat("time", &time, -200, 200);
 		ImGui::TreePop();
 	}
+	float sx = player->GetArea_S().x;
+	float sy = player->GetArea_S().y;
+
+	float ex = player->GetArea_e().x;
+	float ey = player->GetArea_e().y;
+
+	if (ImGui::TreeNode("half")) {
+		ImGui::SliderFloat("sx", &sx, -200, 200);
+		ImGui::SliderFloat("sy", &sy, -200, 200);
+		ImGui::SliderFloat("ex", &ex, -200, 200);
+		ImGui::SliderFloat("ey", &ey, -200, 200);
+		ImGui::TreePop();
+	}
+	
+
+	/*if (ImGui::TreeNode("1")) {
+		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
+		ImGui::SliderFloat("+_height", &half_height, -200, 200);
+		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
+		ImGui::SliderFloat("-_height", &half_height, -200, 200);
+		ImGui::SliderFloat("map_1_width", &width, -200, 200);
+		ImGui::SliderFloat("map_1_height", &height, -200, 200);
+		ImGui::TreePop();
+	}*/
 
 
+	ImGui::End();
+
+	
 	ImGui::End();
 
 }
@@ -619,7 +523,35 @@ void LastBossScene::ImGuiDraw()
 void LastBossScene::Finalize()
 {
 	//delete sceneManager_;
+	delete dxcomn;
+	delete background;
 
+		bossenemy.reset();
+	//Enemy* enemy[2];
+	effects.reset();
+	attackeffects.reset();
+	
+	delete player;
+	//std::unique_ptr<Object3d>player[10];
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 200; j++) {
+			tst[i][j].reset();
+		}
+	}
+
+
+	goal.reset();
+
+	Line::Finalize();
+	GameUI::Finalize();
+	delete object1;
+	delete fbxmodel;
+	delete playermodel;
+	delete tstmodel;
+	delete goalmodel;
+	delete camera;
+	delete item;
 	//delete efk,efk1;
 
 }
+#pragma endregion

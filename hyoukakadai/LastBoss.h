@@ -10,6 +10,7 @@
 #include"f_Object3d.h"
 #include"FbxLoader.h"
 #include"Sprite.h"
+#include"nTexture.h"
 class LastBoss :
     public Enemy
 {
@@ -31,9 +32,10 @@ private:
 
     Sprite* ZAttention[2];
 
-    Model* BossArmModel[2] ;
+    Model* BossArmModel ;
 
     Object3d* BossArmObject[2];
+
 
 private:
     bool ChangeAttack;
@@ -107,7 +109,7 @@ public:
     void SetTtime(float t) { bosstime = t; }
     void ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)override;
 
-    void ZAttack();
+    void ZAttack(Player*player);
 public:
     void Initialize()override;
 
@@ -141,8 +143,12 @@ public:
     void GetDamage();
     void UpDownMove(XMFLOAT3 position);
     void DeathMotion();
+    
+    XMFLOAT3 Gettexpos() { return texpos[0]; }
+    bool GetAtc() { return atcf; }
 private:
-
+    static XMFLOAT3 texpos[2];
+    static bool atcf;
 private:
     int StayCount;
     bool damageRec = false;
@@ -183,9 +189,40 @@ private:
     BossAction bossAction = StartBattle;
     static bool stayflag;
     int deathcount;
-public:
-    bool GetAltStay() { return stayflag; }
 
+    Object3d* syuriken[2];
+    Model* syurikenm;
+    XMFLOAT3 syurikenpos[2] = { {25,-10,0},{45,-10,0} };
+    XMFLOAT3 syurikenrot[2] = { {0,0,0 },{0,0,0}
+};
+    XMFLOAT3 syurikenscl[2] = { {0,0,0},{0,0,0} };
+    float sclplus[2];
+    bool rotack[2];
+    OBB pobb;
+    OBB syuriken0;// = nullptr;
+    OBB syuriken1;// = nullptr;
+    OBB syuriken2;// = nullptr;
+    OBB syuriken3;// = nullptr;
+    OBBCollision* ps0 = nullptr;
+    OBBCollision* ps1 = nullptr;
+    OBBCollision* ps2 = nullptr;
+    OBBCollision* ps3= nullptr;
+    nTexture* damagearea[2];
+    bool zattack;
+    XMFLOAT3 oldplayerpos;
+    XMFLOAT3 texscl;
+    float konbouscl;
+    float zalpha;
+    int zatackEndTimer;
+    int zatackStartTimer;
+    bool rearm;
+public:
+    void colsyuri(Player* player);
+    bool GetAltStay() { return stayflag; }
+    void RotationDamageblock();
+   // void ZAttack();
+   void ZAttackTex(XMMATRIX matview, XMMATRIX matprojection, Player*player);
+   void Drawtex(DirectXCommon* dxcomn);
 };
 
 

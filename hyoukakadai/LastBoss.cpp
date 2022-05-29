@@ -8,7 +8,8 @@
 #include<random>
 #define PI 3.14
 #include"imgui.h"
-
+bool LastBoss::atcf;
+XMFLOAT3 LastBoss::texpos[2];
 // Sphere LastBoss::playersphere;
 LastBoss::LastBoss()
 {
@@ -51,11 +52,42 @@ void LastBoss::Attack(Player* player)
 //初期化処理
 void LastBoss::Initialize()
 {
+	nTexture::LoadTexture(8, L"Resources/targetcircle.png");
+
+	damagearea[0] = nTexture::Create(8, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
+	damagearea[0]->CreateNormalTexture();
+
+	damagearea[1] = nTexture::Create(8, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
+	damagearea[1]->CreateNormalTexture();
+
+	syurikenm = Model::CreateFromOBJ("syuriken");
+	syuriken[0] = Object3d::Create();
+	syuriken[0]->SetModel(syurikenm);
+	syuriken[0]->Initialize();
+	//syurikenm = Model::CreateFromOBJ("syuriken");
+	syuriken[1] = Object3d::Create();
+	syuriken[1]->SetModel(syurikenm);
+	syuriken[1]->Initialize();
+	//モデルの読込
+	BossModel = Model::CreateFromOBJ("boss1");
+	//モデル割り当て
+	BossObject = Object3d::Create();
+	BossObject->SetModel(BossModel);
+	BossObject->Initialize();
 	
 	Position = { 67,-4,0 };
 	Boss_Scl = { 2,2,2 };
 	Boss_Rot = { 0,-180,0 };
 	Rotation = { 0,0,0 };
+
+	BossArmModel = Model::CreateFromOBJ("konbou");
+	BossArmObject[0] = Object3d::Create();
+	BossArmObject[0]->SetModel(BossArmModel);
+	BossArmObject[0]->Initialize();
+	//syurikenm = Model::CreateFromOBJ("syuriken");
+	BossArmObject[1] = Object3d::Create();
+	BossArmObject[1]->SetModel(BossArmModel);
+	BossArmObject[1]->Initialize();
 	//モデルの読込
 	//Rotation.z = 0;
 	HP = MaxHP;
@@ -65,7 +97,8 @@ void LastBoss::Initialize()
 //更新処理
 void LastBoss::Update(XMFLOAT3 position)
 {
-
+	texpos[0] = damagearea[0]->GetPosition();
+	RotationDamageblock();
 	Old_Pos = Position;
 
 
@@ -85,15 +118,46 @@ void LastBoss::Update(XMFLOAT3 position)
 	UpDownMove(position);
 	BossObject->SetPosition(Position);
 	//BossObject->SetScale({ 2,2,2 });
+	BossObject->Update({ 1,1,1,1 });
 	BossObject->SetRotation(Rotation);
+	for (int i = 0; i < 2; i++) {
+		syuriken[i]->SetPosition(syurikenpos[i]);
+		syuriken[i]->SetRotation(syurikenrot[i]);
+		syuriken[i]->SetScale(syurikenscl[i]);
+		syuriken[i]->Update({ 1,1,1,1 });
 
+		BossArmObject[i]->SetPosition({ damagearea[i]->GetPosition().x,damagearea[i]->GetPosition().y,damagearea[i]->GetPosition().z+10});
+		BossArmObject[i]->SetRotation({ 90,0,0 });
+		BossArmObject[i]->SetScale({4, konbouscl, 4});
+
+		BossArmObject[i]->Update({ 1,1,1,1 });
+	}
 }
 
 //描画処理
 void LastBoss::Draw(DirectXCommon* dxcomn)
 {
+	
+	syuriken[0]->PreDraw();
+	syuriken[0]->Draw();
+	syuriken[0]->PostDraw();
+	syuriken[1]->PreDraw();
+	syuriken[1]->Draw();
+	syuriken[1]->PostDraw();
+	BossArmObject[0]->PreDraw();
+	BossArmObject[0]->Draw();
+	BossArmObject[0]->PostDraw();
+	BossArmObject[1]->PreDraw();
+	BossArmObject[1]->Draw();
+	BossArmObject[1]->PostDraw();
+
+	nTexture::PreDraw(dxcomn->GetCmdList());
+	damagearea[0]->Draw();
+	damagearea[1]->Draw();
+	nTexture::PostDraw();
+
 	ImGui::Begin("scl");
-	//ImGui::SliderFloat("scly", &Arm_Scl[0].y, 20.0f, 20.0f);
+	//ImGui::SliderFloat("scly", &syurikenscl[0].y, 20.0f, 20.0f);
 	//ImGui::SliderFloat("scly", &lene, 20.0f, 20.0f);
 	ImGui::End();
 }
@@ -108,9 +172,10 @@ void LastBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200],
 
 void LastBoss::Motion(Player* player)
 {
+	atcf = zattack;
 	NormalAttacks(player);
-
-
+	colsyuri(player);
+	ZAttack(player);
 	switch (bossAction)
 	{
 	case KeepPos:
@@ -186,8 +251,7 @@ void LastBoss::Follow(XMFLOAT3 position)
 	float centerSpeed = 0.1f;
 	angleX = (position.x - Position.x);
 	angleZ = (position.y - Position.y);
-	angleR = sqrtf((Position.x - position.x) * (Position.x - position.x)
-		+ (Position.y - position.y) * (Position.y - position.y));
+	angleR = sqrtf((Position.x - position.x) * (Position.x - position.x));
 
 	Position.x += (angleX / angleR) * (bossmovespeed / 2);
 
@@ -255,6 +319,12 @@ void LastBoss::GetDamage()
 }
 void LastBoss::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
 
+	for (int i = 0; i < 2; i++) {
+		damagearea[i]->SetScale({texscl});
+		damagearea[i]->SetColor({ 1,1,1,zalpha });
+
+		damagearea[i]->Update(matview, matprojection);
+	}
 }
 
 
@@ -270,5 +340,171 @@ void LastBoss::UpDownMove(XMFLOAT3 position)
 
 void LastBoss::DeathMotion()
 {
+
+}
+
+void LastBoss::RotationDamageblock()
+{
+
+	if (Input::GetInstance()->TriggerKey(DIK_T)) {
+		rotack[0] = true;
+		rotack[1] = true;
+	}
+	if (rotack[0]) {
+		sclplus[0] += 0.01f;
+		syurikenscl[0].x=Easing::EaseOut(sclplus[0], 0, 2);
+		syurikenscl[0].y = Easing::EaseOut(sclplus[0], 0, 2);
+		if (syurikenscl[0].y >= 1.9f) {
+			rotack[0] = false;
+		}
+	}
+	if (rotack[1]) {
+		sclplus[1] += 0.01f;
+		syurikenscl[1].x = Easing::EaseOut(sclplus[1], 0, 2);
+		syurikenscl[1].y = Easing::EaseOut(sclplus[1], 0, 2);
+		if (syurikenscl[1].y >= 1.9f) {
+			rotack[1] = false;
+		}
+	}
+	syurikenrot[0].z++;
+	syurikenrot[1].z++;
+}
+
+void LastBoss::colsyuri(Player*player)
+{
+	pobb.m_NormaDirect[0] = { player->GetMatrot().r[0].m128_f32[0],player->GetMatrot().r[0].m128_f32[1],player->GetMatrot().r[0].m128_f32[2] };
+	pobb.m_NormaDirect[1] = { player->GetMatrot().r[1].m128_f32[0],player->GetMatrot().r[1].m128_f32[1],player->GetMatrot().r[1].m128_f32[2] };
+	pobb.m_NormaDirect[2] = { player->GetMatrot().r[2].m128_f32[0],player->GetMatrot().r[2].m128_f32[1],player->GetMatrot().r[2].m128_f32[2] };
+	pobb.m_fLength[0] = 1;//x方向の長さ
+	pobb.m_fLength[1] = 1;//y方向の長さ
+	pobb.m_fLength[2] = 1;//z方向の長さ
+	//敵のOBB 回転ベクトル
+	syuriken0.m_NormaDirect[0] = { syuriken[0]->GetMatrot().r[0].m128_f32[0],syuriken[0]->GetMatrot().r[0].m128_f32[1],syuriken[0]->GetMatrot().r[0].m128_f32[2] };
+	syuriken0.m_NormaDirect[1] = { syuriken[0]->GetMatrot().r[1].m128_f32[0], syuriken[0]->GetMatrot().r[1].m128_f32[1], syuriken[0]->GetMatrot().r[1].m128_f32[2] };
+	syuriken0.m_NormaDirect[2] = { syuriken[0]->GetMatrot().r[2].m128_f32[0], syuriken[0]->GetMatrot().r[2].m128_f32[1], syuriken[0]->GetMatrot().r[2].m128_f32[2] };
+	syuriken0.m_fLength[0] = syurikenscl[0].x*0.5;//x方向の長さ
+	syuriken0.m_fLength[1] = syurikenscl[0].y * 5.5;//y方向の長さ
+	syuriken0.m_fLength[2] = syurikenscl[0].z;//z方向の長さ
+	//OBBの設定位置
+	pobb.m_Pos = { player->GetPosition().x,player->GetPosition().y,player->GetPosition().z };
+	syuriken0.m_Pos = { syuriken[0]->GetPosition().x,  syuriken[0]->GetPosition().y, syuriken[0]->GetPosition().z };
+
+	if (ps0->ColOBBs(pobb, syuriken0)) {
+		player->SetHp(player->getHp() - 1);
+	} else {
+		//obbf = 0;
+	}
+
+	//敵のOBB 回転ベクトル
+	syuriken1.m_NormaDirect[0] = { syuriken[1]->GetMatrot().r[0].m128_f32[0],syuriken[1]->GetMatrot().r[0].m128_f32[1],syuriken[1]->GetMatrot().r[0].m128_f32[2] };
+	syuriken1.m_NormaDirect[1] = { syuriken[1]->GetMatrot().r[1].m128_f32[0], syuriken[1]->GetMatrot().r[1].m128_f32[1], syuriken[1]->GetMatrot().r[1].m128_f32[2] };
+	syuriken1.m_NormaDirect[2] = { syuriken[1]->GetMatrot().r[2].m128_f32[0], syuriken[1]->GetMatrot().r[2].m128_f32[1], syuriken[1]->GetMatrot().r[2].m128_f32[2] };
+	syuriken1.m_fLength[0] = syurikenscl[1].x*0.5;//x方向の長さ
+	syuriken1.m_fLength[1] = syurikenscl[1].y * 5.5;//y方向の長さ
+	syuriken1.m_fLength[2] = syurikenscl[1].z;//z方向の長さ
+	//OBBの設定位置
+	pobb.m_Pos = { player->GetPosition().x,player->GetPosition().y,player->GetPosition().z };
+	syuriken1.m_Pos = { syuriken[1]->GetPosition().x,  syuriken[1]->GetPosition().y, syuriken[1]->GetPosition().z };
+
+	if (ps1->ColOBBs(pobb, syuriken1)) {
+		player->SetHp(player->getHp() - 1);
+	} else {
+		//obbf = 0;
+	}
+	//敵のOBB 回転ベクトル
+	syuriken2.m_NormaDirect[0] = { syuriken[0]->GetMatrot().r[0].m128_f32[0],syuriken[0]->GetMatrot().r[0].m128_f32[1],syuriken[0]->GetMatrot().r[0].m128_f32[2] };
+	syuriken2.m_NormaDirect[1] = { syuriken[0]->GetMatrot().r[1].m128_f32[0], syuriken[0]->GetMatrot().r[1].m128_f32[1], syuriken[0]->GetMatrot().r[1].m128_f32[2] };
+	syuriken2.m_NormaDirect[2] = { syuriken[0]->GetMatrot().r[2].m128_f32[0], syuriken[0]->GetMatrot().r[2].m128_f32[1], syuriken[0]->GetMatrot().r[2].m128_f32[2] };
+	syuriken2.m_fLength[0] = syurikenscl[0].x*5.5;//x方向の長さ
+	syuriken2.m_fLength[1] = syurikenscl[0].y*0.5 ;//y方向の長さ
+	syuriken2.m_fLength[2] = syurikenscl[0].z;//z方向の長さ
+	//OBBの設定位置
+	pobb.m_Pos = { player->GetPosition().x,player->GetPosition().y,player->GetPosition().z };
+	syuriken2.m_Pos = { syuriken[0]->GetPosition().x,  syuriken[0]->GetPosition().y, syuriken[0]->GetPosition().z };
+
+	if (ps2->ColOBBs(pobb, syuriken2)) {
+		player->SetHp(player->getHp() - 1);
+	} else {
+		//obbf = 0;
+	}
+
+	//敵のOBB 回転ベクトル
+	syuriken3.m_NormaDirect[0] = { syuriken[1]->GetMatrot().r[0].m128_f32[0],syuriken[1]->GetMatrot().r[0].m128_f32[1],syuriken[1]->GetMatrot().r[0].m128_f32[2] };
+	syuriken3.m_NormaDirect[1] = { syuriken[1]->GetMatrot().r[1].m128_f32[0], syuriken[1]->GetMatrot().r[1].m128_f32[1], syuriken[1]->GetMatrot().r[1].m128_f32[2] };
+	syuriken3.m_NormaDirect[2] = { syuriken[1]->GetMatrot().r[2].m128_f32[0], syuriken[1]->GetMatrot().r[2].m128_f32[1], syuriken[1]->GetMatrot().r[2].m128_f32[2] };
+	syuriken3.m_fLength[0] = syurikenscl[1].x*5.5;//x方向の長さ
+	syuriken3.m_fLength[1] = syurikenscl[1].y*0.5;//y方向の長さ
+	syuriken3.m_fLength[2] = syurikenscl[1].z;//z方向の長さ
+	//OBBの設定位置
+	pobb.m_Pos = { player->GetPosition().x,player->GetPosition().y,player->GetPosition().z };
+	syuriken3.m_Pos = { syuriken[1]->GetPosition().x,  syuriken[1]->GetPosition().y, syuriken[1]->GetPosition().z };
+
+	if (ps3->ColOBBs(pobb, syuriken3)) {
+		player->SetHp(player->getHp() - 1);
+	} else {
+		//obbf = 0;
+	}
+}
+
+void LastBoss::ZAttackTex(XMMATRIX matview, XMMATRIX matprojection, Player* player)
+{
+	
+}
+
+void LastBoss::Drawtex(DirectXCommon* dcomn)
+{
+
+}
+
+void LastBoss::ZAttack(Player*player)
+{
+	if (Input::GetInstance()->TriggerKey(DIK_Z)) {
+		zattack = true;
+		zatackEndTimer = 0;
+
+	}
+	if (!zattack) {
+		if (texscl.x >= 0) {
+			texscl.x -= 0.5f;
+			texscl.y -= 0.5f;
+		}
+		oldplayerpos = player->GetPosition();
+		oldplayerpos.z = player->GetPosition().z + 20;
+		zalpha = 0;
+		konbouscl = 0;
+	} else {
+		if (texscl.x <= 2) {
+			texscl.x += 0.1f;
+			texscl.y += 0.1f;
+		} else {
+			zatackStartTimer++;
+		}
+		if (zatackStartTimer > 35) {
+			if (konbouscl < 5 && zatackEndTimer == 0 && !rearm) {
+				konbouscl += 0.5;
+			} else {
+				zatackEndTimer++;
+				if (zatackEndTimer > 45) {
+					rearm = true;
+				}
+			}
+		}
+		if (rearm) {
+			if (konbouscl > 0) {
+				konbouscl -= 0.5f;
+				//zatackEndTimer = 0;
+				zatackStartTimer = 0;
+				//zattack = false;
+			} else {
+				rearm = false;
+			}
+		}
+		damagearea[0]->SetPosition(oldplayerpos);
+		damagearea[1]->SetPosition({ oldplayerpos.x + 20,oldplayerpos.y,oldplayerpos.z
+			});
+		zalpha = 1;
+	}
+	konbouscl = max(konbouscl, 0);
+	konbouscl = min(konbouscl, 5);
 
 }

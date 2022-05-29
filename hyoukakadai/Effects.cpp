@@ -17,7 +17,7 @@ void Effects::Initialize(DirectXCommon* dxcomn, DebugCamera* camera)
 	//エフェクトのセット(3引き数に)
 	attackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/oaa.efk", (const EFK_CHAR*)L"effect/10");
 	efk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/deadef.efk", (const EFK_CHAR*)L"effect/10");
-	bossattackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/laser.efk", (const EFK_CHAR*)L"effect/10");
+	bossattackefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/Heal.efk", (const EFK_CHAR*)L"effect/10");
 	Healefk->EffekseerSetting(dxcomn, camera, (const EFK_CHAR*)L"Effect/10/Heal.efk", (const EFK_CHAR*)L"effect/10");
 
 	//b_Effect_Rot = { -25.08,90,0 };
@@ -59,13 +59,15 @@ void Effects::Update2(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_pt
 				df = true;
 			}
 			if (df == true) {
-				//efk->SetPosition(enemy[i]->GetPosition().x, enemy[i]->GetPosition().y, enemy[i]->GetPosition().z);
+				efk->SetPosition(enemy[i]->GetPosition().x, enemy[i]->GetPosition().y, enemy[i]->GetPosition().z);
 				efk->Load_Effect();
 
 				df = false;
 			}
 		}
 	}
+	//if (player->GetRot_Left()) {
+	
 	if (player->GetRot_Left() == true) {
 		attackefk->SetPosition(player->GetPosition().x - 6, player->GetPosition().y, player->GetPosition().z);
 		//attackefk->SetRotation(zrot, 180, 30);
@@ -253,28 +255,26 @@ void Effects::Updateo(DirectXCommon* dxcomn, DebugCamera* camera,Enemy*enemy, Pl
 void Effects::BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera, bool stay,bool altAttack, XMFLOAT3 bpos)
 {
 	b_Effect_Pos =bpos;
-	if (stay == true) {
-		b_Effect_SCl = { 0.5f,0.5f,0.01f };
-	}
-	else {
-		b_Effect_SCl = { 1,2.5,10 };
-	}
-
+	
+	
+		b_Effect_SCl = { 1,1,1 };
+	
 	if (altAttack||stay) {
 		b_attack = true;
 	}
-	else {
-		b_attack = false;
-	}
+	//else {
+		//b_attack = false;
+	//}
 	if (b_attack) {
 		bossattackefk->Load_Effect();
-		//b_attack = false;
+		b_attack = false;
 		
 	}
-	bossattackefk->SetPosition(b_Effect_Pos.x, b_Effect_Pos.y, b_Effect_Pos.z);
+	bossattackefk->SetPosition(b_Effect_Pos.x, b_Effect_Pos.y, b_Effect_Pos.z+10);
 	bossattackefk->SetRotation(b_Effect_Rot.x, b_Effect_Rot.y, b_Effect_Rot.z);
 	bossattackefk->SetScale(b_Effect_SCl.x, b_Effect_SCl.y, b_Effect_SCl.z);
 	//bossattackefk->SetColor(0, 1, 0);
+	bossattackefk->EffekseerUpdate(dxcomn, camera);
 
 
 }
@@ -288,8 +288,8 @@ void Effects::Draw(DirectXCommon*dxcomn)
 	bossattackefk->EffekseerDraw(dxcomn->GetCmdList());
 	//efk1->EffekseerDraw(dxcomn->GetCmdList());
 	ImGui::Begin("ddd");
-	ImGui::SliderFloat("y", &yrot, 180, -180);
-	ImGui::SliderFloat("z", &zrot, 180, -170);
+	ImGui::SliderFloat("y", &b_Effect_Rot.x, 180, -180);
+	ImGui::SliderFloat("z", &b_Effect_Rot.z, 180, -170);
 	ImGui::End();
 }
 
