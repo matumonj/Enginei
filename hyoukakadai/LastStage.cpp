@@ -57,11 +57,10 @@ void LastStage::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("wood");
+	tstmodel = Model::CreateFromOBJ("casle");
 	worldmodel = Model::CreateFromOBJ("skydome");
 	harimodel = Model::CreateFromOBJ("hari");
 	goalmodel = Model::CreateFromOBJ("goal");
-	reefmodel = Model::CreateFromOBJ("reef");
 
 	item = new Item();
 	item->Initialize();
@@ -74,10 +73,6 @@ void LastStage::ModelCreate()
 			tst[j][i] = std::make_unique<Object3d>();
 			tst[j][i]->Initialize();// Object3d::Create();
 			tst[j][i]->SetModel(tstmodel);
-
-			reef[j][i] = std::make_unique<Object3d>();
-			reef[j][i]->Initialize();// Object3d::Create();
-			reef[j][i]->SetModel(reefmodel);
 		}
 	}
 	block = std::make_unique<Object3d>();
@@ -148,9 +143,6 @@ void LastStage::SetPrm()
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
 
-			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			reef[j][i]->SetRotation({ tst_Rot });
-			reef[j][i]->SetScale({ tst_Scl });
 			if (map[j][i] == 3) {
 				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 				goal->SetRotation({ 0,120,0 });
@@ -189,7 +181,6 @@ void LastStage::objUpdate()
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			tst[j][i]->Update({ 1,1,1,1 });
-			reef[j][i]->Update({ 1,1,1,1 });
 		}
 	}
 
@@ -372,7 +363,6 @@ void LastStage::Update(DirectXCommon* dxCommon)
 
 
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
-	Collision::CollisionMap(map, reef, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
 
 	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3) == true)
 	{
@@ -483,7 +473,6 @@ void LastStage::Update(DirectXCommon* dxCommon)
 			//プレイヤーの検知
 			enemy[i]->Attack(player);
 			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
-			enemy[i]->ColMap(map, reef, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
 
 			enemy[i]->EnemySearchPlayer(player);
@@ -497,7 +486,6 @@ void LastStage::Update(DirectXCommon* dxCommon)
 			//プレイヤーの検知
 			enemy1[i]->Attack(player);
 			enemy1[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
-			enemy1[i]->ColMap(map, reef, mapx, mapy, MAX_X, MAX_Y);
 			enemy1[i]->Update(Player_Pos);
 
 			enemy1[i]->EnemySearchPlayer(player);
@@ -546,11 +534,6 @@ void LastStage::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->PostDraw();
 			}
 
-			if (map[j][i] == 2) {
-				reef[j][i]->PreDraw();
-				reef[j][i]->Draw();
-				reef[j][i]->PostDraw();
-			}
 
 			if (map[j][i] == 3) {
 				goal->PreDraw();
