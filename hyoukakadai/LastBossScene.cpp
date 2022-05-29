@@ -53,9 +53,15 @@ void LastBossScene::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
+<<<<<<< HEAD
 	tstmodel = Model::CreateFromOBJ("sea");
 	//worldmodel = Model::CreateFromOBJ("skydome");
 	//harimodel = Model::CreateFromOBJ("hari");
+=======
+	tstmodel = Model::CreateFromOBJ("casle");
+	worldmodel = Model::CreateFromOBJ("skydome");
+	harimodel = Model::CreateFromOBJ("hari");
+>>>>>>> 2293fa0c16c4ff46c3456a0c8fd4274e37e3fb0e
 	goalmodel = Model::CreateFromOBJ("goal");
 
 

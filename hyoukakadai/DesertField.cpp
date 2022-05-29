@@ -65,6 +65,9 @@ void DesertField::ModelCreate()
 
 	item = new Item();
 	item->Initialize();
+
+	item1 = new Item();
+	item1->Initialize();
 	//collision = new Collision();
 
 	for (int j = 0; j < MAX_Y; j++) {
@@ -175,37 +178,99 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
-	enemy[0] = std::make_unique<ThrowEnemy>();
+	enemy[0] = std::make_unique<MobEnemy>();
 	enemy[1] = std::make_unique<MobEnemy>();
-	enemy[2] = std::make_unique<ThrowEnemy>();
-	enemy[3] = std::make_unique<ThrowEnemy>();
-	enemy[4] = std::make_unique<ThrowEnemy>();
-	enemy[5] = std::make_unique<ThrowEnemy>();
-	enemy[6] = std::make_unique<ThrowEnemy>();
-	enemy[7] = std::make_unique<ThrowEnemy>();
-	enemy[8] = std::make_unique<ThrowEnemy>();
-	enemy[9] = std::make_unique<ThrowEnemy>();
-	//enemy[0] = new MobEnemy();
-	enemy[9]->Setposition({ 3850, -18, 0 });
-	enemy[8]->Setposition({ 3820,-14.2f,0 });
-	enemy[7]->Setposition({ 2780,-18.2f,0 });
-	enemy[6]->Setposition ({ 350, -18, 0 });
-	enemy[5]->Setposition ({ 320,-14.2f,0 });
-	enemy[4]->Setposition ({ 270,-18.2f,0 });
-	enemy[3]->Setposition ({ 250,-4.2f,0 });
-	enemy[2]->Setposition ({ 170,-18.2f,0 });
-	enemy[1]->Setposition({ 80,-4.2f,0 });
-	enemy[0]->Setposition({ 50, -15, 0 });
-	enemy[0]->Initialize();
-	enemy[1]->Initialize();
-	enemy[2]->Initialize();
-	enemy[3]->Initialize();
-	enemy[4]->Initialize();
-	enemy[5]->Initialize();
-	enemy[6]->Initialize();
-	enemy[7]->Initialize();
-	enemy[8]->Initialize();
-	enemy[9]->Initialize();
+	enemy[2] = std::make_unique<MobEnemy>();
+	enemy[3] = std::make_unique<MobEnemy>();
+	enemy[4] = std::make_unique<MobEnemy>();
+	enemy[5] = std::make_unique<MobEnemy>();
+	enemy[6] = std::make_unique<MobEnemy>();
+	enemy[7] = std::make_unique<MobEnemy>();
+	enemy[8] = std::make_unique<MobEnemy>();
+	enemy[9] = std::make_unique<MobEnemy>();
+
+	enemy1[0] = std::make_unique<MobEnemy>();
+	enemy1[1] = std::make_unique<MobEnemy>();
+	enemy1[2] = std::make_unique<MobEnemy>();
+	enemy1[3] = std::make_unique<MobEnemy>();
+	enemy1[4] = std::make_unique<MobEnemy>();
+	enemy1[5] = std::make_unique<MobEnemy>();
+	enemy1[6] = std::make_unique<MobEnemy>();
+	enemy1[7] = std::make_unique<MobEnemy>();
+	enemy1[8] = std::make_unique<MobEnemy>();
+	enemy1[9] = std::make_unique<MobEnemy>();
+
+
+	for (int i = 0; i < 10; i++) {
+		enemy[i]->Initialize();
+		enemy1[i]->Initialize();
+	}
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			if (map[j][i] == 4) {
+				enemy[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 5) {
+				enemy[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 6) {
+				enemy[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 7) {
+				enemy[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 8) {
+				enemy[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 9) {
+				enemy[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 10) {
+				enemy[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 11) {
+				enemy[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 12) {
+				enemy[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 13) {
+				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 14) {
+				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 15) {
+				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 16) {
+				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 17) {
+				enemy1[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 18) {
+				enemy1[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 19) {
+				enemy1[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 20) {
+				enemy1[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 21) {
+				enemy1[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 22) {
+				enemy1[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+			else if (map[j][i] == 23) {
+				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}
+		}
+	}
+
 	mapcol = new Collision();
 	c_postEffect = Default;
 
@@ -337,7 +402,7 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	Line::Update(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player, Player_Pos, colf, moveSpeed);
 
 	Line::CollisionEnemys(enemy);
-
+	Line::CollisionEnemys2group(enemy1);
 
 	//カメラ関係の処理
 	if (Player_Pos.x <= 27.0f) {
@@ -365,11 +430,13 @@ void DesertField::Update(DirectXCommon* dxCommon)
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
 	player->CollisionAttack(enemy, Player_Pos);
+	player->CollisionAttack(enemy1, Player_Pos);
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
 
 	effects->Update(dxCommon, camera, enemy, player);
+	effects->Update(dxCommon, camera, enemy1, player);
 	//enemyにnullptr代入するときは敵が死んだら
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
@@ -388,11 +455,30 @@ void DesertField::Update(DirectXCommon* dxCommon)
 
 			}
 		}
+
+		if (enemy1[i] != nullptr) {
+			//プレイヤーの検知
+			enemy1[i]->Motion(player);
+			enemy1[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
+			enemy1[i]->Attack(player);
+			enemy1[i]->Update(Player_Pos);
+
+			enemy1[i]->EnemySearchPlayer(player);
+			enemy1[i]->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
+
+			//もし敵が死んだら破棄
+			if (enemy1[i]->GetState_DEAD() == true) {
+				Destroy_unique(enemy1[i]);
+
+			}
+		}
 	
 	}
 
 	item->HealEfficasy(player);
+	item1->HealEfficasy(player);
 	item->Update(enemy);
+	item1->Update(enemy1);
 
 	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
@@ -460,6 +546,11 @@ void DesertField::MyGameDraw(DirectXCommon* dxcomn)
 			enemy[i]->Draw(dxcomn);
 			enemy[i]->SearchActionDraw(dxcomn);
 		}
+
+		if (enemy1[i] != nullptr) {
+			enemy1[i]->Draw(dxcomn);
+			enemy1[i]->SearchActionDraw(dxcomn);
+		}
 	}
 	//普通のテクスチャの描画
 	Line::Draw(dxcomn);
@@ -511,95 +602,95 @@ void DesertField::Draw(DirectXCommon* dxcomn)
 
 void DesertField::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 300));
-	if (ImGui::TreeNode("light_position")) {
-		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
-		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
-		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
-		if (ImGui::Button("spotlight ON")) {
-			lightGroup->SetSpotLightActive(0, true);
-		}
-		if (ImGui::Button("spotlight OFF")) {
-			lightGroup->SetSpotLightActive(0, false);
-		}
-		ImGui::ColorPicker3("light_color", spotLightColor);
-		ImGui::TreePop();
-	}
+	//ImGui::Begin("Obj1");
+	//ImGui::SetWindowPos(ImVec2(0, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 300));
+	//if (ImGui::TreeNode("light_position")) {
+	//	//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
+	//	///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
+	//	///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
+	//	if (ImGui::Button("spotlight ON")) {
+	//		lightGroup->SetSpotLightActive(0, true);
+	//	}
+	//	if (ImGui::Button("spotlight OFF")) {
+	//		lightGroup->SetSpotLightActive(0, false);
+	//	}
+	//	ImGui::ColorPicker3("light_color", spotLightColor);
+	//	ImGui::TreePop();
+	//}
 
-	if (ImGui::TreeNode("Effect_position")) {
-		//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
-		//ImGui::SliderFloat("positionY", &debuga, -200, 200);
-		//ImGui::SliderInt("positionZ", &elf, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("enemy_position")) {
-		float rf = enemy[0]->GetPosition().x;
-		float rf2 = enemy[0]->GetPosition().y;
-		float rrr = player->getdis();
-		//float rf3 = enemy->GetPosition().z;
-		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &rf2, -100, 100);
-		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-		ImGui::SliderInt("positionX", &co, -200, 200);
-		ImGui::SliderFloat("positionY", &rf2, -200, 200);
-		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
-		ImGui::TreePop();
-	}
-	float linex = Line::GetInstance()->getpos().x;
-	float liney = Line::GetInstance()->getpos().y;
-	float rr = player->GetPosition().x;
-	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -200, 200);
-		ImGui::SliderFloat("positionY", &liney, -200, 200);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
-		ImGui::SliderFloat("grav", &grav, -200, 200);
-		ImGui::SliderFloat("time", &time, -200, 200);
-		ImGui::TreePop();
-	}
-	float sx = player->GetArea_S().x;
-	float sy = player->GetArea_S().y;
+	//if (ImGui::TreeNode("Effect_position")) {
+	//	//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
+	//	//ImGui::SliderFloat("positionY", &debuga, -200, 200);
+	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("enemy_position")) {
+	//	float rf = enemy[0]->GetPosition().x;
+	//	float rf2 = enemy[0]->GetPosition().y;
+	//	float rrr = player->getdis();
+	//	//float rf3 = enemy->GetPosition().z;
+	//	ImGui::SliderInt("positionX", &co, -100, 100);
+	//	ImGui::SliderFloat("positionY", &rf2, -100, 100);
+	//	ImGui::SliderFloat("positionZ", &rrr, -100, 100);
+	//	ImGui::SliderInt("positionX", &co, -200, 200);
+	//	ImGui::SliderFloat("positionY", &rf2, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &rrr, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//float linex = Line::GetInstance()->getpos().x;
+	//float liney = Line::GetInstance()->getpos().y;
+	//float rr = player->GetPosition().x;
+	//if (ImGui::TreeNode("Player_position")) {
+	//	ImGui::SliderFloat("positionX", &linex, -200, 200);
+	//	ImGui::SliderFloat("positionY", &liney, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+	//	ImGui::SliderFloat("grav", &grav, -200, 200);
+	//	ImGui::SliderFloat("time", &time, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//float sx = player->GetArea_S().x;
+	//float sy = player->GetArea_S().y;
 
-	float ex = player->GetArea_e().x;
-	float ey = player->GetArea_e().y;
+	//float ex = player->GetArea_e().x;
+	//float ey = player->GetArea_e().y;
 
-	if (ImGui::TreeNode("half")) {
-		ImGui::SliderFloat("sx", &sx, -200, 200);
-		ImGui::SliderFloat("sy", &sy, -200, 200);
-		ImGui::SliderFloat("ex", &ex, -200, 200);
-		ImGui::SliderFloat("ey", &ey, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
-		ImGui::TreePop();
-	}
-
-
-	/*if (ImGui::TreeNode("1")) {
-		ImGui::SliderFloat("+_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("+_height", &half_height, -200, 200);
-		ImGui::SliderFloat("-_width", &half_Width, -200, 200);
-		ImGui::SliderFloat("-_height", &half_height, -200, 200);
-		ImGui::SliderFloat("map_1_width", &width, -200, 200);
-		ImGui::SliderFloat("map_1_height", &height, -200, 200);
-		ImGui::TreePop();
-	}*/
+	//if (ImGui::TreeNode("half")) {
+	//	ImGui::SliderFloat("sx", &sx, -200, 200);
+	//	ImGui::SliderFloat("sy", &sy, -200, 200);
+	//	ImGui::SliderFloat("ex", &ex, -200, 200);
+	//	ImGui::SliderFloat("ey", &ey, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("Old")) {
+	//	ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+	//	ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
 
-	ImGui::End();
+	///*if (ImGui::TreeNode("1")) {
+	//	ImGui::SliderFloat("+_width", &half_Width, -200, 200);
+	//	ImGui::SliderFloat("+_height", &half_height, -200, 200);
+	//	ImGui::SliderFloat("-_width", &half_Width, -200, 200);
+	//	ImGui::SliderFloat("-_height", &half_height, -200, 200);
+	//	ImGui::SliderFloat("map_1_width", &width, -200, 200);
+	//	ImGui::SliderFloat("map_1_height", &height, -200, 200);
+	//	ImGui::TreePop();
+	//}*/
 
-	ImGui::Begin("postEffect");
-	if (ImGui::RadioButton("Blur", &c_postEffect)) {
-		c_postEffect = Blur;
-	}
-	if (ImGui::RadioButton("Default", &c_postEffect)) {
-		c_postEffect = Default;
-	}
 
-	ImGui::End();
+	//ImGui::End();
+
+	//ImGui::Begin("postEffect");
+	//if (ImGui::RadioButton("Blur", &c_postEffect)) {
+	//	c_postEffect = Blur;
+	//}
+	//if (ImGui::RadioButton("Default", &c_postEffect)) {
+	//	c_postEffect = Default;
+	//}
+
+	//ImGui::End();
 
 }
 #pragma region 解放部分
@@ -615,6 +706,7 @@ void DesertField::Finalize()
 
 	for (int i = 0; i < 10; i++) {
 		enemy[i].reset();
+		enemy1[i].reset();
 	}
 	//Enemy* enemy[2];
 	effects.reset();

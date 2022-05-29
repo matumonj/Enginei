@@ -47,6 +47,8 @@ private:
 	const int MAX_X = 200;
 	const int MAX_Y = 20;
 private:
+	Sprite* background = nullptr;
+
 
 	std::unique_ptr<Enemy> enemy = nullptr;
 	Collision* collision = nullptr;
