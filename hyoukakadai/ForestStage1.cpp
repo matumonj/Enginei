@@ -83,10 +83,6 @@ void ForestStage1::ModelCreate()
 	goal->Initialize();
 	goal->SetModel(goalmodel);
 
-	block = std::make_unique<Object3d>();
-	block->Initialize();// = Object3d::Create();
-	block->SetModel(tstmodel);
-
 	hari = std::make_unique<Object3d>();
 	hari->Initialize();
 	hari->SetModel(harimodel);
@@ -142,9 +138,6 @@ void ForestStage1::SetPrm()
 		}
 	}
 
-	block->SetPosition({ block_pos });
-	block->SetScale({ block_Scl });
-
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
 	background->setcolor({ 1,1,1,1 });
@@ -176,7 +169,6 @@ void ForestStage1::objUpdate()
 	}
 
 	goal->Update({ 1,1,1,1 });
-	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
 }
 #pragma endregion
@@ -511,9 +503,6 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 void ForestStage1::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
-	block->PreDraw();
-	block->Draw();
-	block->PostDraw();
 
 	item->Draw();
 	item1->Draw();
