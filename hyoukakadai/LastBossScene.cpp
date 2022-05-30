@@ -53,15 +53,11 @@ void LastBossScene::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-<<<<<<< HEAD
 	tstmodel = Model::CreateFromOBJ("sea");
 	//worldmodel = Model::CreateFromOBJ("skydome");
 	//harimodel = Model::CreateFromOBJ("hari");
-=======
 	tstmodel = Model::CreateFromOBJ("casle");
-	worldmodel = Model::CreateFromOBJ("skydome");
-	harimodel = Model::CreateFromOBJ("hari");
->>>>>>> 2293fa0c16c4ff46c3456a0c8fd4274e37e3fb0e
+
 	goalmodel = Model::CreateFromOBJ("goal");
 
 
@@ -297,7 +293,38 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	Line::CollisionEnemys(&bossenemy);
 
+	if (LastBoss::GetInstance()->GetAtc())
+	{
 
+		if (shaketime != 0) {
+			oshake = (float)(rand() % 3 - 6);
+			oshakex = (float)(rand() % 3 - 6);
+			oshakey = (float)(rand() % 3 - 6);
+			oshake -= 0.1f;
+			oshakex -= 0.1f;
+			oshakey -= 0.1f;
+			
+			shakex = oshakex * 0.05f;
+			shakey = oshakey * 0.05f;
+			shake = oshake * 0.05f;
+			shakex -= shake;
+			shakey -= shake;
+			shaketime--;
+			//}
+			//シェイク値を０に
+		} else {
+			shakex = 0;
+			shakey = 0;
+			//rushAttackPrm.rushflag = true;
+			shaketime = 100;
+		}
+		camerapositionx += shakex;
+		camerapositiony += shakey;
+	}
+	else {
+		camerapositionx = 0;
+		camerapositiony= 0;
+	}
 	//カメラ関係の処理
 	if (Player_Pos.x <= 27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
@@ -314,8 +341,8 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 	} else {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
+		camera->SetEye({ Player_Pos.x,Player_Pos.y+camerapositiony,Player_Pos.z - 27.0f });
+		camera->SetTarget({ Player_Pos.x + camerapositionx,Player_Pos.y + camerapositiony,Player_Pos.z });
 	}
 
 	camera->Update();
@@ -332,6 +359,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 	//for (int i = 0; i < 10; i++) {
 		if (bossenemy != nullptr) {
 			//プレイヤーの検知
+			//LastBoss::GetInstance()->appearance(camerapositiony, Player_Pos.x);
 			bossenemy->Motion(player);
 			bossenemy->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			bossenemy->Attack(player);
@@ -339,7 +367,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 			bossenemy->EnemySearchPlayer(player);
 			bossenemy->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
-
+			
 			//もし敵が死んだら破棄
 			if (bossenemy->GetState_DEAD() == true) {
 				Destroy_unique(bossenemy);
@@ -350,6 +378,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		}
 
 		effects->BossAttackEffect(dxCommon, camera, j, LastBoss::GetInstance()->GetAtc(), LastBoss::GetInstance()->Gettexpos());
+		effects->BossAttackEffect2(dxCommon, camera, LastBoss::GetInstance()->GetSt(), LastBoss::GetInstance()->GetStay(),bossenemy->GetPosition());
 
 	item->HealEfficasy(player);
 	item->Update(&bossenemy);
@@ -430,6 +459,7 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
+	effects->Draw2(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
 

@@ -10,6 +10,10 @@
 #include"imgui.h"
 bool LastBoss::atcf;
 XMFLOAT3 LastBoss::texpos[2];
+bool LastBoss::staybeam;
+bool LastBoss::beamatck;
+bool LastBoss::stayflag;
+Ray LastBoss::laserRay;
 // Sphere LastBoss::playersphere;
 LastBoss::LastBoss()
 {
@@ -89,6 +93,14 @@ void LastBoss::Initialize()
 	BossArmObject[1]->SetModel(BossArmModel);
 	BossArmObject[1]->Initialize();
 	//モデルの読込
+	ShotModel = Model::CreateFromOBJ("sphere");
+
+	for (int i = 0; i < 3; i++) {
+		ShotObj[i] = Object3d::Create();
+		ShotObj[i]->SetModel(ShotModel);
+		Shot_Pos[i] = { Position };
+
+	}
 	//Rotation.z = 0;
 	HP = MaxHP;
 
@@ -97,6 +109,9 @@ void LastBoss::Initialize()
 //更新処理
 void LastBoss::Update(XMFLOAT3 position)
 {
+
+	beamatck = beamf;
+	staybeam = beamf2;
 	texpos[0] = damagearea[0]->GetPosition();
 	RotationDamageblock();
 	Old_Pos = Position;
@@ -112,8 +127,8 @@ void LastBoss::Update(XMFLOAT3 position)
 	//Arm_Rot[1].z = rotfollow  ;//60=角度調整用 180=反転
 	GetDamage();
 	//モブ
-	Rotation.x = 30;
-	Position.x = 20;
+	Rotation.x = 60;
+	Position.y = -18;
 	Position.z = 0;
 	UpDownMove(position);
 	BossObject->SetPosition(Position);
@@ -132,6 +147,14 @@ void LastBoss::Update(XMFLOAT3 position)
 
 		BossArmObject[i]->Update({ 1,1,1,1 });
 	}
+	for (int i = 0; i < 3; i++) {
+		if (ShotObj[i] != nullptr) {
+			ShotObj[i]->SetPosition(Shot_Pos[i]);
+			ShotObj[i]->SetRotation({ 0,0,0 });
+			ShotObj[i]->SetScale({ 1,1,1 });
+			ShotObj[i]->Update({ 1,1,1,1 });
+		}
+	}
 }
 
 //描画処理
@@ -144,18 +167,29 @@ void LastBoss::Draw(DirectXCommon* dxcomn)
 	syuriken[1]->PreDraw();
 	syuriken[1]->Draw();
 	syuriken[1]->PostDraw();
-	BossArmObject[0]->PreDraw();
-	BossArmObject[0]->Draw();
-	BossArmObject[0]->PostDraw();
-	BossArmObject[1]->PreDraw();
-	BossArmObject[1]->Draw();
-	BossArmObject[1]->PostDraw();
-
+	if (zatackStartTimer != 0) {
+		BossArmObject[0]->PreDraw();
+		BossArmObject[0]->Draw();
+		BossArmObject[0]->PostDraw();
+		BossArmObject[1]->PreDraw();
+		BossArmObject[1]->Draw();
+		BossArmObject[1]->PostDraw();
+	}
+	BossObject->PreDraw();
+	BossObject->Draw();
+	BossObject->PostDraw();
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	damagearea[0]->Draw();
 	damagearea[1]->Draw();
 	nTexture::PostDraw();
 
+	for (int i = 0; i < 3; i++) {
+		if (ShotObj[i] != nullptr) {
+			ShotObj[i]->PreDraw();
+			ShotObj[i]->Draw();
+			ShotObj[i]->PostDraw();
+		}
+	}
 	ImGui::Begin("scl");
 	//ImGui::SliderFloat("scly", &syurikenscl[0].y, 20.0f, 20.0f);
 	//ImGui::SliderFloat("scly", &lene, 20.0f, 20.0f);
@@ -176,6 +210,9 @@ void LastBoss::Motion(Player* player)
 	NormalAttacks(player);
 	colsyuri(player);
 	ZAttack(player);
+	if (Input::GetInstance()->TriggerKey(DIK_L)) {
+		bossAction = Stay;
+	}
 	switch (bossAction)
 	{
 	case KeepPos:
@@ -189,6 +226,7 @@ void LastBoss::Motion(Player* player)
 		if (Input::GetInstance()->TriggerKey(DIK_S)) {
 			bossAction = SetStartPos;
 		}
+		
 		if (HP < MaxHP / 2) {
 			bossAction = SetStartPos;//体力が一定以下なったら初期位置に
 		}
@@ -220,9 +258,11 @@ void LastBoss::Motion(Player* player)
 		break;
 
 	case Stay://ビーム前の待機
+		stayflag = true;
 		StayCount++;
-		if (StayCount > 150) {
-			bossAction = None;
+		if (StayCount > 200) {
+			beamatck = true;
+			bossAction = altattackk;
 			StayCount = 0;
 		}
 		break;
@@ -234,7 +274,9 @@ void LastBoss::Motion(Player* player)
 	case StartBattle:
 
 		break;
-
+	case altattackk:
+		beamAtack(player);
+		break;
 	default:
 		break;
 	}
@@ -260,40 +302,9 @@ void LastBoss::Follow(XMFLOAT3 position)
 
 void LastBoss::appearance(float& camerapos, float position)
 {
-	float oldpos = -48;
-	if (phase && !returnCamera) {
-		cameratime += 0.002f;
-		if (camerapos >= 178) {
-			cameratime = 0;
-			returnCamera = true;
-			phase = false;
-		} else {
-			camerapos = Easing::EaseOut(cameratime, oldpos, 178);
-		}
-	} else {
-		oldpos = camerapos;
-		//startcount += 0.01;
-	}
 
-	if (returnCamera) {
-		returnCameraTime += 0.01f;
-		if (camerapos <= -40) {
-			returnCameraTime = 0;
-			returnCamera = false;
-			phase = false;
-		} else {
-			camerapos = Easing::EaseOut(returnCameraTime, 177, -48);
-		}
 
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_J)) {
-		//bossAction = None;
-		phase = true;
-	}
 
-	if (!returnCamera && !phase) {
-		camerapos = position;
-	}
 }
 
 void LastBoss::GetDamage()
@@ -330,7 +341,51 @@ void LastBoss::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 p
 
 void LastBoss::NormalAttacks(Player* player)
 {
+	float x[3];
+	float y[3];
+	for (int i = 0; i < 3; i++) {
+		if (attackcount % 400 == 0) {
+			BarrelFolflag = false;
+			if (!shotf[i]) {
+				//shotf[i] = true;
+				//if (Input::GetInstance()->TriggerKey(DIK_S)) {
+				if (!ChangeAttack) {
+					shotf[i] = true;
+					BarrelRec = true;
+				} else {
+					delete ShotObj[i];
+					ShotObj[i] = nullptr;
+				}
+				//}
 
+				Shot_Pos[i] = { Position };
+				x[i] = player->GetPosition().x - Shot_Pos[i].x;
+				y[i] = player->GetPosition().y - Shot_Pos[i].y;
+
+				BulAngle[i] = sqrtf(x[i] * x[i] + y[i] * y[i]);
+				rt[i] += 0.05f;
+				Xspeed[i] = ((0.1f) * x[i] / BulAngle[i]);
+				Yspeed[i] = ((0.1f) * y[i] / BulAngle[i]);
+				break;
+			}
+
+		}
+
+		if (shotf[i] && ShotObj[i] != nullptr) {
+			Shot_Pos[i].x += Xspeed[i];
+			Shot_Pos[i].y += Yspeed[i];
+			if (Collision::GetLen(Shot_Pos[i], player->GetPosition()) < 1) {
+				player->SetHp(player->getHp() - 1);
+				shotf[i] = false;
+				break;
+			}
+			if (Collision::GetLen(Shot_Pos[i], Position) > 100) {
+				shotf[i] = false;
+				break;
+			}
+
+		}
+	}
 }
 
 void LastBoss::UpDownMove(XMFLOAT3 position)
@@ -347,15 +402,39 @@ void LastBoss::RotationDamageblock()
 {
 
 	if (Input::GetInstance()->TriggerKey(DIK_T)) {
+		syurikenack = true;
 		rotack[0] = true;
 		rotack[1] = true;
+	}
+	if (syurikenscl[0].y >= 1.9f) {
+		syurikentimer++;
+		if (syurikentimer > 260) {
+			syurikenack = false;
+			syurikentimer = 0;
+		}
+	}
+	if(syurikenack){
+		
+	}
+	else {
+		if (syurikenscl[0].y >= 0) {
+			syurikenscl[0].y -= 0.01f;
+			syurikenscl[0].x -= 0.01f;
+
+			syurikenscl[1].y -= 0.01f;
+			syurikenscl[1].x -= 0.01f;
+		}
+		sclplus[0] = 0;
+		sclplus[1] = 0;
 	}
 	if (rotack[0]) {
 		sclplus[0] += 0.01f;
 		syurikenscl[0].x=Easing::EaseOut(sclplus[0], 0, 2);
 		syurikenscl[0].y = Easing::EaseOut(sclplus[0], 0, 2);
 		if (syurikenscl[0].y >= 1.9f) {
+			//sclplus[0] = 0;
 			rotack[0] = false;
+			//syurikentimer++;
 		}
 	}
 	if (rotack[1]) {
@@ -473,30 +552,39 @@ void LastBoss::ZAttack(Player*player)
 		zalpha = 0;
 		konbouscl = 0;
 	} else {
-		if (texscl.x <= 2) {
-			texscl.x += 0.1f;
-			texscl.y += 0.1f;
-		} else {
-			zatackStartTimer++;
-		}
-		if (zatackStartTimer > 35) {
-			if (konbouscl < 5 && zatackEndTimer == 0 && !rearm) {
-				konbouscl += 0.5;
+			if (texscl.x <= 2 && !rearm) {
+				texscl.x += 0.1f;
+				texscl.y += 0.1f;
 			} else {
-				zatackEndTimer++;
-				if (zatackEndTimer > 45) {
-					rearm = true;
+				zatackStartTimer++;
+			}
+			if (zatackStartTimer > 105) {
+				if (konbouscl < 5 && zatackEndTimer == 0 && !rearm) {
+					konbouscl += 0.5;
+				} else {
+					zatackEndTimer++;
+					if (zatackEndTimer > 45) {
+						rearm = true;
+					}
 				}
 			}
-		}
 		if (rearm) {
 			if (konbouscl > 0) {
 				konbouscl -= 0.5f;
 				//zatackEndTimer = 0;
 				zatackStartTimer = 0;
 				//zattack = false;
-			} else {
+			}
+			else {
+				//rearm = false;
+			}
+			if (texscl.x > 0) {
+				texscl.x -= 0.1f;
+				texscl.y -= 0.1f;
+			}
+			else {
 				rearm = false;
+				zattack = false;
 			}
 		}
 		damagearea[0]->SetPosition(oldplayerpos);
@@ -507,4 +595,25 @@ void LastBoss::ZAttack(Player*player)
 	konbouscl = max(konbouscl, 0);
 	konbouscl = min(konbouscl, 5);
 
+}
+
+void LastBoss::beamAtack(Player*player)
+{
+	stayflag = false;
+	Attackcount++;
+	if (Attackcount > 50) {
+		beamf = true;//ブロックの破壊とビームのタイミング合わせ
+	}
+	if (Attackcount > 100) {//一定時間経過したら攻撃終了
+		beamf2 = false;//これなんで
+		Attackcount = 0;
+		beamf = false;//２つあるんだ？
+		bossAction = NormalAttack;
+	} else {
+		beamf2 = true;
+	}
+	//ボスビームのレイとプレイやーの当たり判定
+	if (Collision::CheckRay2Sphere(laserRay, playersphere) == true) {
+		player->SetHp(player->getHp() - 1);
+	}
 }

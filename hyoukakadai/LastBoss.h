@@ -35,8 +35,14 @@ private:
     Model* BossArmModel ;
 
     Object3d* BossArmObject[2];
+    //オブジェクトのインスタンス
+    Object3d* ShotObj[3] = { nullptr };
+    //モデルのインスタンス
+    Model* ShotModel = nullptr;
 
-
+    XMFLOAT3 Shot_Pos[3];
+    bool shotf[3];
+    float rt[3];
 private:
     bool ChangeAttack;
     float r = 1;
@@ -44,8 +50,7 @@ private:
     float b = 1;
     int BefHP;
     //パラメータ
-    XMFLOAT3 Shot_Pos[3];
-    bool shotf[3];
+   
     bool returnCamera;
     float returnCameraTime = 0;
     float Xspeed[3];
@@ -61,7 +66,7 @@ private:
     float BarrelsclTime;
 private:
 
-    XMFLOAT3 Boss_Pos;
+    XMFLOAT3 Boss_Pos = {60,-18,0};
     XMFLOAT3 Boss_Rot;
     XMFLOAT3 Boss_Scl = { 9,9,9 };
     static const int max = 3;
@@ -159,6 +164,8 @@ private:
     float oshake, oshakex, oshakey;
     float shake, shakex, shakey;
     int shaketime = 100;
+    bool syurikenack;
+    int syurikentimer;
     XMFLOAT2 DamageArea;
     XMFLOAT2 DamageAreaStart;
     float rotfollow;
@@ -177,7 +184,8 @@ private:
         Skewers,
         SetStartPos,
         ArmAttacks,
-        StartBattle
+        StartBattle,
+        altattackk
     };
 
     enum Phase {
@@ -216,13 +224,23 @@ private:
     int zatackEndTimer;
     int zatackStartTimer;
     bool rearm;
+    bool beamf;
+    bool beamf2=false;
+    static Ray laserRay;//マップブロックとの当たり判定にも使うからstatic
+    Sphere playersphere;
+    static bool beamatck;
+    static bool staybeam;
+    
 public:
+    bool GetSt() { return stayflag; }
+    bool GetStay() { return beamatck; }
     void colsyuri(Player* player);
     bool GetAltStay() { return stayflag; }
     void RotationDamageblock();
    // void ZAttack();
    void ZAttackTex(XMMATRIX matview, XMMATRIX matprojection, Player*player);
    void Drawtex(DirectXCommon* dxcomn);
+   void beamAtack(Player* player);
 };
 
 

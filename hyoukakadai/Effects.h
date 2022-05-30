@@ -25,6 +25,7 @@ private:
 private:
 	//エフェクト用(ただプログラムでつくれるものはプログラムで作る方がいい　多用はいくない)
 	mEffekseer* efk = nullptr;
+	mEffekseer* laefk = nullptr;
 	mEffekseer* attackefk = nullptr;
 	mEffekseer* bossattackefk = nullptr;
 	mEffekseer* Healefk = nullptr;
@@ -38,6 +39,9 @@ public:
 	XMFLOAT3 Effect_Pos = { -50.0f,-10.0f,90.0f };
 	XMFLOAT3 Effect_Rot;
 	XMFLOAT3 Effect_SCl;
+	XMFLOAT3 Effect_Pos2 = { -50.0f,-10.0f,90.0f };
+	XMFLOAT3 Effect_Rot2;
+	XMFLOAT3 Effect_SCl2;
 
 	XMFLOAT3 a_Effect_Pos = { -50.0f,-10.0f,90.0f };
 	XMFLOAT3 a_Effect_Rot;
@@ -46,11 +50,16 @@ public:
 	XMFLOAT3 b_Effect_Pos = {  };
 	XMFLOAT3 b_Effect_Rot =  {0.0f,-174.277f,0.0f};
 	XMFLOAT3 b_Effect_SCl;
+	XMFLOAT3 b_Effect_Pos2 = {  };
+	XMFLOAT3 b_Effect_Rot2 = { 0.0f,-174.277f,0.0f };
+	XMFLOAT3 b_Effect_SCl2;
 
 	bool deathf;
 	float zrot;
 	float yrot;
 public:
+	void BossAttackEffect2(DirectXCommon* dxcomn, DebugCamera* camera, bool stay, bool altAttack, XMFLOAT3 bpos);
+
 	void BossAttackEffect(DirectXCommon* dxcomn, DebugCamera* camera,bool stay, bool altAttack, XMFLOAT3 bpos);
 	void Initialize(DirectXCommon* dxcomn, DebugCamera* camera);
 	void Update(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr<Enemy>enemy[],Player*player);
@@ -61,6 +70,7 @@ public:
 	void HealEffects(bool heal);
 	void HealEffect2(bool heal);
 	void Draw(DirectXCommon*dxcomn);
+	void Draw2(DirectXCommon* dxcomn);
 	void Finalize();
 	void ImGuiDraw();
 };
