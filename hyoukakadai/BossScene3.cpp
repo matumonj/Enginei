@@ -455,7 +455,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 				Player_Rot.y = 0;
 			}
 			if (Player_Pos.z >= 1) {
-				BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
+				BaseScene* scene = new  ClearScene(sceneManager_);//次のシーンのインスタンス生成
 				sceneManager_->SetnextScene(scene);//シーンのセット
 			}
 		}
@@ -517,16 +517,9 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 	Line::CollisionEnemys(enemy);
 	Line::CollisionEnemys2group(enemy2);
 
-	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
-	//FBXのアニメーション再生
-	//if (Input::GetInstance()->Pushkey(DIK_0)) {
-///object2->PlayAnimation();
-	//}
-	//FbxTime time = 0.1f;
+
 	object2->setcounter(2);
-	//zrot += 1;
-	
-	//}
+
 	//カメラ関係の処理
 	if (Player_Pos.x <= 27.0f) {
 		camera->SetTarget({ 0,1,0 });//注視点
@@ -728,7 +721,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	effects->Draw(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
-	//object2->Draw(dxcomn->GetCmdList());
+	object2->Draw(dxcomn->GetCmdList());
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	for (int i = 0; i < 8; i++) {
 		BubbleSprite[i]->Draw();
