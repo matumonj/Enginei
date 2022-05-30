@@ -56,6 +56,7 @@ void LastBoss::Attack(Player* player)
 //初期化処理
 void LastBoss::Initialize()
 {
+	bossAction = None;
 	nTexture::LoadTexture(8, L"Resources/targetcircle.png");
 
 	damagearea[0] = nTexture::Create(8, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
@@ -109,11 +110,11 @@ void LastBoss::Initialize()
 //更新処理
 void LastBoss::Update(XMFLOAT3 position)
 {
-
+	gametimer++;
 	beamatck = beamf;
 	staybeam = beamf2;
 	texpos[0] = damagearea[0]->GetPosition();
-	RotationDamageblock();
+	
 	Old_Pos = Position;
 
 
@@ -133,7 +134,7 @@ void LastBoss::Update(XMFLOAT3 position)
 	UpDownMove(position);
 	BossObject->SetPosition(Position);
 	//BossObject->SetScale({ 2,2,2 });
-	BossObject->Update({ 1,1,1,1 });
+	BossObject->Update({ r,g,b,1 });
 	BossObject->SetRotation(Rotation);
 	for (int i = 0; i < 2; i++) {
 		syuriken[i]->SetPosition(syurikenpos[i]);
@@ -167,7 +168,7 @@ void LastBoss::Draw(DirectXCommon* dxcomn)
 	syuriken[1]->PreDraw();
 	syuriken[1]->Draw();
 	syuriken[1]->PostDraw();
-	if (zatackStartTimer != 0) {
+	if (zattack) {
 		BossArmObject[0]->PreDraw();
 		BossArmObject[0]->Draw();
 		BossArmObject[0]->PostDraw();
@@ -206,15 +207,30 @@ void LastBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200],
 
 void LastBoss::Motion(Player* player)
 {
+	RotationDamageblock();
 	atcf = zattack;
 	NormalAttacks(player);
 	colsyuri(player);
 	ZAttack(player);
+	GetDamage();
 	if (Input::GetInstance()->TriggerKey(DIK_L)) {
 		bossAction = Stay;
 	}
 	switch (bossAction)
 	{
+	case syurikenattack:
+
+		syurikenack = true;
+		rotack[0] = true;
+		rotack[1] = true;
+		
+		//bossAction = None;
+		break;
+
+	case Zattackp:
+
+		break;
+
 	case KeepPos:
 
 		break;
@@ -223,20 +239,17 @@ void LastBoss::Motion(Player* player)
 		break;
 
 	case None:
-		if (Input::GetInstance()->TriggerKey(DIK_S)) {
-			bossAction = SetStartPos;
-		}
-		
-		if (HP < MaxHP / 2) {
-			bossAction = SetStartPos;//体力が一定以下なったら初期位置に
-		}
+	
 		if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 5) {
 			Follow(player->GetPosition());
 			//MoveBlockJump();//ボスの埋まり回避用とブロック飛び越えとか
 
 		}
-		if (HP != MaxHP && HP != BefHP && HP % 4 == 0) {
-			bossAction = SetStartPos;
+		if (HP!=MaxHP&&HP %10==0) {
+			bossAction = syurikenattack;
+		}
+		if (HP == MaxHP / 2-1) {
+			bossAction = Stay;
 		}
 
 		break;
@@ -307,27 +320,7 @@ void LastBoss::appearance(float& camerapos, float position)
 
 }
 
-void LastBoss::GetDamage()
-{
 
-	if (HP == MaxHP) {
-		OldHP = HP - 1;
-	}
-	if (HP == OldHP && !damageRec) {
-		damageRec = true;
-		OldHP--;
-	}
-	if (damageRec) {
-		r = 1.0f; g = 0.2f; b = 0.0f;
-		damageRec = false;
-	} else {
-		if (r > 0.0f)r -= 0.1f;
-		if (g < 1.0f)g += 0.1f;
-		if (b < 1.0f)b += 0.1f;
-		//BossObject->SetColor({ 1,1.0f,1.0f,1 });
-	}
-	//BossObject->SetColor({ r,g,b,1.0f });
-}
 void LastBoss::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
 
 	for (int i = 0; i < 2; i++) {
@@ -402,13 +395,12 @@ void LastBoss::RotationDamageblock()
 {
 
 	if (Input::GetInstance()->TriggerKey(DIK_T)) {
-		syurikenack = true;
-		rotack[0] = true;
-		rotack[1] = true;
+		
 	}
 	if (syurikenscl[0].y >= 1.9f) {
 		syurikentimer++;
 		if (syurikentimer > 260) {
+			//bossAction = None;
 			syurikenack = false;
 			syurikentimer = 0;
 		}
@@ -434,6 +426,7 @@ void LastBoss::RotationDamageblock()
 		if (syurikenscl[0].y >= 1.9f) {
 			//sclplus[0] = 0;
 			rotack[0] = false;
+			bossAction = None;
 			//syurikentimer++;
 		}
 	}
@@ -442,7 +435,9 @@ void LastBoss::RotationDamageblock()
 		syurikenscl[1].x = Easing::EaseOut(sclplus[1], 0, 2);
 		syurikenscl[1].y = Easing::EaseOut(sclplus[1], 0, 2);
 		if (syurikenscl[1].y >= 1.9f) {
+			HP=HP - 1;
 			rotack[1] = false;
+			bossAction = None;
 		}
 	}
 	syurikenrot[0].z++;
@@ -537,7 +532,7 @@ void LastBoss::Drawtex(DirectXCommon* dcomn)
 
 void LastBoss::ZAttack(Player*player)
 {
-	if (Input::GetInstance()->TriggerKey(DIK_Z)) {
+	if (gametimer % 300 == 0 && (!syurikenack&& !stayflag&&!beamf)) {
 		zattack = true;
 		zatackEndTimer = 0;
 
@@ -585,6 +580,7 @@ void LastBoss::ZAttack(Player*player)
 			else {
 				rearm = false;
 				zattack = false;
+				bossAction = None;
 			}
 		}
 		damagearea[0]->SetPosition(oldplayerpos);
@@ -599,6 +595,12 @@ void LastBoss::ZAttack(Player*player)
 
 void LastBoss::beamAtack(Player*player)
 {
+	//私レイキャストをこっちに入れておりません
+	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
+	playersphere.radius = 5.0f;
+	laserRay.start = { Position.x,Position.y + 0.5f,Position.z };
+	laserRay.dir = { -1,0,0 };
+
 	stayflag = false;
 	Attackcount++;
 	if (Attackcount > 50) {
@@ -615,5 +617,40 @@ void LastBoss::beamAtack(Player*player)
 	//ボスビームのレイとプレイやーの当たり判定
 	if (Collision::CheckRay2Sphere(laserRay, playersphere) == true) {
 		player->SetHp(player->getHp() - 1);
+	}
+}
+
+
+void LastBoss::GetDamage()
+{
+
+	if (HP == MaxHP) {
+		OldHP = HP - 1;
+	}
+	if (HP == OldHP && !damageRec) {
+		damageRec = true;
+		OldHP--;
+	}
+	if (damageRec) {
+		r = 1.0f; g = 0.2f; b = 0.0f;
+		damageRec = false;
+	} else {
+		if (r > 0.0f)r -= 0.05f;
+		if (g < 1.0f)g += 0.05f;
+		if (b < 1.0f)b += 0.05f;
+		//BossObject->SetColor({ 1,1.0f,1.0f,1 });
+	}
+	BossObject->SetColor({ r,g,b,1.0f });
+
+	if (HP == 1) {
+		BossObject->SetColor({ 1,0,0,1.0f });
+
+		dtime++;
+		if (Rotation.z > -180) {
+			Rotation.z - 5 * dtime;
+		} else {
+			SetHP(0);
+			dtime = 0;
+		}
 	}
 }

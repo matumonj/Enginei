@@ -293,7 +293,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	Line::CollisionEnemys(&bossenemy);
 
-	if (LastBoss::GetInstance()->GetAtc())
+	if (LastBoss::GetInstance()->GetAtc()&&bossenemy!=nullptr)
 	{
 
 		if (shaketime != 0) {
@@ -349,7 +349,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	player->Attack(Player_Pos);
 	//for (int i = 0; i < 2; i++) {
-	player->CollisionAttack(&bossenemy, Player_Pos);
+	player->CollisionAttack1(bossenemy.get(), Player_Pos);
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
@@ -367,7 +367,10 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 			bossenemy->EnemySearchPlayer(player);
 			bossenemy->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
-			
+
+			effects->BossAttackEffect(dxCommon, camera, j, LastBoss::GetInstance()->GetAtc(), LastBoss::GetInstance()->Gettexpos());
+			effects->BossAttackEffect2(dxCommon, camera, LastBoss::GetInstance()->GetSt(), LastBoss::GetInstance()->GetStay(), bossenemy->GetPosition());
+
 			//もし敵が死んだら破棄
 			if (bossenemy->GetState_DEAD() == true) {
 				Destroy_unique(bossenemy);
@@ -376,9 +379,6 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		//	LastBoss::GetInstance()->ZAttackTex(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player);
 
 		}
-
-		effects->BossAttackEffect(dxCommon, camera, j, LastBoss::GetInstance()->GetAtc(), LastBoss::GetInstance()->Gettexpos());
-		effects->BossAttackEffect2(dxCommon, camera, LastBoss::GetInstance()->GetSt(), LastBoss::GetInstance()->GetStay(),bossenemy->GetPosition());
 
 	item->HealEfficasy(player);
 	item->Update(&bossenemy);

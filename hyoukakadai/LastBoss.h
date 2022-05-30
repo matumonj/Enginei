@@ -76,7 +76,7 @@ private:
     float bosstime = 0;
     int Attackcount = 0;
 
-    const int MaxHP = 20;//‘Ì—Í‚Ì‰Šú’l
+    const int MaxHP = 30;//‘Ì—Í‚Ì‰Šú’l
 
     bool bossjumpflag2 = false;
 private:
@@ -185,9 +185,11 @@ private:
         SetStartPos,
         ArmAttacks,
         StartBattle,
-        altattackk
+        altattackk,
+        Zattackp,
+        syurikenattack
     };
-
+    int gametimer=1;
     enum Phase {
         StartFloor,
         SecondFloor,
@@ -230,8 +232,9 @@ private:
     Sphere playersphere;
     static bool beamatck;
     static bool staybeam;
-    
+    int dtime;
 public:
+   // void GetDamage();
     bool GetSt() { return stayflag; }
     bool GetStay() { return beamatck; }
     void colsyuri(Player* player);

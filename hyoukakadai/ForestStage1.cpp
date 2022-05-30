@@ -442,7 +442,7 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	objUpdate();//オブジェクトの更新処理
 
 	effects->Update(dxCommon, camera, enemy, player);
-	effects->Update(dxCommon, camera, enemy1, player);
+	effects->Update2(dxCommon, camera, enemy1, player);
 	//enemyにnullptr代入するときは敵が死んだら
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
@@ -483,6 +483,8 @@ void ForestStage1::Update(DirectXCommon* dxCommon)
 	item1->HealEfficasy(player);
 	item->Update(enemy);
 	item1->Update(enemy1);
+	
+	effects->HealEffect(item->ColItem(), item1->ColItem());
 	Fader::FeedSpriteUpdate();
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
