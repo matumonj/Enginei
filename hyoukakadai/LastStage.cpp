@@ -380,7 +380,7 @@ void LastStage::Update(DirectXCommon* dxCommon)
 				Player_Rot.y = 0;
 			}
 			if (Player_Pos.z >= 1) {
-				BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
+				BaseScene* scene = new  ClearScene(sceneManager_);//次のシーンのインスタンス生成
 				sceneManager_->SetnextScene(scene);//シーンのセット
 			}
 		}

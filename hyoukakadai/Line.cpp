@@ -20,7 +20,7 @@ float Line::subradius = 0;
 float Line::Startsubradius = 2.0f;
 float Line::olddistance = 0;
 const float Line::LengThenSpeed = 1.0f;
-const float Line::MaxLen = 30.0f;
+const float Line::MaxLen = 25.0f;
 const float Line::MinLen = 0.0f;
 float Line::timer = 0.0;
 float Line::LimitGauge, Line::necolor = 1, Line::twcolor = 1;
