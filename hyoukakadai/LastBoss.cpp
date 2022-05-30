@@ -56,6 +56,7 @@ void LastBoss::Attack(Player* player)
 //初期化処理
 void LastBoss::Initialize()
 {
+	Scale = { 1,1,1};
 	bossAction = None;
 	nTexture::LoadTexture(8, L"Resources/targetcircle.png");
 
@@ -64,6 +65,12 @@ void LastBoss::Initialize()
 
 	damagearea[1] = nTexture::Create(8, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	damagearea[1]->CreateNormalTexture();
+
+	damagearea2[0] = nTexture::Create(8, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
+	damagearea2[0]->CreateNormalTexture();
+
+	damagearea2[1] = nTexture::Create(8, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
+	damagearea2[1]->CreateNormalTexture();
 
 	syurikenm = Model::CreateFromOBJ("syuriken");
 	syuriken[0] = Object3d::Create();
@@ -93,6 +100,13 @@ void LastBoss::Initialize()
 	BossArmObject[1] = Object3d::Create();
 	BossArmObject[1]->SetModel(BossArmModel);
 	BossArmObject[1]->Initialize();
+	BossArmObject2[0] = Object3d::Create();
+	BossArmObject2[0]->SetModel(BossArmModel);
+	BossArmObject2[0]->Initialize();
+	//syurikenm = Model::CreateFromOBJ("syuriken");
+	BossArmObject2[1] = Object3d::Create();
+	BossArmObject2[1]->SetModel(BossArmModel);
+	BossArmObject2[1]->Initialize();
 	//モデルの読込
 	ShotModel = Model::CreateFromOBJ("sphere");
 
@@ -103,6 +117,7 @@ void LastBoss::Initialize()
 
 	}
 	//Rotation.z = 0;
+	Position.y = -18;
 	HP = MaxHP;
 
 }//
@@ -128,12 +143,14 @@ void LastBoss::Update(XMFLOAT3 position)
 	//Arm_Rot[1].z = rotfollow  ;//60=角度調整用 180=反転
 	GetDamage();
 	//モブ
-	Rotation.x = 60;
-	Position.y = -18;
+	//Rotation.x = 60;
+	//Position.y = -18;
 	Position.z = 0;
 	UpDownMove(position);
+
+	//Scale.x -= 0.001f;
 	BossObject->SetPosition(Position);
-	//BossObject->SetScale({ 2,2,2 });
+	BossObject->SetScale(Scale);
 	BossObject->Update({ r,g,b,1 });
 	BossObject->SetRotation(Rotation);
 	for (int i = 0; i < 2; i++) {
@@ -147,6 +164,11 @@ void LastBoss::Update(XMFLOAT3 position)
 		BossArmObject[i]->SetScale({4, konbouscl, 4});
 
 		BossArmObject[i]->Update({ 1,1,1,1 });
+		BossArmObject2[i]->SetPosition({ damagearea2[i]->GetPosition().x,damagearea2[i]->GetPosition().y,damagearea2[i]->GetPosition().z + 10 });
+		BossArmObject2[i]->SetRotation({ 90,0,0 });
+		BossArmObject2[i]->SetScale({ 4, konbouscl2, 4 });
+
+		BossArmObject2[i]->Update({ 1,1,1,1 });
 	}
 	for (int i = 0; i < 3; i++) {
 		if (ShotObj[i] != nullptr) {
@@ -176,12 +198,22 @@ void LastBoss::Draw(DirectXCommon* dxcomn)
 		BossArmObject[1]->Draw();
 		BossArmObject[1]->PostDraw();
 	}
+	if (zattack2) {
+		BossArmObject2[0]->PreDraw();
+		BossArmObject2[0]->Draw();
+		BossArmObject2[0]->PostDraw();
+		BossArmObject2[1]->PreDraw();
+		BossArmObject2[1]->Draw();
+		BossArmObject2[1]->PostDraw();
+	}
 	BossObject->PreDraw();
 	BossObject->Draw();
 	BossObject->PostDraw();
 	nTexture::PreDraw(dxcomn->GetCmdList());
 	damagearea[0]->Draw();
 	damagearea[1]->Draw();
+	damagearea2[0]->Draw();
+	damagearea2[1]->Draw();
 	nTexture::PostDraw();
 
 	for (int i = 0; i < 3; i++) {
@@ -203,7 +235,26 @@ void LastBoss::Finalize()
 
 }
 void LastBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y)
-{}
+{
+
+	//
+
+	for (int i = 0; i < X; i++) {
+		for (int j = 0; j < Y; j++) {
+			for (int k = 0; k < 3; k++) {
+				if (map[j][i] == 1 || map[j][i] == 2) {
+					if (Collision::GetLen(tst[j][i]->GetPosition(), Shot_Pos[k]) < 2) {
+						shotf[k] = false;
+						//hitcol[k] = true;
+						break;
+					}
+
+				}
+			}
+		}
+	}
+	GetDamageMove(map, tst);
+}
 
 void LastBoss::Motion(Player* player)
 {
@@ -212,6 +263,7 @@ void LastBoss::Motion(Player* player)
 	NormalAttacks(player);
 	colsyuri(player);
 	ZAttack(player);
+	ZAttack2(player);
 	GetDamage();
 	if (Input::GetInstance()->TriggerKey(DIK_L)) {
 		bossAction = Stay;
@@ -270,11 +322,13 @@ void LastBoss::Motion(Player* player)
 		}
 		break;
 
-	case Stay://ビーム前の待機
+	case Stay://ビーム前の待機]
+		Scale = { 1,1,1 };
 		stayflag = true;
 		StayCount++;
 		if (StayCount > 200) {
 			beamatck = true;
+			beamf = true;
 			bossAction = altattackk;
 			StayCount = 0;
 		}
@@ -288,6 +342,7 @@ void LastBoss::Motion(Player* player)
 
 		break;
 	case altattackk:
+		Scale = { 1,1,1 };
 		beamAtack(player);
 		break;
 	default:
@@ -306,9 +361,10 @@ void LastBoss::Follow(XMFLOAT3 position)
 	float centerSpeed = 0.1f;
 	angleX = (position.x - Position.x);
 	angleZ = (position.y - Position.y);
-	angleR = sqrtf((Position.x - position.x) * (Position.x - position.x));
+	angleR = sqrtf((Position.x - position.x) * (Position.x - position.x)+ (Position.y - position.y) * (Position.y - position.y));
 
 	Position.x += (angleX / angleR) * (bossmovespeed / 2);
+	Position.y += (angleZ / angleR) * (bossmovespeed / 2);
 
 }
 
@@ -328,6 +384,11 @@ void LastBoss::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 p
 		damagearea[i]->SetColor({ 1,1,1,zalpha });
 
 		damagearea[i]->Update(matview, matprojection);
+
+		damagearea2[i]->SetScale({ texscl2 });
+		damagearea2[i]->SetColor({ 1,1,1,zalpha2 });
+
+		damagearea2[i]->Update(matview, matprojection);
 	}
 }
 
@@ -342,13 +403,11 @@ void LastBoss::NormalAttacks(Player* player)
 			if (!shotf[i]) {
 				//shotf[i] = true;
 				//if (Input::GetInstance()->TriggerKey(DIK_S)) {
-				if (!ChangeAttack) {
+				//if (!ChangeAttack) {
 					shotf[i] = true;
 					BarrelRec = true;
-				} else {
-					delete ShotObj[i];
-					ShotObj[i] = nullptr;
-				}
+				//} else {
+				
 				//}
 
 				Shot_Pos[i] = { Position };
@@ -586,6 +645,7 @@ void LastBoss::ZAttack(Player*player)
 		damagearea[0]->SetPosition(oldplayerpos);
 		damagearea[1]->SetPosition({ oldplayerpos.x + 20,oldplayerpos.y,oldplayerpos.z
 			});
+	
 		zalpha = 1;
 	}
 	konbouscl = max(konbouscl, 0);
@@ -629,10 +689,13 @@ void LastBoss::GetDamage()
 	}
 	if (HP == OldHP && !damageRec) {
 		damageRec = true;
+		
 		OldHP--;
 	}
 	if (damageRec) {
 		r = 1.0f; g = 0.2f; b = 0.0f;
+		GetDamageSclx = true;
+		GetDamageScly = true;
 		damageRec = false;
 	} else {
 		if (r > 0.0f)r -= 0.05f;
@@ -653,4 +716,122 @@ void LastBoss::GetDamage()
 			dtime = 0;
 		}
 	}
+	
+}
+
+void LastBoss::GetDamageMove(int map[20][200], std::unique_ptr<Object3d>  tst[20][200])
+{
+	if (damageRec) {
+
+	}
+	if (GetDamageSclx) {
+		if (Scale.x >= 0) {
+			Scale.x -= 0.1f;
+		} else {
+			//movearea = true;
+			//Scale.x = 1;
+			GetDamageSclx = false;
+		}
+	}
+	if (GetDamageScly) {
+
+		if (Scale.y <= 3) {
+			Scale.y += 0.1f;
+		} else {
+			movearea = true;
+			//Scale.y = 1;
+			GetDamageScly = false;
+		}
+	}
+	
+	if (movearea&&(!beamf&&!stayflag)) {
+		for (int i = 0; i < 200; i++) {
+			for (int j = 0; j < 20; j++) {
+				if (map[j][i] == mapnum) {
+					Position = tst[j][i]->GetPosition();
+					Scale.x = 1;
+					Scale.y = 1;
+				}
+			}
+		}
+		mapnum++;
+		if (mapnum > 54) {
+			mapnum = 50;
+		}
+		movearea = false;
+	}
+	if (stayflag || beamf) {
+		for (int i = 0; i < 200; i++) {
+			for (int j = 0; j < 20; j++) {
+				if (map[j][i] == 54) {
+					Position = tst[j][i]->GetPosition();
+					Scale.x = 1;
+					Scale.y = 1;
+				}
+			}
+		}
+	}
+}
+void LastBoss::ZAttack2(Player*player)
+{
+	if (HP<MaxHP/2&& gametimer % 350 == 0 && (!syurikenack && !stayflag && !beamf)) {
+		zattack2 = true;
+		zatackEndTimer2 = 0;
+
+	}
+	if (!zattack2) {
+		if (texscl2.x >= 0) {
+			texscl2.x -= 0.5f;
+			texscl2.y -= 0.5f;
+		}
+		oldplayerpos2 = player->GetPosition();
+		oldplayerpos2.z = player->GetPosition().z + 20;
+		zalpha2 = 0;
+		konbouscl2 = 0;
+	} else {
+		if (texscl2.x <= 2 && !rearm2) {
+			texscl2.x += 0.1f;
+			texscl2.y += 0.1f;
+		} else {
+			zatackStartTimer2++;
+		}
+		if (zatackStartTimer2 > 105) {
+			if (konbouscl2 < 5 && zatackEndTimer2 == 0 && !rearm2) {
+				konbouscl2 += 0.5;
+			} else {
+				zatackEndTimer2++;
+				if (zatackEndTimer2 > 45) {
+					rearm2 = true;
+				}
+			}
+		}
+		if (rearm2) {
+			if (konbouscl2 > 0) {
+				konbouscl2 -= 0.5f;
+				//zatackEndTimer = 0;
+				zatackStartTimer2 = 0;
+				//zattack = false;
+			} else {
+				//rearm = false;
+			}
+			if (texscl2.x > 0) {
+				texscl2.x -= 0.1f;
+				texscl2.y -= 0.1f;
+			} else {
+				rearm2 = false;
+				zattack2 = false;
+				bossAction = None;
+			}
+		}
+		
+		//	if (HP < 20) {
+		damagearea2[0]->SetPosition({ oldplayerpos2.x - 15,oldplayerpos2.y,oldplayerpos2.z });;
+		damagearea2[1]->SetPosition({ oldplayerpos2.x + 35,oldplayerpos2.y,oldplayerpos2.z });
+
+		//	}
+		zalpha2 = 1;
+	}
+	konbouscl2 = max(konbouscl2, 0);
+	konbouscl2 = min(konbouscl2, 5);
+
 }

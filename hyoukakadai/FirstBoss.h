@@ -156,6 +156,7 @@ class FirstBoss :
         BossAction bossAction =StartBattle;
         static bool stayflag;
     public:
+        void GetDamageMove();
         bool GetAltStay() { return stayflag; }
 };
 

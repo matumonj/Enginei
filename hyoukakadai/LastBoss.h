@@ -35,6 +35,7 @@ private:
     Model* BossArmModel ;
 
     Object3d* BossArmObject[2];
+    Object3d* BossArmObject2[2];
     //オブジェクトのインスタンス
     Object3d* ShotObj[3] = { nullptr };
     //モデルのインスタンス
@@ -218,14 +219,24 @@ private:
     OBBCollision* ps2 = nullptr;
     OBBCollision* ps3= nullptr;
     nTexture* damagearea[2];
+    nTexture* damagearea2[2];
     bool zattack;
+    bool zattack2;
     XMFLOAT3 oldplayerpos;
+    XMFLOAT3 oldplayerpos2;
     XMFLOAT3 texscl;
     float konbouscl;
     float zalpha;
     int zatackEndTimer;
     int zatackStartTimer;
     bool rearm;
+    //
+    XMFLOAT3 texscl2;
+    float konbouscl2;
+    float zalpha2;
+    int zatackEndTimer2;
+    int zatackStartTimer2;
+    bool rearm2;
     bool beamf;
     bool beamf2=false;
     static Ray laserRay;//マップブロックとの当たり判定にも使うからstatic
@@ -233,6 +244,10 @@ private:
     static bool beamatck;
     static bool staybeam;
     int dtime;
+    bool GetDamageSclx;
+    bool GetDamageScly;
+    int mapnum=50;
+    bool movearea;
 public:
    // void GetDamage();
     bool GetSt() { return stayflag; }
@@ -241,9 +256,11 @@ public:
     bool GetAltStay() { return stayflag; }
     void RotationDamageblock();
    // void ZAttack();
+    void GetDamageMove(int map[20][200], std::unique_ptr<Object3d>  tst[20][200]);
    void ZAttackTex(XMMATRIX matview, XMMATRIX matprojection, Player*player);
    void Drawtex(DirectXCommon* dxcomn);
    void beamAtack(Player* player);
+   void ZAttack2(Player* player);
 };
 
 
