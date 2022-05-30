@@ -33,7 +33,7 @@ void ThrowEnemy::Initialize()
 
 	//ƒ‚ƒfƒ‹‚Ì“Ç
 	for (int i = 0; i < _countof(ThrowModel); i++) {
-		ThrowModel[i] = Model::CreateFromOBJ("sphere");
+		ThrowModel[i] = Model::CreateFromOBJ("iwa");
 		//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 		//MobObject = new Object3d();
 		ThrowObj[i] = Object3d::Create();
