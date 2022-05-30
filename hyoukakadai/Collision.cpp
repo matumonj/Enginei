@@ -258,6 +258,8 @@ void Collision::CollisionMap(int map[20][200], std::unique_ptr<Object3d> tst[20]
 {
 	float height;//
 	float width;
+
+	
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
 			if (map[j][i] == MAP_NUMBER ) {

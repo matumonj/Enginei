@@ -70,10 +70,10 @@ void ForestBoss::Initialize()
 	//ƒ‚ƒfƒ‹Š„‚è“–‚Ä
 	BossObject = Object3d::Create();
 	BossObject->SetModel(BossModel);
-	BarrelModel= Model::CreateFromOBJ("arm");
-	SkewersBossModel= Model::CreateFromOBJ("enemy2");
+	BarrelModel= Model::CreateFromOBJ("taihou");
+	SkewersBossModel= Model::CreateFromOBJ("arm");
 	ShotModel = Model::CreateFromOBJ("sphere");
-	BossArmModel = Model::CreateFromOBJ("enemy2");
+	BossArmModel = Model::CreateFromOBJ("arm");
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i] = Object3d::Create();
 		SkewersObject[i]->SetModel(SkewersBossModel);
@@ -165,7 +165,7 @@ void ForestBoss::Update(XMFLOAT3 position)
 	for (int i = 0; i < max; i++) {
 		SkewersObject[i]->Update({ 1,1,1,1 });
 	}
-	NuclearObj->SetPosition(Nuclear_Pos);
+	NuclearObj->SetPosition({ Nuclear_Pos.x+4, Nuclear_Pos.y, Nuclear_Pos.z });
 	NuclearObj->SetRotation({ 0,Rot_Nuclear,0 });
 	NuclearObj->SetScale({ 2,2,2 });
 	NuclearObj->Update({ r,g,b,1 });
@@ -270,7 +270,9 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 {
 	for (int i = 0; i < 2; i++) {
 		BossArmObj[i]->PreDraw();
-		// BossArmObj[i]->Draw();
+		if (ChangeAttack) {
+			BossArmObj[i]->Draw();
+		}
 		BossArmObj[i]->PostDraw();
 	}
 	
@@ -517,7 +519,7 @@ void ForestBoss::collisionArm(Player* player)
 	earmobb_right.m_NormaDirect[1] = { BossArmObj[0]->GetMatrot().r[1].m128_f32[0], BossArmObj[0]->GetMatrot().r[1].m128_f32[1], BossArmObj[0]->GetMatrot().r[1].m128_f32[2] };
 	earmobb_right.m_NormaDirect[2] = { BossArmObj[0]->GetMatrot().r[2].m128_f32[0], BossArmObj[0]->GetMatrot().r[2].m128_f32[1], BossArmObj[0]->GetMatrot().r[2].m128_f32[2] };
 	earmobb_right.m_fLength[0] = Arm_Scl[0].x;//x•ûŒü‚Ì’·‚³
-	earmobb_right.m_fLength[1] = Arm_Scl[0].y * 2;//y•ûŒü‚Ì’·‚³
+	earmobb_right.m_fLength[1] = Arm_Scl[0].y * 5;//y•ûŒü‚Ì’·‚³
 	earmobb_right.m_fLength[2] = Arm_Scl[0].z;//z•ûŒü‚Ì’·‚³
 	//OBB‚ÌÝ’èˆÊ’u
 	pobb.m_Pos = { player->GetPosition().x,player->GetPosition().y,player->GetPosition().z };
@@ -534,7 +536,7 @@ void ForestBoss::collisionArm(Player* player)
 	earmobb_left.m_NormaDirect[1] = { BossArmObj[1]->GetMatrot().r[1].m128_f32[0], BossArmObj[1]->GetMatrot().r[1].m128_f32[1], BossArmObj[1]->GetMatrot().r[1].m128_f32[2] };
 	earmobb_left.m_NormaDirect[2] = { BossArmObj[1]->GetMatrot().r[2].m128_f32[0], BossArmObj[1]->GetMatrot().r[2].m128_f32[1], BossArmObj[1]->GetMatrot().r[2].m128_f32[2] };
 	earmobb_left.m_fLength[0] = Arm_Scl[1].x;//x•ûŒü‚Ì’·‚³
-	earmobb_left.m_fLength[1] = Arm_Scl[1].y*2;//y•ûŒü‚Ì’·‚³
+	earmobb_left.m_fLength[1] = Arm_Scl[1].y*3;//y•ûŒü‚Ì’·‚³
 	earmobb_left.m_fLength[2] = Arm_Scl[1].z;//z•ûŒü‚Ì’·‚³
 	//OBB‚ÌÝ’èˆÊ’u
 	pobb.m_Pos = { player->GetPosition().x,player->GetPosition().y,player->GetPosition().z };
@@ -552,11 +554,16 @@ void ForestBoss::ArmAytack(Player*player)
 	ArmAttackCount++;
 	if (ArmAttackCount%300==0) {
 		ArmAttackflag = true;
+		//armattacktime = 0;
 	}
+	
 	if (ArmAttackflag) {
-		armattacktime += 0.05f;
+	if (Arm_Scl[0].y <= OldArm_Scl[0].y + 5) {
+			armattacktime += 0.005f;
+			//armattacktime += 0.05f;
+		}
 		Arm_Scl[0].y = Easing::EaseOut(armattacktime, OldArm_Scl[0].y, OldArm_Scl[0].y+5);
-		if (Collision::GetLen({ OldArm_Scl[0].x,OldArm_Scl[0].y+10,OldArm_Scl[0].z }, Arm_Scl[0]) < 1) {
+		if (Arm_Scl[0].y > OldArm_Scl[0].y + 4.9) {
 			ArmAttackflag = false;
 			armreturn=true;
 			armattacktime = 0.0f;
@@ -602,8 +609,12 @@ void ForestBoss::ArmAttack_Left(Player* player)
 		ArmAttackflag = true;
 	}
 	if (Sec_ArmAttackflag) {
-		Sec_armattacktime += 0.05f;
-		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime, OldArm_Scl[1].y, OldArm_Scl[1].y + 5);
+		
+		if (Arm_Scl[1].y <= OldArm_Scl[1].y + 2) {
+			Sec_armattacktime += 0.05f;
+			//Sec_armattacktime = 0.05f;
+		}
+		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime, OldArm_Scl[1].y, OldArm_Scl[1].y + 2);
 		if (Collision::GetLen({ OldArm_Scl[1].x,OldArm_Scl[1].y + 10,OldArm_Scl[1].z }, Arm_Scl[1]) < 1) {
 			Sec_ArmAttackflag = false;
 			Sec_armreturn = true;

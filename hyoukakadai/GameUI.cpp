@@ -55,7 +55,7 @@ void GameUI::UISpriteSet()
 	//ì‡òg
 	Sprite::LoadTexture(110, L"Resources/hp.png");
 	//íçà”
-	Sprite::LoadTexture(120, L"Resources/linemax.png");
+	Sprite::LoadTexture(120, L"Resources/hp.png");
 	HPout= Sprite::Create(110, { 0.0f,-200.0f });
 	lineOutui= Sprite::Create(120, { 0.0f,-200.0f });
 	LineLengthout = Sprite::Create(10, { 0.0f,-200.0f });
