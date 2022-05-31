@@ -35,9 +35,10 @@ void FirstBossScene::SpriteCreate()
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
-	Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	Sprite::LoadTexture(1, L"Resources/home.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
+	background = Sprite::Create(1, { 0.0f,0.0f });
 }
 #pragma endregion
 
@@ -47,7 +48,7 @@ void FirstBossScene::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("box1");
+	tstmodel = Model::CreateFromOBJ("homeblock");
 	goalmodel = Model::CreateFromOBJ("goalmo");
 
 	item = new Item();
@@ -104,6 +105,13 @@ void FirstBossScene::SetPrm()
 			tst[j][i]->SetScale({ tst_Scl });
 		}
 	}
+
+	background->SetPosition({ 0, 0 });
+	background->SetSize({ WinApp::window_width,WinApp::window_height });
+	background->setcolor({ 1,1,1,1 });
+
+	object1->SetPosition({ Player_Pos });
+	object1->SetRotation({ Player_Rot });
 }
 #pragma endregion
 
@@ -156,7 +164,7 @@ void FirstBossScene::Initialize(DirectXCommon* dxCommon)
 	attackeffects->Initialize(dxCommon, camera);
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -176,6 +184,8 @@ void FirstBossScene::Initialize(DirectXCommon* dxCommon)
 	camerapositiony = -4.5f;
 	camerapositionz = -12.15f;
 	bossenemy->Setposition({ 57,-4,0 });
+
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -188,47 +198,18 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
-	LONG u_r = 32768;
-	LONG a = 30000;
+	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 
-	//左
-	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time,Player_Rot);
-	///////// コントローラー //////////
-	// スティックの方向判定
-	// 無反応範囲
-
-	//左
-	//方向だけを調べる方法
-		if (Input::GetInstance()->GetCMove().lX < u_r - a)
-		{
-			// 左に傾けた
-			Player_Pos.x -= moveSpeed;
-
-		} else if (Input::GetInstance()->GetCMove().lX > u_r + a)
-		{
-			// 右に傾けた
-			Player_Pos.x += moveSpeed;
-		}
+	}
 
 		//FBXモデルの更新
 		object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-		if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
-			Player_Pos.x += moveSpeed;
-		}
-		if (Input::GetInstance()->Pushkey(DIK_LEFT)) {
-			Player_Pos.x -= moveSpeed;
-		}
 
 
-	///これより上に入力処理をかけ
-	////当たり判定
-
-	//入力処理より後に当たり判定を描け
 
 	GameUI::BossUIUpdate(bossenemy.get());
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
-
-	//Collision::CollisionMap(map, tst, mapx, mapy, 200, 20, grav, time, moveSpeed, jumpFlag, Player_Pos, Old_Pos,1);
 
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -242,6 +223,9 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	} else {
 		grav = 0.03f;
 	}
+
+	time += 0.04f;
+	Player_Pos.y -= grav * time * time;
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -257,10 +241,6 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 
 	Line::CollisionEnemy(bossenemy.get());
 	//weffect->Update(dxcomn,camera,player[0]->GetPosition(),Line::GetInstance()->Getboundflag());
-	//FBXのアニメーション再生
-	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		object1->PlayAnimation();
-	}
 	XMFLOAT3 bpos;
 	if (bossenemy != nullptr) {
 		bpos = bossenemy->GetPosition();
@@ -329,9 +309,7 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 #pragma region モデルの描画
 void FirstBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	player->PreDraw();
-	player->Draw();
-	player->PostDraw();
+
 
 	if (bossenemy != nullptr) {
 		bossenemy->Draw(dxcomn);
@@ -353,7 +331,7 @@ void FirstBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 void FirstBossScene::MyGameDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
-
+	background->Draw();
 	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
 	Sprite::PostDraw(dxcomn->GetCmdList());
 

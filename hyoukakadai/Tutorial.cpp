@@ -8,6 +8,8 @@
 #include"BossEnemy.h"
 #include"ThrowEnemy.h"
 #include"Line.h"
+#include"Retry.h"
+#include"GamOver.h"
 #include"Destroy.h"
 #include"Fader.h"
 #include"DesertField.h"
@@ -229,7 +231,7 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 					Player_Rot.y = 0;
 				}
 				if (Player_Pos.z >= 1) {
-					BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new  FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
@@ -320,11 +322,12 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		GameUI::PlayerUIUpdate(player);
 
 	//シーンチェンジ
-	if (tyutorial->Gethh()&& Input::GetInstance()->TriggerButtonA() || Input::GetInstance()->TriggerKey(DIK_N)) {//押されたら
-		BaseScene* scene = new  FirstBossScene(sceneManager_);//次のシーンのインスタンス生成
-		sceneManager_->SetnextScene(scene);//シーンのセット
-		//delete scene;
-	}
+		if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+			Retry::SetStage(Sea_1_1);
+			BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+			//delete scene;
+		}
 }
 #pragma endregion 
 
