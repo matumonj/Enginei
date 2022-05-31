@@ -14,6 +14,8 @@
 #include"SeaScene1.h"
 #include"BossScene2.h"
 #include"Fader.h"
+#include"LastBossScene.h"
+#include"LastStage.h"
 GamOver::GamOver(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
 {
@@ -66,6 +68,15 @@ void GamOver::Update(DirectXCommon* dxCommon)
 		}
 		if (Retry::getStage() == Jungle_1_3) {
 			BaseScene* scene = new BossScene2(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+
+		}
+		if (Retry::getStage() == Cas_1_1) {
+			BaseScene* scene = new LastStage(sceneManager_);//次のシーンのインスタンス生成
+			sceneManager_->SetnextScene(scene);//シーンのセット
+		}
+		if (Retry::getStage() == Cas_1_2) {
+			BaseScene* scene = new LastBossScene(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
 
 		}

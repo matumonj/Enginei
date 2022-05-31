@@ -553,9 +553,9 @@ void LastBoss::RotationDamageblock()
 	}
 	if (rotack[0]) {
 		sclplus[0] += 0.01f;
-		syurikenscl[0].x=Easing::EaseOut(sclplus[0], 0, 2);
-		syurikenscl[0].y = Easing::EaseOut(sclplus[0], 0, 2);
-		if (syurikenscl[0].y >= 1.9f) {
+		syurikenscl[0].x=Easing::EaseOut(sclplus[0], 0, 2.5);
+		syurikenscl[0].y = Easing::EaseOut(sclplus[0], 0, 2.5);
+		if (syurikenscl[0].y >=2.4f) {
 			//sclplus[0] = 0;
 			rotack[0] = false;
 			bossAction = None;
@@ -564,9 +564,9 @@ void LastBoss::RotationDamageblock()
 	}
 	if (rotack[1]) {
 		sclplus[1] += 0.01f;
-		syurikenscl[1].x = Easing::EaseOut(sclplus[1], 0, 2);
-		syurikenscl[1].y = Easing::EaseOut(sclplus[1], 0, 2);
-		if (syurikenscl[1].y >= 1.9f) {
+		syurikenscl[1].x = Easing::EaseOut(sclplus[1], 0, 2.5f);
+		syurikenscl[1].y = Easing::EaseOut(sclplus[1], 0, 2.5f);
+		if (syurikenscl[1].y >= 2.4f) {
 			HP=HP - 1;
 			rotack[1] = false;
 			bossAction = None;
@@ -589,7 +589,7 @@ void LastBoss::colsyuri(Player*player)
 	syuriken0.m_NormaDirect[1] = { syuriken[0]->GetMatrot().r[1].m128_f32[0], syuriken[0]->GetMatrot().r[1].m128_f32[1], syuriken[0]->GetMatrot().r[1].m128_f32[2] };
 	syuriken0.m_NormaDirect[2] = { syuriken[0]->GetMatrot().r[2].m128_f32[0], syuriken[0]->GetMatrot().r[2].m128_f32[1], syuriken[0]->GetMatrot().r[2].m128_f32[2] };
 	syuriken0.m_fLength[0] = syurikenscl[0].x*0.5;//x方向の長さ
-	syuriken0.m_fLength[1] = syurikenscl[0].y * 5.5;//y方向の長さ
+	syuriken0.m_fLength[1] = syurikenscl[0].y * 4.5;//y方向の長さ
 	syuriken0.m_fLength[2] = syurikenscl[0].z;//z方向の長さ
 	//OBBの設定位置
 	pobb.m_Pos = { player->GetPosition().x,player->GetPosition().y,player->GetPosition().z };
@@ -606,7 +606,7 @@ void LastBoss::colsyuri(Player*player)
 	syuriken1.m_NormaDirect[1] = { syuriken[1]->GetMatrot().r[1].m128_f32[0], syuriken[1]->GetMatrot().r[1].m128_f32[1], syuriken[1]->GetMatrot().r[1].m128_f32[2] };
 	syuriken1.m_NormaDirect[2] = { syuriken[1]->GetMatrot().r[2].m128_f32[0], syuriken[1]->GetMatrot().r[2].m128_f32[1], syuriken[1]->GetMatrot().r[2].m128_f32[2] };
 	syuriken1.m_fLength[0] = syurikenscl[1].x*0.5;//x方向の長さ
-	syuriken1.m_fLength[1] = syurikenscl[1].y * 5.5;//y方向の長さ
+	syuriken1.m_fLength[1] = syurikenscl[1].y * 4.5;//y方向の長さ
 	syuriken1.m_fLength[2] = syurikenscl[1].z;//z方向の長さ
 	//OBBの設定位置
 	pobb.m_Pos = { player->GetPosition().x,player->GetPosition().y,player->GetPosition().z };
@@ -621,7 +621,7 @@ void LastBoss::colsyuri(Player*player)
 	syuriken2.m_NormaDirect[0] = { syuriken[0]->GetMatrot().r[0].m128_f32[0],syuriken[0]->GetMatrot().r[0].m128_f32[1],syuriken[0]->GetMatrot().r[0].m128_f32[2] };
 	syuriken2.m_NormaDirect[1] = { syuriken[0]->GetMatrot().r[1].m128_f32[0], syuriken[0]->GetMatrot().r[1].m128_f32[1], syuriken[0]->GetMatrot().r[1].m128_f32[2] };
 	syuriken2.m_NormaDirect[2] = { syuriken[0]->GetMatrot().r[2].m128_f32[0], syuriken[0]->GetMatrot().r[2].m128_f32[1], syuriken[0]->GetMatrot().r[2].m128_f32[2] };
-	syuriken2.m_fLength[0] = syurikenscl[0].x*5.5;//x方向の長さ
+	syuriken2.m_fLength[0] = syurikenscl[0].x*4.5;//x方向の長さ
 	syuriken2.m_fLength[1] = syurikenscl[0].y*0.5 ;//y方向の長さ
 	syuriken2.m_fLength[2] = syurikenscl[0].z;//z方向の長さ
 	//OBBの設定位置
@@ -638,7 +638,7 @@ void LastBoss::colsyuri(Player*player)
 	syuriken3.m_NormaDirect[0] = { syuriken[1]->GetMatrot().r[0].m128_f32[0],syuriken[1]->GetMatrot().r[0].m128_f32[1],syuriken[1]->GetMatrot().r[0].m128_f32[2] };
 	syuriken3.m_NormaDirect[1] = { syuriken[1]->GetMatrot().r[1].m128_f32[0], syuriken[1]->GetMatrot().r[1].m128_f32[1], syuriken[1]->GetMatrot().r[1].m128_f32[2] };
 	syuriken3.m_NormaDirect[2] = { syuriken[1]->GetMatrot().r[2].m128_f32[0], syuriken[1]->GetMatrot().r[2].m128_f32[1], syuriken[1]->GetMatrot().r[2].m128_f32[2] };
-	syuriken3.m_fLength[0] = syurikenscl[1].x*5.5;//x方向の長さ
+	syuriken3.m_fLength[0] = syurikenscl[1].x*4.5;//x方向の長さ
 	syuriken3.m_fLength[1] = syurikenscl[1].y*0.5;//y方向の長さ
 	syuriken3.m_fLength[2] = syurikenscl[1].z;//z方向の長さ
 	//OBBの設定位置
