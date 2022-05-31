@@ -134,14 +134,14 @@ void GamOver::Draw(DirectXCommon* dxcomn)
 	dxcomn->BeginDraw();//•`‰æƒRƒ}ƒ“ƒh‚Ìã‚ç‚Ö‚ñ‚É
 	SpriteDraw(dxcomn->GetCmdList());
 	GameUI::NowLoadDraw(dxcomn);
-	ImGui::Begin("Obj1");
+	/*ImGui::Begin("Obj1");
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("cameraposition")) {
 		ImGui::SliderFloat("cy", &alpha, 200, -200);
 		ImGui::TreePop();
 	}
-	ImGui::End();
+	ImGui::End();*/
 	dxcomn->EndDraw();
 
 }
