@@ -453,6 +453,8 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
+	effects->HealEffects(item->ColItem());
+	effects->HealEffects(item1->ColItem());
 
 	effects->Update(dxCommon, camera, enemy, player);
 	effects->Update(dxCommon, camera, enemy1, player);

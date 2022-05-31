@@ -222,6 +222,13 @@ void LastBossScene::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void LastBossScene::Update(DirectXCommon* dxCommon)
 {
+	if (bossenemy != nullptr) {
+		if (bossenemy->GetHP() <= 1) {
+			dth = false;
+		} else {
+			dth = true;
+		}
+	}
 	if (Collision::GetInstance()->Gethit() == true) {
 		loadf = false;
 		Fader::feedOut(0.0f, 0.1f);
@@ -244,7 +251,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	object2->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	object2->Updata({ 1,1,1,1 }, dxCommon, camera, dth);
 
 
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
@@ -391,7 +398,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 		}
 		if (bossenemy != nullptr) {
-			object2->SetRotation({ 1,1,1 });
+			object2->SetRotation(bossenemy->GetRotation());
 			object2->SetPosition(bossenemy->GetPosition());
 			object2->SetScale({ bossenemy->GetScale().x * 0.02f,bossenemy->GetScale().y * 0.02f,bossenemy->GetScale().z * 0.02f });
 

@@ -332,6 +332,7 @@ void LastBoss::Motion(Player* player)
 			//player->SetHp(player->getHp() - 1);
 		}
 	}
+	DeathMotions();
 	RotationDamageblock();
 	atcf = zattack;
 	NormalAttacks(player);
@@ -910,4 +911,11 @@ void LastBoss::ZAttack2(Player*player)
 	konbouscl2 = max(konbouscl2, 0);
 	konbouscl2 = min(konbouscl2, 5);
 
+}
+
+void LastBoss::DeathMotions()
+{
+	if (HP <= 1) {
+		Rotation.z += 10;
+	}
 }

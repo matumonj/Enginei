@@ -131,7 +131,7 @@ private:
 	float half_Width;
 	float half_height = 0;
 
-
+	bool dth;
 	float mapx[20][200];
 	float mapy[20][200];
 
