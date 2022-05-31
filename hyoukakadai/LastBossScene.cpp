@@ -248,29 +248,29 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
-
-	if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3) == true)
-	{
-		goalflag = true;
-		jumpFlag = false;
-		moveSpeed = 0;
-		goaltime += 0.01f;
-		goalSpeed = 0.01f;
-		Player_Pos.x += goalSpeed;
-		if (goaltime >= 1) {
-			goaltime = 1;
-			Player_Pos.z += 0.01f;
-			Player_Rot.y--;
-			if (Player_Rot.y <= 0) {
-				Player_Rot.y = 0;
-			}
-			if (Player_Pos.z >= 1) {
-				BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
-				sceneManager_->SetnextScene(scene);//シーンのセット
+	if (Onflag == true) {
+		if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3) == true)
+		{
+			goalflag = true;
+			jumpFlag = false;
+			moveSpeed = 0;
+			goaltime += 0.01f;
+			goalSpeed = 0.01f;
+			Player_Pos.x += goalSpeed;
+			if (goaltime >= 1) {
+				goaltime = 1;
+				Player_Pos.z += 0.01f;
+				Player_Rot.y--;
+				if (Player_Rot.y <= 0) {
+					Player_Rot.y = 0;
+				}
+				if (Player_Pos.z >= 1) {
+					BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
 			}
 		}
 	}
-
 
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
@@ -332,6 +332,11 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		camerapositionx += shakex;
 		camerapositiony += shakey;
 	}
+
+	if (bossenemy == nullptr) {
+		Onflag = true;
+	}
+
 	else {
 		camerapositionx = 0;
 		camerapositiony= 0;
@@ -435,9 +440,11 @@ void LastBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 			}
 
 			if (map[j][i] == 3) {
-				goal->PreDraw();
-				goal->Draw();
-				goal->PostDraw();
+				if (Onflag == true) {
+					goal->PreDraw();
+					goal->Draw();
+					goal->PostDraw();
+				}
 			}
 		}
 	}

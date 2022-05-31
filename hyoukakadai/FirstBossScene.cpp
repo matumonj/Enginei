@@ -53,7 +53,7 @@ void FirstBossScene::ModelCreate()
 
 	tstmodel = Model::CreateFromOBJ("homeblock");
 
-	goalmodel = Model::CreateFromOBJ("goalmo");
+	goalmodel = Model::CreateFromOBJ("goal");
 
 	item = new Item();
 	item->Initialize();
@@ -65,6 +65,10 @@ void FirstBossScene::ModelCreate()
 			tst[j][i]->SetModel(tstmodel);
 		}
 	}
+
+	goal = std::make_unique<Object3d>();
+	goal->Initialize();
+	goal->SetModel(goalmodel);
 
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -107,6 +111,12 @@ void FirstBossScene::SetPrm()
 			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
+
+			if (map[j][i] == 3) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,110,0 });
+				goal->SetScale({ tst_Scl });
+			}
 		}
 	}
 
@@ -138,7 +148,7 @@ void FirstBossScene::objUpdate()
 			tst[j][i]->Update({ 1,1,1,1 });
 		}
 	}
-
+	goal->Update({ 1,1,1,1 });
 }
 #pragma endregion
 
@@ -214,7 +224,29 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 
 	GameUI::BossUIUpdate(bossenemy.get());
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
-
+	if (Onflag == true) {
+		if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3) == true)
+		{
+			goalflag = true;
+			jumpFlag = false;
+			moveSpeed = 0;
+			goaltime += 0.01f;
+			goalSpeed = 0.01f;
+			Player_Pos.x += goalSpeed;
+			if (goaltime >= 1) {
+				goaltime = 1;
+				Player_Pos.z += 0.01f;
+				Player_Rot.y--;
+				if (Player_Rot.y <= 0) {
+					Player_Rot.y = 0;
+				}
+				if (Player_Pos.z >= 1) {
+					BaseScene* scene = new  ClearScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
+		}
+	}
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
 		time = 0;
@@ -289,6 +321,10 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 
+	if (bossenemy == nullptr) {
+		Onflag = true;
+	}
+
 	//BossPos = bossenemy->GetPosition();
 
 //bossenemy[3]->Update(Player_Pos);
@@ -327,6 +363,14 @@ void FirstBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->PreDraw();
 				tst[j][i]->Draw();
 				tst[j][i]->PostDraw();
+			}
+
+			if (map[j][i] == 3) {
+				if (Onflag == true) {
+					goal->PreDraw();
+					goal->Draw();
+					goal->PostDraw();
+				}
 			}
 		}
 	}
