@@ -148,10 +148,10 @@ void ThrowEnemy::Draw(DirectXCommon* dxcomn)
 		searchTexture->Draw();
 	}
 	nTexture::PostDraw();
-	ImGui::Begin("the");
+	/*ImGui::Begin("the");
 	if (ImGui::SliderFloat("x", &Position.x, 200, -200));
 	if (ImGui::SliderFloat("y", &Position.y, 200, -200));
-	ImGui::End();
+	ImGui::End();*/
 }
 void ThrowEnemy::SearchAction(XMMATRIX matview, XMMATRIX matprojection, XMFLOAT3 position) {
 	if (Collision::GetLen_X(position.x, Position.x) < 5&& searchCount<=20) {

@@ -206,14 +206,14 @@ void Effects::Update(DirectXCommon* dxcomn, DebugCamera* camera, std::unique_ptr
 }
 void Effects::ImGuiDraw()
 {
-	ImGui::Begin("1");
+	/*ImGui::Begin("1");
 	ImGui::SetWindowPos(ImVec2(200, 0));
 	ImGui::SetWindowSize(ImVec2(500, 300));
 	if (ImGui::TreeNode("cameraposition")) {
 		ImGui::SliderFloat("cy", &zrot, 200, -200);
 		ImGui::TreePop();
 	}
-	ImGui::End();
+	ImGui::End();*/
 }
 void Effects::Updateo(DirectXCommon* dxcomn, DebugCamera* camera, Enemy* enemy, Player* player)
 {
@@ -294,10 +294,10 @@ void Effects::Draw(DirectXCommon* dxcomn)
 	attackefk->EffekseerDraw(dxcomn->GetCmdList());
 	bossattackefk->EffekseerDraw(dxcomn->GetCmdList());
 	//efk1->EffekseerDraw(dxcomn->GetCmdList());
-	ImGui::Begin("ddd");
+	/*ImGui::Begin("ddd");
 	ImGui::SliderFloat("y", &b_Effect_Rot.x, 180, -180);
 	ImGui::SliderFloat("z", &b_Effect_Rot.z, 180, -170);
-	ImGui::End();
+	ImGui::End();*/
 }
 void Effects::Draw2(DirectXCommon* dxcomn)
 {
