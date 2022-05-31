@@ -367,7 +367,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
-	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("shark");
+	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("boss");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());

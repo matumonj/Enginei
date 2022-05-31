@@ -28,15 +28,15 @@ FirstBossScene::FirstBossScene(SceneManager* sceneManager)
 void FirstBossScene::SpriteCreate()
 {
 	// デバッグテキスト用テクスチャ読み込み
-	Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont2.png");
+	//Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont2.png");
 	//普通のテクスチャ(スプライトじゃないよ)
 	Line::Initialize();
 	GameUI::AllowUISet();
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
-	Sprite::LoadTexture(1, L"Resources/haikei2.png");
-	Sprite::LoadTexture(2, L"Resources/setumei.png");
+	//Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	//Sprite::LoadTexture(2, L"Resources/setumei.png");
 
 }
 #pragma endregion
@@ -47,7 +47,7 @@ void FirstBossScene::ModelCreate()
 	playermodel = Model::CreateFromOBJ("player");
 	player = Player::Create(playermodel);
 	player->Initialize();
-	tstmodel = Model::CreateFromOBJ("box1");
+	tstmodel = Model::CreateFromOBJ("box2");
 	goalmodel = Model::CreateFromOBJ("goalmo");
 
 	item = new Item();
@@ -156,7 +156,7 @@ void FirstBossScene::Initialize(DirectXCommon* dxCommon)
 	attackeffects->Initialize(dxCommon, camera);
 
 	//モデル名を指定してファイル読み込み
-	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -176,6 +176,7 @@ void FirstBossScene::Initialize(DirectXCommon* dxCommon)
 	camerapositiony = -4.5f;
 	camerapositionz = -12.15f;
 	bossenemy->Setposition({ 57,-4,0 });
+	object1->PlayAnimation();
 }
 #pragma endregion
 
@@ -211,7 +212,6 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 		}
 
 		//FBXモデルの更新
-		object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 		if (Input::GetInstance()->Pushkey(DIK_RIGHT)) {
 			Player_Pos.x += moveSpeed;
 		}
@@ -286,6 +286,7 @@ void FirstBossScene::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
+	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 
 	effects->Update(dxCommon, camera, &bossenemy, player);
 

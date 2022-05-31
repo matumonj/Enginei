@@ -74,7 +74,7 @@ void LastBoss::Initialize()
 	damagearea2[1] = nTexture::Create(8, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	damagearea2[1]->CreateNormalTexture();
 
-	syurikenm = Model::CreateFromOBJ("syuriken");
+	syurikenm = Model::CreateFromOBJ("fire");
 	syuriken[0] = Object3d::Create();
 	syuriken[0]->SetModel(syurikenm);
 	syuriken[0]->Initialize();
@@ -260,20 +260,76 @@ void LastBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200],
 
 void LastBoss::Motion(Player* player)
 {
-	if (zattack) {
+	if (zattack&&konbouscl>=2) {
 		if (Collision::GetLen(damagearea[0]->GetPosition(), player->GetPosition()) < 5) {
-			player->SetHp(player->getHp() - 1);
+			if (servDamage) {
+				player->SetHp(player->getHp() - 5);
+				servDamage = false;
+				stayflg = true;
+				//Attack(player);
+		}
+		if (stayflg) {
+			redamageCount++;
+			if (redamageCount > 30) {
+				servDamage = true;
+				redamageCount = 0;
+				stayflg = false;
+			}
+		}
+		//	player->SetHp(player->getHp() - 1);
 		}
 		if (Collision::GetLen(damagearea[1]->GetPosition(), player->GetPosition()) < 5) {
-			player->SetHp(player->getHp() - 1);
+			if (servDamage) {
+				player->SetHp(player->getHp() - 5);
+				servDamage = false;
+				stayflg = true;
+				//Attack(player);
+			}
+			if (stayflg) {
+				redamageCount++;
+				if (redamageCount > 30) {
+					servDamage = true;
+					redamageCount = 0;
+					stayflg = false;
+				}
+			}
+			//	player->SetHp(player->getHp() - 1);
 		}
 	}
-	if (zattack2) {
+	if (zattack2&&konbouscl2>=2) {
 		if (Collision::GetLen(damagearea2[0]->GetPosition(), player->GetPosition()) < 5) {
-			player->SetHp(player->getHp() - 1);
+			if (servDamage) {
+				player->SetHp(player->getHp() - 5);
+				servDamage = false;
+				stayflg = true;
+				//Attack(player);
+			}
+			if (stayflg) {
+				redamageCount++;
+				if (redamageCount > 30) {
+					servDamage = true;
+					redamageCount = 0;
+					stayflg = false;
+				}
+			}
+			//player->SetHp(player->getHp() - 1);
 		}
 		if (Collision::GetLen(damagearea2[1]->GetPosition(), player->GetPosition()) < 5) {
-			player->SetHp(player->getHp() - 1);
+			if (servDamage) {
+				player->SetHp(player->getHp() - 5);
+				servDamage = false;
+				stayflg = true;
+				//Attack(player);
+			}
+			if (stayflg) {
+				redamageCount++;
+				if (redamageCount > 30) {
+					servDamage = true;
+					redamageCount = 0;
+					stayflg = false;
+				}
+			}
+			//player->SetHp(player->getHp() - 1);
 		}
 	}
 	RotationDamageblock();
@@ -314,7 +370,7 @@ void LastBoss::Motion(Player* player)
 			//MoveBlockJump();//ボスの埋まり回避用とブロック飛び越えとか
 
 		}
-		if (HP!=MaxHP&&HP %10==0) {
+		if (HP!=MaxHP&&HP %2==0) {
 			bossAction = syurikenattack;
 		}
 		if (HP == MaxHP / 2-1) {
@@ -744,6 +800,7 @@ void LastBoss::GetDamageMove(int map[20][200], std::unique_ptr<Object3d>  tst[20
 	if (GetDamageSclx) {
 		if (Scale.x >= 0) {
 			Scale.x -= 0.1f;
+			Scale.z -= 0.1f;
 		} else {
 			//movearea = true;
 			//Scale.x = 1;
@@ -768,6 +825,7 @@ void LastBoss::GetDamageMove(int map[20][200], std::unique_ptr<Object3d>  tst[20
 					Position = tst[j][i]->GetPosition();
 					Scale.x = 1;
 					Scale.y = 1;
+					Scale.z = 1;
 				}
 			}
 		}
@@ -784,6 +842,7 @@ void LastBoss::GetDamageMove(int map[20][200], std::unique_ptr<Object3d>  tst[20
 					Position = tst[j][i]->GetPosition();
 					Scale.x = 1;
 					Scale.y = 1;
+					Scale.z = 1;
 				}
 			}
 		}

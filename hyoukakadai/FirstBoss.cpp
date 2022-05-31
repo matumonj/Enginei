@@ -300,7 +300,22 @@ void FirstBoss::RushAttack(Player* player)
 		}
 	}
 	if (Collision::GetLen(Position, player->GetPosition()) <10) {
-		player->SetHp(player->getHp() - 5);
+		//servDamage = true;
+		if (servDamage) {
+			player->SetHp(player->getHp() - 10);
+			servDamage = false;
+			stayflg = true;
+			//Attack(player);
+		}
+		if (stayflg) {
+			redamageCount++;
+			if (redamageCount > 10) {
+				servDamage = true;
+				redamageCount = 0;
+				stayflg = false;
+			}
+		}
+		//player->SetHp(player->getHp() - 5);
 	}
 	if (startPos.x == 67) {
 		Rotation.y = 180;
@@ -356,6 +371,9 @@ void FirstBoss::RushAttackStayPrm(Player* player)
 }
 void FirstBoss::NormalAttacks(Player* player)
 {
+//	if (dis <= 2) {
+		//
+
 	//DamageAreaStart = { Position.x,Position.y + 2 };
 	if (Rotation.y == 180) {//‰EŒü‚¢‚Ä‚é‚Æ‚«‚Ì
 		DamageAreaStart = { Position.x,Position.y + 2 };
@@ -363,7 +381,22 @@ void FirstBoss::NormalAttacks(Player* player)
 		if (Collision::Boxcol({ player->GetPosition().x,player->GetPosition().y },
 			{ player->GetPosition().x + 2,player->GetPosition().y + 2 }, DamageArea, DamageAreaStart
 		) == true) {
-			player->SetHp(player->getHp() - 1);
+			servDamage = true;
+			if (servDamage) {
+				player->SetHp(player->getHp() - 1);
+				servDamage = false;
+				stayflg = true;
+				//Attack(player);
+			}
+			if (stayflg) {
+				redamageCount++;
+				if (redamageCount > 30) {
+					servDamage = true;
+					redamageCount = 0;
+					stayflg = false;
+				}
+			}
+			//player->SetHp(player->getHp() - 1);
 		}
 	} else {
 		DamageAreaStart = { Position.x,Position.y - 2 };
@@ -371,7 +404,22 @@ void FirstBoss::NormalAttacks(Player* player)
 		if (Collision::Boxcol({ player->GetPosition().x,player->GetPosition().y },
 			{ player->GetPosition().x + 2,player->GetPosition().y + 2}, DamageAreaStart, DamageArea
 		) == true) {
-			player->SetHp(player->getHp() - 1);
+			servDamage = true;
+			if (servDamage) {
+				player->SetHp(player->getHp() - 1);
+				servDamage = false;
+				stayflg = true;
+				//Attack(player);
+			}
+			if (stayflg) {
+				redamageCount++;
+				if (redamageCount > 30) {
+					servDamage = true;
+					redamageCount = 0;
+					stayflg = false;
+				}
+			}
+			//player->SetHp(player->getHp() - 1);
 		}
 	}
 
