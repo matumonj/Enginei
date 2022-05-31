@@ -618,45 +618,45 @@ void ForestStage1::Draw(DirectXCommon* dxcomn)
 
 void ForestStage1::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 300));
-	if (ImGui::TreeNode("light_position")) {
-		//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
-		///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
-		///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
-		if (ImGui::Button("spotlight ON")) {
-			lightGroup->SetSpotLightActive(0, true);
-		}
-		if (ImGui::Button("spotlight OFF")) {
-			lightGroup->SetSpotLightActive(0, false);
-		}
-		ImGui::ColorPicker3("light_color", spotLightColor);
-		ImGui::TreePop();
-	}
+	//ImGui::Begin("Obj1");
+	//ImGui::SetWindowPos(ImVec2(0, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 300));
+	//if (ImGui::TreeNode("light_position")) {
+	//	//ImGui::SliderFloat("positionX", &needlepos.x, -200, 200);
+	//	///ImGui::SliderFloat("positionY", &needlepos.y, -200, 200);
+	//	///ImGui::SliderFloat("positionZ", &needlepos.z, -200, 200);
+	//	if (ImGui::Button("spotlight ON")) {
+	//		lightGroup->SetSpotLightActive(0, true);
+	//	}
+	//	if (ImGui::Button("spotlight OFF")) {
+	//		lightGroup->SetSpotLightActive(0, false);
+	//	}
+	//	ImGui::ColorPicker3("light_color", spotLightColor);
+	//	ImGui::TreePop();
+	//}
 
-	if (ImGui::TreeNode("Effect_position")) {
-		//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
-		//ImGui::SliderFloat("positionY", &debuga, -200, 200);
-		//ImGui::SliderInt("positionZ", &elf, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("enemy_position")) {
-		float rf = enemy[0]->GetPosition().x;
-		float rf2 = enemy[0]->GetPosition().y;
-		float rrr = player->getdis();
-		//float rf3 = enemy->GetPosition().z;
-		ImGui::SliderInt("positionX", &co, -100, 100);
-		ImGui::SliderFloat("positionY", &Player_Pos.y, -100, 100);
-		ImGui::SliderFloat("positionZ", &rrr, -100, 100);
-		ImGui::SliderInt("positionX", &co, -200, 200);
-		ImGui::SliderFloat("positionY", &rf2, -200, 200);
-		ImGui::SliderFloat("positionZ", &rrr, -200, 200);
-		ImGui::TreePop();
-	}
+	//if (ImGui::TreeNode("Effect_position")) {
+	//	//ImGui::SliderInt("positionX", &L_Cflag, -200, 200);
+	//	//ImGui::SliderFloat("positionY", &debuga, -200, 200);
+	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("enemy_position")) {
+	//	float rf = enemy[0]->GetPosition().x;
+	//	float rf2 = enemy[0]->GetPosition().y;
+	//	float rrr = player->getdis();
+	//	//float rf3 = enemy->GetPosition().z;
+	//	ImGui::SliderInt("positionX", &co, -100, 100);
+	//	ImGui::SliderFloat("positionY", &Player_Pos.y, -100, 100);
+	//	ImGui::SliderFloat("positionZ", &rrr, -100, 100);
+	//	ImGui::SliderInt("positionX", &co, -200, 200);
+	//	ImGui::SliderFloat("positionY", &rf2, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &rrr, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
 
-	ImGui::End();
+	//ImGui::End();
 
 }
 #pragma region ‰ð•ú•”•ª

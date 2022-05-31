@@ -4,6 +4,7 @@
 #include"DesertField.h"
 #include"Tutorial.h"
 #include"SceneManager.h"
+#include"StageSelect.h"
 #include"imgui.h"
 #include"Helper.h"
 
@@ -21,7 +22,7 @@ void ClearScene::Update(DirectXCommon* dxCommon)
 {
 	//ENTERで次のシーンへ
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {//押されたら
-		BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 	//if (Input::GetInstance()->TriggerKey(DIK_F))

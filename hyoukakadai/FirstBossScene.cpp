@@ -377,7 +377,7 @@ void FirstBossScene::Draw(DirectXCommon* dxcomn)
 {
 	dxcomn->BeginDraw();
 	MyGameDraw(dxcomn);
-	effects->ImGuiDraw();
+	//effects->ImGuiDraw();
 	//ImGuiDraw();//imgui‚ÍÅŒã‚Ì•û“ü‚ê‚Æ‚­
 	dxcomn->EndDraw();
 }
@@ -385,54 +385,54 @@ void FirstBossScene::Draw(DirectXCommon* dxcomn)
 
 void FirstBossScene::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 300));
-	if (ImGui::TreeNode("light_position")) {
-		if (ImGui::Button("spotlight ON")) {
-			lightGroup->SetSpotLightActive(0, true);
-		}
-		if (ImGui::Button("spotlight OFF")) {
-			lightGroup->SetSpotLightActive(0, false);
-		}
-		ImGui::ColorPicker3("light_color", spotLightColor);
-		ImGui::TreePop();
-	}
-	//int x= bossenemy->GetHP();
-	if (ImGui::TreeNode("Effect_position")) {
-		//ImGui::SliderInt("positionX", &x, -200, 200);
-		float x = player->GetPosition().x;
-		ImGui::SliderFloat("positionX", &x, -200, 200);
-		ImGui::SliderFloat("positionY", &camerapositiony, -200, 200);
-		ImGui::SliderFloat("positionz", &camerapositionz, -200, 200);
-		camera->SetEye({ camerapositionx,camerapositiony,camerapositionz-20 });
-		camera->SetTarget({ camerapositionx,camerapositiony - 2 ,camerapositionz});
-		//ImGui::SliderInt("positionZ", &elf, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("enemy_position")) {
+	//ImGui::Begin("Obj1");
+	//ImGui::SetWindowPos(ImVec2(0, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 300));
+	//if (ImGui::TreeNode("light_position")) {
+	//	if (ImGui::Button("spotlight ON")) {
+	//		lightGroup->SetSpotLightActive(0, true);
+	//	}
+	//	if (ImGui::Button("spotlight OFF")) {
+	//		lightGroup->SetSpotLightActive(0, false);
+	//	}
+	//	ImGui::ColorPicker3("light_color", spotLightColor);
+	//	ImGui::TreePop();
+	//}
+	////int x= bossenemy->GetHP();
+	//if (ImGui::TreeNode("Effect_position")) {
+	//	//ImGui::SliderInt("positionX", &x, -200, 200);
+	//	float x = player->GetPosition().x;
+	//	ImGui::SliderFloat("positionX", &x, -200, 200);
+	//	ImGui::SliderFloat("positionY", &camerapositiony, -200, 200);
+	//	ImGui::SliderFloat("positionz", &camerapositionz, -200, 200);
+	//	camera->SetEye({ camerapositionx,camerapositiony,camerapositionz-20 });
+	//	camera->SetTarget({ camerapositionx,camerapositiony - 2 ,camerapositionz});
+	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("enemy_position")) {
 
-		ImGui::TreePop();
-	}
-	float linex = Line::GetInstance()->getpos().x;
-	float liney = Line::GetInstance()->getpos().y;
-	float rr = player->GetPosition().x;
-	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -200, 200);
-		ImGui::SliderFloat("positionY", &liney, -200, 200);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
-		ImGui::SliderFloat("grav", &grav, -200, 200);
-		ImGui::SliderFloat("time", &time, -200, 200);
-		ImGui::TreePop();
-	}
+	//	ImGui::TreePop();
+	//}
+	//float linex = Line::GetInstance()->getpos().x;
+	//float liney = Line::GetInstance()->getpos().y;
+	//float rr = player->GetPosition().x;
+	//if (ImGui::TreeNode("Player_position")) {
+	//	ImGui::SliderFloat("positionX", &linex, -200, 200);
+	//	ImGui::SliderFloat("positionY", &liney, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+	//	ImGui::SliderFloat("grav", &grav, -200, 200);
+	//	ImGui::SliderFloat("time", &time, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
-	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
-		ImGui::TreePop();
-	}
+	//if (ImGui::TreeNode("Old")) {
+	//	ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+	//	ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
-	ImGui::End();
+	//ImGui::End();
 
 }
 #pragma region ‰ð•ú•”•ª

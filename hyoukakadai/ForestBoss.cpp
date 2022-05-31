@@ -299,11 +299,11 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 	NuclearObj->Draw();
 	NuclearObj->PostDraw();
 
-	ImGui::Begin("scl");
-	
-	ImGui::SliderFloat("scly",&Arm_Scl[0].y, 20.0f, 20.0f);
-	ImGui::SliderFloat("scly", &lene, 20.0f, 20.0f);
-	ImGui::End();
+	//ImGui::Begin("scl");
+	//
+	//ImGui::SliderFloat("scly",&Arm_Scl[0].y, 20.0f, 20.0f);
+	//ImGui::SliderFloat("scly", &lene, 20.0f, 20.0f);
+	//ImGui::End();
 }
 
 //‰ğ•úˆ—

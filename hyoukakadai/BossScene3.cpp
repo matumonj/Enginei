@@ -757,7 +757,7 @@ void BossScene3::Draw(DirectXCommon* dxcomn)
 
 void BossScene3::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
+	//ImGui::Begin("Obj1");
 	//ImGui::SetWindowPos(ImVec2(0, 0));
 	//ImGui::SetWindowSize(ImVec2(500, 300));
 	//if (ImGui::TreeNode("light_position")) {
@@ -799,8 +799,8 @@ void BossScene3::ImGuiDraw()
 	int xf=Line::GetInstance()->Getindex();
 	int xf2= Line::GetInstance()->Getindex2();
 	//	ImGui::SliderFloat("positionY", &BublePos[0].y, -200, 200);
-		ImGui::SliderInt("positionZ", &xf, -200, 200);
-		ImGui::SliderInt("positionZ", &xf2, -200, 200);
+	/*	ImGui::SliderInt("positionZ", &xf, -200, 200);
+		ImGui::SliderInt("positionZ", &xf2, -200, 200);*/
 	//	ImGui::SliderFloat("grav", &grav, -200, 200);
 	//	ImGui::SliderFloat("time", &time, -200, 200);
 	//	ImGui::TreePop();

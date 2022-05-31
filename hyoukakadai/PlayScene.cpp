@@ -445,7 +445,7 @@ void PlayScene::Draw(DirectXCommon* dxcomn)
 
 		dxcomn->BeginDraw();
 		postEffect->Draw(dxcomn->GetCmdList());
-		ImGuiDraw();//imguiは最後の方入れとく
+		//ImGuiDraw();//imguiは最後の方入れとく
 		dxcomn->EndDraw();
 		break;
 
@@ -456,7 +456,7 @@ void PlayScene::Draw(DirectXCommon* dxcomn)
 
 		dxcomn->BeginDraw();
 		MyGameDraw(dxcomn);
-		ImGuiDraw();
+	//	ImGuiDraw();
 		dxcomn->EndDraw();
 		break;
 	}
@@ -465,59 +465,59 @@ void PlayScene::Draw(DirectXCommon* dxcomn)
 
 void PlayScene::ImGuiDraw()
 {
-	ImGui::Begin("Obj1");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 300));
-	if (ImGui::TreeNode("light_position")) {
-		if (ImGui::Button("spotlight ON")) {
-			lightGroup->SetSpotLightActive(0, true);
-		}
-		if (ImGui::Button("spotlight OFF")) {
-			lightGroup->SetSpotLightActive(0, false);
-		}
-		ImGui::ColorPicker3("light_color", spotLightColor);
-		ImGui::TreePop();
-	}
-	float x = BossEnemy::GetInstance()->GetScale().x;
-	if (ImGui::TreeNode("Effect_position")) {
-		ImGui::SliderFloat("positionX", &x, -200, 200);
-		ImGui::SliderInt("positionY", &atb, -200, 200);
-		//ImGui::SliderInt("positionZ", &elf, -200, 200);
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("enemy_position")) {
-		
-		ImGui::TreePop();
-	}
-	float linex = Line::GetInstance()->getpos().x;
-	float liney = Line::GetInstance()->getpos().y;
-	float rr = player->GetPosition().x;
-	if (ImGui::TreeNode("Player_position")) {
-		ImGui::SliderFloat("positionX", &linex, -200, 200);
-		ImGui::SliderFloat("positionY", &liney, -200, 200);
-		ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
-		ImGui::SliderFloat("grav", &grav, -200, 200);
-		ImGui::SliderFloat("time", &time, -200, 200);
-		ImGui::TreePop();
-	}
-	
-	if (ImGui::TreeNode("Old")) {
-		ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
-		ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
-		ImGui::TreePop();
-	}
+	//ImGui::Begin("Obj1");
+	//ImGui::SetWindowPos(ImVec2(0, 0));
+	//ImGui::SetWindowSize(ImVec2(500, 300));
+	//if (ImGui::TreeNode("light_position")) {
+	//	if (ImGui::Button("spotlight ON")) {
+	//		lightGroup->SetSpotLightActive(0, true);
+	//	}
+	//	if (ImGui::Button("spotlight OFF")) {
+	//		lightGroup->SetSpotLightActive(0, false);
+	//	}
+	//	ImGui::ColorPicker3("light_color", spotLightColor);
+	//	ImGui::TreePop();
+	//}
+	//float x = BossEnemy::GetInstance()->GetScale().x;
+	//if (ImGui::TreeNode("Effect_position")) {
+	//	ImGui::SliderFloat("positionX", &x, -200, 200);
+	//	ImGui::SliderInt("positionY", &atb, -200, 200);
+	//	//ImGui::SliderInt("positionZ", &elf, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//if (ImGui::TreeNode("enemy_position")) {
+	//	
+	//	ImGui::TreePop();
+	//}
+	//float linex = Line::GetInstance()->getpos().x;
+	//float liney = Line::GetInstance()->getpos().y;
+	//float rr = player->GetPosition().x;
+	//if (ImGui::TreeNode("Player_position")) {
+	//	ImGui::SliderFloat("positionX", &linex, -200, 200);
+	//	ImGui::SliderFloat("positionY", &liney, -200, 200);
+	//	ImGui::SliderFloat("positionZ", &Player_Pos.z, -200, 200);
+	//	ImGui::SliderFloat("grav", &grav, -200, 200);
+	//	ImGui::SliderFloat("time", &time, -200, 200);
+	//	ImGui::TreePop();
+	//}
+	//
+	//if (ImGui::TreeNode("Old")) {
+	//	ImGui::SliderFloat("Old_PosX", &Old_Pos.x, -200, 200);
+	//	ImGui::SliderFloat("old_PosY", &Old_Pos.y, -200, 200);
+	//	ImGui::TreePop();
+	//}
 
-	ImGui::End();
+	//ImGui::End();
 
-	ImGui::Begin("postEffect");
-	if (ImGui::RadioButton("Blur", &c_postEffect)) {
-		c_postEffect = Blur;
-	}
-	if (ImGui::RadioButton("Default", &c_postEffect)) {
-		c_postEffect = Default;
-	}
+	//ImGui::Begin("postEffect");
+	//if (ImGui::RadioButton("Blur", &c_postEffect)) {
+	//	c_postEffect = Blur;
+	//}
+	//if (ImGui::RadioButton("Default", &c_postEffect)) {
+	//	c_postEffect = Default;
+	//}
 
-	ImGui::End();
+	//ImGui::End();
 
 }
 #pragma region 解放部分
