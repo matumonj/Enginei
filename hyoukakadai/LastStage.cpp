@@ -327,6 +327,8 @@ void LastStage::Initialize(DirectXCommon* dxCommon)
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
+	object1->PlayAnimation();
+
 }
 #pragma endregion
 
@@ -430,7 +432,7 @@ void LastStage::Update(DirectXCommon* dxCommon)
 	
 	//FBXのアニメーション再生
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
-		object1->PlayAnimation();
+		
 	}
 
 	//カメラ関係の処理

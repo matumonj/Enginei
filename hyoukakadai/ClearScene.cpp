@@ -21,7 +21,7 @@ void ClearScene::Initialize(DirectXCommon* dxCommon)
 void ClearScene::Update(DirectXCommon* dxCommon)
 {
 	//ENTERで次のシーンへ
-	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {//押されたら
+	if (Input::GetInstance()->TriggerButtonA()) {//押されたら
 		BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}

@@ -33,9 +33,10 @@ void BossScene2::SpriteCreate()
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
-	Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	Sprite::LoadTexture(1, L"Resources/forest.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
+	background = Sprite::Create(1, { 0.0f,0.0f });
 }
 #pragma endregion
 
@@ -103,6 +104,11 @@ void BossScene2::SetPrm()
 	player->SetPosition({ Player_Pos });
 	player->SetScale({ Player_Scl });
 	player->SetRotation({ Player_Rot });
+
+	background->SetPosition({ 0, 0 });
+	background->SetSize({ WinApp::window_width,WinApp::window_height });
+	background->setcolor({ 1,1,1,1 });
+
 
 	object1->SetPosition({ Player_Pos });
 	object1->SetRotation({ Player_Rot });
@@ -505,7 +511,7 @@ void BossScene2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 void BossScene2::MyGameDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
-
+	background->Draw();
 	dxcomn->ClearDepthBuffer(dxcomn->GetCmdList());
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
