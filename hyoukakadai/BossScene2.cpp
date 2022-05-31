@@ -547,10 +547,10 @@ void BossScene2::Draw(DirectXCommon* dxcomn)
 
 void BossScene2::ImGuiDraw()
 {
-	ImGui::Begin("ww");
+	/*ImGui::Begin("ww");
 	int index = Line::GetInstance()->Getindex();
 	ImGui::SliderInt("index", &index, 200, -200);
-	ImGui::End();
+	ImGui::End();*/
 
 }
 #pragma region ‰ð•ú•”•ª
