@@ -281,13 +281,13 @@ void SeaScene1::Initialize(DirectXCommon* dxCommon)
 			else if (map[j][i] == 13) {
 				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[j][i] == 14) {
+		/*	else if (map[j][i] == 14) {
 				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
-			else if (map[j][i] == 15) {
+			}*/
+			/*if (map[j][i] == 15) {
 				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
-			else if (map[j][i] == 16) {
+			}*/
+			/*else if (map[j][i] == 16) {
 				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 17) {
@@ -310,7 +310,7 @@ void SeaScene1::Initialize(DirectXCommon* dxCommon)
 			}
 			else if (map[j][i] == 23) {
 				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
+			}*/
 		}
 	}
 
@@ -481,7 +481,7 @@ void SeaScene1::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
-			enemy[i]->Attack(player);
+			enemy[i]->Motion(player);
 			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->ColMap(map, seablock, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
@@ -606,10 +606,10 @@ void SeaScene1::MyGameDraw(DirectXCommon* dxcomn)
 	Line::Draw(dxcomn);
 
 	//weffect->Draw(dxcomn);
-	/*GameUI::AllowUIDraw(dxcomn);
+	GameUI::AllowUIDraw(dxcomn);
 	GameUI::TargetUIDraw(dxcomn);
 	GameUI::UIDraw(dxcomn);
-	GameUI::PlayerUIDraw(dxcomn);*/
+	GameUI::PlayerUIDraw(dxcomn);
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
