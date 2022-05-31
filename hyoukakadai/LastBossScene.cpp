@@ -222,6 +222,17 @@ void LastBossScene::Initialize(DirectXCommon* dxCommon)
 #pragma region 更新処理
 void LastBossScene::Update(DirectXCommon* dxCommon)
 {
+	if (Collision::GetInstance()->Gethit() == true) {
+		loadf = false;
+		hintload = false;
+		Fader::feedOut(0.0f, 0.1f);
+		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+			//::GetInstance()->SetHit(false);
+		}
+	} else {
+		hintload = true;
+		loadf = true;
+	}
 	if (bossenemy != nullptr) {
 		if (bossenemy->GetHP() <= 1) {
 			dth = false;
@@ -229,19 +240,13 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 			dth = true;
 		}
 	}
-	if (Collision::GetInstance()->Gethit() == true) {
-		loadf = false;
-		Fader::feedOut(0.0f, 0.1f);
-		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
-			//::GetInstance()->SetHit(false);
-		}
-	} else {
-		loadf = true;
-	}
+
 	GameUI::NowLoadUpdate(loadf);
+	GameUI::HintLaBossUpdate(hintload);
+
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y + 10;
+	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
@@ -377,7 +382,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	objUpdate();//オブジェクトの更新処理
 
-	effects->Update(dxCommon, camera, &bossenemy, player);
+	effects->Updateo(dxCommon, camera, bossenemy.get(), player);
 	//enemyにnullptr代入するときは敵が死んだら
 	//for (int i = 0; i < 10; i++) {
 		if (bossenemy != nullptr) {
@@ -482,17 +487,28 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 	Line::Draw(dxcomn);
 
 	//weffect->Draw(dxcomn);
+
+	//FBXの描画
+	object1->Draw(dxcomn->GetCmdList());
+	if (bossenemy != nullptr) {
+		object2->Draw(dxcomn->GetCmdList());
+	}
+	attackeffects->Draw(dxcomn);
+	effects->Draw(dxcomn);
+	effects->Draw2(dxcomn);
+	Sprite::PreDraw(dxcomn->GetCmdList());
+
+	Fader::FeedSpriteDraw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
+
 	GameUI::AllowUIDraw(dxcomn);
 	GameUI::TargetUIDraw(dxcomn);
 	GameUI::UIDraw(dxcomn);
 	GameUI::PlayerUIDraw(dxcomn);
 
-	attackeffects->Draw(dxcomn);
-	effects->Draw(dxcomn);
-	effects->Draw2(dxcomn);
-	//FBXの描画
-	object1->Draw(dxcomn->GetCmdList());
-	object2->Draw(dxcomn->GetCmdList());
+	GameUI::NowLoadDraw(dxcomn);
+	GameUI::HintLaBossDraw(dxcomn);
 
 }
 #pragma endregion

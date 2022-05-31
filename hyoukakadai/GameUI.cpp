@@ -29,10 +29,13 @@ float GameUI::lsclMax;
 Sprite* GameUI::NowLoad;
 Sprite* GameUI::HintSea;
 Sprite* GameUI::HintForest;
+Sprite* GameUI::HintLast;
 float GameUI::LoadAlpha=0;
 float GameUI::HintSeaAlpha = 0;
+float GameUI::HintLaAlpha = 0;
 float GameUI::HintForestAlpha = 0;
 float GameUI::seatimer = 0;
+float GameUI::latimer = 0;
 float GameUI::foretimer = 0;
 Sprite* GameUI::HPout;
 Sprite* GameUI::lineOutui;
@@ -374,5 +377,36 @@ void GameUI::HintForeBossDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	HintForest->Draw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+}
+
+
+void GameUI::HintLaBossSet()
+{
+	Sprite::LoadTexture(49, L"Resources/labos.png");
+	HintLast = Sprite::Create(49, { 0.0f,-200.0f });
+
+	HintLaAlpha = 0;
+}
+
+void GameUI::HintLaBossUpdate(bool onf)
+{
+	HintLast->SetPosition({ 400,100 });
+	HintLast->SetSize({ 1200,780 });
+	if (onf) {
+		//seatimer += 0.1f;
+		//HintSeaAlpha = Easing::EaseOut(seatimer, 0, 1);
+		HintLaAlpha = 0.8f;
+	} else {
+		HintLaAlpha = 0.0f;
+		//seatimer = 0;
+	}
+	HintLast->setcolor({ 1,1,1,HintLaAlpha });
+
+}
+void GameUI::HintLaBossDraw(DirectXCommon* dxcomn)
+{
+	Sprite::PreDraw(dxcomn->GetCmdList());
+	HintLast->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }

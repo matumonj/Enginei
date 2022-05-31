@@ -731,8 +731,8 @@ void LastBoss::beamAtack(Player*player)
 {
 	//私レイキャストをこっちに入れておりません
 	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
-	playersphere.radius = 5.0f;
-	laserRay.start = { Position.x,Position.y + 0.5f,Position.z };
+	playersphere.radius = 4.0f;
+	laserRay.start = { Position.x,Position.y+0.3f,Position.z };
 	laserRay.dir = { -1,0,0 };
 
 	stayflag = false;

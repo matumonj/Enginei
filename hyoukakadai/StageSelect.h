@@ -118,6 +118,7 @@ private:
 	};
 	bool hintsea;
 	bool hintforest;
+	bool hintlast;
 	whSelect whStage = Stage_JorS;
 	const int MaxStage = 3;
 	float stime = 0.0f;

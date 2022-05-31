@@ -44,12 +44,17 @@ private:
 	static float Targetalpha;
 	static Sprite* HintSea;
 	static Sprite* HintForest;
+
+	static Sprite* HintLast;
+
 	static Sprite* HPout;
 	static Sprite* lineOutui;
 	static float HintSeaAlpha;
 	static float HintForestAlpha;
+	static float HintLaAlpha;
 	static float seatimer;
 	static float foretimer;
+	static float latimer;
 public:
 	static void BossUIUpdate(Enemy* enemy);
 	float Getsclx() { return loutscl.x; }
@@ -95,5 +100,11 @@ public:
 	static void HintForeBossUpdate(bool onf);
 
 	static void HintForeBossDraw(DirectXCommon* dxcomn);
+
+	static void HintLaBossSet();
+
+	static void HintLaBossUpdate(bool onf);
+
+	static void HintLaBossDraw(DirectXCommon* dxcomn);
 };
 
