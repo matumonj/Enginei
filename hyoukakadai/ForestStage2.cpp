@@ -502,8 +502,8 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-		Retry::SetStage(Jungle_1_1);
+	if (player->getHp() <= 0 || (Player_Pos.y <= -50)) {
+		Retry::SetStage(Jungle_1_2);
 		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 		//delete scene;

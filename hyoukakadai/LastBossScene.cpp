@@ -265,7 +265,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 					Player_Rot.y = 0;
 				}
 				if (Player_Pos.z >= 1) {
-					BaseScene* scene = new  StageSelect(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new  ClearScene(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 			}
@@ -409,8 +409,10 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
+
+
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+	if (player->getHp()<=0|| (Player_Pos.y <= -50)) {//押されたら
 		Retry::SetStage(Cas_1_2);
 		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
