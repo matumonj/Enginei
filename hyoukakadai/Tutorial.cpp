@@ -15,6 +15,7 @@
 #include"DesertField.h"
 #include"FirstBossScene.h"
 #include"StageSelect.h"
+#include"StageSelect.h"
 //コメントアウト
 //シーンのコンストラクタ
 Tutorial::Tutorial(SceneManager* sceneManager)
@@ -322,8 +323,8 @@ void Tutorial::Update(DirectXCommon* dxCommon)
 		GameUI::PlayerUIUpdate(player);
 
 	//シーンチェンジ
-		if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
-			Retry::SetStage(Sea_1_1);
+		if (player->getHp() <= 0 || (Player_Pos.y <= -50)) {
+			Retry::SetStage(tyutorial_1);
 			BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 			sceneManager_->SetnextScene(scene);//シーンのセット
 			//delete scene;
