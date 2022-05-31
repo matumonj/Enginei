@@ -152,6 +152,8 @@ private:
 	float goaltime = 0;
 	bool goalflag = false;
 
+
+
 	float width;
 	float height;
 	float FollowangleX, FollowangleZ, FollowangleR;
