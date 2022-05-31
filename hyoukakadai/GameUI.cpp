@@ -382,7 +382,6 @@ void GameUI::HintForeBossDraw(DirectXCommon* dxcomn)
 	HintForest->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
-<<<<<<< HEAD
 
 
 void GameUI::HintLaBossSet()
@@ -414,5 +413,3 @@ void GameUI::HintLaBossDraw(DirectXCommon* dxcomn)
 	HintLast->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
-=======
->>>>>>> 4ff3c2445e8937c36cb5c8dc05ff02c8fbd0676d

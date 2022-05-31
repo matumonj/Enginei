@@ -109,7 +109,8 @@ void ThrowEnemy::Attack(Player* player)
 			}
 		}
 	}
-	if (dis <= 2) {
+	float dis2 = Collision::GetLen(Position, player->GetPosition());
+	if (dis2 <= 2) {
 		//servDamage = true;
 		if (servDamage) {
 			player->SetHp(player->getHp() - 1);

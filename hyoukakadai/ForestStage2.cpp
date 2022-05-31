@@ -67,17 +67,7 @@ void ForestStage2::ModelCreate()
 	item1->Initialize();
 	collision = new Collision();
 
-	for (int j = 0; j < MAX_Y; j++) {
-		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i] = std::make_unique<Object3d>();
-			tst[j][i]->Initialize();// Object3d::Create();
-			tst[j][i]->SetModel(tstmodel);
-
-			reef[j][i] = std::make_unique<Object3d>();
-			reef[j][i]->Initialize();// Object3d::Create();
-			reef[j][i]->SetModel(reefmodel);
-		}
-	}
+	
 
 	goal = std::make_unique<Object3d>();
 	goal->Initialize();
@@ -126,13 +116,7 @@ void ForestStage2::SetPrm()
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			tst[j][i]->SetRotation({ tst_Rot });
-			tst[j][i]->SetScale({ tst_Scl });
-
-			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			reef[j][i]->SetRotation({ tst_Rot });
-			reef[j][i]->SetScale({ tst_Scl });
+			
 			if (map[j][i] == 3) {
 				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 				goal->SetRotation({ 0,120,0 });
@@ -213,72 +197,93 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 		enemy[i]->Initialize();
 		enemy1[i]->Initialize();
 	}
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i] = std::make_unique<Object3d>();
+			tst[j][i]->Initialize();// Object3d::Create();
+			tst[j][i]->SetModel(tstmodel);
 
-
-
+			reef[j][i] = std::make_unique<Object3d>();
+			reef[j][i]->Initialize();// Object3d::Create();
+			reef[j][i]->SetModel(reefmodel);
+		}
+	}
 
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			tst[j][i]->SetRotation({ tst_Rot });
+			tst[j][i]->SetScale({ tst_Scl });
+
+			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			reef[j][i]->SetRotation({ tst_Rot });
+			reef[j][i]->SetScale({ tst_Scl });
+		}
+	}
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 4) {
-				enemy[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				//tst[j][i]->GetPosition();
+				enemy[0]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 5) {
-				enemy[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[1]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 6) {
-				enemy[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[2]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 7) {
-				enemy[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[3]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 8) {
-				enemy[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[4]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 9) {
-				enemy[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[5]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 10) {
-				enemy[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[6]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 11) {
-				enemy[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[7]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 12) {
-				enemy[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[8]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 13) {
-				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[9]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 14) {
-				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[0]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 15) {
-				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[1]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 16) {
-				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[2]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 17) {
-				enemy1[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[3]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 18) {
-				enemy1[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[4]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 19) {
-				enemy1[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[5]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 20) {
-				enemy1[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[6]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 21) {
-				enemy1[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[7]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 22) {
-				enemy1[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[8]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 23) {
-				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[9]->Setposition({ tst[j][i]->GetPosition() });
 			}
 		}
 	}

@@ -503,12 +503,13 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 	Fader::FeedSpriteDraw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
-
-	GameUI::AllowUIDraw(dxcomn);
-	GameUI::TargetUIDraw(dxcomn);
-	GameUI::UIDraw(dxcomn);
-	GameUI::PlayerUIDraw(dxcomn);
-
+	if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+		//::GetInstance()->SetHit(false);
+		GameUI::AllowUIDraw(dxcomn);
+		GameUI::TargetUIDraw(dxcomn);
+		GameUI::UIDraw(dxcomn);
+		GameUI::PlayerUIDraw(dxcomn);
+	}
 	GameUI::NowLoadDraw(dxcomn);
 	GameUI::HintLaBossDraw(dxcomn);
 
