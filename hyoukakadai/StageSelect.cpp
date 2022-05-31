@@ -262,6 +262,7 @@ void StageSelect::Select()
 			switch (NowSelectStage)
 			{
 			case TutorialStage:
+				
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
 
 					BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
