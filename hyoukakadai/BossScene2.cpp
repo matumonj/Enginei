@@ -560,8 +560,8 @@ void BossScene2::Draw(DirectXCommon* dxcomn)
 {
 	dxcomn->BeginDraw();
 	MyGameDraw(dxcomn);
-	effects->ImGuiDraw();
-	ImGuiDraw();//imgui‚ÍÅŒã‚Ì•û“ü‚ê‚Æ‚­
+	//effects->ImGuiDraw();
+	//ImGuiDraw();//imgui‚ÍÅŒã‚Ì•û“ü‚ê‚Æ‚­
 	dxcomn->EndDraw();
 }
 #pragma endregion
