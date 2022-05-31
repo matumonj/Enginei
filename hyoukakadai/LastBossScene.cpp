@@ -224,17 +224,29 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 {
 	if (Collision::GetInstance()->Gethit() == true) {
 		loadf = false;
+		hintload = false;
 		Fader::feedOut(0.0f, 0.1f);
 		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
 			//::GetInstance()->SetHit(false);
 		}
 	} else {
+		hintload = true;
 		loadf = true;
 	}
+	if (bossenemy != nullptr) {
+		if (bossenemy->GetHP() <= 1) {
+			dth = false;
+		} else {
+			dth = true;
+		}
+	}
+
 	GameUI::NowLoadUpdate(loadf);
+	GameUI::HintLaBossUpdate(hintload);
+
 	Old_Pos = Player_Pos;
 	spotLightpos[0] = Player_Pos.x;
-	spotLightpos[1] = Player_Pos.y + 10;
+	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
 
 	if (Line::GetInstance()->Gettriggerflag() != true || Line::GetInstance()->Getboundflag() == true) {
@@ -244,7 +256,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
-	object2->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	object2->Updata({ 1,1,1,1 }, dxCommon, camera, dth);
 
 
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
@@ -370,7 +382,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	objUpdate();//オブジェクトの更新処理
 
-	effects->Update(dxCommon, camera, &bossenemy, player);
+	effects->Updateo(dxCommon, camera, bossenemy.get(), player);
 	//enemyにnullptr代入するときは敵が死んだら
 	//for (int i = 0; i < 10; i++) {
 		if (bossenemy != nullptr) {
@@ -396,7 +408,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 		}
 		if (bossenemy != nullptr) {
-			object2->SetRotation({ 1,1,1 });
+			object2->SetRotation(bossenemy->GetRotation());
 			object2->SetPosition(bossenemy->GetPosition());
 			object2->SetScale({ bossenemy->GetScale().x * 0.02f,bossenemy->GetScale().y * 0.02f,bossenemy->GetScale().z * 0.02f });
 
@@ -477,17 +489,29 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 	Line::Draw(dxcomn);
 
 	//weffect->Draw(dxcomn);
-	GameUI::AllowUIDraw(dxcomn);
-	GameUI::TargetUIDraw(dxcomn);
-	GameUI::UIDraw(dxcomn);
-	GameUI::PlayerUIDraw(dxcomn);
 
+	//FBXの描画
+	object1->Draw(dxcomn->GetCmdList());
+	if (bossenemy != nullptr) {
+		object2->Draw(dxcomn->GetCmdList());
+	}
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
 	effects->Draw2(dxcomn);
-	//FBXの描画
-	object1->Draw(dxcomn->GetCmdList());
-	object2->Draw(dxcomn->GetCmdList());
+	Sprite::PreDraw(dxcomn->GetCmdList());
+
+	Fader::FeedSpriteDraw();
+	Sprite::PostDraw(dxcomn->GetCmdList());
+
+	if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
+		//::GetInstance()->SetHit(false);
+		GameUI::AllowUIDraw(dxcomn);
+		GameUI::TargetUIDraw(dxcomn);
+		GameUI::UIDraw(dxcomn);
+		GameUI::PlayerUIDraw(dxcomn);
+	}
+	GameUI::NowLoadDraw(dxcomn);
+	GameUI::HintLaBossDraw(dxcomn);
 
 }
 #pragma endregion

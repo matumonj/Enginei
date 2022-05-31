@@ -332,6 +332,7 @@ void LastBoss::Motion(Player* player)
 			//player->SetHp(player->getHp() - 1);
 		}
 	}
+	DeathMotions();
 	RotationDamageblock();
 	atcf = zattack;
 	NormalAttacks(player);
@@ -730,8 +731,8 @@ void LastBoss::beamAtack(Player*player)
 {
 	//私レイキャストをこっちに入れておりません
 	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
-	playersphere.radius = 5.0f;
-	laserRay.start = { Position.x,Position.y + 0.5f,Position.z };
+	playersphere.radius = 4.0f;
+	laserRay.start = { Position.x,Position.y+0.3f,Position.z };
 	laserRay.dir = { -1,0,0 };
 
 	stayflag = false;
@@ -910,4 +911,11 @@ void LastBoss::ZAttack2(Player*player)
 	konbouscl2 = max(konbouscl2, 0);
 	konbouscl2 = min(konbouscl2, 5);
 
+}
+
+void LastBoss::DeathMotions()
+{
+	if (HP <= 1) {
+		Rotation.z += 10;
+	}
 }

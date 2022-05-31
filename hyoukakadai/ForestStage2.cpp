@@ -20,13 +20,13 @@ ForestStage2::ForestStage2(SceneManager* sceneManager)
 
 }
 
-#pragma region ƒXƒvƒ‰ƒCƒg‚Ì¶¬
-//ƒXƒvƒ‰ƒCƒg¶¬
+#pragma region ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
+//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”Ÿæˆ
 void ForestStage2::SpriteCreate()
 {
-	// ƒfƒoƒbƒOƒeƒLƒXƒg—pƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆç”¨ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont2.png");
-	//•’Ê‚ÌƒeƒNƒXƒ`ƒƒ(ƒXƒvƒ‰ƒCƒg‚¶‚á‚È‚¢‚æ)
+	//æ™®é€šã®ãƒ†ã‚¯ã‚¹ãƒãƒ£(ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã˜ã‚ƒãªã„ã‚ˆ)
 	Line::Initialize();
 	GameUI::AllowUISet();
 
@@ -42,7 +42,7 @@ void ForestStage2::SpriteCreate()
 
 	background = Sprite::Create(1, { 0.0f,0.0f });
 
-	// ƒfƒoƒbƒOƒeƒLƒXƒg‰Šú‰»
+	// ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆåˆæœŸåŒ–
 	dxcomn = new DirectXCommon();
 	debugText = new DebugTxt();
 	debugText->Initialize(debugTextTexNumber);
@@ -67,17 +67,7 @@ void ForestStage2::ModelCreate()
 	item1->Initialize();
 	collision = new Collision();
 
-	for (int j = 0; j < MAX_Y; j++) {
-		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i] = std::make_unique<Object3d>();
-			tst[j][i]->Initialize();// Object3d::Create();
-			tst[j][i]->SetModel(tstmodel);
-
-			reef[j][i] = std::make_unique<Object3d>();
-			reef[j][i]->Initialize();// Object3d::Create();
-			reef[j][i]->SetModel(reefmodel);
-		}
-	}
+	
 
 	goal = std::make_unique<Object3d>();
 	goal->Initialize();
@@ -92,11 +82,11 @@ void ForestStage2::ModelCreate()
 	hari->SetModel(harimodel);
 
 
-	// ƒ‰ƒCƒg¶¬
+	// ãƒ©ã‚¤ãƒˆç”Ÿæˆ
 	lightGroup = LightGroup::Create();
-	// 3DƒIƒuƒGƒNƒg‚Éƒ‰ƒCƒg‚ğƒZƒbƒg
+	// 3Dã‚ªãƒ–ã‚¨ã‚¯ãƒˆã«ãƒ©ã‚¤ãƒˆã‚’ã‚»ãƒƒãƒˆ
 	Object3d::SetLightGroup(lightGroup);
-	//ƒpƒ‰ƒ[ƒ^‚Ìİ’è
+	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®è¨­å®š
 	lightGroup->SetDirLightActive(0, false);
 	lightGroup->SetDirLightActive(1, false);
 	lightGroup->SetDirLightActive(2, false);
@@ -114,7 +104,7 @@ void ForestStage2::ModelCreate()
 }
 #pragma endregion
 
-#pragma region Šeƒpƒ‰ƒ[ƒ^‚ÌƒZƒbƒg
+#pragma region å„ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
 void ForestStage2::SetPrm()
 {
 
@@ -126,13 +116,7 @@ void ForestStage2::SetPrm()
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			tst[j][i]->SetRotation({ tst_Rot });
-			tst[j][i]->SetScale({ tst_Scl });
-
-			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			reef[j][i]->SetRotation({ tst_Rot });
-			reef[j][i]->SetScale({ tst_Scl });
+			
 			if (map[j][i] == 3) {
 				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 				goal->SetRotation({ 0,120,0 });
@@ -154,10 +138,10 @@ void ForestStage2::SetPrm()
 }
 #pragma endregion
 
-#pragma region ƒIƒuƒWƒFƒNƒg+ƒ‰ƒCƒg‚ÌXVˆ—
+#pragma region ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ+ãƒ©ã‚¤ãƒˆã®æ›´æ–°å‡¦ç†
 void ForestStage2::objUpdate()
 {
-	{//ƒ‰ƒCƒg‚Ìƒpƒ‰ƒ[ƒ^‚ğ”½‰f 	
+	{//ãƒ©ã‚¤ãƒˆã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’åæ˜  	
 		lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
 		lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightpos));
 		lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
@@ -181,7 +165,7 @@ void ForestStage2::objUpdate()
 }
 #pragma endregion
 
-#pragma region ‰Šú‰»
+#pragma region åˆæœŸåŒ–
 void ForestStage2::Initialize(DirectXCommon* dxCommon)
 {
 	GameUI::UISpriteSet();
@@ -213,73 +197,97 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 		enemy[i]->Initialize();
 		enemy1[i]->Initialize();
 	}
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i] = std::make_unique<Object3d>();
+			tst[j][i]->Initialize();// Object3d::Create();
+			tst[j][i]->SetModel(tstmodel);
 
-
-
+			reef[j][i] = std::make_unique<Object3d>();
+			reef[j][i]->Initialize();// Object3d::Create();
+			reef[j][i]->SetModel(reefmodel);
+		}
+	}
 
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			tst[j][i]->SetRotation({ tst_Rot });
+			tst[j][i]->SetScale({ tst_Scl });
+
+			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			reef[j][i]->SetRotation({ tst_Rot });
+			reef[j][i]->SetScale({ tst_Scl });
+		}
+	}
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 4) {
-				enemy[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				//tst[j][i]->GetPosition();
+				enemy[0]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 5) {
-				enemy[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[1]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 6) {
-				enemy[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[2]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 7) {
-				enemy[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[3]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 8) {
-				enemy[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[4]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 9) {
-				enemy[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[5]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 10) {
-				enemy[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[6]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 11) {
-				enemy[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[7]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 12) {
-				enemy[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[8]->Setposition({ tst[j][i]->GetPosition()});
 			}
 			else if (map[j][i] == 13) {
-				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy[9]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 14) {
-				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[0]->Setposition({ tst[j][i]->GetPosition() });
 			}
-			if (map[j][i] == 15) {
-				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+
+
+			else if (map[j][i] == 15) {
+				enemy1[1]->Setposition({ tst[j][i]->GetPosition() });
 			}
-			/*else if (map[j][i] == 16) {
-				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			else if (map[j][i] == 16) {
+				enemy1[2]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 17) {
-				enemy1[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[3]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 18) {
-				enemy1[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[4]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 19) {
-				enemy1[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[5]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 20) {
-				enemy1[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[6]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 21) {
-				enemy1[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[7]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 22) {
-				enemy1[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				enemy1[8]->Setposition({ tst[j][i]->GetPosition() });
 			}
 			else if (map[j][i] == 23) {
-				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}*/
+
+				enemy1[9]->Setposition({ tst[j][i]->GetPosition() });
+			}
 		}
 	}
 
@@ -290,29 +298,29 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 	SpriteCreate();//
 	ModelCreate();//
 
-	// ƒJƒƒ‰¶¬
+	// ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height/*input*/);
-	// 3DƒIƒuƒWƒFƒNƒg‚ÉƒJƒƒ‰‚ğƒZƒbƒg
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
 	Object3d::SetCamera(camera);
 
 	effects->Initialize(dxCommon, camera);
 	attackeffects->Initialize(dxCommon, camera);
 
 
-	//ƒ‚ƒfƒ‹–¼‚ğw’è‚µ‚Äƒtƒ@ƒCƒ‹“Ç‚İ‚İ
+	//ãƒ¢ãƒ‡ãƒ«åã‚’æŒ‡å®šã—ã¦ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
-	//ƒfƒoƒCƒX‚ğƒZƒbƒg
+	//ãƒ‡ãƒã‚¤ã‚¹ã‚’ã‚»ãƒƒãƒˆ
 	f_Object3d::SetDevice(dxCommon->GetDev());
-	//ƒJƒƒ‰‚ğƒZƒbƒg
+	//ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
 	f_Object3d::SetCamera(camera);
-	//ƒOƒ‰ƒtƒBƒbƒNƒpƒCƒvƒ‰ƒCƒ“¶¬
+	//ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ç”Ÿæˆ
 	f_Object3d::CreateGraphicsPipeline();
 
-	//FBXƒ‚ƒfƒ‹‚Ì¶¬
+	//FBXãƒ¢ãƒ‡ãƒ«ã®ç”Ÿæˆ
 	object1 = new f_Object3d();
 	object1->Initialize(dxCommon, camera);
 	object1->SetModel(fbxmodel);
-	//Audio‚Ì¶¬
+	//Audioã®ç”Ÿæˆ
 	/*audio = new Audio();
 	audio->Initialize();
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
@@ -323,7 +331,7 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 }
 #pragma endregion
 
-#pragma region XVˆ—
+#pragma region æ›´æ–°å‡¦ç†
 void ForestStage2::Update(DirectXCommon* dxCommon)
 {
 	if (Collision::GetInstance()->Gethit() == true) {
@@ -349,7 +357,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	if (Input::GetInstance()->Pushkey(DIK_0)) {
 
 	}
-	//FBXƒ‚ƒfƒ‹‚ÌXV
+	//FBXãƒ¢ãƒ‡ãƒ«ã®æ›´æ–°
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 
 
@@ -372,8 +380,8 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 				Player_Rot.y = 0;
 			}
 			if (Player_Pos.z >= 1) {
-				BaseScene* scene = new  ClearScene(sceneManager_);//Ÿ‚ÌƒV[ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX¶¬
-				sceneManager_->SetnextScene(scene);//ƒV[ƒ“‚ÌƒZƒbƒg
+				BaseScene* scene = new  ClearScene(sceneManager_);//æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
+				sceneManager_->SetnextScene(scene);//ã‚·ãƒ¼ãƒ³ã®ã‚»ãƒƒãƒˆ
 			}
 		}
 	}
@@ -384,7 +392,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 		time = 0;
 	}
 
-#pragma region ü‚Ìˆ—
+#pragma region ç·šã®å‡¦ç†
 
 
 	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
@@ -398,14 +406,14 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	Player_Pos.y -= grav * time * time;
 
 
-	//’¸“_À•W‚ÌXV
+	//é ‚ç‚¹åº§æ¨™ã®æ›´æ–°
 	mech->CreateLineTexture(linex, linex2, liney, liney2);
 
 	hari_Pos.x = Line::GetInstance()->getpos().x;
 	hari_Pos.y = Line::GetInstance()->getpos().y;
 
 #pragma endregion
-	//Å‘å’l‚ªŒ¸‚é‚Æ‚«‚Ég‚¤ƒtƒ‰ƒO‚Í‚±‚Á‚¿‚ÅŠÇ—
+	//æœ€å¤§å€¤ãŒæ¸›ã‚‹ã¨ãã«ä½¿ã†ãƒ•ãƒ©ã‚°ã¯ã“ã£ã¡ã§ç®¡ç†
 	colf = Line::GetInstance()->GetColf();
 
 	GameUI::UIUpdate(
@@ -423,22 +431,22 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	Line::CollisionEnemys(enemy);
 	Line::CollisionEnemys2group(enemy1);
 
-	//ƒJƒƒ‰ŠÖŒW‚Ìˆ—
+	//ã‚«ãƒ¡ãƒ©é–¢ä¿‚ã®å‡¦ç†
 	if (Player_Pos.x <= 27.0f) {
-		camera->SetTarget({ 0,1,0 });//’‹“_
+		camera->SetTarget({ 0,1,0 });//æ³¨è¦–ç‚¹
 		camera->SetDistance(distance);//
 		camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
 		camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
 	}
 
 	else if (Player_Pos.x >= 368.0f) {
-		camera->SetTarget({ 0,1,0 });//’‹“_
+		camera->SetTarget({ 0,1,0 });//æ³¨è¦–ç‚¹
 		camera->SetDistance(distance);//
 		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
 		camera->SetTarget({ 368.0f,Player_Pos.y ,Player_Pos.z });
 	}
 	else {
-		camera->SetTarget({ 0,1,0 });//’‹“_
+		camera->SetTarget({ 0,1,0 });//æ³¨è¦–ç‚¹
 		camera->SetDistance(distance);//
 		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
 		camera->SetTarget({ Player_Pos.x,Player_Pos.y,Player_Pos.z });
@@ -450,16 +458,18 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	//for (int i = 0; i < 2; i++) {
 	player->CollisionAttack(enemy, Player_Pos);
 	player->CollisionAttack(enemy1, Player_Pos);
-	SetPrm();//ƒpƒ‰ƒ[ƒ^‚ÌƒZƒbƒg
+	SetPrm();//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
 
-	objUpdate();//ƒIƒuƒWƒFƒNƒg‚ÌXVˆ—
+	objUpdate();//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°å‡¦ç†
+	effects->HealEffects(item->ColItem());
+	effects->HealEffects(item1->ColItem());
 
 	effects->Update(dxCommon, camera, enemy, player);
 	effects->Update(dxCommon, camera, enemy1, player);
-	//enemy‚Énullptr‘ã“ü‚·‚é‚Æ‚«‚Í“G‚ª€‚ñ‚¾‚ç
+	//enemyã«nullpträ»£å…¥ã™ã‚‹ã¨ãã¯æ•µãŒæ­»ã‚“ã ã‚‰
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
-			//ƒvƒŒƒCƒ„[‚ÌŒŸ’m
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ¤œçŸ¥
 			enemy[i]->Motion(player);
 			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Attack(player);
@@ -468,14 +478,14 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 			enemy[i]->EnemySearchPlayer(player);
 			enemy[i]->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
 
-			//‚à‚µ“G‚ª€‚ñ‚¾‚ç”jŠü
+			//ã‚‚ã—æ•µãŒæ­»ã‚“ã ã‚‰ç ´æ£„
 			if (enemy[i]->GetState_DEAD() == true) {
 				Destroy_unique(enemy[i]);
 
 			}
 		}
 		if (enemy1[i] != nullptr) {
-			//ƒvƒŒƒCƒ„[‚ÌŒŸ’m
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ¤œçŸ¥
 			enemy1[i]->Motion(player);
 			enemy1[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy1[i]->Attack(player);
@@ -484,7 +494,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 			enemy1[i]->EnemySearchPlayer(player);
 			enemy1[i]->SearchAction(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Player_Pos);
 
-			//‚à‚µ“G‚ª€‚ñ‚¾‚ç”jŠü
+			//ã‚‚ã—æ•µãŒæ­»ã‚“ã ã‚‰ç ´æ£„
 			if (enemy1[i]->GetState_DEAD() == true) {
 				Destroy_unique(enemy1[i]);
 
@@ -501,18 +511,18 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
-	//ƒV[ƒ“ƒ`ƒFƒ“ƒW
+	//ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸
 	if (player->getHp() <= 0 || (Player_Pos.y <= -50)) {
 		Retry::SetStage(Jungle_1_2);
-		BaseScene* scene = new GamOver(sceneManager_);//Ÿ‚ÌƒV[ƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX¶¬
-		sceneManager_->SetnextScene(scene);//ƒV[ƒ“‚ÌƒZƒbƒg
+		BaseScene* scene = new GamOver(sceneManager_);//æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
+		sceneManager_->SetnextScene(scene);//ã‚·ãƒ¼ãƒ³ã®ã‚»ãƒƒãƒˆ
 		//delete scene;
 	}
 }
 #pragma endregion 
 
-//ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ
-#pragma region ƒ‚ƒfƒ‹‚Ì•`‰æ
+//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»
+#pragma region ãƒ¢ãƒ‡ãƒ«ã®æç”»
 void ForestStage2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
@@ -552,7 +562,7 @@ void ForestStage2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	hari->PostDraw();*/
 
 }
-//sƒvƒ‰ƒC‚ÆˆÈŠO‚Ì•`‰æ
+//sãƒ—ãƒ©ã‚¤ã¨ä»¥å¤–ã®æç”»
 void ForestStage2::MyGameDraw(DirectXCommon* dxcomn)
 {
 
@@ -564,7 +574,7 @@ void ForestStage2::MyGameDraw(DirectXCommon* dxcomn)
 	//Fader::FeedSpriteDraw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 
-	//ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»
 	SpriteDraw(dxcomn->GetCmdList());
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
@@ -577,7 +587,7 @@ void ForestStage2::MyGameDraw(DirectXCommon* dxcomn)
 		}
 	}
 
-	//•’Ê‚ÌƒeƒNƒXƒ`ƒƒ‚Ì•`‰æ
+	//æ™®é€šã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”»
 	Line::Draw(dxcomn);
 
 	//weffect->Draw(dxcomn);
@@ -588,7 +598,7 @@ void ForestStage2::MyGameDraw(DirectXCommon* dxcomn)
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
-	//FBX‚Ì•`‰æ
+	//FBXã®æç”»
 	object1->Draw(dxcomn->GetCmdList());
 
 	Sprite::PreDraw(dxcomn->GetCmdList());
@@ -598,25 +608,25 @@ void ForestStage2::MyGameDraw(DirectXCommon* dxcomn)
 	GameUI::NowLoadDraw(dxcomn);
 }
 #pragma endregion
-//«‚É“ü‚é
+//â†“ã«å…¥ã‚‹
 #pragma region
 void ForestStage2::Draw(DirectXCommon* dxcomn)
 {
-	//ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ìê‡‚í‚¯(B‚Å‚Ú‚©‚µ D‚ªƒfƒtƒHƒ‹ƒg)
+	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å ´åˆã‚ã‘(Bã§ã¼ã‹ã— DãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)
 	switch (c_postEffect)
 	{
-	case Blur://‚Ú‚©‚µ@•`‰æ€ˆá‚¤‚¾‚¯
+	case Blur://ã¼ã‹ã—ã€€æç”»æº–é•ã†ã ã‘
 		postEffect->PreDrawScene(dxcomn->GetCmdList());
 		MyGameDraw(dxcomn);
 		postEffect->PostDrawScene(dxcomn->GetCmdList());
 
 		dxcomn->BeginDraw();
 		postEffect->Draw(dxcomn->GetCmdList());
-		ImGuiDraw();//imgui‚ÍÅŒã‚Ì•û“ü‚ê‚Æ‚­
+		ImGuiDraw();//imguiã¯æœ€å¾Œã®æ–¹å…¥ã‚Œã¨ã
 		dxcomn->EndDraw();
 		break;
 
-	case Default://•’Ê‚Ì‚â‚Â“Á‚É‰½‚à‚©‚©‚Á‚Ä‚¢‚È‚¢
+	case Default://æ™®é€šã®ã‚„ã¤ç‰¹ã«ä½•ã‚‚ã‹ã‹ã£ã¦ã„ãªã„
 		postEffect->PreDrawScene(dxcomn->GetCmdList());
 		postEffect->Draw(dxcomn->GetCmdList());
 		postEffect->PostDrawScene(dxcomn->GetCmdList());
@@ -673,7 +683,7 @@ void ForestStage2::ImGuiDraw()
 	//ImGui::End();
 
 }
-#pragma region ‰ğ•ú•”•ª
+#pragma region è§£æ”¾éƒ¨åˆ†
 void ForestStage2::Finalize()
 {
 	//delete sceneManager_;
