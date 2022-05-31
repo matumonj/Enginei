@@ -301,8 +301,10 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
-	if (bossenemy != nullptr) {
-		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
+	if (bossenemy!=nullptr) {
+		if (bossenemy->GetHP() > 1) {
+			player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
+		}
 	}
 	//FBXƒ‚ƒfƒ‹‚ÌXV
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera,movenow);

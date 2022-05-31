@@ -8,6 +8,8 @@ enum Stage {
 	Sea_1_1,
 	Sea_1_2,
 	Sea_1_3,
+	Cas_1_1,
+	Cas_1_2,
 };
 class Retry
 {

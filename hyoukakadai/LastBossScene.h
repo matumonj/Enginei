@@ -199,6 +199,8 @@ public:
 	f_Model* fbxmodel = nullptr;
 	f_Object3d* object1 = nullptr;
 
+	f_Model* fbxmodel2 = nullptr;
+	f_Object3d* object2 = nullptr;
 };
 
 

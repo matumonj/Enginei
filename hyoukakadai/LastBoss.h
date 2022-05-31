@@ -233,6 +233,9 @@ private:
     //
     XMFLOAT3 texscl2;
     float konbouscl2;
+    bool servDamage = true;
+    bool stayflg;
+    int redamageCount = 0;
     float zalpha2;
     int zatackEndTimer2;
     int zatackStartTimer2;

@@ -103,6 +103,7 @@ public:
 	void SetScale(XMFLOAT3 scale) { Scale = scale; }
 	virtual XMFLOAT3 GetRotation() { return Rotation; }
 	XMFLOAT3 GetPosition() { return Position; }
+	XMFLOAT3 GetScale() { return Scale; }
 	virtual void ColMap(int map[20][200] , std::unique_ptr<Object3d>  tst[20][200], float mapx[20][200], float mapy[20][200], const int X, const int Y) =0;
 	virtual void ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y) = 0;
 

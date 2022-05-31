@@ -34,7 +34,7 @@ void LastBossScene::SpriteCreate()
 
 	Texture::LoadTexture(6, L"Resources/gomi.png");
 	Texture::LoadTexture(1, L"Resources/background.png");
-	Sprite::LoadTexture(1, L"Resources/haikei2.png");
+	Sprite::LoadTexture(1, L"Resources/castle.png");
 	Sprite::LoadTexture(2, L"Resources/setumei.png");
 
 
@@ -190,6 +190,8 @@ void LastBossScene::Initialize(DirectXCommon* dxCommon)
 
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("Knight");
+	//モデル名を指定してファイル読み込み
+	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("boss");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -202,10 +204,18 @@ void LastBossScene::Initialize(DirectXCommon* dxCommon)
 	object1 = new f_Object3d();
 	object1->Initialize(dxCommon, camera);
 	object1->SetModel(fbxmodel);
+
+	object2 = new f_Object3d();
+	object2->Initialize(dxCommon, camera);
+	object2->SetModel(fbxmodel2);
 	/*audio = new Audio();
 	audio->Initialize();
+	object2->PlayAnimation();
+
 	audio->LoopWave("Resources/loop100216.wav", vol);*/
 	object1->PlayAnimation();
+	object2->PlayAnimation();
+
 }
 #pragma endregion
 
@@ -234,6 +244,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
+	object2->Updata({ 1,1,1,1 }, dxCommon, camera, TRUE);
 
 
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
@@ -379,7 +390,12 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		//	LastBoss::GetInstance()->ZAttackTex(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player);
 
 		}
+		if (bossenemy != nullptr) {
+			object2->SetRotation({ 1,1,1 });
+			object2->SetPosition(bossenemy->GetPosition());
+			object2->SetScale({ bossenemy->GetScale().x * 0.02f,bossenemy->GetScale().y * 0.02f,bossenemy->GetScale().z * 0.02f });
 
+		}
 	item->HealEfficasy(player);
 	item->Update(&bossenemy);
 
@@ -462,6 +478,7 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 	effects->Draw2(dxcomn);
 	//FBXの描画
 	object1->Draw(dxcomn->GetCmdList());
+	object2->Draw(dxcomn->GetCmdList());
 
 }
 #pragma endregion
