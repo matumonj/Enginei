@@ -33,7 +33,7 @@ void Item::Update(std::unique_ptr<Enemy>enemy[])
 			if (itemObj[i] != nullptr) {
 				itemObj[i]->SetPosition(position[i]);
 				itemObj[i]->SetScale({ 1,1,1 });
-				itemObj[i]->Update({ 1,1,1,1 });
+				itemObj[i]->Update({ 1,1,1,alpha[i] });
 			}
 		}
 }
@@ -41,7 +41,7 @@ void Item::Update(std::unique_ptr<Enemy>enemy[])
 void Item::Draw()
 {
 	for (int i = 0; i<itemMax; i++) {
-		if (itemObj[i] != nullptr) {
+		if (itemObj[i] != nullptr&&GetPossible[i]==true) {
 			itemObj[i]->PreDraw();
 			itemObj[i]->Draw();
 			itemObj[i]->PostDraw();
@@ -52,9 +52,11 @@ void Item::Drop(std::unique_ptr<Enemy>enemy[])
 {
 	for (int i = 0; i < itemMax; i++) {
 		if (enemy[i] != nullptr) {
+			//alpha[i] = 0;
 			position[i] = enemy[i]->GetPosition();
 		}
 		else {
+			alpha[i] = 1;
 			GetPossible[i] = true;
 		}
 	

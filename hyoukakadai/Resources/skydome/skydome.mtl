@@ -2,7 +2,7 @@
 # File Created: 13.10.2020 15:01:10
 
 newmtl Material__25
-	Ka 1.0000 1.0000 1.0000
+	Ka 0.7000 0.7000 0.7000
 	Kd 0.0000 0.0000 0.0000
 	Ks 0.0000 0.0000 0.0000
 	Tr 0.0000
@@ -15,4 +15,4 @@ newmtl Material__25
 	Ni 1.5200
 	Ke 0.0000 0.0000 0.0000
 	illum 2
-	map_Kd b033a06f2786b46c48e1eeea2a2bbe9e_t.jpeg
+	map_Kd e91c5e9aa711c6df1fddaab4f652f1c0_t.jpeg

@@ -26,13 +26,14 @@ public:
 	void HealEfficasy(Player*player);
 	void GetItem(Player* plauer);
 	bool ColItem() { return colitem; }
+	
 private:
 	bool colitem;
 	static const int itemMax = 10;
 	bool GetPossible[itemMax];
 	Object3d* itemObj[itemMax] = { nullptr };
 	Model* itemModel =  nullptr ;
-
+	float alpha[itemMax] = { 0 };
 	//XMFLOAT3 positione[itemMax];
 	XMFLOAT3 position[itemMax];
 	XMFLOAT3 rotation[itemMax];

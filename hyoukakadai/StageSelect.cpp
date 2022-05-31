@@ -41,8 +41,8 @@ void StageSelect::SpriteCreate()
 	Sprite::LoadTexture(103, L"Resources/umi1.png");
 	Sprite::LoadTexture(104, L"Resources/umi2.png");
 	Sprite::LoadTexture(105, L"Resources/umi3.png");
-	Sprite::LoadTexture(107, L"Resources/Stage1-1.png");
-	Sprite::LoadTexture(108, L"Resources/Stage1-1.png");
+	Sprite::LoadTexture(107, L"Resources/siro1.png");
+	Sprite::LoadTexture(108, L"Resources/siro2.png");
 	Sprite::LoadTexture(109, L"Resources/Stage1-1.png");
 	Sprite::LoadTexture(106, L"Resources/targetSprite.png");
 
@@ -264,7 +264,7 @@ void StageSelect::Select()
 			case TutorialStage:
 				if (Input::GetInstance()->TriggerButtonA()) {//押されたら
 
-					BaseScene* scene = new LastBossScene(sceneManager_);//次のシーンのインスタンス生成
+					BaseScene* scene = new Tutorial(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
 				break;
@@ -565,6 +565,12 @@ void StageSelect::SpriteUpdate()
 				StageSprite[i]->SetPosition(SpritePosition[i]);
 				StageSprite[i]->SetSize(SpriteScale[i]);
 			}
+			for (int i = 6; i < 8; i++) {
+				//for (int j = 0; j < 3; j++) {
+				StageSprite[i]->SetPosition(SpritePosition[i - 6]);
+				StageSprite[i]->SetSize(SpriteScale[i -6]);
+				//}
+			}
 			if (Input::GetInstance()->TriggerButtonB()) {
 				stime = 0;
 				stageSpriteScene = Stay_C;
@@ -595,6 +601,9 @@ void StageSelect::SpriteUpdate()
 					BaseScene* scene = new LastBossScene(sceneManager_);//次のシーンのインスタンス生成
 					sceneManager_->SetnextScene(scene);//シーンのセット
 				}
+			}
+			for (int i = 0; i < 6; i++) {
+				StageSprite[i]->SetSize({ 0,0 });
 			}
 			break;
 		case None:

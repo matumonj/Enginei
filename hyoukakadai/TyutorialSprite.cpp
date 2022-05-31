@@ -20,10 +20,10 @@ TyutorialSprite::~TyutorialSprite()
 void TyutorialSprite::Initialize()
 {
 	Sprite::LoadTexture(30, L"Resources/tutorial.png");
-	Sprite::LoadTexture(90, L"Resources/move.png");
-	Sprite::LoadTexture(32, L"Resources/lineshot.png");
-	Sprite::LoadTexture(33, L"Resources/lineope.png");
-	Sprite::LoadTexture(34, L"Resources/attack.png");
+	Sprite::LoadTexture(90, L"Resources/move2.png");
+	Sprite::LoadTexture(32, L"Resources/lineshot1.png");
+	Sprite::LoadTexture(33, L"Resources/gaugelimit1.png");
+	Sprite::LoadTexture(34, L"Resources/attack1.png");
 	//Sprite::LoadTexture(35, L"Resources/lineshot.png");
 	//2
 	//Sprite::LoadTexture(36, L"Resources/lineshot.png");//éÖèoÇµ+éÖÇÃè„å¿
