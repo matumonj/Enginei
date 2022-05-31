@@ -295,9 +295,9 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	spotLightpos[0] = Player_Pos.x;
 	spotLightpos[1] = Player_Pos.y + 1000;
 	spotLightpos[2] = 0;
-
-	player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
-
+	if (bossenemy != nullptr) {
+		player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
+	}
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera,movenow);
 
@@ -320,10 +320,10 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	} else {
 		grav = 0.03f;
 	}
-
-	time += 0.04f;
-	Player_Pos.y -= grav * time * time;
-
+	if (bossenemy != nullptr) {
+		time += 0.04f;
+		Player_Pos.y -= grav * time * time;
+	}
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -363,9 +363,14 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	ForestBoss::GetInstance()->appearance(camerapositiony, Player_Pos.y);
 	camera->SetTarget({ 0,1,0 });//注視点
 	camera->SetDistance(distance);//
-	camera->SetEye({ Player_Pos.x,camerapositiony + 5,Player_Pos.z - 35.0f });
-	camera->SetTarget({ Player_Pos.x,camerapositiony + 3 ,Player_Pos.z });
-
+//	if (bossenemy != nullptr) {
+		//if (bossenemy->GetHP() >= 1) {
+			camera->SetEye({ Player_Pos.x,camerapositiony + 5,Player_Pos.z - 35.0f });
+			camera->SetTarget({ Player_Pos.x,camerapositiony + 3 ,Player_Pos.z });
+			oldcamera = camerapositiony + 3;
+		
+		
+	//}
 	camera->Update();
 
 	effects->BossAttackEffect(dxCommon, camera, BossEnemy::GetInstance()->GetAltStay(), atb, bpos);
@@ -402,6 +407,12 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 		//もし敵が死んだら破棄
 		if (bossenemy->GetState_DEAD() == true) {
 			Destroy_unique(bossenemy);
+			Fader::feedIn(1.0f, 1);
+			if (Fader::GetInstance()->GetAlpha()>=0.9 ) {//押されたら
+				//Retry::SetStage(Jungle_1_3);
+				BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
+				sceneManager_->SetnextScene(scene);//シーンのセット
+			}
 		}
 	}
 
@@ -433,6 +444,7 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 				//もし敵が死んだら破棄
 				if (enemycolony2[i]->GetState_DEAD() == true) {
 					Destroy_unique(enemycolony2[i]);
+
 				}
 		}
 	}

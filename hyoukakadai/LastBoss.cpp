@@ -56,6 +56,8 @@ void LastBoss::Attack(Player* player)
 //èâä˙âªèàóù
 void LastBoss::Initialize()
 {
+	stayflag = false;
+	beamf = false;
 	Scale = { 1,1,1};
 	bossAction = None;
 	nTexture::LoadTexture(8, L"Resources/targetcircle.png");
@@ -238,7 +240,7 @@ void LastBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200],
 {
 
 	//
-
+	
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
 			for (int k = 0; k < 3; k++) {
@@ -258,6 +260,22 @@ void LastBoss::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200],
 
 void LastBoss::Motion(Player* player)
 {
+	if (zattack) {
+		if (Collision::GetLen(damagearea[0]->GetPosition(), player->GetPosition()) < 5) {
+			player->SetHp(player->getHp() - 1);
+		}
+		if (Collision::GetLen(damagearea[1]->GetPosition(), player->GetPosition()) < 5) {
+			player->SetHp(player->getHp() - 1);
+		}
+	}
+	if (zattack2) {
+		if (Collision::GetLen(damagearea2[0]->GetPosition(), player->GetPosition()) < 5) {
+			player->SetHp(player->getHp() - 1);
+		}
+		if (Collision::GetLen(damagearea2[1]->GetPosition(), player->GetPosition()) < 5) {
+			player->SetHp(player->getHp() - 1);
+		}
+	}
 	RotationDamageblock();
 	atcf = zattack;
 	NormalAttacks(player);
@@ -271,7 +289,6 @@ void LastBoss::Motion(Player* player)
 	switch (bossAction)
 	{
 	case syurikenattack:
-
 		syurikenack = true;
 		rotack[0] = true;
 		rotack[1] = true;
@@ -403,10 +420,10 @@ void LastBoss::NormalAttacks(Player* player)
 			if (!shotf[i]) {
 				//shotf[i] = true;
 				//if (Input::GetInstance()->TriggerKey(DIK_S)) {
-				//if (!ChangeAttack) {
+				if (!beamf&&!stayflag) {
 					shotf[i] = true;
 					BarrelRec = true;
-				//} else {
+				} //else {
 				
 				//}
 

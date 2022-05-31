@@ -117,6 +117,7 @@ private:
 	bool movenow;
 	bool hintload;
 	int blockSize = 2;
+	float oldcamera;
 	int map[130][20] = {
 		//マップチップ振り分け
 		//20~ボスの移動位置(イージング用)
