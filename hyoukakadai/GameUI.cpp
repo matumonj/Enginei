@@ -5,6 +5,8 @@
 #include"Destroy.h"
 #include"Line.h"
 #include"BossEnemy.h"
+#include"BaseScene.h"
+#include"GamOver.h"
 #include"mHelper.h"
 //Ž…‚É‚©‚©‚í‚éUI
 using namespace DirectX;
@@ -255,6 +257,7 @@ void GameUI::PlayerUIUpdate(Player* player)
 	PlayerHP->SetSize(playerHPScl);
 	PlayerHP->SetPosition(playerHPPos);
 	PlayerHP->setcolor({ 1,1,1,1 });
+	
 }
 
 void GameUI::PlayerUIDraw(DirectXCommon* dxcomn)

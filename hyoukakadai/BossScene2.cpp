@@ -14,6 +14,7 @@
 #include"Fader.h"
 #include"CollisionPrimitive.h"
 #include"Retry.h"
+#include"GamOver.h"
 //シーンのコンストラクタ
 BossScene2::BossScene2(SceneManager* sceneManager)
 	:BaseScene(sceneManager)
@@ -472,9 +473,9 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
 	GameUI::PlayerUIUpdate(player);
 	//シーンチェンジ
-	if (Input::GetInstance()->TriggerKey(DIK_R) || (Player_Pos.y <= -50)) {//押されたら
+	if (player->getHp() <= 0 || (Player_Pos.y <= -50)) {
 		Retry::SetStage(Jungle_1_3);
-		BaseScene* scene = new ClearScene(sceneManager_);//次のシーンのインスタンス生成
+		BaseScene* scene = new GamOver(sceneManager_);//次のシーンのインスタンス生成
 		sceneManager_->SetnextScene(scene);//シーンのセット
 	}
 }

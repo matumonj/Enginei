@@ -2,6 +2,8 @@
 #include"Input.h"
 enum Stage {
 	None,
+	tyutorial_1,
+	tyutorial_2,
 	Jungle_1_1,
 	Jungle_1_2,
 	Jungle_1_3,
