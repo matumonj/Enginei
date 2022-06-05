@@ -259,13 +259,13 @@ void LastStage::Initialize(DirectXCommon* dxCommon)
 			else if (map[j][i] == 13) {
 				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[j][i] == 14) {
+			if (map[j][i] == 14) {
 				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 15) {
 				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[j][i] == 16) {
+		/*	else if (map[j][i] == 16) {
 				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 17) {
@@ -288,7 +288,7 @@ void LastStage::Initialize(DirectXCommon* dxCommon)
 			}
 			else if (map[j][i] == 23) {
 				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
+			}*/
 		}
 	}
 
@@ -474,7 +474,7 @@ void LastStage::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < 10; i++) {
 		if (enemy[i] != nullptr) {
 			//プレイヤーの検知
-			enemy[i]->Attack(player);
+			enemy[i]->Motion(player);
 			enemy[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy[i]->Update(Player_Pos);
 
@@ -487,7 +487,7 @@ void LastStage::Update(DirectXCommon* dxCommon)
 		}
 		if (enemy1[i] != nullptr) {
 			//プレイヤーの検知
-			enemy1[i]->Attack(player);
+			enemy1[i]->Motion(player);
 			enemy1[i]->ColMap(map, tst, mapx, mapy, MAX_X, MAX_Y);
 			enemy1[i]->Update(Player_Pos);
 

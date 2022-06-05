@@ -181,25 +181,25 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 	GameUI::PlayerUISet();
 	enemy[0] = std::make_unique<MobEnemy>();
 	enemy[1] = std::make_unique<MobEnemy>();
-	enemy[2] = std::make_unique<ThrowEnemy>();
-	enemy[3] = std::make_unique<ThrowEnemy>();
-	enemy[4] = std::make_unique<ThrowEnemy>();
-	enemy[5] = std::make_unique<ThrowEnemy>();
-	enemy[6] = std::make_unique<ThrowEnemy>();
-	enemy[7] = std::make_unique<ThrowEnemy>();
-	enemy[8] = std::make_unique<ThrowEnemy>();
-	enemy[9] = std::make_unique<ThrowEnemy>();
+	enemy[2] = std::make_unique<MobEnemy>();
+	enemy[3] = std::make_unique<MobEnemy>();
+	enemy[4] = std::make_unique<MobEnemy>();
+	enemy[5] = std::make_unique<MobEnemy>();
+	enemy[6] = std::make_unique<MobEnemy>();
+	enemy[7] = std::make_unique<MobEnemy>();
+	enemy[8] = std::make_unique<MobEnemy>();
+	enemy[9] = std::make_unique<MobEnemy>();
 
 	enemy1[0] = std::make_unique<MobEnemy>();
 	enemy1[1] = std::make_unique<MobEnemy>();
-	enemy1[2] = std::make_unique<ThrowEnemy>();
-	enemy1[3] = std::make_unique<ThrowEnemy>();
-	enemy1[4] = std::make_unique<ThrowEnemy>();
-	enemy1[5] = std::make_unique<ThrowEnemy>();
-	enemy1[6] = std::make_unique<ThrowEnemy>();
-	enemy1[7] = std::make_unique<ThrowEnemy>();
-	enemy1[8] = std::make_unique<ThrowEnemy>();
-	enemy1[9] = std::make_unique<ThrowEnemy>();
+	enemy1[2] = std::make_unique<MobEnemy>();
+	enemy1[3] = std::make_unique<MobEnemy>();
+	enemy1[4] = std::make_unique<MobEnemy>();
+	enemy1[5] = std::make_unique<MobEnemy>();
+	enemy1[6] = std::make_unique<MobEnemy>();
+	enemy1[7] = std::make_unique<MobEnemy>();
+	enemy1[8] = std::make_unique<MobEnemy>();
+	enemy1[9] = std::make_unique<MobEnemy>();
 
 	for (int i = 0; i < 10; i++) {
 		enemy[i]->Initialize();
@@ -238,22 +238,22 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 			else if (map[j][i] == 13) {
 				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[j][i] == 14) {
+			/*if (map[j][i] == 14) {
 				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
-			else if (map[j][i] == 15) {
+			}*/
+			/*else if (map[j][i] == 15) {
 				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
-			else if (map[j][i] == 16) {
+			}*/
+		/*	else if (map[j][i] == 16) {
 				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
-			else if (map[j][i] == 17) {
+			}*/
+			/*else if (map[j][i] == 17) {
 				enemy1[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 18) {
 				enemy1[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
-			else if (map[j][i] == 19) {
+			}*/
+			/*else if (map[j][i] == 19) {
 				enemy1[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 20) {
@@ -267,7 +267,7 @@ void ForestStage1::Initialize(DirectXCommon* dxCommon)
 			}
 			else if (map[j][i] == 23) {
 				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			}
+			}*/
 		}
 	}
 

@@ -241,7 +241,7 @@ void DesertField::Initialize(DirectXCommon* dxCommon)
 			else if (map[j][i] == 14) {
 				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[j][i] == 15) {
+			if (map[j][i] == 15) {
 				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 16) {
