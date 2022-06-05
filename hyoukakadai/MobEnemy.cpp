@@ -230,7 +230,7 @@ void MobEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200] 
 	}
 
 	time += 0.04f;
-	Position.y -= grav * time * time;
+	Position.y -= grav;// *time* time;
 }
 void MobEnemy::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)
 {

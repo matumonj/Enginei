@@ -501,9 +501,24 @@ void LastBoss::NormalAttacks(Player* player)
 			Shot_Pos[i].x += Xspeed[i];
 			Shot_Pos[i].y += Yspeed[i];
 			if (Collision::GetLen(Shot_Pos[i], player->GetPosition()) < 1) {
-				player->SetHp(player->getHp() - 1);
+				if (servDamage2) {
+					player->SetHp(player->getHp() - 4);
+					servDamage2 = false;
+					stayflg2= true;
+					//Attack(player);
+				}
+			
+			if (stayflg2) {
+				redamageCount2++;
+				if (redamageCount2 > 3) {
+					servDamage2 = true;
+					redamageCount2 = 0;
+					stayflg2 = false;
+				}
+			}
+				//player->SetHp(player->getHp() - 5);
 				shotf[i] = false;
-				break;
+				//break;
 			}
 			if (Collision::GetLen(Shot_Pos[i], Position) > 100) {
 				shotf[i] = false;
@@ -553,7 +568,7 @@ void LastBoss::RotationDamageblock()
 		sclplus[1] = 0;
 	}
 	if (rotack[0]) {
-		sclplus[0] += 0.01f;
+		sclplus[0] += 0.005f;
 		syurikenscl[0].x=Easing::EaseOut(sclplus[0], 0, 2.5);
 		syurikenscl[0].y = Easing::EaseOut(sclplus[0], 0, 2.5);
 		if (syurikenscl[0].y >=2.4f) {
@@ -564,7 +579,7 @@ void LastBoss::RotationDamageblock()
 		}
 	}
 	if (rotack[1]) {
-		sclplus[1] += 0.01f;
+		sclplus[1] += 0.005f;
 		syurikenscl[1].x = Easing::EaseOut(sclplus[1], 0, 2.5f);
 		syurikenscl[1].y = Easing::EaseOut(sclplus[1], 0, 2.5f);
 		if (syurikenscl[1].y >= 2.4f) {
@@ -731,7 +746,7 @@ void LastBoss::beamAtack(Player*player)
 {
 	//私レイキャストをこっちに入れておりません
 	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
-	playersphere.radius = 4.0f;
+	playersphere.radius = 2.0f;
 	laserRay.start = { Position.x,Position.y+0.3f,Position.z };
 	laserRay.dir = { -1,0,0 };
 
@@ -810,8 +825,8 @@ void LastBoss::GetDamageMove(int map[20][200], std::unique_ptr<Object3d>  tst[20
 	}
 	if (GetDamageScly) {
 
-		if (Scale.y <= 3) {
-			Scale.y += 0.1f;
+		if (Scale.y >=0) {
+			Scale.y -= 0.1f;
 		} else {
 			movearea = true;
 			//Scale.y = 1;

@@ -231,7 +231,38 @@ void Effects::Updateo(DirectXCommon* dxcomn, DebugCamera* camera, Enemy* enemy, 
 		}
 	}
 
+	if (player->GetRot_Left() == true) {
+		attackefk->SetPosition(player->GetPosition().x - 6, player->GetPosition().y, player->GetPosition().z);
+		//attackefk->SetRotation(zrot, 180, 30);
+		//attackefk->SetScale(2,2,2 );
+		attackefk->SetRotation(0, zrot, 0); //-4.651);
+		attackefk->SetScale(0.15, 0.326, 0.05);
 
+	} else if (player->GetRot_Right() == true) {
+		attackefk->SetPosition(player->GetPosition().x + 6, player->GetPosition().y, player->GetPosition().z);
+		//Effect_Rot = { 0,0,0 };
+		attackefk->SetRotation(0,/*-55.068*/ zrot, 0); //-4.651);
+		attackefk->SetScale(-0.15, 0.326, 0.05);
+
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+		attack = true;
+	}
+
+	//コントローラー
+	if (Input::GetInstance()->TriggerButtonA()) {
+		//攻撃処理
+		attack = true;
+	}//
+	if (player->GetFlyAttack() == true) {
+		attack = true;
+	}
+	if (attack) {
+		attackefk->Load_Effect();
+
+		attack = false;
+	}
 	//エフェクトのパラメータセット
 	/*efk->SetPosition(Effect_Pos.x, Effect_Pos.y, Effect_Pos.z);
 	efk->SetRotation(0, 0, 0);
@@ -251,7 +282,7 @@ void Effects::Updateo(DirectXCommon* dxcomn, DebugCamera* camera, Enemy* enemy, 
 
 	//view,projection行列をエフェクトのテクスチャにかける
 	efk->EffekseerUpdate(dxcomn, camera);
-	//attackefk->EffekseerUpdate(dxcomn, camera);
+	attackefk->EffekseerUpdate(dxcomn, camera);
 	//bossattackefk->EffekseerUpdate(dxcomn, camera);
 
 	//efk1->EffekseerUpdate(dxcomn, camera);

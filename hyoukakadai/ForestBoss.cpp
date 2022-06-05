@@ -559,7 +559,7 @@ void ForestBoss::ArmAytack(Player*player)
 	
 	if (ArmAttackflag) {
 	if (Arm_Scl[0].y <= OldArm_Scl[0].y + 5) {
-			armattacktime += 0.005f;
+			armattacktime += 0.05f;
 			//armattacktime += 0.05f;
 		}
 		Arm_Scl[0].y = Easing::EaseOut(armattacktime, OldArm_Scl[0].y, OldArm_Scl[0].y+5);
@@ -601,21 +601,15 @@ void ForestBoss::ArmAttack_Left(Player* player)
 			Sec_ArmAttackflag = true;
 		}
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_B)) {
-		Sec_ArmAttackflag = true;
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_C)) {
-		Sec_ArmAttackflag = true;
-		ArmAttackflag = true;
-	}
+	
 	if (Sec_ArmAttackflag) {
 		
-		if (Arm_Scl[1].y <= OldArm_Scl[1].y + 2) {
-			Sec_armattacktime += 0.05f;
+		if (Arm_Scl[1].y <= OldArm_Scl[1].y + 1) {
+			Sec_armattacktime += 0.5f;
 			//Sec_armattacktime = 0.05f;
 		}
 		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime, OldArm_Scl[1].y, OldArm_Scl[1].y + 2);
-		if (Collision::GetLen({ OldArm_Scl[1].x,OldArm_Scl[1].y + 10,OldArm_Scl[1].z }, Arm_Scl[1]) < 1) {
+		if (Arm_Scl[1].y > OldArm_Scl[1].y + 4.9) {
 			Sec_ArmAttackflag = false;
 			Sec_armreturn = true;
 			Sec_armattacktime = 0.0f;
@@ -624,7 +618,7 @@ void ForestBoss::ArmAttack_Left(Player* player)
 		OldArm_Scl[1] = Arm_Scl[1];
 	}
 	if (Sec_armreturn) {
-		Sec_armattacktime2 += 0.05f;
+		Sec_armattacktime2 += 0.5f;
 		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime2, Arm_Scl[1].y, 0);
 		if (Collision::GetLenY(Arm_Scl[1], { 0,0,0 }) < 1) {
 			Sec_armreturn = false;

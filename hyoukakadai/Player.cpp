@@ -122,20 +122,17 @@ void Player::CollisionAttack(std::unique_ptr<Enemy>enemy[], XMFLOAT3 playerpos)
 
 void Player::CollisionAttack1(Enemy*enemy, XMFLOAT3 playerpos)
 {
-	damageArea.Area_s = { position.x - Area_X_s,position.y - 8 };
-	damageArea.Area_e = { position.x + Area_X_e ,position.y + 5 };
+	damageArea.Area_s = { position.x - Area_X_s,position.y - 3 };
+	damageArea.Area_e = { position.x + Area_X_e ,position.y + 3 };
 
 	//当たり判定
 
 	if (action == Action::Attack) {
-		
-		if (enemy != nullptr) {
-			if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e,
-				{ enemy->GetPosition().x - 3,enemy->GetPosition().y - 3 },
-				{ enemy->GetPosition().x + 3,enemy->GetPosition().y + 3}) == true) {
-				enemy->SetHP(enemy->GetHP() - 1);
+			if (enemy != nullptr) {
+				if (Collision::Boxcol(damageArea.Area_s, damageArea.Area_e, { enemy->GetPosition().x,enemy->GetPosition().y - 1 }, { enemy->GetPosition().x ,enemy->GetPosition().y + 1 }) == true) {
+					enemy->SetHP(enemy->GetHP() - 1);
+				}
 			}
-		}
 	}
 }
 

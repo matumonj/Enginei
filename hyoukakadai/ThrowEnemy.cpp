@@ -104,7 +104,7 @@ void ThrowEnemy::Attack(Player* player)
 			dis = sqrtf((thposition[i].x - player->GetPosition().x) * (thposition[i].x - player->GetPosition().x) +
 				(thposition[i].y - player->GetPosition().y) * (thposition[i].y - player->GetPosition().y));
 			if (dis <= 2 && throwparam[i].flag == true) {
-				player->SetHp(player->getHp() - Damage);
+				player->SetHp(player->getHp() -5);
 				throwparam[i].flag = false;
 			}
 		}
@@ -390,7 +390,7 @@ void ThrowEnemy::ColMap(int map[20][200], std::unique_ptr<Object3d>  tst[20][200
 	}
 
 	time += 0.04f;
-	Position.y -= grav * time * time;
+	Position.y -= grav;
 
 
 	//

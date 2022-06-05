@@ -145,6 +145,57 @@ void BossScene3::ModelCreate()
 	//Fader::SetFeedSprite();
 	BckGrnd[0] = 0;
 	BckGrnd[1] = 1900;
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			tst[j][i]->SetRotation({ tst_Rot });
+			tst[j][i]->SetScale({ tst_Scl });
+			if (map[j][i] == 3) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,120,0 });
+				goal->SetScale({ tst_Scl });
+			}
+		}
+	}
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 200; j++) {
+		
+			if (map[i][j] == 41) {
+				if (enemy[9] != nullptr) {
+					enemy[9]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+		
+			if (map[i][j] == 60) {
+				if (enemy[1] != nullptr) {
+					enemy[1]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 61) {
+				if (enemy[2] != nullptr) {
+					enemy[2]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 52) {
+				if (enemy[4] != nullptr) {
+					enemy[4]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 53) {
+				if (enemy[5] != nullptr) {
+					enemy[5]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 54) {
+				if (enemy[6] != nullptr) {
+					enemy[6]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			
+
+		}
+	}
 }
 #pragma endregion
 
@@ -170,19 +221,6 @@ void BossScene3::SetPrm()
 	player->SetScale({ Player_Scl });
 	player->SetRotation({ Player_Rot });
 
-	for (int j = 0; j < MAX_Y; j++) {
-		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			tst[j][i]->SetRotation({ tst_Rot });
-			tst[j][i]->SetScale({ tst_Scl });
-			if (map[j][i] == 3) {
-				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-				goal->SetRotation({ 0,120,0 });
-				goal->SetScale({ tst_Scl });
-			}
-		}
-	}
-
 	block->SetPosition({ block_pos });
 	block->SetScale({ block_Scl });
 
@@ -198,41 +236,9 @@ void BossScene3::SetPrm()
 
 	object1->SetPosition({ Player_Pos });
 	object1->SetRotation({ Player_Rot });
-}
-#pragma endregion
-
-#pragma region オブジェクト+ライトの更新処理
-void BossScene3::objUpdate()
-{
-	{//ライトのパラメータを反映 	
-		lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
-		lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightpos));
-		lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
-		lightGroup->SetSpotLightAtten(0, XMFLOAT3(spotLightAtten));
-		lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));
-	}
-	lightGroup->Update();
-
-	player->Update({ 1,1,1,1 });
-
-	for (int j = 0; j < MAX_Y; j++) {
-		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i]->Update({ 1,1,1,1 });
-		}
-	}
-
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 200; j++) {
-			if (map[i][j] == 40) {
-				if (enemy[7] != nullptr) {
-					enemy[7]->Setposition(tst[i][j]->GetPosition());
-				}
-			}
-			if (map[i][j] == 41) {
-				if (enemy[9] != nullptr) {
-					enemy[9]->Setposition(tst[i][j]->GetPosition());
-				}
-			}
+		
 			if (map[i][j] == 42) {
 				if (enemy2[0] != nullptr) {
 					enemy2[0]->Setposition(tst[i][j]->GetPosition());
@@ -283,8 +289,53 @@ void BossScene3::objUpdate()
 					enemy2[9]->Setposition(tst[i][j]->GetPosition());
 				}
 			}
+			if (map[i][j] == 51) {
+				if (enemy2[9] != nullptr) {
+					enemy2[9]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+
+			if (map[i][j] == 40) {
+				if (enemy[7] != nullptr) {
+					enemy[7]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 55) {
+				if (enemy[9] != nullptr) {
+					enemy[9]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
+			if (map[i][j] == 56) {
+				if (enemy[8] != nullptr) {
+					enemy[8]->Setposition(tst[i][j]->GetPosition());
+				}
+			}
 		}
 	}
+}
+#pragma endregion
+
+#pragma region オブジェクト+ライトの更新処理
+void BossScene3::objUpdate()
+{
+	{//ライトのパラメータを反映 	
+		lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
+		lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightpos));
+		lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
+		lightGroup->SetSpotLightAtten(0, XMFLOAT3(spotLightAtten));
+		lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));
+	}
+	lightGroup->Update();
+
+	player->Update({ 1,1,1,1 });
+
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i]->Update({ 1,1,1,1 });
+		}
+	}
+
+
 	world->Update({ 1,1,1,1 });
 	block->Update({ 1,1,1,1 });
 	hari->Update({ 1,1,1,1 });
@@ -303,7 +354,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[0] = std::make_unique<SeaBoss>();
 	//enemy[0] = std::make_unique<ThrowEnemy>();
 	enemy[9] = std::make_unique<PorcFish>();
-	enemy[8] = std::make_unique<FishEnemy>();
+	enemy[8] = std::make_unique<PorcFish>();
 	enemy[7] = std::make_unique<PorcFish>();
 
 	enemy[1] = std::make_unique<MobEnemy>();
@@ -311,17 +362,12 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	enemy[3] = std::make_unique<ThrowEnemy>();
 	enemy[4] = std::make_unique<ThrowEnemy>();
 	enemy[5] = std::make_unique<ThrowEnemy>();
-	enemy[6] = std::make_unique<ThrowEnemy>();
+	enemy[6] = std::make_unique<MobEnemy>();
 	//enemy[0] = new MobEnemy();
 	//enemy[9]->Setposition({ 1070,-18.2f,0 });
 	enemy[8]->Setposition({ 80,-12.2f,0 });
 	//enemy[7]->Setposition({ 800,-4.2f,0 });
-	enemy[6]->Setposition({ 2700,-18.2f,0 });
-	enemy[5]->Setposition({ 1700,-18.2f,0 });
-	enemy[4]->Setposition({ 3200,-14.2f,0 });
 	enemy[3]->Setposition({ 80,-4.2f,0 });
-	enemy[2]->Setposition({ 2500,-4.2f,0 });
-	enemy[1]->Setposition({ 3500, -18, 0 });
 	//enemy[0]->Setposition({ 50, -15, 0 });
 	enemy[0]->Initialize();
 	enemy[1]->Initialize();
@@ -716,6 +762,7 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 	GameUI::TargetUIDraw(dxcomn);
 
 	GameUI::PlayerUIDraw(dxcomn);
+	GameUI::UIDraw(dxcomn);
 
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
@@ -738,7 +785,6 @@ void BossScene3::MyGameDraw(DirectXCommon* dxcomn)
 
 
 	nTexture::PostDraw();
-	GameUI::UIDraw(dxcomn);
 	GameUI::NowLoadDraw(dxcomn);
 	GameUI::HintSeaBossDraw(dxcomn);
 }

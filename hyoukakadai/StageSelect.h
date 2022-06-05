@@ -26,7 +26,7 @@ private:
 	Model* SelectStageModel;
 	Object3d* Skydome;
 	Model* DomeModel;
-	Sprite* StageSprite[9];
+	Sprite* StageSprite[11];
 	Sprite* TargetSprite;
 	XMFLOAT2 TargetSpritePos[3];
 	XMFLOAT2 SpritePosition[3];

@@ -133,7 +133,7 @@ void LastBossScene::SetPrm()
 
 	background->SetPosition({ 0, 0 });
 	background->SetSize({ WinApp::window_width,WinApp::window_height });
-	background->setcolor({ 1,1,1,1 });
+	background->setcolor({ 0.5,0.5,0.5,1 });
 
 	object1->SetPosition({ Player_Pos });
 	object1->SetRotation({ Player_Rot });
@@ -169,7 +169,7 @@ void LastBossScene::objUpdate()
 void LastBossScene::Initialize(DirectXCommon* dxCommon)
 {
 	//
-
+	
 	GameUI::UISpriteSet();
 	GameUI::TargetUISet();
 	GameUI::PlayerUISet();
@@ -216,6 +216,7 @@ void LastBossScene::Initialize(DirectXCommon* dxCommon)
 	object1->PlayAnimation();
 	object2->PlayAnimation();
 
+	player->SetHp(200);
 }
 #pragma endregion
 
@@ -497,7 +498,7 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 	}
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
-	effects->Draw2(dxcomn);
+	//effects->Draw2(dxcomn);
 	Sprite::PreDraw(dxcomn->GetCmdList());
 
 	Fader::FeedSpriteDraw();

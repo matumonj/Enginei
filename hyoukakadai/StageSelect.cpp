@@ -46,6 +46,8 @@ void StageSelect::SpriteCreate()
 	Sprite::LoadTexture(108, L"Resources/siro2.png");
 	Sprite::LoadTexture(109, L"Resources/Stage1-1.png");
 	Sprite::LoadTexture(106, L"Resources/targetSprite.png");
+	Sprite::LoadTexture(110, L"Resources/RBrotation1.png");
+	Sprite::LoadTexture(111, L"Resources/LBrotation1.png");
 
 	StageSprite[0] = Sprite::Create(100, { 200,0 });
 	StageSprite[1] = Sprite::Create(101, { 200,0 });
@@ -56,7 +58,8 @@ void StageSelect::SpriteCreate()
 	StageSprite[6] = Sprite::Create(107, { 200,0 });
 	StageSprite[7] = Sprite::Create(108, { 200,0 });
 	StageSprite[8] = Sprite::Create(109, { 200,0 });
-	//StageSprite[9] = Sprite::Create(103, { 200,0 });
+	StageSprite[9] = Sprite::Create(110, { 200,0 });
+	StageSprite[10] = Sprite::Create(111, { 200,0 });
 	
 	TargetSprite= Sprite::Create(106, { 200,0 });
 	
@@ -85,7 +88,7 @@ void StageSelect::ModelCreate()
 	SelectStageObj->SetScale({ 8,8,8 });
 	SelectStageObj->SetRotation({ 0,0,0 });
 	obj_Rot = { 0,0,0 };
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 12; i++) {
 		StageSprite[i]->SetAnchorPoint({ 0.5,0.5 });
 		StageSprite[i]->SetPosition({ -300,-300 });
 	}
@@ -206,7 +209,7 @@ void StageSelect::Draw(DirectXCommon* dxcomn)
 	
 	
 	if (!Loadf) {
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 12; i++) {
 			StageSprite[i]->Draw();
 		}
 	}
@@ -250,7 +253,7 @@ void StageSelect::Finalize()
 	//delete sceneManager_;
 	delete camera;
 	delete SelectStageModel, SelectStageObj;
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 11; i++) {
 		delete StageSprite[i];
 	}
 	delete TargetSprite;
@@ -367,6 +370,8 @@ void StageSelect::SelectMove()
 
 void StageSelect::SpriteUpdate()
 {
+	StageSprite[9]->SetPosition({ 1700,800 });
+	StageSprite[10]->SetPosition({ 200,800 });
 		switch (stageSpriteScene)
 		{
 		case Jungle:
