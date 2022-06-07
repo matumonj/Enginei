@@ -67,7 +67,17 @@ void ForestStage2::ModelCreate()
 	item1->Initialize();
 	collision = new Collision();
 
-	
+	for (int j = 0; j < MAX_Y; j++) {
+		for (int i = 0; i < MAX_X; i++) {
+			tst[j][i] = std::make_unique<Object3d>();
+			tst[j][i]->Initialize();// Object3d::Create();
+			tst[j][i]->SetModel(tstmodel);
+
+			reef[j][i] = std::make_unique<Object3d>();
+			reef[j][i]->Initialize();// Object3d::Create();
+			reef[j][i]->SetModel(reefmodel);
+		}
+	}
 
 	goal = std::make_unique<Object3d>();
 	goal->Initialize();
@@ -116,7 +126,13 @@ void ForestStage2::SetPrm()
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
-			
+			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			tst[j][i]->SetRotation({ tst_Rot });
+			tst[j][i]->SetScale({ tst_Scl });
+
+			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			reef[j][i]->SetRotation({ tst_Rot });
+			reef[j][i]->SetScale({ tst_Scl });
 			if (map[j][i] == 3) {
 				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 				goal->SetRotation({ 0,120,0 });
@@ -197,97 +213,63 @@ void ForestStage2::Initialize(DirectXCommon* dxCommon)
 		enemy[i]->Initialize();
 		enemy1[i]->Initialize();
 	}
-	for (int j = 0; j < MAX_Y; j++) {
-		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i] = std::make_unique<Object3d>();
-			tst[j][i]->Initialize();// Object3d::Create();
-			tst[j][i]->SetModel(tstmodel);
-
-			reef[j][i] = std::make_unique<Object3d>();
-			reef[j][i]->Initialize();// Object3d::Create();
-			reef[j][i]->SetModel(reefmodel);
-		}
-	}
 
 
-	for (int j = 0; j < MAX_Y; j++) {
-		for (int i = 0; i < MAX_X; i++) {
-			tst[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			tst[j][i]->SetRotation({ tst_Rot });
-			tst[j][i]->SetScale({ tst_Scl });
 
-			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
-			reef[j][i]->SetRotation({ tst_Rot });
-			reef[j][i]->SetScale({ tst_Scl });
-		}
-	}
+
 
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 4) {
-				//tst[j][i]->GetPosition();
-				enemy[0]->Setposition({ tst[j][i]->GetPosition()});
+				enemy[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 5) {
+				enemy[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 6) {
+				enemy[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 7) {
+				enemy[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 8) {
+				enemy[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 9) {
+				enemy[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 10) {
+				enemy[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 11) {
+				enemy[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 12) {
+				enemy[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 13) {
+				enemy[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			} else if (map[j][i] == 14) {
+				enemy1[0]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[j][i] == 5) {
-				enemy[1]->Setposition({ tst[j][i]->GetPosition()});
+			if (map[j][i] == 15) {
+				enemy1[1]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
-			else if (map[j][i] == 6) {
-				enemy[2]->Setposition({ tst[j][i]->GetPosition()});
-			}
-			else if (map[j][i] == 7) {
-				enemy[3]->Setposition({ tst[j][i]->GetPosition() });
-			}
-			else if (map[j][i] == 8) {
-				enemy[4]->Setposition({ tst[j][i]->GetPosition() });
-			}
-			else if (map[j][i] == 9) {
-				enemy[5]->Setposition({ tst[j][i]->GetPosition() });
-			}
-			else if (map[j][i] == 10) {
-				enemy[6]->Setposition({ tst[j][i]->GetPosition() });
-			}
-			else if (map[j][i] == 11) {
-				enemy[7]->Setposition({ tst[j][i]->GetPosition()});
-			}
-			else if (map[j][i] == 12) {
-				enemy[8]->Setposition({ tst[j][i]->GetPosition()});
-			}
-			else if (map[j][i] == 13) {
-				enemy[9]->Setposition({ tst[j][i]->GetPosition() });
-			}
-			else if (map[j][i] == 14) {
-				enemy1[0]->Setposition({ tst[j][i]->GetPosition() });
-			}
-
-
-			else if (map[j][i] == 15) {
-				enemy1[1]->Setposition({ tst[j][i]->GetPosition() });
-			}
-			else if (map[j][i] == 16) {
-				enemy1[2]->Setposition({ tst[j][i]->GetPosition() });
+			/*else if (map[j][i] == 16) {
+				enemy1[2]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 17) {
-				enemy1[3]->Setposition({ tst[j][i]->GetPosition() });
+				enemy1[3]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 18) {
-				enemy1[4]->Setposition({ tst[j][i]->GetPosition() });
+				enemy1[4]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 19) {
-				enemy1[5]->Setposition({ tst[j][i]->GetPosition() });
+				enemy1[5]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 20) {
-				enemy1[6]->Setposition({ tst[j][i]->GetPosition() });
+				enemy1[6]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 21) {
-				enemy1[7]->Setposition({ tst[j][i]->GetPosition() });
+				enemy1[7]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 22) {
-				enemy1[8]->Setposition({ tst[j][i]->GetPosition() });
+				enemy1[8]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			}
 			else if (map[j][i] == 23) {
-
-				enemy1[9]->Setposition({ tst[j][i]->GetPosition() });
-			}
+				enemy1[9]->Setposition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+			}*/
 		}
 	}
 
@@ -340,8 +322,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 		if (Fader::GetInstance()->GetAlpha() <= 0.0f) {
 			//::GetInstance()->SetHit(false);
 		}
-	}
-	else {
+	} else {
 		loadf = true;
 	}
 	GameUI::NowLoadUpdate(loadf);
@@ -397,8 +378,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 
 	if (Line::GetInstance()->Getboundflag() == false || Line::GetInstance()->Gettriggerflag() == false) {
 		//grav = 0.0f;
-	}
-	else {
+	} else {
 		grav = 0.03f;
 	}
 
@@ -444,8 +424,7 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 		camera->SetDistance(distance);//
 		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
 		camera->SetTarget({ 368.0f,Player_Pos.y ,Player_Pos.z });
-	}
-	else {
+	} else {
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
 		camera->SetEye({ Player_Pos.x,Player_Pos.y,Player_Pos.z - 27.0f });
@@ -461,8 +440,6 @@ void ForestStage2::Update(DirectXCommon* dxCommon)
 	SetPrm();//パラメータのセット
 
 	objUpdate();//オブジェクトの更新処理
-	effects->HealEffects(item->ColItem());
-	effects->HealEffects(item1->ColItem());
 
 	effects->Update(dxCommon, camera, enemy, player);
 	effects->Update(dxCommon, camera, enemy1, player);
@@ -622,7 +599,7 @@ void ForestStage2::Draw(DirectXCommon* dxcomn)
 
 		dxcomn->BeginDraw();
 		postEffect->Draw(dxcomn->GetCmdList());
-		ImGuiDraw();//imguiは最後の方入れとく
+		//ImGuiDraw();//imguiは最後の方入れとく
 		dxcomn->EndDraw();
 		break;
 
@@ -633,7 +610,7 @@ void ForestStage2::Draw(DirectXCommon* dxcomn)
 
 		dxcomn->BeginDraw();
 		MyGameDraw(dxcomn);
-		ImGuiDraw();
+		//ImGuiDraw();
 		dxcomn->EndDraw();
 		break;
 	}
