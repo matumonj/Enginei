@@ -31,7 +31,8 @@ public:
 	static void ColMap2(int map[130][20], std::unique_ptr<Object3d> tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3& Old_Pos);
 	
 	static void BossMap(int map[50][50], std::unique_ptr<Object3d> tst[50][50], float mapx[50][50], float mapy[50][50], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3 PLayer_Scl, XMFLOAT3& Old_Pos, int MAP_NUMBER);
-	
+	static bool GoalCollision1(int map[130][20], std::unique_ptr<Object3d> tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y, float& grav, float& time, float& movespeed, bool& jumpf, XMFLOAT3& Player_Pos, XMFLOAT3 Player_Scl, XMFLOAT3& Old_Pos, int MAP_NUMBER);
+
 	
 
 	static bool Boxcol(XMFLOAT2 a1, XMFLOAT2 a2, XMFLOAT2 b1, XMFLOAT2 b2);

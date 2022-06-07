@@ -69,6 +69,12 @@ void BossScene2::ModelCreate()
 		}
 	}
 
+	goalmodel = Model::CreateFromOBJ("goal");
+
+	goal = std::make_unique<Object3d>();
+	goal->Initialize();
+	goal->SetModel(goalmodel);
+
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -137,7 +143,7 @@ void BossScene2::objUpdate()
 		}
 	}
 
-
+	goal->Update({1,1,1,1});
 
 }
 #pragma endregion
@@ -227,6 +233,16 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 			reef[j][i]->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 			reef[j][i]->SetRotation({ tst_Rot });
 			reef[j][i]->SetScale({ tst_Scl });
+
+			if (map[j][i] == 88) {
+				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+				goal->SetRotation({ 0,120,0 });
+				goal->SetScale({ tst_Scl });
+			}
+			if (map[j][i] == 73) {
+				player->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
+
+			}
 		}
 	}
 	bossenemy->Initialize();
@@ -275,7 +291,7 @@ void BossScene2::Initialize(DirectXCommon* dxCommon)
 		}
 	}
 	//168,48
-	Player_Pos = { 20,10,0 };
+	//Player_Pos = { 20,10,0 };
 	object1->PlayAnimation();
 }
 #pragma endregion
@@ -307,6 +323,12 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 			player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
 		}
 	}
+	if (bossenemy == nullptr) {
+		//if (bossenemy->GetHP() > 1) {
+			player->PlayerMoves(Player_Pos, moveSpeed, jumpFlag, grav, time, Player_Rot);
+		//}
+	}
+
 	//FBXモデルの更新
 	object1->Updata({ 1,1,1,1 }, dxCommon, camera,movenow);
 
@@ -316,7 +338,34 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 2);
 	Collision::ColMapb1(map, tst, mapx, mapy, 20, 130, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 9);
-
+	if (bossenemy == nullptr) {
+		Onflag = true;
+	}
+	
+	if (Onflag == true) {
+		if (Collision::GoalCollision1(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 88) == true)
+		{
+			goalflag = true;
+			jumpFlag = false;
+			moveSpeed = 0;
+			goaltime += 0.01f;
+			goalSpeed = 0.01f;
+			Player_Pos.x += goalSpeed;
+			if (goaltime >= 1) {
+				goaltime = 1;
+				Player_Pos.z += 0.01f;
+				Player_Rot.y--;
+				if (Player_Rot.y <= 0) {
+					Player_Rot.y = 0;
+				}
+				if (Player_Pos.z >= 1) {
+					BaseScene* scene = new  ClearScene(sceneManager_);//次のシーンのインスタンス生成
+					sceneManager_->SetnextScene(scene);//シーンのセット
+				}
+			}
+		}
+		}
+		
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
 		time = 0;
@@ -329,10 +378,10 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 	} else {
 		grav = 0.03f;
 	}
-	if (bossenemy != nullptr) {
+	//if (bossenemy != nullptr) {
 		time += 0.04f;
 		Player_Pos.y -= grav * time * time;
-	}
+	//}
 #pragma endregion
 	//最大値が減るときに使うフラグはこっちで管理
 	colf = Line::GetInstance()->GetColf();
@@ -377,7 +426,15 @@ void BossScene2::Update(DirectXCommon* dxCommon)
 			camera->SetEye({ Player_Pos.x,camerapositiony + 5,Player_Pos.z - 35.0f });
 			camera->SetTarget({ Player_Pos.x,camerapositiony + 3 ,Player_Pos.z });
 			oldcamera = camerapositiony + 3;
-		
+			for (int i = 0; i < 130; i++) {
+				for (int j = 0; j < 30; j++) {
+					if (bossenemy == nullptr) {
+						if (map[i][j] == 9) {
+							map[i][j] = 0;
+						}
+					}
+				}
+		}
 		
 	//}
 	camera->Update();
@@ -502,6 +559,13 @@ void BossScene2::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				reef[j][i]->PreDraw();
 				reef[j][i]->Draw();
 				reef[j][i]->PostDraw();
+			}
+			if (map[j][i] == 88) {
+				if (Onflag == true) {
+					goal->PreDraw();
+					goal->Draw();
+					goal->PostDraw();
+				}
 			}
 		}
 	}

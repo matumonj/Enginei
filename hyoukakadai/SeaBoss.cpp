@@ -232,9 +232,9 @@ void SeaBoss::Follow(XMFLOAT3 position)
 				if (position.x > 30 && position.x < 234) {
 					bossmovespeed = 0.13f;
 				} else if (position.x >= 234 && position.x < 310) {
-					bossmovespeed = 0.18f;
+					bossmovespeed = 0.17f;
 				} else if (position.x >= 310 && position.x < 500) {
-					bossmovespeed = 0.25f;
+					bossmovespeed = 0.21f;
 				}
 			}
 		}

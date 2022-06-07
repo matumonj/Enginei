@@ -51,24 +51,24 @@ void GameUI::UISpriteSet()
 {
 	// デバッグテキスト用テクスチャ読み込み
 	//外枠
-	Sprite::LoadTexture(10, L"Resources/bosshp.png");
+	Sprite::LoadTexture(67, L"Resources/bosshp.png");
 	//内枠
 	Sprite::LoadTexture(11, L"Resources/gomi.png");
 	//注意
 	Sprite::LoadTexture(12, L"Resources/attention.png");
 
 	//内枠
-	Sprite::LoadTexture(110, L"Resources/hp.png");
+	Sprite::LoadTexture(110, L"Resources/linestate.png");
 	//注意
-	Sprite::LoadTexture(120, L"Resources/hp.png");
+	Sprite::LoadTexture(120, L"Resources/hpstate.png");
 	HPout= Sprite::Create(110, { 0.0f,-200.0f });
 	lineOutui= Sprite::Create(120, { 0.0f,-200.0f });
-	LineLengthout = Sprite::Create(10, { 0.0f,-200.0f });
+	LineLengthout = Sprite::Create(67, { 0.0f,-200.0f });
 	LineLength = Sprite::Create(11, { 0.0f,-200.0f });
 	Attention[0] = Sprite::Create(12, { 0.0f,-200.0f });
 	AllowTexure = nTexture::Create(12, { 0,-50,50 }, { 1,1,1 }, { 1,1,1,1 });
 	AllowTexure->CreateNormalTexture();
-	loutpos = { 50,200 };
+	loutpos = { 40,200 };
 	loutscl = { 500,50 };
 	lpos = { 70,120 };
 	lscl = { 0,40 };
@@ -109,9 +109,12 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 				boundflag = false;//!boundflag->colf
 			}
 		}
-		else if(loutscl.x <=0){
+		else if(loutscl.x <=5){
 			
 			boundflag = false;
+		}
+		else if (loutscl.x <= 10) {
+			Line::GetInstance()->SetTrigger(false);
 		}
 		if (lscl.x >= lsclMax) {//最大値が減ったあと紐の長さがそれ超えるようであれば最大値に合わせる
 			lscl.x = lsclMax;
@@ -122,7 +125,7 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 		
 	}
 	AttentionUI();
-	loutscl.x += 0.3f;
+	loutscl.x += 0.1f;
 	if (loutscl.x >= 500.0f) {
 		loutscl.x = 500.0f;
 	}
@@ -130,10 +133,10 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 	LineLength->SetSize(lscl);
 	LineLengthout->SetPosition(loutpos);
 	LineLengthout->SetSize(loutscl);
-	lineOutui->SetSize({ 200,150 });
-	HPout->SetSize({ 200,150 });
-	HPout->SetPosition(LineLengthout->GetPosition());
-	lineOutui->SetPosition({ LineLengthout->GetPosition().x,LineLengthout->GetPosition().y + 10 });
+	lineOutui->SetSize({ 100,100 });
+	HPout->SetSize({ 100,100 });
+	HPout->SetPosition({ LineLengthout->GetPosition().x-30, LineLengthout->GetPosition().y - 60 });
+	lineOutui->SetPosition({ PlayerHP->GetPosition().x-30,PlayerHP->GetPosition().y-60});
 	HPout->setcolor({ 1,1,1,1 });
 	lineOutui->setcolor({ 1,1,1,1 });
 	
@@ -142,14 +145,7 @@ void GameUI::UIUpdate(float length, bool flag, bool& boundflag, float movement)
 
 void GameUI::UIDraw(DirectXCommon* dxcomn)
 {
-	Sprite::PreDraw(dxcomn->GetCmdList());
-	//Attention[0]->Draw();
-	LineLengthout->Draw();
-	//LineLength->Draw();
-	BossHP->Draw();
-	//HPout->Draw();
-	lineOutui->Draw();
-	Sprite::PostDraw(dxcomn->GetCmdList());
+	
 }
 
 void GameUI::AllowUISet()
@@ -246,7 +242,7 @@ void GameUI::TargetUIDraw(DirectXCommon* dxcomn)
 void GameUI::PlayerUISet()
 {
 	//playerhp
-	Sprite::LoadTexture(13, L"Resources/bosshp.png");
+	Sprite::LoadTexture(13, L"Resources/life.png");
 	PlayerHP = Sprite::Create(13, { 0.0f,-200.0f });
 
 	playerHPScl = { 500,50 };
@@ -263,10 +259,27 @@ void GameUI::PlayerUIUpdate(Player* player)
 	
 }
 
+void GameUI::PlayerUIUpdate2(Player* player)
+{
+
+	playerHPScl.x = (float)(player->getHp() * 2);
+	PlayerHP->SetSize(playerHPScl);
+	PlayerHP->SetPosition(playerHPPos);
+	PlayerHP->setcolor({ 1,1,1,1 });
+
+}
+
 void GameUI::PlayerUIDraw(DirectXCommon* dxcomn)
 {
 	Sprite::PreDraw(dxcomn->GetCmdList());
 	PlayerHP->Draw();
+	//Attention[0]->Draw();
+	LineLengthout->Draw();
+	//LineLength->Draw();
+
+	lineOutui->Draw();
+	//BossHP->Draw();
+	HPout->Draw();
 	Sprite::PostDraw(dxcomn->GetCmdList());
 }
 void GameUI::AllDraw(DirectXCommon* dxcomn)

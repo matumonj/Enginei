@@ -165,7 +165,9 @@ void Line::Update(XMMATRIX matview, XMMATRIX matprojection, Player* player, XMFL
 			//Line = 1;
 		}
 	}
-
+	if (GameUI::GetInstance()->Getsclx() < 10) {
+		trigger = false;
+	}
 	if (trigger) {//trigger:線伸ばすフラグ
 		subradius += LengThenSpeed;//線を伸ばす
 		if (subradius > MaxLen || elf) {//一定以上行ったら+ブロックに針あたったら

@@ -220,9 +220,11 @@ void LastBoss::Draw(DirectXCommon* dxcomn)
 
 	for (int i = 0; i < 3; i++) {
 		if (ShotObj[i] != nullptr) {
-			ShotObj[i]->PreDraw();
-			ShotObj[i]->Draw();
-			ShotObj[i]->PostDraw();
+			if (shotf[i]) {
+				ShotObj[i]->PreDraw();
+				ShotObj[i]->Draw();
+				ShotObj[i]->PostDraw();
+			}
 		}
 	}
 	//ImGui::Begin("scl");
@@ -263,10 +265,11 @@ void LastBoss::Motion(Player* player)
 	if (zattack&&konbouscl>=2) {
 		if (Collision::GetLen(damagearea[0]->GetPosition(), player->GetPosition()) < 5) {
 			if (servDamage) {
-				player->SetHp(player->getHp() - 5);
+				player->SetHp(player->getHp() - 7);
 				servDamage = false;
 				stayflg = true;
 				//Attack(player);
+			}
 		}
 		if (stayflg) {
 			redamageCount++;
@@ -278,28 +281,11 @@ void LastBoss::Motion(Player* player)
 		}
 		//	player->SetHp(player->getHp() - 1);
 		}
-		if (Collision::GetLen(damagearea[1]->GetPosition(), player->GetPosition()) < 5) {
-			if (servDamage) {
-				player->SetHp(player->getHp() - 5);
-				servDamage = false;
-				stayflg = true;
-				//Attack(player);
-			}
-			if (stayflg) {
-				redamageCount++;
-				if (redamageCount > 30) {
-					servDamage = true;
-					redamageCount = 0;
-					stayflg = false;
-				}
-			}
-			//	player->SetHp(player->getHp() - 1);
-		}
-	}
+		
 	if (zattack2&&konbouscl2>=2) {
 		if (Collision::GetLen(damagearea2[0]->GetPosition(), player->GetPosition()) < 5) {
 			if (servDamage) {
-				player->SetHp(player->getHp() - 5);
+				player->SetHp(player->getHp() - 7);
 				servDamage = false;
 				stayflg = true;
 				//Attack(player);
@@ -316,7 +302,7 @@ void LastBoss::Motion(Player* player)
 		}
 		if (Collision::GetLen(damagearea2[1]->GetPosition(), player->GetPosition()) < 5) {
 			if (servDamage) {
-				player->SetHp(player->getHp() - 5);
+				player->SetHp(player->getHp() - 4);
 				servDamage = false;
 				stayflg = true;
 				//Attack(player);
@@ -366,12 +352,12 @@ void LastBoss::Motion(Player* player)
 
 	case None:
 	
-		if (Collision::GetLen_X(Position.x, player->GetPosition().x) > 5) {
+		if (Collision::GetLen(Position, player->GetPosition()) > 2) {
 			Follow(player->GetPosition());
 			//MoveBlockJump();//ボスの埋まり回避用とブロック飛び越えとか
 
 		}
-		if (HP!=MaxHP&&HP %2==0) {
+		if (HP<10&&HP %3==0) {
 			bossAction = syurikenattack;
 		}
 		if (HP == MaxHP / 2-1) {
@@ -500,9 +486,9 @@ void LastBoss::NormalAttacks(Player* player)
 		if (shotf[i] && ShotObj[i] != nullptr) {
 			Shot_Pos[i].x += Xspeed[i];
 			Shot_Pos[i].y += Yspeed[i];
-			if (Collision::GetLen(Shot_Pos[i], player->GetPosition()) < 1) {
+			if (Collision::GetLen(Shot_Pos[i], player->GetPosition()) < 3) {
 				if (servDamage2) {
-					player->SetHp(player->getHp() - 4);
+					player->SetHp(player->getHp() - 8);
 					servDamage2 = false;
 					stayflg2= true;
 					//Attack(player);
@@ -568,7 +554,7 @@ void LastBoss::RotationDamageblock()
 		sclplus[1] = 0;
 	}
 	if (rotack[0]) {
-		sclplus[0] += 0.005f;
+		sclplus[0] += 0.01f;
 		syurikenscl[0].x=Easing::EaseOut(sclplus[0], 0, 2.5);
 		syurikenscl[0].y = Easing::EaseOut(sclplus[0], 0, 2.5);
 		if (syurikenscl[0].y >=2.4f) {
@@ -579,7 +565,7 @@ void LastBoss::RotationDamageblock()
 		}
 	}
 	if (rotack[1]) {
-		sclplus[1] += 0.005f;
+		sclplus[1] += 0.01f;
 		syurikenscl[1].x = Easing::EaseOut(sclplus[1], 0, 2.5f);
 		syurikenscl[1].y = Easing::EaseOut(sclplus[1], 0, 2.5f);
 		if (syurikenscl[1].y >= 2.4f) {
@@ -746,7 +732,7 @@ void LastBoss::beamAtack(Player*player)
 {
 	//私レイキャストをこっちに入れておりません
 	playersphere.center = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
-	playersphere.radius = 2.0f;
+	playersphere.radius = 4.0f;
 	laserRay.start = { Position.x,Position.y+0.3f,Position.z };
 	laserRay.dir = { -1,0,0 };
 

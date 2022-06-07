@@ -113,6 +113,26 @@ void PorcFish::Motion(Player* player)
 		//SetDead(true);
 		//enemyState = State::DEAD;
 	//}
+		float dis;
+		dis = sqrtf((player->GetPosition().x - Position.x) * (player->GetPosition().x - Position.x) +
+			(player->GetPosition().y - Position.y) * (player->GetPosition().y - Position.y));
+		if (dis <= 2) {
+			//servDamage = true;
+			if (servDamage) {
+				player->SetHp(player->getHp() - 10);
+				servDamage = false;
+				stayflg = true;
+				//Attack(player);
+			}
+		}
+		if (stayflg) {
+			redamageCount++;
+			if (redamageCount > 30) {
+				servDamage = true;
+				redamageCount = 0;
+				stayflg = false;
+			}
+		}
 }
 void PorcFish::Attack(Player* player)
 {

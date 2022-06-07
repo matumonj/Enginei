@@ -88,6 +88,6 @@ void Item::HealEfficasy(Player*player)
 void Item::GetItem(Player* plauer)
 {
 	
-	GameUI::GetInstance()->SetlineOutScl(GameUI::GetInstance()->GetOutX()+100);
+	GameUI::GetInstance()->SetlineOutScl(GameUI::GetInstance()->GetOutX()+120);
 
 }

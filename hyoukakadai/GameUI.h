@@ -71,6 +71,7 @@ public:
 	static void Finalize();
 	static void PlayerUISet();
 	static void PlayerUIUpdate(Player* player);
+	static void PlayerUIUpdate2(Player* player);
 	static void PlayerUIDraw(DirectXCommon* dxcomn);
 
 	static void EnemyUISet();

@@ -123,7 +123,7 @@ void LastBossScene::SetPrm()
 			tst[j][i]->SetRotation({ tst_Rot });
 			tst[j][i]->SetScale({ tst_Scl });
 
-			if (map[j][i] == 3) {
+			if (map[j][i] == 90) {
 				goal->SetPosition({ tst_Pos.x + blockSize * i,tst_Pos.y - blockSize * j ,tst_Pos.z });
 				goal->SetRotation({ 0,120,0 });
 				goal->SetScale({ tst_Scl });
@@ -262,7 +262,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 
 	Collision::CollisionMap(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 1);
 	if (Onflag == true) {
-		if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 3) == true)
+		if (Collision::GoalCollision(map, tst, mapx, mapy, MAX_X, MAX_Y, grav, time, moveSpeed, jumpFlag, Player_Pos, Player_Scl, Old_Pos, 90) == true)
 		{
 			goalflag = true;
 			jumpFlag = false;
@@ -354,25 +354,12 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 		camerapositionx = 0;
 		camerapositiony= 0;
 	}
-	//カメラ関係の処理
-	if (Player_Pos.x <= 27.0f) {
+	
+	
 		camera->SetTarget({ 0,1,0 });//注視点
 		camera->SetDistance(distance);//
-		camera->SetEye({ 27.0f,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 27.0f,Player_Pos.y,Player_Pos.z });
-	}
-
-	else if (Player_Pos.x >= 368.0f) {
-		camera->SetTarget({ 0,1,0 });//注視点
-		camera->SetDistance(distance);//
-		camera->SetEye({ 368.0f,Player_Pos.y,Player_Pos.z - 27.0f });
-		camera->SetTarget({ 368.0f,Player_Pos.y ,Player_Pos.z });
-	} else {
-		camera->SetTarget({ 0,1,0 });//注視点
-		camera->SetDistance(distance);//
-		camera->SetEye({ Player_Pos.x,Player_Pos.y+camerapositiony,Player_Pos.z - 27.0f });
-		camera->SetTarget({ Player_Pos.x + camerapositionx,Player_Pos.y + camerapositiony,Player_Pos.z });
-	}
+		camera->SetEye({ Player_Pos.x,Player_Pos.y+5,Player_Pos.z - 30.0f });
+		camera->SetTarget({ Player_Pos.x + camerapositionx,Player_Pos.y+5,Player_Pos.z });
 
 	camera->Update();
 
@@ -421,7 +408,7 @@ void LastBossScene::Update(DirectXCommon* dxCommon)
 	GameUI::AllowUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), player->GetPosition(),
 		Line::GetInstance()->GetlineAngle(), Line::GetInstance()->Gettriggerflag());
 	GameUI::TargetUIUpdate(camera->GetViewMatrix(), camera->GetProjectionMatrix(), Line::GetInstance()->Getelf());
-	GameUI::PlayerUIUpdate(player);
+	GameUI::PlayerUIUpdate2(player);
 
 
 	//シーンチェンジ
@@ -445,7 +432,7 @@ void LastBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 	player->PostDraw();
 
 
-	item->Draw();
+	//item->Draw();
 	for (int j = 0; j < MAX_Y; j++) {
 		for (int i = 0; i < MAX_X; i++) {
 			if (map[j][i] == 1) {
@@ -454,7 +441,7 @@ void LastBossScene::SpriteDraw(ID3D12GraphicsCommandList* cmdList)
 				tst[j][i]->PostDraw();
 			}
 
-			if (map[j][i] == 3) {
+			if (map[j][i] == 90) {
 				if (Onflag == true) {
 					goal->PreDraw();
 					goal->Draw();
@@ -498,7 +485,7 @@ void LastBossScene::MyGameDraw(DirectXCommon* dxcomn)
 	}
 	attackeffects->Draw(dxcomn);
 	effects->Draw(dxcomn);
-	//effects->Draw2(dxcomn);
+	effects->Draw2(dxcomn);
 	Sprite::PreDraw(dxcomn->GetCmdList());
 
 	Fader::FeedSpriteDraw();

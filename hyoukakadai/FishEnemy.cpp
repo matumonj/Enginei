@@ -63,7 +63,7 @@ void FishEnemy::Update(XMFLOAT3 position)
 		//	enemyState = State::ALIVE;
 	}
 	FishObject->SetScale({ 0.5,0.5,0.5 });
-	FishObject->SetRotation({ 0,180,0 });
+	FishObject->SetRotation({ 0,-90,0 });
 
 
 	FishObject->Update({ 1,1,1,1 });

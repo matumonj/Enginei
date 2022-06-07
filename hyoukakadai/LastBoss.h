@@ -77,7 +77,7 @@ private:
     float bosstime = 0;
     int Attackcount = 0;
 
-    const int MaxHP = 10;//‘Ì—Í‚Ì‰Šú’l
+    const int MaxHP = 15;//‘Ì—Í‚Ì‰Šú’l
 
     bool bossjumpflag2 = false;
 private:

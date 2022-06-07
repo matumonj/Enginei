@@ -413,7 +413,7 @@ void BossScene3::Initialize(DirectXCommon* dxCommon)
 	
 	//モデル名を指定してファイル読み込み
 	fbxmodel = FbxLoader::GetInstance()->LoadModelFromFile("knight");
-	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("boss");
+	fbxmodel2 = FbxLoader::GetInstance()->LoadModelFromFile("shark");
 
 	//デバイスをセット
 	f_Object3d::SetDevice(dxCommon->GetDev());
@@ -495,7 +495,7 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 		Player_Pos.x += goalSpeed;
 		if (goaltime >= 1) {
 			goaltime = 1;
-			Player_Pos.z += 0.01f;
+			Player_Pos.z += 0.05f;
 			Player_Rot.y--;
 			if (Player_Rot.y <= 0) {
 				Player_Rot.y = 0;
@@ -507,22 +507,6 @@ void BossScene3::Update(DirectXCommon* dxCommon)
 		}
 	}
 
-	if (Player_Pos.x <= goal_pos.x + goal->GetScale().x && Player_Pos.x >= goal_pos.x - goal->GetScale().x && Player_Pos.y <= goal_pos.y + goal->GetScale().y && Player_Pos.y >= goal_pos.y - goal->GetScale().y) {
-		gf = true;
-		
-	}
-	if (gf) {
-		Player_Pos = goal_pos;
-		grav = 0;
-		time = 0;
-		if (enemy[0]->GetPosition().x > 400) {
-			Fader::feedIn(1.0f, 0.1f);
-			if (Fader::GetInstance()->GetAlpha() >= 1.0f) {
-				BaseScene* scene = new StageSelect(sceneManager_);//次のシーンのインスタンス生成
-				sceneManager_->SetnextScene(scene);//シーンのセット
-			}
-		}
-	}
 	if (Line::GetInstance()->Getboundflag() == true) {
 		grav = 0;
 		time = 0;

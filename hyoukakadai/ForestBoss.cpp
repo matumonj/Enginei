@@ -62,6 +62,8 @@ void ForestBoss::Attack(Player* player)
 //‰Šú‰»ˆ—
 void ForestBoss::Initialize()
 {
+	ChangeAttack = false;
+	woodatkflag = false;
 	NuclearModel= Model::CreateFromOBJ("boss_weak");
 	NuclearObj = Object3d::Create();
 	NuclearObj->SetModel(NuclearModel);
@@ -71,7 +73,7 @@ void ForestBoss::Initialize()
 	BossObject = Object3d::Create();
 	BossObject->SetModel(BossModel);
 	BarrelModel= Model::CreateFromOBJ("taihou");
-	SkewersBossModel= Model::CreateFromOBJ("arm");
+	SkewersBossModel= Model::CreateFromOBJ("taihou");
 	ShotModel = Model::CreateFromOBJ("sphere");
 	BossArmModel = Model::CreateFromOBJ("arm");
 	for (int i = 0; i < max; i++) {
@@ -109,6 +111,10 @@ void ForestBoss::Initialize()
 	BarrelObj->SetScale({ 1,5,1 });
 	BarrelObj->SetPosition(Position);
 	Barrel_Rot = { 0,180,90 };
+	for (int i = 0; i < max; i++) {
+		Skewers_Scl[i] = { 1,1,1 };
+	}
+	
 }//
 
 //XVˆ—
@@ -212,6 +218,7 @@ void ForestBoss::Update(XMFLOAT3 position)
 }
 void ForestBoss::SkewersAttack(int map[130][20], std::unique_ptr<Object3d> tst[130][20])
 {
+	
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j< 130; j++) {
 			if (map[j][i] == 3) {
@@ -241,6 +248,7 @@ void ForestBoss::SkewersAttack(int map[130][20], std::unique_ptr<Object3d> tst[1
 				if (map[j][i] == 30) {
 					Nuclear_Pos = { tst[j][i]->GetPosition().x - 5,tst[j][i]->GetPosition().y,tst[j][i]->GetPosition().z };
 			}
+				
 		}
 	}
 	
@@ -280,16 +288,21 @@ void ForestBoss::Draw(DirectXCommon* dxcomn)
 	BossObject->Draw();
 	BossObject->PostDraw();
 	for (int i = 0; i < max; i++) {
-		SkewersObject[i]->PreDraw();
-		SkewersObject[i]->Draw();
-		SkewersObject[i]->PostDraw();
+		//if (woodatkflag) {
+			SkewersObject[i]->PreDraw();
+			SkewersObject[i]->Draw();
+			SkewersObject[i]->PostDraw();
+	//	}
 	}
 	for (int i = 0; i < 3; i++) {
 		if (ShotObj[i] != nullptr) {
-			ShotObj[i]->PreDraw();
-			ShotObj[i]->Draw();
-			ShotObj[i]->PostDraw();
+			if (shotf[i] == true) {
+				ShotObj[i]->PreDraw();
+				ShotObj[i]->Draw();
+				ShotObj[i]->PostDraw();
+			}
 		}
+	
 	}
 	BarrelObj->PreDraw();
 	BarrelObj->Draw();
@@ -396,8 +409,10 @@ void ForestBoss::Motion(Player* player)
 		}
 		break;
 	case ArmAttacks:
-		ArmAytack(player);
-		ArmAttack_Left(player);
+		if (NuclearHP > 1) {
+			ArmAytack(player);
+			ArmAttack_Left(player);
+		}
 		break;
 	default:
 		break;
@@ -408,6 +423,7 @@ void ForestBoss::Motion(Player* player)
 void ForestBoss::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][20], float mapx[130][20], float mapy[130][20], const int X, const int Y)
 {
 
+
 	for (int i = 0; i < X; i++) {
 		for (int j = 0; j < Y; j++) {
 			for (int k = 0; k < 3; k++) {
@@ -415,10 +431,10 @@ void ForestBoss::ColMap1(int map[130][20], std::unique_ptr<Object3d>  tst[130][2
 					if(Collision::GetLen(tst[j][i]->GetPosition(),Shot_Pos[k])<2){
 					shotf[k]= false;
 						hitcol[k] = true;
-						break;
+						//break;
 					}
-					
 				}
+				
 			}
 		}
 	}
@@ -601,14 +617,13 @@ void ForestBoss::ArmAttack_Left(Player* player)
 			Sec_ArmAttackflag = true;
 		}
 	}
-	
+
 	if (Sec_ArmAttackflag) {
-		
-		if (Arm_Scl[1].y <= OldArm_Scl[1].y + 1) {
-			Sec_armattacktime += 0.5f;
-			//Sec_armattacktime = 0.05f;
+		if (Arm_Scl[1].y <= OldArm_Scl[1].y + 5) {
+			Sec_armattacktime += 0.05f;
+			//armattacktime += 0.05f;
 		}
-		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime, OldArm_Scl[1].y, OldArm_Scl[1].y + 2);
+		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime, OldArm_Scl[1].y, OldArm_Scl[1].y + 5);
 		if (Arm_Scl[1].y > OldArm_Scl[1].y + 4.9) {
 			Sec_ArmAttackflag = false;
 			Sec_armreturn = true;
@@ -618,7 +633,7 @@ void ForestBoss::ArmAttack_Left(Player* player)
 		OldArm_Scl[1] = Arm_Scl[1];
 	}
 	if (Sec_armreturn) {
-		Sec_armattacktime2 += 0.5f;
+		Sec_armattacktime2 += 0.05f;
 		Arm_Scl[1].y = Easing::EaseOut(Sec_armattacktime2, Arm_Scl[1].y, 0);
 		if (Collision::GetLenY(Arm_Scl[1], { 0,0,0 }) < 1) {
 			Sec_armreturn = false;
@@ -678,7 +693,9 @@ void ForestBoss::NormalAttacks(Player* player)
 			Shot_Pos[i].x += Xspeed[i];
 			Shot_Pos[i].y += Yspeed[i];
 			if (Collision::GetLen(Shot_Pos[i], player->GetPosition()) < 1) {
-				player->SetHp(player->getHp() - 1);
+				if (HP > 1) {
+					player->SetHp(player->getHp() - 1);
+				}
 				shotf[i] = false;
 				break;
 			}
